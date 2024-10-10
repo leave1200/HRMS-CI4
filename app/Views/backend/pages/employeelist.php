@@ -20,9 +20,9 @@
         </div>
     </div>
 </div>
-<button onclick="printTable()" class="btn btn-primary">Print Employee Form</button>
-<button onclick="exportToCSV()" class="btn btn-primary">Export to CSV</button>
-<button class="btn btn-primary" onclick="exportToExcel()">Export to Excel</button>
+<button onclick="printTable()" class="btn btn-primary"><i class="icon-copy fa fa-print" aria-hidden="true"></i><span> Print</span></button>
+<button onclick="exportToCSV()" class="btn btn-primary"><i class="icon-copy fa fa-file-excel-o" aria-hidden="true"></i><span> CSV</span></button>
+<button class="btn btn-primary" onclick="exportToExcel()"><i class="icon-copy fa fa-file-excel-o" aria-hidden="true"></i><span> Excel</span></button>
 <div class="pd-20 card-box mb-30">
     <div class="clearfix mb-20">
         <div class="pull-left">
@@ -59,7 +59,7 @@
                             <td><?= htmlspecialchars($emp['dob']) ?></td>
                             <td><?= htmlspecialchars($emp['email']) ?></td>
                             <td>
-							<button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
+							<button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>"><i class="icon-copy fa fa-eye" aria-hidden="true"></i></button>
 							<button class="btn btn-primary edit-employee-btn"
                                 data-id="<?= $emp['id'] ?>"
                                 data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
@@ -79,12 +79,11 @@
                                 data-result="<?= htmlspecialchars($emp['result']) ?>"
                                 data-comment="<?= htmlspecialchars($emp['comment']) ?>"
                                 data-toggle="modal"
-                                data-target="#editEmployeeModal">
-                                Edit
+                                data-target="#editEmployeeModal"><i class="icon-copy dw dw-pen"></i>
                             </button>
 
-									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
-								<a href="<?= route_to('employee_print', $emp['id']) ?>" class="btn btn-sm btn-secondary" target="_blank">Print</a>
+									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)"><i class="icon-copy fa fa-trash" aria-hidden="true"></i></button>
+								<a href="<?= route_to('employee_print', $emp['id']) ?>" class="btn btn-sm btn-secondary" target="_blank"><i class="icon-copy fa fa-print" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -99,7 +98,7 @@
 </div>
 <!-- modal -->
  <!-- Employee Modal View -->
- <div class="modal fade" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -237,6 +236,7 @@
     </div>
 </div>
 
+
 <!-- Update Employee Modal -->
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -286,7 +286,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="edit_phone">Phone Number</label>
-                                            <input type="text" id="edit_phone" name="phone" class="form-control" pattern="\d*" maxlength="11" required title="Phone number should be numeric and up to 11 digits">
+                                            <input type="text" id="edit_phone" name="phone" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="11" required title="Phone number should be numeric and up to 11 digits">
                                         </div>
                                         <div class="form-group">
                                             <label for="edit_dob">Date of Birth</label>
@@ -469,7 +469,7 @@
             dataType: 'json',
             success: function(response) {
 				if(response) {
-				$('#view_picture').attr('src', response.picture ? '<?= base_url('backend/images/users/') ?>' + response.picture : '<?= base_url('backend/images/users/employee.png') ?>');
+				  $('#view_picture').attr('src', response.picture ? '<?= base_url('backend/images/users/') ?>' + response.picture : '<?= base_url('backend/images/users/employee.png') ?>');
                 $('#view_firstname').val(response.firstname);
 				$('#view_lastname').val(response.lastname);
                 $('#view_phone').val(response.phone);
@@ -715,9 +715,7 @@ $(document).ready(function() {
                                 icon: 'success',
                                 title: 'Success',
                                 text: response.message,
-                            }).then(() => {
-                            location.reload(); // Reload page or update table
-                        });
+                            });
                             $('#editProfilePictureModal').modal('hide');
                             $('.avatar-photo').attr('src', response.new_picture_url);
                         } else {

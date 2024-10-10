@@ -38,16 +38,6 @@ class CIFilter implements FilterInterface
             }
         }
     }
-    public $globals = [
-        'before' => [
-            // Other filters
-            'cspfilter' => ['except' => ['api/*']], // Exclude API routes if necessary
-        ],
-        'after' => [
-            // Other filters
-        ],
-    ];
-    
 
     /**
      * Allows After filters to inspect and modify the response

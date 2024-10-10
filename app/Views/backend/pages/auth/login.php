@@ -7,70 +7,61 @@
     </div>
 
     <?php $validation = \Config\Services::validation(); ?>
-    
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
-        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
-        
-        <!-- Success flash message -->
+    <form action="<?= route_to('admin.login.handler') ?>" method="POST">
+        <?= csrf_field() ?>
+
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
-                <?= esc(session()->getFlashdata('success')) ?> <!-- Escaping output to prevent XSS -->
+                <?= session()->getFlashdata('success') ?>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         <?php endif; ?>
-
-        <!-- Failure flash message -->
+        
         <?php if (!empty(session()->getFlashdata('fail'))) : ?>
             <div class="alert alert-danger">
-                <?= esc(session()->getFlashdata('fail')) ?> <!-- Escaping output to prevent XSS -->
+                <?= session()->getFlashdata('fail') ?>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         <?php endif; ?>
 
-        <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>"> <!-- Escaping user input -->
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= set_value('login_id') ?>">
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
         </div>
-        
-        <!-- Validation Error for login_id -->
         <?php if ($validation->getError('login_id')): ?>
-            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
-                <?= esc($validation->getError('login_id')) ?> <!-- Escaping error output -->
+            <div class="d-block text-danger" style="margin-top: 15px; margin-bottom: 15px;">
+                <?= $validation->getError('login_id') ?>
             </div>
         <?php endif; ?>
 
-        <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>"> <!-- Escaping user input -->
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= set_value('password') ?>">
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
         </div>
-
-        <!-- Validation Error for password -->
         <?php if ($validation->getError('password')): ?>
-            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
-                <?= esc($validation->getError('password')) ?> <!-- Escaping error output -->
+            <div class="d-block text-danger" style="margin-top: 15px; margin-bottom: 15px;">
+                <?= $validation->getError('password') ?>
             </div>
         <?php endif; ?>
 
         <div class="row pb-30">
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember"> <!-- Add 'name' attribute for 'remember me' -->
+                    <input type="checkbox" class="custom-control-input" id="customCheck1">
                     <label class="custom-control-label" for="customCheck1">Remember</label>
                 </div>
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forget.forms'), 'attr') ?>">Forgot Password</a> <!-- Escaping URL -->
+                    <a href="<?= route_to('admin.forget.forms') ?>">Forgot Password</a>
                 </div>
             </div>
         </div>
@@ -84,5 +75,20 @@
         </div>
     </form>
 </div>
+
+<!-- Disable Inspect Element and Keyboard Shortcuts -->
+<script>
+    // Disable right-click
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Disable F12, Ctrl+Shift+I, and Ctrl+U (view source)
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85)) {
+            e.preventDefault();
+        }
+    });
+</script>
 
 <?= $this->endSection() ?>

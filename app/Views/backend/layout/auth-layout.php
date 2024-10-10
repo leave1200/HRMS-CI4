@@ -81,38 +81,30 @@
 			<div
 				class="container-fluid d-flex justify-content-between align-items-center">
 				<div class="brand-logo">
-					<a href="login.html">
 						<img src="/extra-assets/img/madridejos.png" alt="" />
-					</a>
 				</div>
 				 <div class="login-menu">
-
 				 </div>
                 
 			</div>
 		</div>
-
 		<svg class="curved-background" viewBox="0 0 100 100" preserveAspectRatio="none">
         <path fill="white" d="M0,-10 C40,40 0,100 0,100 L0,100 L100,100 L100,30 Z"></path>
     </svg>
 		<div
 			class="login-wrap d-flex align-items-center flex-wrap justify-content-center"
 		>
-		
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-md-6 col-lg-7">
 						<img src="" alt="" />
 					</div>
-
 					<div class="col-md-6 col-lg-5">
 						<?= $this->renderSection('content') ?>
-						
 					</div>
 				</div>
 			</div>
 		</div>
-		
 		<!-- js -->
 		<script src="/backend/vendors/scripts/core.js"></script>
 		<script src="/backend/vendors/scripts/script.min.js"></script>
