@@ -23,19 +23,19 @@
             <h4 class="text-blue h4">Designation</h4>
         </div>
     </div>
-    <form id="designationForm" action="<?= route_to('designation_save') ?>" method="post">
-        <?= csrf_field() ?>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Designation</label>
-                    <input type="text" class="form-control" name="designation" style="width: 100%; height: 38px" required>
-                    <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
+        <form id="designationForm" action="<?= route_to('designation_save') ?>" method="post">
+                <?= csrf_field() ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" class="form-control" name="designation" style="width: 100%; height: 38px" required>
+                            <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
-</div>
 
 <div class="pd-20 card-box mb-30">
     <div class="clearfix mb-20">
@@ -67,7 +67,8 @@
                 <?php else: ?>
                     <tr>
                         <td colspan="3">No designations found</td>
-                    </tr>
+                    </tr> 
+                    
                 <?php endif; ?>
             </tbody>
         </table>

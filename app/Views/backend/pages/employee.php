@@ -1,7 +1,4 @@
 <?= $this->extend('backend/layout/pages-layout') ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <?= $this->section('content') ?>
 <div class="page-header">
@@ -12,14 +9,13 @@
             </div>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= route_to('admin.home') ?>">Home</a></li>
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add Employee</li>
                 </ol>
             </nav>
         </div>
     </div>
 </div>
-<div class="pd-ltr-20 xs-pd-20-10">
     <div class="min-height-200px">
         <div class="pd-20 card-box mb-30">
             <div class="clearfix">
@@ -35,7 +31,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="firstname">First Name :</label>
-                                    <input type="text" class="form-control" id="firstname" name="firstname" required/>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -55,7 +51,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="phone">Phone Number :</label>
-                                    <input type="text" class="form-control" id="phone" name="phone" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required/>
+                                    <input type="text" class="form-control" id="phone" name="phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="11" title="Please enter a valid phone number (only digits, up to 11 digits)" style="-webkit-spin-button: none;" required/>
                                 </div>
                             </div>
                         </div>
@@ -79,10 +75,15 @@
                                     <label for="sex">Sex :</label>
                                     <select class="form-control" id="sex" name="sex">
                                         <option value="">Sex</option>
-                                        <option value="Pending">Male</option>
-                                        <option value="Hired">Female</option>
-                                        <option value="Rejected">Others</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                <label for="age">Age :</label>
+                                <input type="text" class="form-control" id="age" name="age" required/>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +94,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="p_school">Primary School Attended:</label>
-                                    <input type="text" class="form-control" id="p_school" name="p_school" required/>
+                                    <input type="text"class="form-control" id="p_school" name="p_school" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -204,6 +205,39 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- success Popup html End -->
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script>
+    $(document).ready(function() {
+    // Define the default date (January 1, 2002)
+    var defaultDate = new Date(2002, 0, 1); // January is month 0
+
+    $(".date-picker").datepicker({
+        dateFormat: 'yy-mm-dd', // Use the ISO standard date format
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1900:2002", // Allow years from 1900 to 2002
+        maxDate: defaultDate, // Disable dates after 2002
+        defaultDate: defaultDate, // Set default date to January 1, 2002
+        onClose: function(selectedDate) {
+            var date = $(this).datepicker('getDate');
+            if (!date) {
+                $(this).datepicker('setDate', defaultDate); // Set default date if no date is selected
+            }
+        }
+    });
+
+    // Set default date if field is empty on page load
+    $(".date-picker").each(function() {
+        if ($(this).val() === "") {
+            $(this).datepicker('setDate', defaultDate);
+        }
+    });
+});
+</script>
+
 <?= $this->endSection() ?>
+
