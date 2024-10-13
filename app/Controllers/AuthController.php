@@ -89,7 +89,7 @@ class AuthController extends BaseController
     
             // Lock out the user after 3 attempts
             if ($attempts >= 3) {
-                session()->set('lockout_time', time() + 5); // Lock for 5 seconds
+                session()->set('lockout_time', time() + 30); // Lock for 5 seconds
                 return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 5 seconds before trying again.')->withInput();
             }
     
