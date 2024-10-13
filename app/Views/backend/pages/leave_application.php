@@ -34,7 +34,6 @@
                             <option value="" disabled selected>Select Employee</option>
                             <?php if (!empty($employees) && is_array($employees)): ?>
                                 <?php foreach ($employees as $employee): ?>
-                                    <option value="<?= esc($employee['id']) ?>">
                                     <td><?= esc(session()->get('username')) ?></td>
                                     </option>
                                 <?php endforeach; ?>
