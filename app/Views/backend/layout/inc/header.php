@@ -75,12 +75,12 @@
 $(document).ready(function() {
     function fetchPendingNotifications() {
         $.ajax({
-            url: '<?= route_to('admin.pending_results') ?>', // Adjust the route to your actual route for fetching pending results
+            url: '<?= route_to('admin.pending_results') ?>', // Uses the named route defined earlier
             method: 'GET',
             dataType: 'json',
             success: function(data) {
                 var notificationList = $('.notifications-dropdown .list-group');
-                notificationList.empty(); // Clear previous notifications
+                notificationList.empty();
 
                 if (data.length > 0) {
                     data.forEach(function(notification) {
