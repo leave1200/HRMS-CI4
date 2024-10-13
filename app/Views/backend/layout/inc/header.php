@@ -36,15 +36,7 @@
         <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
             <h6 class="dropdown-header">Notifications</h6>
             <ul class="list-group">
-                <?php if (!empty($pendingApplications)): ?>
-                    <?php foreach ($pendingApplications as $application): ?>
-                        <li class="list-group-item">
-                            <?= esc($application['employee_name']) ?> has a pending leave request from <?= esc($application['start_date']) ?> to <?= esc($application['end_date']) ?>.
-                        </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li class="list-group-item">No new notifications.</li>
-                <?php endif; ?>
+                <h4>ay ambot</h4>
             </ul>
         </div>
     </div>
