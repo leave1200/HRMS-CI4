@@ -128,6 +128,7 @@ if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
             title: 'Account Locked',
             html: timerHtml,
             showConfirmButton: false, // No confirm button
+            allowOutsideClick: false // Prevent closing the alert by clicking outside
         });
 
         const interval = setInterval(() => {
@@ -144,6 +145,7 @@ if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
                 document.getElementById('username_email').disabled = false;
                 document.getElementById('password').disabled = false;
                 document.querySelector('input[type="submit"]').disabled = false;
+                Swal.close(); // Close the SweetAlert
             }
         }, 1000);
     });
