@@ -12,9 +12,6 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= route_to('admin.home'); ?>">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Employee List
-                    </li>
                 </ol>
             </nav>
         </div>
