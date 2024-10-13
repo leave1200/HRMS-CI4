@@ -30,9 +30,20 @@ class AuthController extends BaseController
         ];
         return view('backend/pages/auth/login', $data);
     }
-
     public function loginHandler()
     {
+        // Check if the user is currently in a waiting state
+        if (session()->get('wait_time') && session()->get('wait_time') > time()) {
+            // Calculate remaining wait time
+            $remainingTime = session()->get('wait_time') - time();
+            return view('backend/pages/auth/login', [
+                'pageTitle' => 'Login',
+                'validation' => null,
+                'waiting' => true,
+                'remainingTime' => ceil($remainingTime)
+            ]);
+        }
+    
         // Determine the field type (email or username)
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -70,8 +81,23 @@ class AuthController extends BaseController
     
         // Verify the password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+            // Increment the attempt count
+            $attempts = session()->get('login_attempts') ?: 0;
+            $attempts++;
+            session()->set('login_attempts', $attempts);
+    
+            // Wait for 5 seconds after 3 attempts
+            if ($attempts >= 3) {
+                session()->set('wait_time', time() + 30); // Wait for 30 seconds
+                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
+            }
+    
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
+    
+        // Reset the attempts if login is successful
+        session()->remove('login_attempts');
+        session()->remove('wait_time');
     
         // Set user session or cookie using CIAuth
         CIAuth::setCIAuth($userInfo);
@@ -87,6 +113,7 @@ class AuthController extends BaseController
         // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
+    
     
     
     public function forgotForms(){
