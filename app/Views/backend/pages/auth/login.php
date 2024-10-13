@@ -13,7 +13,7 @@
     
     <?php if (session()->get('lockout_time')): ?>
             <script>
-                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 0; ?>;
+                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 10; ?>;
                 let timeLeft = remainingTime;
 
                 // Show the SweetAlert
