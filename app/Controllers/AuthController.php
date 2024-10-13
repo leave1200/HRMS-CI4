@@ -31,56 +31,62 @@ class AuthController extends BaseController
         return view('backend/pages/auth/login', $data);
     }
 
-    // In your AuthController
-public function loginHandler()
-{
-    // Start a session if not already started
-    if (!session()->has('attempts')) {
-        session()->set('attempts', 0); // Initialize attempts
-    }
-
-    // Define max attempts and wait duration (in seconds)
-    $maxAttempts = 3;
-    $waitDuration = 30; // seconds
-
-    // Check if the user is currently in the waiting period
-    if (session()->has('wait_time')) {
-        $waitTime = session()->get('wait_time');
-        if (time() < $waitTime) {
-            $remainingTime = $waitTime - time();
-            return redirect()->back()->with('fail', "Too many incorrect attempts. Please wait " . $remainingTime . " seconds before trying again.")
-                                   ->with('remainingTime', $remainingTime);
-        } else {
-            // Reset wait time if the wait duration has expired
-            session()->remove('wait_time');
+    public function loginHandler()
+    {
+        // Determine the field type (email or username)
+        $loginId = $this->request->getVar('login_id');
+        $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+    
+        // Validation rules
+        $rules = [
+            'login_id' => [
+                'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
+                'errors' => [
+                    'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
+                    'valid_email' => 'Please, check the email field. It does not appear to be valid.',
+                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
+                ]
+            ],
+            'password' => [
+                'rules' => 'required|min_length[5]|max_length[25]',
+                'errors' => [
+                    'required' => 'Password is required',
+                    'min_length' => 'Password must have at least 5 characters in length.',
+                    'max_length' => 'Password must not have more than 25 characters in length.'
+                ]
+            ]
+        ];
+    
+        // Validate the input
+        if (!$this->validate($rules)) {
+            return view('backend/pages/auth/login', [
+                'pageTitle' => 'Login',
+                'validation' => $this->validator
+            ]);
         }
-    }
-
-    // Validate login credentials
-    $loginID = $this->request->getPost('login_id');
-    $password = $this->request->getPost('password');
-
-    // (Assuming you have a method to validate the user)
-    if ($this->validateLogin($loginID, $password)) {
-        // Successful login logic here
-        session()->set('logged_in', true);
-        session()->remove('attempts'); // Reset attempts on successful login
-        return redirect()->to('dashboard'); // Redirect to dashboard
-    } else {
-        // Increment the attempts on failure
-        session()->set('attempts', session()->get('attempts') + 1);
-
-        // Check if attempts exceed the max allowed
-        if (session()->get('attempts') >= $maxAttempts) {
-            session()->set('wait_time', time() + $waitDuration);
-            return redirect()->back()->with('fail', "Too many incorrect attempts. Please wait " . $waitDuration . " seconds before trying again.")
-                                   ->with('remainingTime', $waitDuration);
+    
+        // If validation passes, proceed to check user credentials
+        $userInfo = $this->userModel->where($fieldType, $loginId)->first();
+    
+        // Verify the password
+        if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-
-        return redirect()->back()->with('fail', 'Invalid login credentials. Attempts left: ' . ($maxAttempts - session()->get('attempts')));
+    
+        // Set user session or cookie using CIAuth
+        CIAuth::setCIAuth($userInfo);
+    
+        // Set session data for logged-in user
+        session()->set([
+            'user_id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'userStatus' => $userInfo['status'],
+            'isLoggedIn' => true
+        ]);
+    
+        // Redirect to the admin dashboard or home page
+        return redirect()->route('admin.home');
     }
-}
-
     
     
     public function forgotForms(){
