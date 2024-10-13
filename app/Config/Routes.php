@@ -60,6 +60,7 @@ $routes->group('admin', static function($routes){
         $routes->post('update_interview', 'AdminController::updateInterview',['as' => 'update_interview']);
         $routes->post('update_remarks', 'AdminController::updateRemarks',['as' => 'update_remarks']);
         $routes->get('employee/getEmployeeData', 'AdminController::getEmployeeData');
+        $routes->get('pendingemployeelist','AdminController::pendingemployeelist',['as'=>'admin.pendingemployeelist']);
 
 
 

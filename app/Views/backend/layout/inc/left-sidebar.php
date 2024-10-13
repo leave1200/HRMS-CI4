@@ -39,6 +39,7 @@
                         <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <li><a href="<?= route_to('admin.employee'); ?>">Add Employee</a></li>
                             <li><a href="<?= route_to('admin.employeelist'); ?>">Employee List</a></li>
+                            <li><a href="<?= route_to('admin.pendingemployeelist'); ?>">Employee List</a></li>
                             <?php endif; ?>
                             <li><a href="<?= route_to('user.upload'); ?>">Employee Upload</a></li>
                         </ul>
