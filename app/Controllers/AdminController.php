@@ -904,26 +904,22 @@ public function attendance()
             public function signOut()
             {
                 $attendanceModel = new AttendanceModel();
+                $attendanceId = $this->request->getPost('id'); // Fetch attendance ID
+                $session = $this->request->getPost('session'); // Fetch session (am/pm)
                 $attendance = $attendanceModel->find($attendanceId); // Fetch the attendance record
             
                 if ($session === 'am') {
-                    // Check if AM sign out is already present
                     if (empty($attendance['sign_out'])) {
-                        // If AM sign out is empty, mark it as signed out
-                        $attendanceModel->update($attendanceId, [
-                            'sign_out' => date('Y-m-d H:i:s') // Current timestamp for AM sign out
-                        ]);
+                        // Update for AM sign out
+                        $attendanceModel->update($attendanceId, ['sign_out' => date('Y-m-d H:i:s')]);
                         return json_encode(['success' => true, 'message' => 'AM Sign Out successful']);
                     } else {
                         return json_encode(['success' => false, 'message' => 'Already signed out for AM']);
                     }
                 } elseif ($session === 'pm') {
-                    // Check if PM sign out is already present
                     if (empty($attendance['pm_sign_out'])) {
-                        // If PM sign out is empty, mark it as signed out
-                        $attendanceModel->update($attendanceId, [
-                            'pm_sign_out' => date('Y-m-d H:i:s') // Current timestamp for PM sign out
-                        ]);
+                        // Update for PM sign out
+                        $attendanceModel->update($attendanceId, ['pm_sign_out' => date('Y-m-d H:i:s')]);
                         return json_encode(['success' => true, 'message' => 'PM Sign Out successful']);
                     } else {
                         return json_encode(['success' => false, 'message' => 'Already signed out for PM']);

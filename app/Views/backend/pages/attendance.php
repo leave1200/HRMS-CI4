@@ -199,7 +199,7 @@ function signInEmployee() {
 }
 
 function signOutAttendance(attendanceId, session) {
-    const sessionText = session === 'am' ? 'AM' : 'PM'; // Determine the session type
+    const sessionText = session === 'am' ? 'AM' : 'PM';
 
     Swal.fire({
         title: 'Are you sure?',
@@ -212,64 +212,12 @@ function signOutAttendance(attendanceId, session) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance_signout') ?>',
+                url: '<?= route_to('admin.attendance_signout') ?>',
                 method: 'post',
                 data: {
                     id: attendanceId,
-                    session: session, // Send the session type
-                    <?= csrf_token() ?>: '<?= csrf_hash() ?>' // Include CSRF token
-                },
-                dataType: 'json', // Expecting a JSON response
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Signed Out',
-                            text: response.message,
-                        }).then(() => {
-                            location.reload(); // Reload page to refresh the table
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText); // Log the error for debugging
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error processing your request.',
-                    });
-                }
-            });
-        }
-    });
-}
-
-
-function signOutPM() {
-    const employeeId = $('#employeeSelect').val(); // Get selected employee
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You want to sign out this employee?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, sign out!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '<?= route_to('attendance_signout') ?>', // Update with your route for sign out
-                method: 'post',
-                data: {
-                    employee: employeeId,
-                    <?= csrf_token() ?>: '<?= csrf_hash() ?>' // Include CSRF token
+                    session: session,
+                    csrf_token_name: '<?= csrf_hash() ?>' // Use correct CSRF field name
                 },
                 dataType: 'json',
                 success: function(response) {
@@ -279,7 +227,7 @@ function signOutPM() {
                             title: 'Signed Out',
                             text: response.message,
                         }).then(() => {
-                            location.reload(); // Reload page to refresh the table
+                            location.reload();
                         });
                     } else {
                         Swal.fire({
