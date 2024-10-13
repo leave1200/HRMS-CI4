@@ -31,7 +31,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
-                    <span class="badge notification-active"><?= isset($pendingEmployees) ? count($pendingEmployees) : 0 ?></span>
+                    <span class="badge notification-active"><?= isset($pendingApplications) ? count($pendingApplications) : 0 ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
                     <h6 class="dropdown-header">Notifications</h6>
