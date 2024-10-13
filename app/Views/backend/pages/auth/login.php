@@ -119,6 +119,15 @@ function validateForm() {
 // Timer and lockout script
 if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
     document.addEventListener('DOMContentLoaded', function() {
+        // Display SweetAlert for lockout message
+        Swal.fire({
+            icon: 'warning',
+            title: 'Account Locked',
+            text: 'Too many incorrect attempts. Please wait for 3 minutes before trying again.',
+            showConfirmButton: false, // No confirm button
+            timer: 3000 // Show the message for 3 seconds
+        });
+
         let timeLeft = 180; // 3 minutes in seconds
         const timerElement = document.getElementById('lockout-timer');
         const interval = setInterval(() => {
