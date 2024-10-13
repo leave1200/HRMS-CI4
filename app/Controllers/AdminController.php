@@ -1259,51 +1259,42 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); 
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    $userModel = new \App\Models\User();
+    $userModel = new \App\Models\User(); 
 
-    try {
-        // Fetch leave applications with details
-        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    // Fetch leave applications with details
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
 
-        // Retrieve all leave types
-        $leaveTypes = $leaveTypeModel->findAll();
+    // Retrieve all leave types
+    $leaveTypes = $leaveTypeModel->findAll();
 
-        // Fetch employee names
-        $employees = $employeeModel->getEmployeeNames();
+    // Fetch employee names
+    $employees = $employeeModel->getEmployeeNames();
 
-        // Get the logged-in user's information
-        $loggedInUserId = session()->get('id');
-        $loggedInUser = $userModel->find($loggedInUserId);
+    // Get the logged-in user's information
+    $loggedInUserId = session()->get('id'); // User ID from session
+    $loggedInUser = $userModel->find($loggedInUserId);
 
-        if (!$loggedInUser) {
-            log_message('error', 'Logged in user not found.');
-            return redirect()->back()->with('error', 'User not found.');
-        }
-
-        // Get user status from session
-        $userStatus = session()->get('userStatus');
-
-        // Prepare data for the view
-        $data = [
-            'pageTitle' => 'Leave Application',
-            'leaveTypes' => $leaveTypes,
-            'employees' => $employees,
-            'userStatus' => $userStatus,
-            'loggedInUser' => $loggedInUser,
-            'leaveApplications' => $leaveApplications
-        ];
-
-        // Load the view with data
-        return view('backend/pages/leave_application', $data);
-
-    } catch (\Exception $e) {
-        log_message('error', 'Error in leave_application: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'An unexpected error occurred.');
+    // Check if the logged-in user is valid
+    if (!$loggedInUser) {
+        return redirect()->back()->with('error', 'User not found.');
     }
+
+    // Get user status from session
+    $userStatus = session()->get('userStatus');
+
+    // Prepare data for the view
+    $data = [
+        'pageTitle' => 'Leave Application',
+        'leaveTypes' => $leaveTypes,
+        'employees' => $employees,
+        'userStatus' => $userStatus,
+        'loggedInUser' => $loggedInUser, // Pass logged-in user details
+        'leaveApplications' => $leaveApplications // Pass leave applications with details
+    ];
+
+    // Load the view with data
+    return view('backend/pages/leave_application', $data);
 }
-
-
-
 
 
     public function submitLeaveApplication()
