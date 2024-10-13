@@ -66,7 +66,7 @@ $routes->group('admin', static function($routes){
         //////attendance
         $routes->get('attendance','AdminController::attendance',['as'=>'admin.attendance']);
         $routes->post('attendance_save', 'AdminController::saveAttendance', ['as' => 'attendance_save']);
-        $routes->post('attendance_signout', 'AdminController::signOut', ['as' => 'attendance_signout']);
+        $routes->post('attendance_signout', 'AdminController::signOut', ['as' => 'admin.attendance_signout']);
         $routes->get('attendance_report', 'AdminController::report', ['as' => 'admin.Report']);
         $routes->get('fetch_attendance_data', 'AdminController::fetchAttendanceData', ['as' => 'fetch_attendance_data']);
         $routes->post('attendance/delete', 'AdminController::deleteAttendance', ['as' => 'attendance.delete']);
