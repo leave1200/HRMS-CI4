@@ -1400,4 +1400,17 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
+    public function pendinglist()
+    {
+        $employeeModel = new EmployeeModel();
+        $employee = $employeeModel->findAll();
+        $userStatus = session()->get('userStatus');
+
+        $data = [
+            'pageTitle' => 'Employee List',
+            'employee' => $employee,
+            'userStatus' => $userStatus
+        ];
+        return view('backend/pages/pendingemployee',$data);
+    }
 }
