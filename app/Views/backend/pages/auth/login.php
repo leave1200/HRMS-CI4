@@ -42,7 +42,7 @@
 
 
         
-        <!-- Success flash message -->
+        <!-- Success flash messagesss -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
                 <?= esc(session()->getFlashdata('success')) ?> <!-- Escaping output to prevent XSS -->
