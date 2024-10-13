@@ -752,13 +752,13 @@ public function attendance()
                     // If attendance record exists, update sign-out time
                         if ($attendance) {
                             // Check if AM sign-in exists and sign-out is null
-                            if ($attendance['sign_in'] !== null && $attendance['sign_out'] === null) {
-                                // Update sign-out for the AM session
-                                $attendanceModel->update($attendance['id'], [
-                                    'sign_out' => $currentTime, // Record AM sign-out time
-                                ]);
-                                return $this->response->setJSON(['success' => true, 'message' => 'AM sign-out recorded successfully.']);
-                            }
+                            // if ($attendance['sign_in'] !== null && $attendance['sign_out'] === null) {
+                            //     // Update sign-out for the AM session
+                            //     $attendanceModel->update($attendance['id'], [
+                            //         'sign_out' => $currentTime, // Record AM sign-out time
+                            //     ]);
+                            //     return $this->response->setJSON(['success' => true, 'message' => 'AM sign-out recorded successfully.']);
+                            // }
 
                             // Handle PM sign-in and sign-out
                             // Check if PM sign-in is null and PM sign-out is null (only then sign-in for PM)
@@ -769,13 +769,13 @@ public function attendance()
                                 return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
                             }
 
-                            // If PM sign-in exists but PM sign-out is still null, allow PM sign-out
-                            if (!is_null($attendance['pm_sign_in']) && is_null($attendance['pm_sign_out'])) {
-                                $attendanceModel->update($attendance['id'], [
-                                    'pm_sign_out' => $currentTime, // Record PM sign-out time
-                                ]);
-                                return $this->response->setJSON(['success' => true, 'message' => 'PM sign-out recorded successfully.']);
-                            }
+                            // // If PM sign-in exists but PM sign-out is still null, allow PM sign-out
+                            // if (!is_null($attendance['pm_sign_in']) && is_null($attendance['pm_sign_out'])) {
+                            //     $attendanceModel->update($attendance['id'], [
+                            //         'pm_sign_out' => $currentTime, // Record PM sign-out time
+                            //     ]);
+                            //     return $this->response->setJSON(['success' => true, 'message' => 'PM sign-out recorded successfully.']);
+                            // }
 
                             // If PM sign-out has already been recorded, don't allow further sign-out
                             if (!is_null($attendance['pm_sign_out'])) {
