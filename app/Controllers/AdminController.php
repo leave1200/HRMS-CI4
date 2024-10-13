@@ -571,10 +571,12 @@ public function updateDesignation()
     {
         $employeeModel = new EmployeeModel();
         $employee = $employeeModel->findAll();
+        $userStatus = session()->get('userStatus');
 
         $data = [
             'pageTitle' => 'Employee List',
-            'employee' => $employee
+            'employee' => $employee,
+            'userStatus' => $userStatus
         ];
         return view('backend/pages/employeelist',$data);
     }
