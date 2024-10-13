@@ -20,15 +20,17 @@ class AuthController extends BaseController
     {
         $this->userModel = new User(); // Load the UserModel
     }
-
     public function loginForm()
     {
-        
-        $data =[
-            'pageTitle'=>'Login',
-            'validation'=>'null'
-        ];
-        return view('backend/pages/auth/login', $data);
+        // Assume we have a function to check system availability
+        if (!$this->isSystemAccessible()) {
+            session()->setFlashdata('system_accessible', false);
+        }
+    
+        return view('backend/pages/auth/login', [
+            'pageTitle' => 'Login',
+            'validation' => null,
+        ]);
     }
     public function loginHandler()
     {
