@@ -28,18 +28,21 @@
 			</div>
 		</div>
 		<div class="user-notification">
-    <div class="dropdown">
-        <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-            <i class="icon-copy dw dw-notification"></i>
-            <span class="badge notification-active"><?= isset($pendingApplications) ? count($pendingApplications) : 0 ?></span>
-        </a>
         <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-            <h6 class="dropdown-header">Notifications</h6>
-            <ul class="list-group">
-                <h4>ay ambot</h4>
-            </ul>
-        </div>
-    </div>
+    <h6 class="dropdown-header">Notifications</h6>
+    <ul class="list-group">
+        <?php if (!empty($pendingEmployees)): ?>
+            <?php foreach ($pendingEmployees as $employee): ?>
+                <li class="list-group-item">
+                    <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?> has a pending result.
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <li class="list-group-item">No pending results.</li>
+        <?php endif; ?>
+    </ul>
+</div>
+
 </div>
 
 
