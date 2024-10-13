@@ -74,7 +74,6 @@
                                 <td><?= esc($file['name']) ?></td>
                                 <td><?= esc($file['original_name']) ?></td>
                                 <td><?= esc($file['uploaded_at']) ?></td>
-                                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                                 <td>
                                     <!-- View Inline (for viewable file types) -->
                                     <a href="<?= route_to('viewFile', $file['id']) ?>" class="btn btn-info btn-sm" target="_blank">View</a>
@@ -88,7 +87,6 @@
 
                                     
                                 </td>
-                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
