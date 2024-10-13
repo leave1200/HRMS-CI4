@@ -1375,17 +1375,12 @@ public function leave_application()
     public function notifications()
     {
         $employeeModel = new EmployeeModel();
-        
-        // Fetch pending employees
+    
+        // Fetch employees whose result is "Pending"
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-
-        // Prepare data for the view
-        $data = [
-            'pendingEmployees' => $pendingEmployees,
-        ];
-
-        // Load the view and pass the data
-        return view('pendingemployee', $data);
+    
+        // Pass the pending employees to the view
+        return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
     }
     public function fetchPendingResults()
         {
