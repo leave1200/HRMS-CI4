@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <?php endif; ?>
-                    <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+                    <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
                     <!-- Form fields for EMPLOYEE -->
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Name</label>
