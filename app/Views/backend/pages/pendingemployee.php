@@ -79,7 +79,7 @@
                                 Edit
                             </button>
 
-									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
+									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Reject</button>
 								<a href="<?= route_to('employee_print', $emp['id']) ?>" class="btn btn-sm btn-secondary" target="_blank">Print</a>
                             </td>
                         </tr>
