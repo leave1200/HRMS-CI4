@@ -44,7 +44,7 @@ class AuthController extends BaseController
                 'errors' => [
                     'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
                     'valid_email' => 'Please, check the email field. It does not appear to be valid.',
-                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
+                    'is_not_unique' => $fieldType === 'email' ? 'Incorrect Email or Password.' : 'Incorrect Email or Password.'
                 ]
             ],
             'password' => [
@@ -70,7 +70,7 @@ class AuthController extends BaseController
     
         // Verify the password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
-            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
+            return redirect()->route('admin.login.form')->with('fail', 'Incorrect Email or Password')->withInput();
         }
     
         // Set user session or cookie using CIAuth
