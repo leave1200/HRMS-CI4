@@ -10,7 +10,13 @@
     
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" onsubmit="return validateForm()">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
-        
+
+        <?php if (session()->get('login_attempts') >= 3): ?>
+            <div class="alert alert-danger">
+                Too many incorrect attempts. Please wait for <span id="lockout-timer">3 minutes</span> before trying again.
+            </div>
+        <?php endif; ?>
+
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
@@ -33,7 +39,7 @@
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" required> <!-- Required attribute added -->
+            <input type="text" class="form-control form-control-lg" id="username_email" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" required <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
@@ -48,7 +54,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" required> <!-- Required attribute added -->
+            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" required <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -78,7 +84,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
                 </div>
             </div>
         </div>
@@ -114,6 +120,27 @@ function validateForm() {
     }
 
     return true; // Allow form submission
+}
+
+// Timer and lockout script
+if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
+    document.addEventListener('DOMContentLoaded', function() {
+        let timeLeft = 180; // 3 minutes in seconds
+        const timerElement = document.getElementById('lockout-timer');
+        const interval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                // Enable input fields and button after lockout period
+                document.getElementById('username_email').disabled = false;
+                document.getElementById('password').disabled = false;
+                document.querySelector('input[type="submit"]').disabled = false;
+                timerElement.textContent = "0 minutes";
+            } else {
+                timerElement.textContent = Math.ceil(timeLeft / 60) + " minute(s)";
+                timeLeft--;
+            }
+        }, 1000);
+    });
 }
 </script>
 
