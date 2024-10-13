@@ -84,7 +84,7 @@
                             </button>
 
 									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
-								<a href="<?= route_to('employee_print', $emp['id']) ?>" class="btn btn-sm btn-secondary" target="_blank">Print</a>
+								<!-- <a href="<?= route_to('employee_print', $emp['id']) ?>" class="btn btn-sm btn-secondary" target="_blank">Print</a> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
