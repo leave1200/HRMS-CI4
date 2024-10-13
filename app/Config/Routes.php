@@ -105,7 +105,7 @@ $routes->group('admin', static function($routes){
         $routes->post('mark-notifications-read', 'AdminController::markNotificationsRead');
         $routes->post('users/fetch', 'UserController::fetchUsers');
         $routes->get('admin/pending-results', 'AdminController::fetchPendingResults', ['as' => 'admin.pending_results']);
-        $routes->get('admin/pending-employee-detail/(:num)', 'AdminController::pendingEmployeeDetail', ['as' => 'admin.pending_employee_detail']);
+        $routes->get('admin/pending-employee-detail/(:num)', 'AdminController::pendingEmployeeDetail', ['as' => 'admin.penndinglist']);
 
 
         
