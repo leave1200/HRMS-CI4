@@ -458,7 +458,7 @@ document.getElementById('profile_picture').addEventListener('change', function()
             Swal.fire({
                 icon: 'error',
                 title: 'File too large',
-                text: 'The file size must not exceed 10MB.',
+                text: 'The file size must not exceed 1MB.',
             });
             fileInput.value = ''; // Clear the input
             return;
