@@ -27,7 +27,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="user-notification">
+        <div class="user-notification">
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
@@ -39,7 +39,9 @@
                         <?php if (!empty($pendingEmployees)): ?>
                             <?php foreach ($pendingEmployees as $employee): ?>
                                 <li class="list-group-item">
-                                    <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?> has a pending result.
+                                    <a href="<?= route_to('admin.pending_employee_detail', $employee['id']) ?>">
+                                        <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                    </a> has a pending result.
                                 </li>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -48,6 +50,8 @@
                     </ul>
                 </div>
             </div>
+        </div>
+
 </div>
 
 

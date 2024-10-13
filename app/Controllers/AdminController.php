@@ -1400,6 +1400,22 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
+        public function pendingEmployeeDetail($id)
+{
+    $employeeModel = new EmployeeModel();
+    
+    // Fetch employee details
+    $employee = $employeeModel->find($id);
+    
+    // Check if the employee exists
+    if (!$employee) {
+        return redirect()->to('/admin/pending-employees')->with('error', 'Employee not found.');
+    }
+
+    // Load the view and pass the employee data
+    return view('backend/pages/pendingemployee', ['employee' => $employee]);
+}
+
 
 
 
