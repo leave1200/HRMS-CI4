@@ -23,28 +23,16 @@ class AuthController extends BaseController
 
     public function loginForm()
     {
-        $data = [
-            'pageTitle' => 'Login',
-            'validation' => 'null'
+        
+        $data =[
+            'pageTitle'=>'Login',
+            'validation'=>'null'
         ];
         return view('backend/pages/auth/login', $data);
     }
 
     public function loginHandler()
     {
-        // Check if the user is locked out
-        if (session()->get('login_attempts') >= 3) {
-            $lockoutTime = session()->get('lockout_time');
-            if (time() < $lockoutTime) {
-                // User is still locked out
-                $remainingTime = $lockoutTime - time();
-                return redirect()->route('admin.login.form')->with('fail', "Too many incorrect attempts. Please wait " . ceil($remainingTime / 60) . " minute(s) before trying again.");
-            } else {
-                // Reset login attempts after lockout period has expired
-                session()->remove(['login_attempts', 'lockout_time']);
-            }
-        }
-    
         // Determine the field type (email or username)
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -56,7 +44,7 @@ class AuthController extends BaseController
                 'errors' => [
                     'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
                     'valid_email' => 'Please, check the email field. It does not appear to be valid.',
-                    'is_not_unique' => $fieldType === 'email' ? 'Incorrect Email or Password.' : 'Incorrect Email or Password.'
+                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
                 ]
             ],
             'password' => [
@@ -82,23 +70,8 @@ class AuthController extends BaseController
     
         // Verify the password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
-            // Increment the login attempts
-            $attempts = session()->get('login_attempts') ?? 0;
-            $attempts++;
-            session()->set('login_attempts', $attempts);
-    
-            // Check if lockout is needed
-            if ($attempts >= 3) {
-                session()->set('lockout_time', time() + 30); // Lock for 30 seconds
-                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.');
-            }
-            
-    
-            return redirect()->route('admin.login.form')->with('fail', 'Incorrect Email or Password')->withInput();
+            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-    
-        // Reset login attempts on successful login
-        session()->remove(['login_attempts', 'lockout_time']);
     
         // Set user session or cookie using CIAuth
         CIAuth::setCIAuth($userInfo);
@@ -114,7 +87,6 @@ class AuthController extends BaseController
         // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
-    
     
     
     public function forgotForms(){
