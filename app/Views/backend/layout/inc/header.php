@@ -31,7 +31,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
-                    <span class="badge notification-active"><?= isset($pendingApplications) ? count($pendingApplications) : 0 ?></span>
+                    <span class="badge notification-active">0</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
                     <h6 class="dropdown-header">Notifications</h6>
@@ -73,14 +73,19 @@
 $(document).ready(function() {
     function fetchPendingNotifications() {
         $.ajax({
-            url: '<?= route_to('admin.pending_results') ?>', // Uses the named route defined earlier
+            url: '<?= route_to('admin.pending_results') ?>', // Adjust the route accordingly
             method: 'GET',
             dataType: 'json',
             success: function(data) {
                 var notificationList = $('.notifications-dropdown .list-group');
-                notificationList.empty();
+                var pendingCount = data.length; // Get the count of pending employees
 
-                if (data.length > 0) {
+                notificationList.empty(); // Clear previous notifications
+
+                // Update the notification badge
+                $('.notification-active').text(pendingCount);
+
+                if (pendingCount > 0) {
                     data.forEach(function(notification) {
                         notificationList.append('<li class="list-group-item">' + 
                             notification.firstname + ' ' + notification.lastname + 
@@ -102,5 +107,6 @@ $(document).ready(function() {
     // Optionally, you can set an interval to refresh notifications
     setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
 });
+
 
 </script>
