@@ -1380,7 +1380,7 @@ public function leave_application()
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
         // Pass the pending employees to the view
-        return view('your_view_name', ['pendingEmployees' => $pendingEmployees]);
+        return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
     }
     
     
