@@ -119,28 +119,31 @@ function validateForm() {
 // Timer and lockout script
 if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
     document.addEventListener('DOMContentLoaded', function() {
+        let timeLeft = 180; // 3 minutes in seconds
+        const timerHtml = `Too many incorrect attempts. Please wait for <strong><span id="countdown-timer">3:00</span></strong> before trying again.`;
+        
         // Display SweetAlert for lockout message
         Swal.fire({
             icon: 'warning',
             title: 'Account Locked',
-            text: 'Too many incorrect attempts. Please wait for 3 minutes before trying again.',
+            html: timerHtml,
             showConfirmButton: false, // No confirm button
-            timer: 3000 // Show the message for 3 seconds
         });
 
-        let timeLeft = 180; // 3 minutes in seconds
-        const timerElement = document.getElementById('lockout-timer');
         const interval = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            // Update countdown timer in SweetAlert
+            document.getElementById('countdown-timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
             if (timeLeft <= 0) {
                 clearInterval(interval);
                 // Enable input fields and button after lockout period
                 document.getElementById('username_email').disabled = false;
                 document.getElementById('password').disabled = false;
                 document.querySelector('input[type="submit"]').disabled = false;
-                timerElement.textContent = "0 minutes";
-            } else {
-                timerElement.textContent = Math.ceil(timeLeft / 60) + " minute(s)";
-                timeLeft--;
             }
         }, 1000);
     });
