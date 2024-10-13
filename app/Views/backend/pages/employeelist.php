@@ -45,7 +45,7 @@
             <tbody>
     <?php if (!empty($employee)): ?>
         <?php foreach ($employee as $index => $emp): ?>
-            <?php if ($emp['status'] !== 'Pending'): // Skip employees with status 'Pending' ?>
+            <?php if ($emp['result'] !== 'Pending'): // Skip employees with status 'Pending' ?>
                 <tr>
                     <td><?= $index + 1 ?></td>
                     <td>
