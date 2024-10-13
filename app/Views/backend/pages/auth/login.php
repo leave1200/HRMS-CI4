@@ -1,5 +1,8 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
+<!-- Add SweetAlert CSS and JS in your layout file -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <div class="login-box bg-white box-shadow border-radius-10">
     <div class="login-title">
@@ -97,9 +100,6 @@
         </div>
     </form>
 </div>
-<!-- Add SweetAlert CSS and JS in your layout file -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 
 
