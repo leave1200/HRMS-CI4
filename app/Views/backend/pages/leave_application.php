@@ -31,13 +31,12 @@
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
                         <select name="la_name" class="form-control" required>
+                            <option value="" disabled selected>Select Employee</option>
                             <?php if (!empty($employees) && is_array($employees)): ?>
                                 <?php foreach ($employees as $employee): ?>
-                                    <?php if (session()->get('username') === $employee['username']): // Show only the logged-in user ?>
-                                        <option value="<?= esc($employee['id']) ?>" selected>
-                                            <?= esc($employee['name']) ?>
-                                        </option>
-                                    <?php endif; ?>
+                                    <option value="<?= esc($employee['id']) ?>">
+                                        <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <option value="" disabled>No employees available</option>
@@ -45,7 +44,6 @@
                         </select>
                     </div>
                 </div>
-
 
 
                 <div class="form-group row">
