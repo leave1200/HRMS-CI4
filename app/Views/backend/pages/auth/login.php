@@ -119,8 +119,8 @@ function validateForm() {
 // Timer and lockout script
 if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
     document.addEventListener('DOMContentLoaded', function() {
-        let timeLeft = 180; // 3 minutes in seconds
-        const timerHtml = `Too many incorrect attempts. Please wait for <strong><span id="countdown-timer">3:00</span></strong> before trying again.`;
+        let timeLeft = 30; // 30 seconds
+        const timerHtml = `Too many incorrect attempts. Please wait for <strong><span id="countdown-timer">0:30</span></strong> before trying again.`;
         
         // Display SweetAlert for lockout message
         Swal.fire({
