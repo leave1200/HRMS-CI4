@@ -32,6 +32,22 @@ class AuthController extends BaseController
             'validation' => null,
         ]);
     }
+    private function isSystemAccessible()
+    {
+        // Load the database connection service
+        $db = \Config\Database::connect();
+
+        // Check if the connection is successful
+        try {
+            // Perform a simple query to check the connection
+            $db->query("SELECT 1");
+            return true; // Connection is successful
+        } catch (\Exception $e) {
+            // Log the error or handle it as needed
+            log_message('error', 'Database connection failed: ' . $e->getMessage());
+            return false; // Connection failed
+        }
+    }
     public function loginHandler()
     {
         // Check if the user is currently in a waiting state

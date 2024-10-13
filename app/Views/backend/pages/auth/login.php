@@ -7,7 +7,7 @@
     </div>
 
     <?php $validation = \Config\Services::validation(); ?>
-    
+
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
 
@@ -31,32 +31,15 @@
             </div>
         <?php endif; ?>
 
-        <!-- Countdown logic -->
-        <?php if (session()->get('wait_time')): ?>
+        <!-- System Inaccessible Alert -->
+        <?php if (session()->get('system_accessible') === false): ?>
             <script>
-                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 30; ?>;
-                let timeLeft = remainingTime;
-
-                // Show the SweetAlert
                 swal({
-                    title: "Locked Out!",
-                    text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
+                    title: "System Unavailable!",
+                    text: "The system is currently inaccessible. Please try again later.",
                     icon: "warning",
-                    button: false, // Disable the button
-                    timer: remainingTime * 1000 // Set timer to the remaining time
+                    button: "OK"
                 });
-
-                // Update the text every second
-                const countdown = setInterval(() => {
-                    timeLeft--;
-                    if (timeLeft >= 0) {
-                        swal({ title: "Locked Out!", text: "Please wait " + timeLeft + " seconds before trying again." });
-                    }
-                    if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        swal.close(); // Close the SweetAlert once the countdown is done
-                    }
-                }, 1000);
             </script>
         <?php endif; ?>
 
