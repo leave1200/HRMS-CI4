@@ -76,7 +76,7 @@
 $(document).ready(function() {
     function fetchPendingNotifications() {
         $.ajax({
-            url: '<?= route_to('admin.pending') ?>', // Adjust the route accordingly
+            url: '<?= route_to('admin.pending_results') ?>', // Adjust the route to your actual route for fetching pending results
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -86,18 +86,15 @@ $(document).ready(function() {
                 if (data.length > 0) {
                     data.forEach(function(notification) {
                         notificationList.append('<li class="list-group-item">' + 
-                            notification.employee_name + 
-                            ' has a leave application of type ' + 
-                            notification.leave_type + 
-                            ' from ' + 
-                            notification.start_date + 
-                            ' to ' + 
-                            notification.end_date + 
-                            '.</li>');
+                            notification.firstname + ' ' + notification.lastname + 
+                            ' has a pending result.</li>');
                     });
                 } else {
-                    notificationList.append('<li class="list-group-item">No new notifications.</li>');
+                    notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching pending notifications:', error);
             }
         });
     }
@@ -108,6 +105,5 @@ $(document).ready(function() {
     // Optionally, you can set an interval to refresh notifications
     setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
 });
-
 
 </script>
