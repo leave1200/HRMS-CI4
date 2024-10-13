@@ -437,7 +437,7 @@
 document.getElementById('profile_picture').addEventListener('change', function() {
     const fileInput = this;
     const file = fileInput.files[0];
-    const maxSize = 10 * 1024 * 1024; // 10 MB
+    const maxSize = 1 * 1024 * 1024; // 10 MB
 
     // Check if a file is selected
     if (file) {
