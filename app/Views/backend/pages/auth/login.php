@@ -11,20 +11,34 @@
 
     <?php $validation = \Config\Services::validation(); ?>
     
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
-        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
-        <?php if (session()->get('lockout_time')): ?>
+    <?php if (session()->get('lockout_time')): ?>
             <script>
-                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 10; ?>;
-                swal({
+                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 0; ?>;
+                let timeLeft = remainingTime;
+
+                // Show the SweetAlert
+                const swalInstance = swal({
                     title: "Locked Out!",
-                    text: "Too many incorrect attempts. Please wait " + remainingTime + " seconds before trying again.",
+                    text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
                     icon: "warning",
-                    button: false,
-                    timer: remainingTime * 1000 // Convert seconds to milliseconds
+                    button: false, // Disable the button
+                    timer: remainingTime * 1000 // Set timer to the remaining time
                 });
+
+                // Update the text every second
+                const countdown = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft >= 0) {
+                        swalInstance.text = "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.";
+                    }
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        swal.close(); // Close the SweetAlert once the countdown is done
+                    }
+                }, 1000);
             </script>
             <?php endif; ?>
+
 
         
         <!-- Success flash message -->
