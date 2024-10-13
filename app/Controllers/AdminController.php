@@ -1256,39 +1256,35 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new leave_typeModel(); 
+    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    $userModel = new \App\Models\User(); 
-
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
-
+    
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
-    // Fetch employee names
-    $employees = $employeeModel->getEmployeeNames();
+    // Get user status and user ID from session
+    $userStatus = session()->get('userStatus');
+    $userId = session()->get('user_id');
 
-    // Get the logged-in user's information
-    $loggedInUserId = session()->get('id'); // User ID from session
-    $loggedInUser = $userModel->find($loggedInUserId);
-
-    // Check if the logged-in user is valid
-    if (!$loggedInUser) {
-        return redirect()->back()->with('error', 'User not found.');
+    // Check user status, if admin show all employees, else show only the logged-in user
+    if ($userStatus === 'ADMIN') {
+        // Fetch all employees for admins
+        $employees = $employeeModel->getEmployeeNames();
+    } else {
+        // Fetch only the logged-in user's data
+        $employees = $employeeModel->where('id', $userId)->findAll();
     }
 
-    // Get user status from session
-    $userStatus = session()->get('userStatus');
-
+    // Fetch leave applications with details
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
         'employees' => $employees,
         'userStatus' => $userStatus,
-        'loggedInUser' => $loggedInUser, // Pass logged-in user details
         'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
