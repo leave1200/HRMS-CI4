@@ -26,24 +26,18 @@
             <form id="leaveApplicationForm" action="<?= route_to('admin.submit_leave') ?>" method="POST">
                 <?= csrf_field() ?>
                 
-                <!-- Form fields -->
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Name</label>
-                    <div class="col-sm-12 col-md-10">
-                        <select name="la_name" class="form-control" required>
-                            <option value="" disabled selected>Select Employee</option>
-                            <?php if (!empty($employees) && is_array($employees)): ?>
-                                <?php foreach ($employees as $employee): ?>
-                                    <option value="<?= esc($employee['id']) ?>">
-                                        <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                        <!-- Form fields -->
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Name</label>
+                            <div class="col-sm-12 col-md-10">
+                                <select name="la_name" class="form-control" required>
+                                    <option value="<?= esc(session()->get('user_id')) ?>" selected>
+                                        <?= esc(session()->get('firstname') . ' ' . session()->get('lastname')) ?>
                                     </option>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <option value="" disabled>No employees available</option>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                </div>
+                                </select>
+                            </div>
+                        </div>
+
 
 
                 <div class="form-group row">
