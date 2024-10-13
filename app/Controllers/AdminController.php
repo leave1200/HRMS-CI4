@@ -1382,6 +1382,25 @@ public function leave_application()
         // Pass the pending employees to the view
         return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
     }
+    public function fetchPendingResults()
+        {
+            $employeeModel = new EmployeeModel();
+            
+            // Fetch employees with a pending result
+            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+
+            // Format the response
+            $data = [];
+            foreach ($pendingEmployees as $employee) {
+                $data[] = [
+                    'firstname' => $employee['firstname'],
+                    'lastname' => $employee['lastname']
+                ];
+            }
+
+            return $this->response->setJSON($data);
+        }
+
 
 
     
