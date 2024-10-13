@@ -8,9 +8,9 @@
 
     <?php $validation = \Config\Services::validation(); ?>
     
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" onsubmit="return validateForm()">
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
-
+        
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
@@ -33,7 +33,7 @@
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" id="username_email" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" required <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>"> <!-- Escaping user input -->
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
@@ -48,7 +48,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" required <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>"> <!-- Escaping user input -->
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -78,78 +78,11 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" <?= (session()->get('login_attempts') >= 3) ? 'disabled' : '' ?>>
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
                 </div>
             </div>
         </div>
     </form>
 </div>
-
-<script>
-// Client-side validation to prevent scripting and file injection
-function validateForm() {
-    const loginId = document.querySelector('input[name="login_id"]').value;
-    const password = document.querySelector('input[name="password"]').value;
-
-    // Regex patterns to block scripts and malicious input
-    const scriptPattern = /<script.*?>.*?<\/script>/i; // Matches <script> tags
-    const htmlPattern = /<\/?[a-z][\s\S]*>/i; // Matches HTML tags
-
-    if (scriptPattern.test(loginId) || htmlPattern.test(loginId)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Invalid input',
-            text: 'Input contains invalid characters.',
-        });
-        return false; // Prevent form submission
-    }
-
-    if (scriptPattern.test(password) || htmlPattern.test(password)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Invalid input',
-            text: 'Input contains invalid characters.',
-        });
-        return false; // Prevent form submission
-    }
-
-    return true; // Allow form submission
-}
-
-// Timer and lockout script
-if (<?= json_encode(session()->get('login_attempts') >= 3) ?>) {
-    document.addEventListener('DOMContentLoaded', function() {
-        let timeLeft = 30; // 30 seconds
-        const timerHtml = `Too many incorrect attempts. Please wait for <strong><span id="countdown-timer">0:30</span></strong> before trying again.`;
-        
-        // Display SweetAlert for lockout message
-        Swal.fire({
-            icon: 'warning',
-            title: 'Account Locked',
-            html: timerHtml,
-            showConfirmButton: false, // No confirm button
-            allowOutsideClick: false // Prevent closing the alert by clicking outside
-        });
-
-        const interval = setInterval(() => {
-            timeLeft--;
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-
-            // Update countdown timer in SweetAlert
-            document.getElementById('countdown-timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                // Enable input fields and button after lockout period
-                document.getElementById('username_email').disabled = false;
-                document.getElementById('password').disabled = false;
-                document.querySelector('input[type="submit"]').disabled = false;
-                Swal.close(); // Close the SweetAlert
-            }
-        }, 1000);
-    });
-}
-</script>
 
 <?= $this->endSection() ?>
