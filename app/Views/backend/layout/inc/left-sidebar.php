@@ -18,7 +18,7 @@
                     </a>
                 </li>
 
-				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
                     <li>
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="micon bi bi-building"></span>
@@ -36,10 +36,10 @@
                             <span class="mtext">Employee</span>
                         </a>
                         <ul class="submenu">
-                        <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+                        <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <li><a href="<?= route_to('admin.employee'); ?>">Add Employee</a></li>
-                            <?php endif; ?>
                             <li><a href="<?= route_to('admin.employeelist'); ?>">Employee List</a></li>
+                            <?php endif; ?>
                             <li><a href="<?= route_to('user.upload'); ?>">Employee Upload</a></li>
                         </ul>
                     </li>
@@ -50,7 +50,9 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="<?= route_to('admin.attendance') ;?>">Add Attendance</a></li>
+                            <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <li><a href="<?= route_to('admin.Report') ;?>">Attendance Reports</a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li>
@@ -60,11 +62,13 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="<?= route_to('admin.leave_application') ;?>">Leave Application</a></li>
+                            <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <li><a href="<?= route_to('admin.leave_type') ;?>">Leave Type</a></li>
                             <li><a href="<?= route_to('admin.holidays') ;?>">Holidays</a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
-					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="micon fa fa-user-plus"></span>
