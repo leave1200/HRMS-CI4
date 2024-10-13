@@ -32,61 +32,84 @@ class AuthController extends BaseController
     }
 
     public function loginHandler()
-    {
-        // Determine the field type (email or username)
-        $loginId = $this->request->getVar('login_id');
-        $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-    
-        // Validation rules
-        $rules = [
-            'login_id' => [
-                'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
-                'errors' => [
-                    'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
-                    'valid_email' => 'Please, check the email field. It does not appear to be valid.',
-                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
-                ]
-            ],
-            'password' => [
-                'rules' => 'required|min_length[5]|max_length[25]',
-                'errors' => [
-                    'required' => 'Password is required',
-                    'min_length' => 'Password must have at least 5 characters in length.',
-                    'max_length' => 'Password must not have more than 25 characters in length.'
-                ]
-            ]
-        ];
-    
-        // Validate the input
-        if (!$this->validate($rules)) {
-            return view('backend/pages/auth/login', [
-                'pageTitle' => 'Login',
-                'validation' => $this->validator
-            ]);
-        }
-    
-        // If validation passes, proceed to check user credentials
-        $userInfo = $this->userModel->where($fieldType, $loginId)->first();
-    
-        // Verify the password
-        if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
-            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
-        }
-    
-        // Set user session or cookie using CIAuth
-        CIAuth::setCIAuth($userInfo);
-    
-        // Set session data for logged-in user
-        session()->set([
-            'user_id' => $userInfo['id'],
-            'username' => $userInfo['username'],
-            'userStatus' => $userInfo['status'],
-            'isLoggedIn' => true
-        ]);
-    
-        // Redirect to the admin dashboard or home page
-        return redirect()->route('admin.home');
+{
+    // Check if the user is currently locked out
+    if (session()->get('lockout_time') && session()->get('lockout_time') > time()) {
+        // Calculate remaining lockout time
+        $remainingTime = session()->get('lockout_time') - time();
+        return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait ' . ceil($remainingTime) . ' seconds before trying again.')->withInput();
     }
+
+    // Determine the field type (email or username)
+    $loginId = $this->request->getVar('login_id');
+    $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+    // Validation rules
+    $rules = [
+        'login_id' => [
+            'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
+            'errors' => [
+                'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
+                'valid_email' => 'Please, check the email field. It does not appear to be valid.',
+                'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
+            ]
+        ],
+        'password' => [
+            'rules' => 'required|min_length[5]|max_length[25]',
+            'errors' => [
+                'required' => 'Password is required',
+                'min_length' => 'Password must have at least 5 characters in length.',
+                'max_length' => 'Password must not have more than 25 characters in length.'
+            ]
+        ]
+    ];
+
+    // Validate the input
+    if (!$this->validate($rules)) {
+        return view('backend/pages/auth/login', [
+            'pageTitle' => 'Login',
+            'validation' => $this->validator
+        ]);
+    }
+
+    // If validation passes, proceed to check user credentials
+    $userInfo = $this->userModel->where($fieldType, $loginId)->first();
+
+    // Verify the password
+    if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+        // Increment the attempt count
+        $attempts = session()->get('login_attempts') ?: 0;
+        $attempts++;
+        session()->set('login_attempts', $attempts);
+
+        // Lock out the user after 3 attempts
+        if ($attempts >= 3) {
+            session()->set('lockout_time', time() + 5); // Lock for 5 seconds
+            return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 5 seconds before trying again.')->withInput();
+        }
+
+        return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
+    }
+
+    // Reset the attempts if login is successful
+    session()->remove('login_attempts');
+    session()->remove('lockout_time');
+
+    // Set user session or cookie using CIAuth
+    CIAuth::setCIAuth($userInfo);
+
+    // Set session data for logged-in user
+    session()->set([
+        'user_id' => $userInfo['id'],
+        'username' => $userInfo['username'],
+        'userStatus' => $userInfo['status'],
+        'isLoggedIn' => true
+    ]);
+
+    // Redirect to the admin dashboard or home page
+    return redirect()->route('admin.home');
+}
+
     
     
     public function forgotForms(){
