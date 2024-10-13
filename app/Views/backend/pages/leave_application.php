@@ -35,7 +35,7 @@
                                 <?php foreach ($employees as $employee): ?>
                                     <?php if (session()->get('username') === $employee['username']): // Show only the logged-in user ?>
                                         <option value="<?= esc($employee['id']) ?>" selected>
-                                            <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                            <?= esc($employee['name']) ?>
                                         </option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
