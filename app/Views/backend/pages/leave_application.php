@@ -35,7 +35,7 @@
                             <?php if (!empty($employees) && is_array($employees)): ?>
                                 <?php foreach ($employees as $employee): ?>
                                     <option value="<?= esc($employee['id']) ?>">
-                                        <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                    <td><?= esc(session()->get('username')) ?></td>
                                     </option>
                                 <?php endforeach; ?>
                             <?php else: ?>
