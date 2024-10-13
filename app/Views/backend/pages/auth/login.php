@@ -8,7 +8,7 @@
 
     <?php $validation = \Config\Services::validation(); ?>
     
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" onsubmit="return validateForm()">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
         
         <!-- Success flash message -->
@@ -33,7 +33,7 @@
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>"> <!-- Escaping user input -->
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" required> <!-- Required attribute added -->
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
@@ -48,7 +48,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>"> <!-- Escaping user input -->
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" required> <!-- Required attribute added -->
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -84,5 +84,37 @@
         </div>
     </form>
 </div>
+
+<script>
+// Client-side validation to prevent scripting and file injection
+function validateForm() {
+    const loginId = document.querySelector('input[name="login_id"]').value;
+    const password = document.querySelector('input[name="password"]').value;
+
+    // Regex patterns to block scripts and malicious input
+    const scriptPattern = /<script.*?>.*?<\/script>/i; // Matches <script> tags
+    const htmlPattern = /<\/?[a-z][\s\S]*>/i; // Matches HTML tags
+
+    if (scriptPattern.test(loginId) || htmlPattern.test(loginId)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid input',
+            text: 'Input contains invalid characters.',
+        });
+        return false; // Prevent form submission
+    }
+
+    if (scriptPattern.test(password) || htmlPattern.test(password)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid input',
+            text: 'Input contains invalid characters.',
+        });
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission
+}
+</script>
 
 <?= $this->endSection() ?>
