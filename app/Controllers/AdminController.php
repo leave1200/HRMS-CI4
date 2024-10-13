@@ -1372,31 +1372,17 @@ public function leave_application()
         return view('backend/pages/print', $data);
     }
 
-    public function getPendingLeaveNotifications()
+    public function notifications()
     {
-        $leaveApplicationModel = new LeaveApplicationModel();
-        
-        // Fetch pending leave applications
-        $pendingApplications = $leaveApplicationModel->where('status', 'Pending')->findAll() ?? [];
+        $employeeModel = new EmployeeModel();
     
-        // Prepare notifications
-        $notifications = [];
-        foreach ($pendingApplications as $application) {
-            $employee = $this->employeeModel->find($application['la_name']);
-            $leaveType = $this->leaveTypeModel->find($application['la_type']);
+        // Fetch employees whose result is "Pending"
+        $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
-            $notifications[] = [
-                'id' => $application['la_id'],
-                'employee_name' => $employee ? $employee['firstname'] . ' ' . $employee['lastname'] : 'Unknown Employee',
-                'leave_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type',
-                'start_date' => $application['la_start'],
-                'end_date' => $application['la_end'],
-            ];
-        }
-    
-        // Pass notifications to the view
-        return view('backend/pages/notifications', ['pendingApplications' => $notifications]);
+        // Pass the pending employees to the view
+        return view('your_view_name', ['pendingEmployees' => $pendingEmployees]);
     }
+    
     
 
 }

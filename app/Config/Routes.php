@@ -101,7 +101,7 @@ $routes->group('admin', static function($routes){
         $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
         
 
-        $routes->get('admin/get_pending_notifications', 'AdminController::getPendingLeaveNotifications', ['as' => 'admin.pending']);
+        $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);
         $routes->post('mark-notifications-read', 'AdminController::markNotificationsRead');
         $routes->post('users/fetch', 'UserController::fetchUsers');
         
