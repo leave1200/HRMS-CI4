@@ -11,12 +11,6 @@
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" onsubmit="return validateForm()">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
 
-        <?php if (session()->get('login_attempts') >= 3): ?>
-            <div class="alert alert-danger">
-                Too many incorrect attempts. Please wait for <span id="lockout-timer">3 minutes</span> before trying again.
-            </div>
-        <?php endif; ?>
-
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
