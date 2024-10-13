@@ -28,6 +28,7 @@
                 
                         <!-- Form fields -->
                         <select name="la_name" class="form-control" required>
+                            <h4>Name</h4>
                             <option value="<?= esc($loggedInUser['id']) ?>" selected>
                                 <?= esc($loggedInUser['name']) ?>
                             </option>
