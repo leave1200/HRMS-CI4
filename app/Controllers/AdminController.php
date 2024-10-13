@@ -1259,22 +1259,25 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    $userModel = new \App\Models\User(); // Load the User model
-
-    // Get logged-in user ID from session
-    $loggedInUserId = session()->get('user_id');
-
-    // Fetch the logged-in user's data
-    $loggedInUser = $userModel->find($loggedInUserId);
+    $userModel = new \App\Models\User(); // Load the User model for logged-in user
 
     // Fetch leave applications with details
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
-    
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
     // Fetch employee names
     $employees = $employeeModel->getEmployeeNames();
+
+    // Get the logged-in user's information
+    $loggedInUserId = session()->get('id'); // Assuming you store the user's ID in the session
+    $loggedInUser = $userModel->find($loggedInUserId);
+
+    // Check if the logged-in user is valid
+    if (!$loggedInUser) {
+        return redirect()->back()->with('error', 'User not found.');
+    }
 
     // Get user status from session
     $userStatus = session()->get('userStatus');
@@ -1285,13 +1288,14 @@ public function leave_application()
         'leaveTypes' => $leaveTypes,
         'employees' => $employees,
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications, // Pass leave applications with details
-        'loggedInUser' => $loggedInUser // Pass logged-in user
+        'loggedInUser' => $loggedInUser, // Pass logged-in user details
+        'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 
