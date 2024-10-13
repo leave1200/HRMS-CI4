@@ -420,7 +420,7 @@
                     <input type="hidden" id="update_employee_id_picture" name="id" value="">
                     <div class="form-group">
                         <label for="profile_picture">Upload Profile Picture</label>
-                        <input type="file" class="form-control" id="profile_picture" name="profile_picture">
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
                         <img id="image" style="display:none;"/>
                         <div class="preview" id="preview"></div>
                     </div>
