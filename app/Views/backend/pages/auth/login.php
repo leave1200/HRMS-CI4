@@ -85,17 +85,17 @@
     </form>
 </div>
 
-<?php if (session()->get('lockout_time')): ?>
+<?php if (session()->get('remainingTime')): ?>
     <script>
-        const remainingTime = <?= isset($remainingTime) ? $remainingTime : 30; ?>; // Set default time
+        const remainingTime = <?= session()->get('remainingTime') ?>; // Get the remaining time from session
         let timeLeft = remainingTime;
 
         // Show the SweetAlert
         const swalInstance = swal({
-            title: "Locked Out!",
+            title: "Wait Before Retrying!",
             text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
             icon: "warning",
-            button: false, // Disable the button
+            button: false,
             timer: remainingTime * 1000 // Set timer to the remaining time
         });
 
@@ -112,5 +112,6 @@
         }, 1000);
     </script>
 <?php endif; ?>
+
 
 <?= $this->endSection() ?>
