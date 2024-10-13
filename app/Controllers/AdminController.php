@@ -372,17 +372,26 @@ public function updateDesignation()
     public function employee()
     {
         $employeeModel = new EmployeeModel();
-        $employees = $employeeModel->findAll(); // Fetch all employees from the database
+        $userModel = new UserModel(); // Ensure you instantiate the UserModel
+    
+        // Fetch employees who do not have a pending result and have an account in the users table
+        $employees = $employeeModel->where('result !=', 'Pending')
+                                    ->whereIn('id', function($query) use ($userModel) {
+                                        $query->select('id')->from($userModel->getTable());
+                                    })
+                                    ->findAll();
+    
         $userStatus = session()->get('userStatus');
-
+    
         $data = [
             'pageTitle' => 'Employee',
             'employee' => $employees, // Pass the retrieved data to the view
             'userStatus' => $userStatus
         ];
-
+    
         return view('backend/pages/employee', $data); // Load the view with data
     }
+    
     public function deleteEmployee()
     {
         $employeeId = $this->request->getPost('id');
