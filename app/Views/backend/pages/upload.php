@@ -38,99 +38,68 @@
         <?= csrf_field() ?>
         <div class="form-group">
             <label for="file">Choose File to Upload:</label>
-            <input type="file" name="file" id="file" class="form-control" required>
+            <input type="file" name="file" id="file" class="form-control" required accept=".doc, .docx, .csv, .xls, .xlsx">
             <button type="submit" class="btn btn-primary mt-3">Upload</button>
         </div>
     </form>
 
     <!-- Table to show uploaded files -->
-    <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
-        <div class="pd-20 card-box mb-30">
-            <div class="table-responsive">
-                <table id="uploadsTable" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Owner</th>
-                            <th>File Name</th>
-                            <th>Original Name</th>
-                            <th>Upload Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($files)): ?>
-                            <?php foreach ($files as $index => $file): ?>
-                                <tr>
-                                    <td><?= esc($index + 1) ?></td>
-                                    <td><?= esc(session()->get('username')) ?></td>
-                                    <td><?= esc($file['name']) ?></td>
-                                    <td><?= esc($file['original_name']) ?></td>
-                                    <td><?= esc($file['uploaded_at']) ?></td>
-                                    <td>
-                                        <!-- View Inline (for viewable file types) -->
-                                        <a href="<?= route_to('viewFile', $file['id']) ?>" class="btn btn-info btn-sm" target="_blank">View</a>
-                                        
-                                        <!-- Download Link -->
-                                        <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm">Download</a>
-
-                                        <?php if (session()->get('userStatus') === 'ADMIN'): ?>
-                                            <!-- Delete Action (only for admins) -->
-                                            <a href="<?= route_to('deleteFile', $file['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this file?');">Delete</a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center">No files uploaded yet</td>
-                            </tr>
+    <div class="pd-20 card-box mb-30">
+        <div class="table-responsive">
+            <table id="uploadsTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Owner</th>
+                        <th>File Name</th>
+                        <th>Original Name</th>
+                        <th>Upload Date</th>
+                        <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
+                        <th>Action</th>
                         <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div><?php endif; ?>
-    <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
-        <div class="pd-20 card-box mb-30">
-                <div class="table-responsive">
-                    <table id="uploadsTable" class="table table-striped">
-                        <thead>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($files)): ?>
+                        <?php foreach ($files as $index => $file): ?>
                             <tr>
-                                <th>#</th>
-                                <th>Owner</th>
-                                <th>File Name</th>
-                                <th>Upload Date</th>
-                                <th>Action</th>
+                                <td><?= esc($index + 1) ?></td>
+                                <?php if (isset($userStatus) && $userStatus === 'ADMIN'): ?>
+                                    <!-- If user is Admin, get the username from the users table -->
+                                    <td><?= esc($file['username']) ?></td>
+                                <?php else: ?>
+                                    <!-- If user is Employee or Staff, get the username from the session -->
+                                    <td><?= esc(session()->get('username')) ?></td>
+                                <?php endif; ?>
+                                <td><?= esc($file['name']) ?></td>
+                                <td><?= esc($file['original_name']) ?></td>
+                                <td><?= esc($file['uploaded_at']) ?></td>
+                                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
+                                <td>
+                                    <!-- View Inline (for viewable file types) -->
+                                    <a href="<?= route_to('viewFile', $file['id']) ?>" class="btn btn-info btn-sm" target="_blank">View</a>
+                                    
+                                    <!-- Download Link -->
+                                    <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm">Download</a>
+
+                                    
+                                        <!-- Delete Action (using SweetAlert for confirmation) -->
+                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)">Delete</button>
+
+                                    
+                                </td>
+                                <?php endif; ?>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($files)): ?>
-                                <?php foreach ($files as $index => $file): ?>
-                                    <tr>
-                                        <td><?= esc($index + 1) ?></td>
-                                        <td><?= esc(session()->get('username')) ?></td>
-                                        <td><?= esc($file['name']) ?></td>
-                                        <td><?= esc($file['uploaded_at']) ?></td>
-                                        <td>
-                                            <!-- View Inline (for viewable file types) -->
-                                            <a href="<?= route_to('viewFile', $file['id']) ?>" class="btn btn-info btn-sm" target="_blank">View</a>
-                                            
-                                            <!-- Download Link -->
-                                            <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm">Download</a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">No files uploaded yet</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center">No files uploaded yet</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Load jQuery, DataTables, and SweetAlert2 -->
@@ -142,19 +111,57 @@
         $('#uploadsTable').DataTable({
             responsive: true
         });
+    });
+</script>
+<script>
+    function confirmDelete(fileId) {
+        var deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + fileId;
 
-        // Check if a success message is present in the session
-        <?php if (session()->getFlashdata('success')): ?>
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Show success message after deletion
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'Your file has been deleted successfully.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                            // Reload the page
+                            window.location.href = deleteUrl;
+                });
+            }
+        });
+    }
+</script>
+<script>
+    document.getElementById('file').addEventListener('change', function(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+
+        // 20MB in bytes
+        const maxSize = 10 * 1024 * 1024; // 20MB
+
+        if (file && file.size > maxSize) {
             Swal.fire({
-                icon: 'success',
-                title: 'Uploaded!',
-                text: 'Your file has been uploaded successfully.',
+                icon: 'error',
+                title: 'File Too Large',
+                text: 'The file size must not exceed 10MB.',
                 confirmButtonText: 'OK'
             }).then(() => {
-                // Reset the form to clear the file input
-                $('form')[0].reset();
+                // Clear the file input field if the file is too large
+                fileInput.value = ''; 
             });
-        <?php endif; ?>
+        }
     });
 </script>
 
