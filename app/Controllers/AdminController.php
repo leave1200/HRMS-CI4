@@ -1260,19 +1260,25 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
     
+    // Retrieve all leave types
+    $leaveTypes = $leaveTypeModel->findAll();
+
+    // Get user status and user ID from session
+    $userStatus = session()->get('userStatus');
+    $userId = session()->get('user_id');
+
+    // Check user status, if admin show all employees, else show only the logged-in user
+    if ($userStatus === 'ADMIN') {
+        // Fetch all employees for admins
+        $employees = $employeeModel->getEmployeeNames();
+    } else {
+        // Fetch only the logged-in user's data
+        $employees = $employeeModel->where('id', $userId)->findAll();
+    }
 
     // Fetch leave applications with details
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
     
-    // Retrieve all leave types
-    $leaveTypes = $leaveTypeModel->findAll();
-
-    // Fetch employee names
-    $employees = $employeeModel->getEmployeeNames();
-
-    // Get user status from session
-    $userStatus = session()->get('userStatus');
-
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
@@ -1285,6 +1291,7 @@ public function leave_application()
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
     public function submitLeaveApplication()
         {
