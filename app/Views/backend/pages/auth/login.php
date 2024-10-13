@@ -1,8 +1,5 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
-<!-- Add SweetAlert CSS and JS in your layout file -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <div class="login-box bg-white box-shadow border-radius-10">
     <div class="login-title">
@@ -11,38 +8,10 @@
 
     <?php $validation = \Config\Services::validation(); ?>
     
-    <?php if (session()->get('lockout_time') && session()->get('lockout_time') > time()): ?>
-        <script>
-            const remainingTime = <?= ceil(session()->get('lockout_time') - time()) ?>; // Calculate remaining time
-            let timeLeft = remainingTime;
-
-            // Show the SweetAlert
-            const swalInstance = swal({
-                title: "Locked Out!",
-                text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
-                icon: "warning",
-                button: false, // Disable the button
-                timer: remainingTime * 1000 // Set timer to the remaining time
-            });
-
-            // Update the text every second
-            const countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft >= 0) {
-                    swalInstance.text = "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.";
-                }
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    swal.close(); // Close the SweetAlert once the countdown is done
-                }
-            }, 1000);
-        </script>
-    <?php endif; ?>
-
-
-
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
+        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
         
-        <!-- Success flash messagesss -->
+        <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
                 <?= esc(session()->getFlashdata('success')) ?> <!-- Escaping output to prevent XSS -->
@@ -115,7 +84,5 @@
         </div>
     </form>
 </div>
-
-
 
 <?= $this->endSection() ?>
