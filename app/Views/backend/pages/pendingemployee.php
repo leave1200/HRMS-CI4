@@ -20,9 +20,6 @@
         </div>
     </div>
 </div>
-<button onclick="printTable()" class="btn btn-primary">Print Employee Form</button>
-<button onclick="exportToCSV()" class="btn btn-primary">Export to CSV</button>
-<button class="btn btn-primary" onclick="exportToExcel()">Export to Excel</button>
 <div class="pd-20 card-box mb-30">
     <div class="clearfix mb-20">
         <div class="pull-left">
@@ -59,7 +56,7 @@
                             <td><?= htmlspecialchars($emp['dob']) ?></td>
                             <td><?= htmlspecialchars($emp['email']) ?></td>
                             <td>
-							<button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
+							<button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">Update</button>
 							<button class="btn btn-primary edit-employee-btn"
                                 data-id="<?= $emp['id'] ?>"
                                 data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
@@ -510,87 +507,6 @@
     });
 });
 </script>   
-<script>
-function printTable() {
-    // Open a new window or tab
-    var printWindow = window.open('', '', 'height=600,width=800');
-
-    // Clone the table
-    var table = document.querySelector('.table-responsive').innerHTML;
-    var clonedTable = document.createElement('div');
-    clonedTable.innerHTML = table;
-
-    // Remove the Action column from the cloned table
-    var headers = clonedTable.querySelectorAll('thead th');
-    var rows = clonedTable.querySelectorAll('tbody tr');
-
-    if (headers.length > 0) {
-        headers[headers.length - 1].style.display = 'none'; // Hide the Action header
-    }
-
-    rows.forEach(row => {
-        row.cells[row.cells.length - 1].style.display = 'none'; // Hide the Action cell
-    });
-
-    // Write the modified content to the new window
-    printWindow.document.write('<html><head><title>Print Employee Table</title>');
-    printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #ddd; padding: 8px;} th{background-color: #f2f2f2;} </style>');
-    printWindow.document.write('</head><body >');
-    printWindow.document.write(clonedTable.innerHTML);
-    printWindow.document.write('</body></html>');
-
-    // Close the document and trigger print
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-}
-</script>
-<script>
-function exportToCSV() {
-    var table = document.querySelector('.table-responsive table');
-    var csv = [];
-    var rows = table.querySelectorAll('tr');
-
-    // Loop through rows and cells to create CSV
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll('td, th');
-
-        for (var j = 0; j < cols.length; j++) {
-            // Exclude the last column (Action column)
-            if (j !== cols.length - 1) {
-                row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-            }
-        }
-
-        csv.push(row.join(','));
-    }
-
-    // Create a CSV Blob and trigger download
-    var csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-    var downloadLink = document.createElement('a');
-    downloadLink.download = 'employees.csv';
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-    downloadLink.click();
-}
-</script>
-<script>
-function exportToExcel() {
-    var table = document.querySelector('.table-responsive table');
-    var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-
-    // Convert the workbook to binary and create a downloadable link
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    var blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    var url = URL.createObjectURL(blob);
-
-    // Create a download link and trigger the download
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'employees.xlsx';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-</script>
 <script>
 function deleteEmployee(id) {
     Swal.fire({
