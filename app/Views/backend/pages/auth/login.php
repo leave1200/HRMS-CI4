@@ -9,8 +9,8 @@
     <?php $validation = \Config\Services::validation(); ?>
     
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
-        <?= csrf_field() ?>
-        
+        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
@@ -31,6 +31,35 @@
             </div>
         <?php endif; ?>
 
+        <!-- Countdown logic -->
+        <?php if (session()->get('wait_time')): ?>
+            <script>
+                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 30; ?>;
+                let timeLeft = remainingTime;
+
+                // Show the SweetAlert
+                swal({
+                    title: "Locked Out!",
+                    text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
+                    icon: "warning",
+                    button: false, // Disable the button
+                    timer: remainingTime * 1000 // Set timer to the remaining time
+                });
+
+                // Update the text every second
+                const countdown = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft >= 0) {
+                        swal({ title: "Locked Out!", text: "Please wait " + timeLeft + " seconds before trying again." });
+                    }
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        swal.close(); // Close the SweetAlert once the countdown is done
+                    }
+                }, 1000);
+            </script>
+        <?php endif; ?>
+
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -48,7 +77,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password">
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -84,39 +113,5 @@
         </div>
     </form>
 </div>
-
-<?php if (session()->get('remainingTime')): ?>
-    <script>
-        const remainingTime = <?= session()->get('remainingTime') ?>; // Get the remaining time from session
-        let timeLeft = remainingTime;
-
-        // Show the SweetAlert
-        swal({
-            title: "Wait Before Retrying!",
-            text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
-            icon: "warning",
-            button: false,
-            timer: remainingTime * 1000 // Set timer to the remaining time
-        });
-
-        // Update the text every second
-        const countdown = setInterval(() => {
-            timeLeft--;
-            if (timeLeft >= 0) {
-                swal({
-                    title: "Wait Before Retrying!",
-                    text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
-                    icon: "warning",
-                    button: false,
-                    timer: timeLeft * 1000 // Update timer
-                });
-            }
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                swal.close(); // Close the SweetAlert once the countdown is done
-            }
-        }, 1000);
-    </script>
-<?php endif; ?>
 
 <?= $this->endSection() ?>
