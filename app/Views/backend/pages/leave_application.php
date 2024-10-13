@@ -26,39 +26,24 @@
             <form id="leaveApplicationForm" action="<?= route_to('admin.submit_leave') ?>" method="POST">
                 <?= csrf_field() ?>
                 
-                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
-                    <!-- Form fields for ADMIN or STAFF -->
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Name</label>
-                        <div class="col-sm-12 col-md-10">
-                            <select name="la_name" class="form-control" required>
-                                <option value="<?= esc($loggedInUser['id']) ?>" selected>
-                                    <?= esc($loggedInUser['name']) ?>
-                                </option>
-                            </select>
-                        </div>
+                <!-- Form fields -->
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Name</label>
+                    <div class="col-sm-12 col-md-10">
+                        <select name="la_name" class="form-control" required>
+                            <option value="" disabled selected>Select Employee</option>
+                            <?php if (!empty($employees) && is_array($employees)): ?>
+                                <?php foreach ($employees as $employee): ?>
+                                    <option value="<?= esc($employee['id']) ?>">
+                                        <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>No employees available</option>
+                            <?php endif; ?>
+                        </select>
                     </div>
-                    <?php endif; ?>
-                    <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
-                    <!-- Form fields for EMPLOYEE -->
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Name</label>
-                        <div class="col-sm-12 col-md-10">
-                            <select name="la_name" class="form-control" required>
-                                <option value="" disabled selected>Select Employee</option>
-                                <?php if (!empty($employees) && is_array($employees)): ?>
-                                    <?php foreach ($employees as $employee): ?>
-                                        <option value="<?= esc($employee['id']) ?>">
-                                            <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <option value="" disabled>No employees available</option>
-                                <?php endif; ?>
-                            </select>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                </div>
 
 
                 <div class="form-group row">
