@@ -53,6 +53,7 @@
         </div>
 
 
+
 		<div class="user-info-dropdown">
 			<div class="dropdown">
 				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -86,11 +87,9 @@ $(document).ready(function() {
 
                 if (data.length > 0) {
                     data.forEach(function(notification) {
-                        // Assuming notification.id contains the employee's ID
                         notificationList.append('<li class="list-group-item">' + 
-                            '<a href="<?= route_to('admin.pending_employee_detail', '') ?>/' + notification.id + '">' + 
                             notification.firstname + ' ' + notification.lastname + 
-                            '</a> has a pending result.</li>');
+                            ' has a pending result.</li>');
                     });
                 } else {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
@@ -100,6 +99,7 @@ $(document).ready(function() {
                 console.error('Error fetching pending notifications:', error);
             }
         });
+
     }
 
     // Fetch notifications on page load
@@ -108,7 +108,5 @@ $(document).ready(function() {
     // Optionally, you can set an interval to refresh notifications
     setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
 });
-</script>
-
 
 </script>
