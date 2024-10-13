@@ -11,33 +11,34 @@
 
     <?php $validation = \Config\Services::validation(); ?>
     
-    <?php if (session()->get('lockout_time')): ?>
-            <script>
-                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 10; ?>;
-                let timeLeft = remainingTime;
+    <?php if (session()->get('lockout_time') && session()->get('lockout_time') > time()): ?>
+        <script>
+            const remainingTime = <?= ceil(session()->get('lockout_time') - time()) ?>; // Calculate remaining time
+            let timeLeft = remainingTime;
 
-                // Show the SweetAlert
-                const swalInstance = swal({
-                    title: "Locked Out!",
-                    text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
-                    icon: "warning",
-                    button: false, // Disable the button
-                    timer: remainingTime * 1000 // Set timer to the remaining time
-                });
+            // Show the SweetAlert
+            const swalInstance = swal({
+                title: "Locked Out!",
+                text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
+                icon: "warning",
+                button: false, // Disable the button
+                timer: remainingTime * 1000 // Set timer to the remaining time
+            });
 
-                // Update the text every second
-                const countdown = setInterval(() => {
-                    timeLeft--;
-                    if (timeLeft >= 0) {
-                        swalInstance.text = "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.";
-                    }
-                    if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        swal.close(); // Close the SweetAlert once the countdown is done
-                    }
-                }, 1000);
-            </script>
-            <?php endif; ?>
+            // Update the text every second
+            const countdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft >= 0) {
+                    swalInstance.text = "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.";
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    swal.close(); // Close the SweetAlert once the countdown is done
+                }
+            }, 1000);
+        </script>
+    <?php endif; ?>
+
 
 
         
