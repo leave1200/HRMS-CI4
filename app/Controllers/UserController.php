@@ -124,12 +124,24 @@ class UserController extends Controller
     
     public function upload()
     {
-        $userStatus = session()->get('userStatus');
-        $userId = session()->get('userId');  // Assuming 'userId' is stored in session
+        $userModel = new \App\Models\User();
+        $fileModel = new \App\Models\FileModel();
     
-        // Fetch uploaded files by the logged-in user from the database
-        $fileModel = new FileModel();
-        $files = $fileModel->where('user_id', $userId)->findAll();
+        // Get the logged-in user's ID and status
+        $userId = $this->session->get('user_id'); 
+        $userStatus = session()->get('userStatus');// Assuming this holds 'ADMIN', 'EMPLOYEE', 'STAFF', etc.
+
+        // If user is an admin, fetch all files
+        if ($userStatus !== 'ADMIN') {
+            // Non-admin users can only view their own files
+            $files = $fileModel->where('user_id', $userId)->findAll();
+           
+        } else {
+            $files = $fileModel->findAll();
+            $files = $fileModel->select('files.*, users.username')
+                   ->join('users', 'users.id = files.user_id')
+                   ->findAll();
+        }
     
         $data = [
             'pageTitle' => 'Uploads',
@@ -155,12 +167,12 @@ class UserController extends Controller
             'file' => [
                 'label' => 'File',
                 'rules' => 'uploaded[file]'
-                            . '|max_size[file,51200]' // Max size in KB (50MB)
+                            . '|max_size[file,20480]' // Max size in KB (50MB)
                             // Removed 'ext_in' and 'mime_in' to accept all file types
                 ,
                 'errors' => [
                     'uploaded' => 'Please upload a file.',
-                    'max_size' => 'The file size must not exceed 50MB.',
+                    'max_size' => 'The file size must not exceed 10MB.',
                 ]
             ]
         ];
