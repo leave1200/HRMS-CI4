@@ -10,6 +10,19 @@
     
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+        <?php if (session()->get('lockout_time')): ?>
+            <script>
+                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 0; ?>;
+                swal({
+                    title: "Locked Out!",
+                    text: "Too many incorrect attempts. Please wait " + remainingTime + " seconds before trying again.",
+                    icon: "warning",
+                    button: false,
+                    timer: remainingTime * 1000 // Convert seconds to milliseconds
+                });
+            </script>
+            <?php endif; ?>
+
         
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
