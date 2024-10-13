@@ -15,7 +15,7 @@
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
         <?php if (session()->get('lockout_time')): ?>
             <script>
-                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 0; ?>;
+                const remainingTime = <?= isset($remainingTime) ? $remainingTime : 10; ?>;
                 swal({
                     title: "Locked Out!",
                     text: "Too many incorrect attempts. Please wait " + remainingTime + " seconds before trying again.",
