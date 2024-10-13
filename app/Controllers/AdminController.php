@@ -1259,38 +1259,40 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    
-    // Retrieve all leave types
-    $leaveTypes = $leaveTypeModel->findAll();
+    $userModel = new \App\Models\User(); // Load the User model
 
-    // Get user status and user ID from session
-    $userStatus = session()->get('userStatus');
-    $userId = session()->get('user_id');
+    // Get logged-in user ID from session
+    $loggedInUserId = session()->get('user_id');
 
-    // Check user status, if admin show all employees, else show only the logged-in user
-    if ($userStatus === 'ADMIN') {
-        // Fetch all employees for admins
-        $employees = $employeeModel->getEmployeeNames();
-    } else {
-        // Fetch only the logged-in user's data
-        $employees = $employeeModel->where('id', $userId)->findAll();
-    }
+    // Fetch the logged-in user's data
+    $loggedInUser = $userModel->find($loggedInUserId);
 
     // Fetch leave applications with details
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
     
+    // Retrieve all leave types
+    $leaveTypes = $leaveTypeModel->findAll();
+
+    // Fetch employee names
+    $employees = $employeeModel->getEmployeeNames();
+
+    // Get user status from session
+    $userStatus = session()->get('userStatus');
+
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
         'employees' => $employees,
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
+        'leaveApplications' => $leaveApplications, // Pass leave applications with details
+        'loggedInUser' => $loggedInUser // Pass logged-in user
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
     public function submitLeaveApplication()
