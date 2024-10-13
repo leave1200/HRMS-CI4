@@ -27,16 +27,12 @@
                 <?= csrf_field() ?>
                 
                         <!-- Form fields -->
-                        <div class="form-group row">
-                            <label class="col-sm-12 col-md-2 col-form-label">Name</label>
-                            <div class="col-sm-12 col-md-10">
-                                <select name="la_name" class="form-control" required>
-                                    <option value="<?= esc(session()->get('user_id')) ?>" selected>
-                                        <?= esc(session()->get('firstname') . ' ' . session()->get('lastname')) ?>
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
+                        <select name="la_name" class="form-control" required>
+                            <option value="<?= esc($loggedInUser['id']) ?>" selected>
+                                <?= esc($loggedInUser['name']) ?>
+                            </option>
+                        </select>
+
 
 
 
