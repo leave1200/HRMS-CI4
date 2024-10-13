@@ -26,7 +26,7 @@
             <form id="leaveApplicationForm" action="<?= route_to('admin.submit_leave') ?>" method="POST">
                 <?= csrf_field() ?>
                 
-                <?php if ($userStatus !== 'EMPLOYEE'): ?>
+                <?php if ($userStatus === 'ADMIN' || $userStatus === 'STAFF'): ?>
                     <!-- Form fields for ADMIN or STAFF -->
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Name</label>
@@ -38,9 +38,7 @@
                             </select>
                         </div>
                     </div>
-                    <?php endif; ?>
-                
-                    <?php if ($userStatus !== 'ADMIN' || $userStatus !== 'STAFF'): ?>
+                <?php elseif ($userStatus === 'EMPLOYEE'): ?>
                     <!-- Form fields for EMPLOYEE -->
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Name</label>
