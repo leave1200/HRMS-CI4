@@ -32,19 +32,20 @@
                             <option value="">Select an employee</option>
                             <?php if (!empty($employees)): ?>
                                 <?php foreach ($employees as $employee): ?>
-                                    <?php if ($employee['result'] !== 'Pending'):?>
-                                    <option value="<?= $employee['id'] ?>"
-                                            data-email="<?= $employee['email'] ?>"
-                                            data-name="<?= $employee['firstname'] . ' ' . $employee['lastname'] ?>"
-                                            <?= old('employee_id') == $employee['id'] ? 'selected' : '' ?>>
-                                        <?= $employee['firstname'] . ' ' . $employee['lastname'] ?>
-                                    </option>
-                                <?php endif; ?>
+                                    <?php if ($employee['result'] !== 'Pending'): ?>
+                                        <option value="<?= $employee['id'] ?>"
+                                                data-email="<?= htmlspecialchars($employee['email']) ?>"
+                                                data-name="<?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>"
+                                                <?= old('employee_id') == $employee['id'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                        </option>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <option value="">No employees found</option>
                             <?php endif; ?>
                         </select>
+
                         <div class="text-danger"><?= $validation->getError('employee_id') ?></div>
                     </div>
                 </div>
