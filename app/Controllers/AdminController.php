@@ -1393,6 +1393,7 @@ public function leave_application()
             $data = [];
             foreach ($pendingEmployees as $employee) {
                 $data[] = [
+                    'id' => $employee['id'],
                     'firstname' => $employee['firstname'],
                     'lastname' => $employee['lastname']
                 ];
