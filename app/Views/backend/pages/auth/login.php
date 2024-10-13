@@ -7,10 +7,10 @@
     </div>
 
     <?php $validation = \Config\Services::validation(); ?>
-    
+
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
-        
+
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
             <div class="alert alert-success">
@@ -38,7 +38,7 @@
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
         </div>
-        
+
         <!-- Validation Error for login_id -->
         <?php if ($validation->getError('login_id')): ?>
             <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
@@ -84,5 +84,33 @@
         </div>
     </form>
 </div>
+
+<?php if (session()->get('lockout_time')): ?>
+    <script>
+        const remainingTime = <?= isset($remainingTime) ? $remainingTime : 30; ?>; // Set default time
+        let timeLeft = remainingTime;
+
+        // Show the SweetAlert
+        const swalInstance = swal({
+            title: "Locked Out!",
+            text: "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.",
+            icon: "warning",
+            button: false, // Disable the button
+            timer: remainingTime * 1000 // Set timer to the remaining time
+        });
+
+        // Update the text every second
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) {
+                swalInstance.text = "Too many incorrect attempts. Please wait " + timeLeft + " seconds before trying again.";
+            }
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                swal.close(); // Close the SweetAlert once the countdown is done
+            }
+        }, 1000);
+    </script>
+<?php endif; ?>
 
 <?= $this->endSection() ?>
