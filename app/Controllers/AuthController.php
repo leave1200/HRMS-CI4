@@ -23,20 +23,31 @@ class AuthController extends BaseController
 
     public function loginForm()
     {
-        
-        $data =[
-            'pageTitle'=>'Login',
-            'validation'=>'null'
+        $data = [
+            'pageTitle' => 'Login',
+            'validation' => 'null'
         ];
         return view('backend/pages/auth/login', $data);
     }
 
     public function loginHandler()
     {
+        // Check if the user is locked out
+        if (session()->get('login_attempts') >= 3) {
+            $lockoutTime = session()->get('lockout_time');
+            if (time() < $lockoutTime) {
+                $remainingTime = $lockoutTime - time();
+                return redirect()->route('admin.login.form')->with('fail', "Too many incorrect attempts. Please wait " . ceil($remainingTime / 60) . " minutes before trying again.");
+            } else {
+                // Reset login attempts after lockout period
+                session()->remove(['login_attempts', 'lockout_time']);
+            }
+        }
+
         // Determine the field type (email or username)
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-    
+
         // Validation rules
         $rules = [
             'login_id' => [
@@ -56,7 +67,7 @@ class AuthController extends BaseController
                 ]
             ]
         ];
-    
+
         // Validate the input
         if (!$this->validate($rules)) {
             return view('backend/pages/auth/login', [
@@ -64,18 +75,32 @@ class AuthController extends BaseController
                 'validation' => $this->validator
             ]);
         }
-    
+
         // If validation passes, proceed to check user credentials
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
-    
+
         // Verify the password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+            // Increment the login attempts
+            $attempts = session()->get('login_attempts') ?? 0;
+            $attempts++;
+            session()->set('login_attempts', $attempts);
+
+            // Check if lockout is needed
+            if ($attempts >= 3) {
+                session()->set('lockout_time', time() + (3 * 60)); // Lock for 3 minutes
+                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 3 minutes before trying again.');
+            }
+
             return redirect()->route('admin.login.form')->with('fail', 'Incorrect Email or Password')->withInput();
         }
-    
+
+        // Reset login attempts on successful login
+        session()->remove(['login_attempts', 'lockout_time']);
+
         // Set user session or cookie using CIAuth
         CIAuth::setCIAuth($userInfo);
-    
+
         // Set session data for logged-in user
         session()->set([
             'user_id' => $userInfo['id'],
@@ -83,7 +108,7 @@ class AuthController extends BaseController
             'userStatus' => $userInfo['status'],
             'isLoggedIn' => true
         ]);
-    
+
         // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
