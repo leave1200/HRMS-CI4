@@ -575,7 +575,7 @@ public function updateDesignation()
     {
         $employeeModel = new EmployeeModel();
          // Fetch employees who do not have a pending result and have an account in the users table
-         $employee = $employeeModel->where('result !=', 'Pending')
+         $employees = $employeeModel->where('result !=', 'Pending')
          ->whereIn('id', function($query) use ($userModel) {
              $query->select('id')->from($userModel->getTable());
          })
