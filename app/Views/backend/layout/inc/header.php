@@ -18,7 +18,7 @@
       background-color: red;
       border-radius: 50%;
       position: relative;
-      animation: heartbeat 1.5s ease-in-out infinite;
+      animation: heartbeat 2s ease-in-out infinite;
     }
 
     @keyframes heartbeat {
