@@ -31,7 +31,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
-                    <span class="heartbit">
+                    <span class="heartbit bg-danger rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
                     <h6 class="dropdown-header">Notifications</h6>
