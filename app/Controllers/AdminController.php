@@ -573,7 +573,7 @@ public function updateDesignation()
     public function employeelist()
     {
         $employeeModel = new EmployeeModel();
-        $userModel = new UserModel(); // Ensure you instantiate the UserModel
+        $userModel = new User(); // Ensure you instantiate the UserModel
          // Fetch employees who do not have a pending result and have an account in the users table
          $employee = $employeeModel->where('result !=', 'Pending')
          ->whereIn('id', function($query) use ($userModel) {
