@@ -13,8 +13,8 @@
 	}
     .heartbit {
       display: inline-block;
-      width: 5px;
-      height: 5px;
+      width: 8px;
+      height: 8px;
       background-color: red;
       border-radius: 50%;
       position: relative;
