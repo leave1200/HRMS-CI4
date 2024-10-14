@@ -13,9 +13,9 @@
 	}
     .heartbit {
       display: inline-block;
-      width: 8px;
-      height: 8px;
-      background-color: red;
+      width: 5px;
+      height: 5px;
+      background-color: blue;
       border-radius: 50%;
       position: relative;
       animation: heartbeat 2s ease-in-out infinite;
