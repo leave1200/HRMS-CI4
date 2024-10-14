@@ -12,23 +12,32 @@
 		overflow-y: auto;
 	}
     .heartbit {
-        width: 20px;
-        height: 20px;
-        background-color: red;
-        animation: heartbeat 1.5s ease-in-out infinite;
-        }
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      border-radius: 50%;
+      position: relative;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
 
-        @keyframes heartbeat {
-        0%, 100% {
-            transform: scale(1);
-        }
-        25%, 75% {
-            transform: scale(1.2);
-        }
-        50% {
-            transform: scale(1.4);
-        }
-        }
+    @keyframes heartbeat {
+      0% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.2);
+      }
+      50% {
+        transform: scale(1.4);
+      }
+      75% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
 
 </style>
 
@@ -50,7 +59,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
-                    <span class="heartbit bg-danger rounded-circle">
+                    <span class="heartbit">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
                     <h6 class="dropdown-header">Notifications</h6>
@@ -93,6 +102,10 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 <script>
 $(document).ready(function() {
     function fetchPendingNotifications() {
