@@ -1,22 +1,34 @@
 <style>
-.heartbit {
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  animation: heartbeat 1.5s ease-in-out infinite;
-}
+	.notification-active {
+		background-color: #f00;
+		border-radius: 50%;
+		padding: 2px 6px;
+		font-size: 12px;
+		color: white;
+	}
+	.dropdown-menu.notifications-dropdown {
+		width: 300px; /* Adjust width of the dropdown */
+		max-height: 300px; /* Control height and enable scroll */
+		overflow-y: auto;
+	}
+    .heartbit {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        animation: heartbeat 1.5s ease-in-out infinite;
+        }
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25%, 75% {
-    transform: scale(1.2);
-  }
-  50% {
-    transform: scale(1.4);
-  }
-}
+        @keyframes heartbeat {
+        0%, 100% {
+            transform: scale(1);
+        }
+        25%, 75% {
+            transform: scale(1.2);
+        }
+        50% {
+            transform: scale(1.4);
+        }
+        }
 
 </style>
 
