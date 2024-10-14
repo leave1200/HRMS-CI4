@@ -373,8 +373,8 @@ public function updateDesignation()
     {
         $employeeModel = new EmployeeModel();
         $userModel = new UserModel(); // Ensure you instantiate the UserModel
-    
         $employees = $employeeModel->findAll();
+    
     
         $userStatus = session()->get('userStatus');
     
@@ -574,7 +574,12 @@ public function updateDesignation()
     public function employeelist()
     {
         $employeeModel = new EmployeeModel();
-        $employee = $employeeModel->findAll();
+         // Fetch employees who do not have a pending result and have an account in the users table
+         $employee = $employeeModel->where('result !=', 'Pending')
+         ->whereIn('id', function($query) use ($userModel) {
+             $query->select('id')->from($userModel->getTable());
+         })
+         ->findAll();
         $userStatus = session()->get('userStatus');
 
         $data = [
