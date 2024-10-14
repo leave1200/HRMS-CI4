@@ -25,14 +25,62 @@
       0% {
         transform: scale(1);
       }
-      25% {
+      5% {
+        transform: scale(1.1);
+      }
+      10% {
         transform: scale(1.2);
       }
-      50% {
+      15% {
+        transform: scale(1.3);
+      }
+      20% {
         transform: scale(1.4);
       }
+      25% {
+        transform: scale(1.5);
+      }
+      30% {
+        transform: scale(1.6);
+      }
+      35% {
+        transform: scale(1.7);
+      }
+      40% {
+        transform: scale(1.8);
+      }
+      45% {
+        transform: scale(1.9);
+      }
+      50% {
+        transform: scale(2);
+      }
+      55% {
+        transform: scale(1.9);
+      }
+      60% {
+        transform: scale(1.8);
+      }
+      65% {
+        transform: scale(1.7);
+      }
+      70% {
+        transform: scale(1.6);
+      }
       75% {
+        transform: scale(1.5);
+      }
+      80% {
+        transform: scale(1.4);
+      }
+      85% {
+        transform: scale(1.3);
+      }
+      90% {
         transform: scale(1.2);
+      }
+      95% {
+        transform: scale(1.1);
       }
       100% {
         transform: scale(1);
