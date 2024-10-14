@@ -374,7 +374,7 @@ public function updateDesignation()
         $employeeModel = new EmployeeModel();
         $userModel = new UserModel(); // Ensure you instantiate the UserModel
     
-        $employees = $employeeModel->findAll(); // Fetch all employees from the database
+        $employees = $employeeModel->findAll();
     
         $userStatus = session()->get('userStatus');
     
