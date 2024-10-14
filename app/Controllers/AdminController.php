@@ -374,12 +374,7 @@ public function updateDesignation()
         $employeeModel = new EmployeeModel();
         $userModel = new UserModel(); // Ensure you instantiate the UserModel
     
-        // Fetch employees who do not have a pending result and have an account in the users table
-        $employees = $employeeModel->where('result !=', 'Pending')
-                                    ->whereIn('id', function($query) use ($userModel) {
-                                        $query->select('id')->from($userModel->getTable());
-                                    })
-                                    ->findAll();
+        $employees = $employeeModel->findAll(); // Fetch all employees from the database
     
         $userStatus = session()->get('userStatus');
     
