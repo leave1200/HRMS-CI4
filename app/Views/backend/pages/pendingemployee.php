@@ -134,11 +134,12 @@ function updateEmployeeStatus(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             fetch(`<?= base_url('admin/hire_employee/') ?>/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
             .then(response => {
                 if (response.ok) {
                     Swal.fire('Hired!', 'Employee hired successfully.', 'success')
