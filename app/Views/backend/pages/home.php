@@ -114,48 +114,41 @@
 				</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('<?= route_to('admin.gender') ?>')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data fetched from server:', data); // Debugging line
+		fetch('<?= route_to('admin.gender') ?>')
+			.then(response => response.json())
+			.then(data => {
+				console.log('Data fetched from server:', data); // Log the response data
+				Highcharts.chart('employeeChart', {
+					chart: {
+						type: 'bar'
+					},
+					title: {
+						text: 'Total Number of Male and Female Employees'
+					},
+					xAxis: {
+						categories: ['Male', 'Female'],
+						crosshair: true
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: 'Number of Employees'
+						}
+					},
+					plotOptions: {
+						column: {
+							pointPadding: 0.2,
+							borderWidth: 0
+						}
+					},
+					series: [{
+						name: 'Employees',
+						data: [data.Male || 0, data.Female || 0] // Ensure data structure matches
+					}]
+				});
+			})
+			.catch(error => console.error('Error fetching employee data:', error));
 
-                // Check if the data structure is as expected
-                if (data.error) {
-                    console.error(data.error);
-                    return; // Exit if there's an error
-                }
-
-                // Create the chart
-                Highcharts.chart('employeeChart', {
-                    chart: {
-                        type: 'bar'
-                    },
-                    title: {
-                        text: 'Total Number of Male and Female Employees'
-                    },
-                    xAxis: {
-                        categories: ['Male', 'Female'],
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Number of Employees'
-                        }
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: [{
-                        name: 'Employees',
-                        data: [data.Male || 0, data.Female || 0] // Ensure this data is correctly set
-                    }]
-                });
-            })
-            .catch(error => console.error('Error fetching employee data:', error));
     });
 </script>
 
