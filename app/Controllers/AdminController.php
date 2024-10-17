@@ -580,6 +580,7 @@ public function updateDesignation()
         //      $query->select('id')->from($userModel->getTable());
         //  })
         //  ->findAll();
+        $employee = $employeeModel;
         $userStatus = session()->get('userStatus');
 
         $data = [
