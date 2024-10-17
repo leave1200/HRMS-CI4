@@ -39,7 +39,7 @@
         <div class="form-group">
             <label for="file">Choose File to Upload:</label>
             <input type="file" name="file" id="file" class="form-control" required accept=".doc, .docx, .csv, .xls, .xlsx">
-            <button type="submit" class="btn btn-primary mt-3">Upload</button>
+            <button type="submit" class="btn btn-primary mt-3"><i class="icon-copy fi-upload-cloud">Upload</i></button>
         </div>
     </form>
 
