@@ -114,11 +114,11 @@
 				</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Perform an AJAX request to fetch the gender data
-        fetch('/admin/getEmployeeGenderData') // Adjust the URL to match your setup
+        fetch('/admin/getEmployeeGenderData')
             .then(response => response.json())
             .then(data => {
-                // Create the chart using the data from the server
+                console.log('Data fetched from server:', data); // Add this line for debugging
+
                 Highcharts.chart('employeeChart', {
                     chart: {
                         type: 'bar'
@@ -144,13 +144,14 @@
                     },
                     series: [{
                         name: 'Employees',
-                        data: [data.male, data.female] // Use the dynamic data from the server
+                        data: [data.male, data.female] // Ensure this data is correctly set
                     }]
                 });
             })
             .catch(error => console.error('Error fetching employee data:', error));
     });
 </script>
+
 
 
 

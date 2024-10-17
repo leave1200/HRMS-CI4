@@ -14,18 +14,17 @@ class EmployeeModel extends Model
         return $this->select('id, firstname, lastname, email, picture')->findAll(); // Include email in the selection
     }
     public function getGenderCounts()
-{
-    // Count the number of male employees
-    $maleCount = $this->where('sex', 'Male')->countAllResults();
+    {
+        // Ensure 'sex' values in the database are properly set as 'Male' and 'Female'
+        $maleCount = $this->where('sex', 'Male')->countAllResults();
+        $femaleCount = $this->where('sex', 'Female')->countAllResults();
+        
+        return [
+            'male' => $maleCount,
+            'female' => $femaleCount
+        ];
+    }
     
-    // Count the number of female employees
-    $femaleCount = $this->where('sex', 'Female')->countAllResults();
-    
-    return [
-        'male' => $maleCount,
-        'female' => $femaleCount
-    ];
-}
 
     
 }
