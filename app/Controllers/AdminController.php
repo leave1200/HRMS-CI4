@@ -685,6 +685,19 @@ public function updateDesignation()
            return $this->response->setStatusCode(200)->setBody('Employee hired successfully.');
        }
        return $this->response->setStatusCode(400, 'Failed to update employee status.');
+   } 
+  public function pendingemployeelist()
+   {
+       $employeeModel = new EmployeeModel();
+       $employee = $employeeModel->findAll();
+       $userStatus = session()->get('userStatus');
+
+       $data = [
+           'pageTitle' => 'Employee List',
+           'employee' => $employee,
+           'userStatus' => $userStatus
+       ];
+       return view('backend/pages/pendingemployee',$data);
    }
    
 
@@ -1430,17 +1443,5 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
-    public function pendingemployeelist()
-    {
-        $employeeModel = new EmployeeModel();
-        $employee = $employeeModel->findAll();
-        $userStatus = session()->get('userStatus');
 
-        $data = [
-            'pageTitle' => 'Employee List',
-            'employee' => $employee,
-            'userStatus' => $userStatus
-        ];
-        return view('backend/pages/pendingemployee',$data);
-    }
 }
