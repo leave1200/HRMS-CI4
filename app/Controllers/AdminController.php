@@ -672,39 +672,8 @@ public function updateDesignation()
    
        return $this->response->setJSON($response);
    }
-   public function getEmployeeGenderData()
-   {
-       try {
-           // Load the EmployeeModel
-           $this->load->model('EmployeeModel');
-           
-           // Fetch the gender counts
-           $genderData = $this->EmployeeModel->getGenderCounts();
-           
-           // Log the fetched data for debugging
-           log_message('debug', 'Fetched Gender Data: ' . json_encode($genderData));
-   
-           // Return the data as JSON response
-           return $this->response->setJSON($genderData);
-       } catch (\Exception $e) {
-           // Log the exception message
-           log_message('error', 'Error fetching gender data: ' . $e->getMessage());
-           return $this->response->setJSON(['error' => 'An error occurred while fetching data.']);
-       }
-   }
-   
-   
-   
-   
-   
-   
-   
    
 
-
-   
-
-    
     
     /////&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
