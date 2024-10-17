@@ -171,7 +171,7 @@ $(document).ready(function() {
                     data.forEach(function(notification) {
                         notificationList.append('<li class="list-group-item">' + 
                             notification.firstname + ' ' + notification.lastname + 
-                            ' has a pending result.</li>');
+                            ' Waiting for Approval.</li>');
                     });
                 } else {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
