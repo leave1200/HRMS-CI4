@@ -15,7 +15,6 @@
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Active</th>
                     <th>Actions</th>
                 </tr>
             </thead>
