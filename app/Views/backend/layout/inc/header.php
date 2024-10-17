@@ -231,39 +231,3 @@ $(document).ready(function() {
 });
 
 </script>
-<script>
-  $(document).ready(function() {
-    function fetchPendingLeaveApplications() {
-        $.ajax({
-            url: '<?= route_to('admin.pending_leaves') ?>', // URL to fetch pending leave applications
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                var leaveList = $('.pending-leaves .list-group');
-                leaveList.empty();
-
-                if (data.length > 0) {
-                    data.forEach(function(leave) {
-                        leaveList.append('<li class="list-group-item">' + 
-                            leave.employee_name + 
-                            ' has a pending leave application (Type: ' + leave.leave_type_name + 
-                            ', From: ' + leave.la_start + ' to ' + leave.la_end + ').</li>');
-                    });
-                } else {
-                    leaveList.append('<li class="list-group-item">No pending leave applications.</li>');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching pending leave applications:', error);
-            }
-        });
-    }
-
-    // Fetch pending leave applications on page load
-    fetchPendingLeaveApplications();
-
-    // Optionally, set an interval to refresh leave applications
-    setInterval(fetchPendingLeaveApplications, 30000); // Every 30 seconds
-});
-
-</script>

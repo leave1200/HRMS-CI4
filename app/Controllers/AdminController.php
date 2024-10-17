@@ -1447,16 +1447,6 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
-        public function fetchPendingLeaves() {
-            $leaveApplicationModel = new LeaveApplicationModel();
-            $leaveTypeModel = new LeaveTypeModel(); // Assuming this model exists
-        
-            // Fetch pending leave applications with details
-            $pendingLeaves = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, new EmployeeModel());
-        
-            // Format the response
-            return $this->response->setJSON($pendingLeaves);
-        }
         
 
 }
