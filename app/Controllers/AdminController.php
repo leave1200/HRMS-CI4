@@ -674,8 +674,16 @@ public function updateDesignation()
    }
    public function getEmployeeGenderData()
    {
-       return $this->response->setJSON(['Male' => 10, 'Female' => 5]); // Temporary test
+       // Load the EmployeeModel
+       $this->load->model('EmployeeModel');
+       
+       // Fetch the gender counts
+       $genderData = $this->EmployeeModel->getGenderCounts();
+       
+       // Return the data as JSON response
+       return $this->response->setJSON($genderData);
    }
+   
    
    
    

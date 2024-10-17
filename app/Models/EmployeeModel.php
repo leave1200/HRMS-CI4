@@ -19,12 +19,13 @@ class EmployeeModel extends Model
         $genderCounts = $this->select('sex, COUNT(*) as count')
             ->groupBy('sex')
             ->findAll();
-
+    
+        log_message('debug', 'Gender Counts: ' . json_encode($genderCounts));
+    
         // Initialize counts
         $maleCount = 0;
         $femaleCount = 0;
-
-        // Populate counts based on the results
+    
         foreach ($genderCounts as $gender) {
             if ($gender['sex'] === 'Male') {
                 $maleCount = (int)$gender['count'];
@@ -32,16 +33,12 @@ class EmployeeModel extends Model
                 $femaleCount = (int)$gender['count'];
             }
         }
-
+    
         return [
             'Male' => $maleCount,
             'Female' => $femaleCount
         ];
     }
-    
-    
-    
-
     
 }
 
