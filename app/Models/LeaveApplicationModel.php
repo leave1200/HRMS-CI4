@@ -31,5 +31,8 @@ class LeaveApplicationModel extends Model
         'la_start' => 'required|valid_date',
         'la_end' => 'required|valid_date',
     ]; 
-    
+    public function countApprovedLeaves()
+    {
+        return $this->where('status', 'approved')->countAllResults();
+    }
 }
