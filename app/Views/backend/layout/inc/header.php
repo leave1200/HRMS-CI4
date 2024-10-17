@@ -106,7 +106,10 @@
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
-                    <span class="heartbit">
+                    <?php if (!empty($pendingEmployees)): ?>
+                        <span class="notification-active"><?= count($pendingEmployees) ?></span> <!-- Display count -->
+                    <?php endif; ?>
+                    <span class="heartbit"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
                     <h6 class="dropdown-header">Notifications</h6>
@@ -178,14 +181,31 @@ $(document).ready(function() {
                 console.error('Error fetching pending notifications:', error);
             }
         });
-
     }
 
     // Fetch notifications on page load
     fetchPendingNotifications();
 
-    // Optionally, you can set an interval to refresh notifications
+    // Optionally, set an interval to refresh notifications
     setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
+
+    // Handle dropdown toggle
+    $('.user-notification .dropdown-toggle').on('click', function(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
+    });
+
+    // Close dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.user-notification').length) {
+            $('.notifications-dropdown').hide(); // Close the dropdown
+        }
+    });
+
+    // Prevent closing dropdown when clicking inside it
+    $('.notifications-dropdown').on('click', function(e) {
+        e.stopPropagation(); // Prevent click from bubbling up
+    });
 });
 
 </script>
