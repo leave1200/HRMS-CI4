@@ -1453,22 +1453,21 @@ public function leave_application()
         }
         public function deleteuser($id)
     {
-        $userModel = new User();
-
-        // Get user ID from POST request
-        $id = $this->request->getPost('id');
-
-        // Attempt to delete the user
-        if ($userModel->delete($id)) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'User deleted successfully.'
-            ]);
+        if ($this->request->isAJAX()) {
+            $userModel = new \App\Models\User();
+            $id = $this->request->getPost('id');
+    
+            if (!empty($id)) {
+                if ($userModel->delete($id)) {
+                    return $this->response->setJSON(['status' => 'success', 'message' => 'User deleted successfully']);
+                } else {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete user'])->setStatusCode(500);
+                }
+            } else {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid user ID'])->setStatusCode(400);
+            }
         } else {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'User could not be deleted.'
-            ]);
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized access'])->setStatusCode(401);
         }
     }
 
