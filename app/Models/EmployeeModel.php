@@ -15,8 +15,8 @@ class EmployeeModel extends Model
     }
     public function getGenderCount()
     {
-        $maleCount = $this->where('sex', 'Male')->where('status !=', 'Pending')->countAllResults();
-        $femaleCount = $this->where('sex', 'Female')->where('status !=', 'Pending')->countAllResults();
+        $maleCount = $this->where('sex', 'Male')->where('result !=', 'Pending')->countAllResults();
+        $femaleCount = $this->where('sex', 'Female')->where('result !=', 'Pending')->countAllResults();
         return ['Male' => $maleCount, 'Female' => $femaleCount];
     }
     
