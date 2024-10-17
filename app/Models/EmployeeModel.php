@@ -15,18 +15,30 @@ class EmployeeModel extends Model
     }
     public function getGenderCounts()
     {
-        // Log the number of rows where 'sex' is 'Male'
-        $maleCount = $this->where('sex', 'Male')->countAllResults();
-        
-        // Log the number of rows where 'sex' is 'Female'
-        $femaleCount = $this->where('sex', 'Female')->countAllResults();
-        
-        // Check if the counts are returning as expected
+        // Get the gender counts using a single query with group by
+        $genderCounts = $this->select('sex, COUNT(*) as count')
+            ->groupBy('sex')
+            ->findAll();
+    
+        // Initialize counts
+        $maleCount = 0;
+        $femaleCount = 0;
+    
+        // Populate counts based on the results
+        foreach ($genderCounts as $gender) {
+            if ($gender['sex'] === 'Male') {
+                $maleCount = (int)$gender['count'];
+            } elseif ($gender['sex'] === 'Female') {
+                $femaleCount = (int)$gender['count'];
+            }
+        }
+    
         return [
             'Male' => $maleCount,
             'Female' => $femaleCount
         ];
     }
+    
     
     
 
