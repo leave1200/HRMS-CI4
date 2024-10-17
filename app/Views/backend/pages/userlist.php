@@ -26,7 +26,6 @@
                 <td><?= $user['username'] ?></td>
                 <td><?= $user['email'] ?></td>
                 <td>
-                <a href="/users/edit/<?= $user['id'] ?>" class="btn btn-primary">Edit</a>
                 <button class="btn btn-danger" onclick="deleteUser(<?= $user['id'] ?>)">Delete</button>
                 </td>
             </tr>
