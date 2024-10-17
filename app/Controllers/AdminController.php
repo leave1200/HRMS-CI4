@@ -676,17 +676,21 @@ public function updateDesignation()
    {
        // Load the EmployeeModel
        $this->load->model('EmployeeModel');
-       
+   
        // Fetch the gender counts
        $genderData = $this->EmployeeModel->getGenderCounts();
-       
+   
+       // Debugging: Check what data is returned
+       log_message('debug', 'Gender Data: ' . json_encode($genderData)); // Log the fetched data for verification
+   
        // Return the data as JSON response
-       if (empty($genderData)) {
-           return $this->response->setJSON(['error' => 'No data found']);
-       } else {
+       if (isset($genderData['Male']) && isset($genderData['Female'])) {
            return $this->response->setJSON($genderData);
+       } else {
+           return $this->response->setJSON(['error' => 'No data found']);
        }
    }
+   
    
    
 
