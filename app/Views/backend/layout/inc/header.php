@@ -120,7 +120,7 @@
                         <li class="list-group-item">
                             <a href="<?= route_to('admin.pendinglist') ?>">
                                 <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                            </a> has a pending result.
+                            </a> Need Approval.
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
