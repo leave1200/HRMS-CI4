@@ -77,7 +77,7 @@
                                 <td>
                                     
                                     <!-- Download Link -->
-                                    <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm">Download</a>
+                                    <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm"><i class="icon-copy fi-save"></i></a>
 
                                     
                                         <!-- Delete Action (using SweetAlert for confirmation) -->
