@@ -144,7 +144,7 @@
                     },
                     series: [{
                         name: 'Employees',
-                        data: [data.male, data.female] // Correct data
+                        data: [data.Male, data.Female] // Correct data
                     }]
                 });
             })
