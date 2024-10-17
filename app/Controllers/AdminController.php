@@ -37,7 +37,6 @@ class AdminController extends BaseController
         $designationCount = $designationModel->countAllResults();
         $userStatus = session()->get('userStatus');
         
-        
 
         $data = [
             'pageTitle' => 'Dashboard',
@@ -1448,6 +1447,5 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
-        
 
 }
