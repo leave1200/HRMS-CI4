@@ -122,25 +122,52 @@ function deleteEmployee(id) {
 }
 </script>
 <script>
-   function updateEmployeeStatus(employeeId) {
-    if (confirm('Are you sure you want to hire this employee?')) {
-        fetch(`<?= route_to('admin.pendingemployeelist') ?>/${employeeId}`, {
-            method: 'PUT', // Or POST, depending on your setup
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                location.reload(); // Reload to see updated list
-            } else {
-                alert('Failed to update status.');
-            }
-        })
-        .catch(error => console.error('Error updating employee status:', error));
-    }
+function updateEmployeeStatus(employeeId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You want to hire this employee?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, hire!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`<?= route_to('admin.pendingemployeelist') ?>/${employeeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'Hired!',
+                        text: 'Employee hired successfully.',
+                        icon: 'success'
+                    }).then(() => {
+                        location.reload(); // Reload to see updated list
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update status.',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating employee status:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while updating the status.',
+                    icon: 'error'
+                });
+            });
+        }
+    });
 }
 </script>
+
 
 
 
