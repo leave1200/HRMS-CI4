@@ -1451,24 +1451,25 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
-        public function deleteuser($id)
-    {
-        if ($this->request->isAJAX()) {
-            $userModel = new \App\Models\User();
-            $id = $this->request->getPost('id');
-    
-            if (!empty($id)) {
-                if ($userModel->delete($id)) {
-                    return $this->response->setJSON(['status' => 'success', 'message' => 'User deleted successfully']);
+        public function deleteuser()
+        {
+            if ($this->request->isAJAX()) {
+                $userModel = new \App\Models\User();
+                $id = $this->request->getPost('id');
+        
+                if (!empty($id) && $userModel->find($id)) {
+                    if ($userModel->delete($id)) {
+                        return $this->response->setJSON(['status' => 'success', 'message' => 'User deleted successfully']);
+                    } else {
+                        return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete user'])->setStatusCode(500);
+                    }
                 } else {
-                    return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete user'])->setStatusCode(500);
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid user ID'])->setStatusCode(400);
                 }
             } else {
-                return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid user ID'])->setStatusCode(400);
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized access'])->setStatusCode(401);
             }
-        } else {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized access'])->setStatusCode(401);
         }
-    }
+        
 
 }
