@@ -263,7 +263,7 @@ function deleteEmployee(id) {
 <script>
    function updateEmployeeStatus(employeeId) {
     if (confirm('Are you sure you want to hire this employee?')) {
-        fetch(`<?= base_url('admin/hire_employee') ?>/${employeeId}`, {
+        fetch(`<?= route_to('admin.hired') ?>/${employeeId}`, {
             method: 'PUT', // Or POST, depending on your setup
             headers: {
                 'Content-Type': 'application/json'
