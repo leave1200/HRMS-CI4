@@ -114,37 +114,44 @@
 				</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        Highcharts.chart('employeeChart', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Total Number of Male and Female Employees'
-            },
-            xAxis: {
-                categories: ['Male', 'Female'],
-                crosshair: true
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Number of Employees'
-                }
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: 'Employees',
-                data: [45, 55] // Replace these numbers with your actual data
-
-            }]
-        });
+        // Perform an AJAX request to fetch the gender data
+        fetch('/admin/getEmployeeGenderData') // Adjust the URL to match your setup
+            .then(response => response.json())
+            .then(data => {
+                // Create the chart using the data from the server
+                Highcharts.chart('employeeChart', {
+                    chart: {
+                        type: 'bar'
+                    },
+                    title: {
+                        text: 'Total Number of Male and Female Employees'
+                    },
+                    xAxis: {
+                        categories: ['Male', 'Female'],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Employees'
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Employees',
+                        data: [data.male, data.female] // Use the dynamic data from the server
+                    }]
+                });
+            })
+            .catch(error => console.error('Error fetching employee data:', error));
     });
 </script>
+
 
 
 <?= $this->endSection()?>

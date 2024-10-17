@@ -677,6 +677,17 @@ public function updateDesignation()
    
        return $this->response->setJSON($response);
    }
+    public function getEmployeeGenderData()
+        {
+            $this->load->model('EmployeeModel');
+
+            // Use the model method to get the male and female counts
+            $genderData = $this->EmployeeModel->getGenderCounts();
+
+            // Return the data as JSON
+            echo json_encode($genderData);
+        }
+
    
 
     
