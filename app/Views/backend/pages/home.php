@@ -118,38 +118,46 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             console.log('Data fetched from server:', data); // Log the response data
-            Highcharts.chart('employeeChart', {
-                chart: {
-                    type: 'bar'
-                },
-                title: {
-                    text: 'Total Number of Male and Female Employees'
-                },
-                xAxis: {
-                    categories: ['Male', 'Female'],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
+            if (data && typeof data === 'object') {
+                const maleCount = data.Male || 0;
+                const femaleCount = data.Female || 0;
+                console.log('Male count:', maleCount);
+                console.log('Female count:', femaleCount);
+
+                Highcharts.chart('employeeChart', {
+                    chart: {
+                        type: 'bar'
+                    },
                     title: {
-                        text: 'Number of Employees'
-                    }
-                },
-                plotOptions: {
-                    bar: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [{
-                    name: 'Employees',
-                    data: [data.Male || 0, data.Female || 0] // Ensure data structure matches
-                }]
-            });
+                        text: 'Total Number of Male and Female Employees'
+                    },
+                    xAxis: {
+                        categories: ['Male', 'Female'],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Employees'
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Employees',
+                        data: [maleCount, femaleCount] // Ensure data structure matches
+                    }]
+                });
+            } else {
+                console.error('Unexpected data format:', data);
+            }
         })
         .catch(error => console.error('Error fetching employee data:', error));
 });
-
 </script>
 
 
