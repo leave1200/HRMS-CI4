@@ -123,7 +123,7 @@ function deleteEmployee(id) {
 }
 </script>
 <script>
-function updateEmployeeStatus(employeeId) {
+function updateEmployeeStatus(id) {
     Swal.fire({
         title: 'Are you sure?',
         text: 'You want to hire this employee?',
@@ -133,7 +133,7 @@ function updateEmployeeStatus(employeeId) {
         cancelButtonText: 'No, cancel!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`<?= route_to('admin.hire_employee') ?>/${employeeId}`, {
+            fetch(`<?= route_to('admin.hire_employee') ?>/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
