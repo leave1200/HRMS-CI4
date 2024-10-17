@@ -13,6 +13,12 @@ class EmployeeModel extends Model
     {
         return $this->select('id, firstname, lastname, email, picture')->findAll(); // Include email in the selection
     }
+    public function getGenderCount()
+    {
+        $maleCount = $this->where('sex', 'Male')->countAllResults();
+        $femaleCount = $this->where('sex', 'Female')->countAllResults();
+        return ['Male' => $maleCount, 'Female' => $femaleCount];
+    }
 }
 
 

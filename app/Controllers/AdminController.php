@@ -672,8 +672,24 @@ public function updateDesignation()
    
        return $this->response->setJSON($response);
    }
+   public function getEmployeeGenderData()
+   {
+    $model = new EmployeeModel();
+    return $this->response->setJSON($model->getGenderCount());
+   }
+   
+   
+   
+   
+   
+   
+   
    
 
+
+   
+
+    
     
     /////&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
