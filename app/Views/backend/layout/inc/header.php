@@ -90,11 +90,6 @@
 </style>
 
 <div class="header">
-	<div class="header-left">
-		<div class="menu-icon bi bi-list"></div>
-		<div class="search-toggle-icon bi bi-search" data-toggle="header_search"></div>
-		<div class="header-search"></div>
-	</div>
 	<div class="header-right">
 		<div class="dashboard-setting user-notification">
 			<div class="dropdown">
