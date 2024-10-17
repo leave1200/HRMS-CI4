@@ -134,7 +134,7 @@ function updateEmployeeStatus(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             fetch(`<?= base_url('admin/hire_employee/') ?>/${id}`, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }
