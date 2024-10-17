@@ -677,25 +677,6 @@ public function updateDesignation()
     $model = new EmployeeModel();
     return $this->response->setJSON($model->getGenderCount());
    }
-
-   public function pendingemployeelist()
-   {
-       $model = new EmployeeModel();
-   
-       // Regular request to fetch the employee list
-       $employees = $model->findAll(); // Fetch all employees
-       $userStatus = session()->get('userStatus'); // Get user status from session
-   
-       // Prepare data for the view
-       $data = [
-           'pageTitle' => 'Employee List',
-           'employees' => $employees,
-           'userStatus' => $userStatus
-       ];
-   
-       return view('backend/pages/pendingemployee', $data); // Load the view
-   }
-   
    public function hire_employee($id)
    {
        $model = new EmployeeModel();
@@ -707,9 +688,20 @@ public function updateDesignation()
        }
        
        return $this->response->setStatusCode(400, 'Failed to update employee status.');
-   }
-   
+   } 
+  public function pendingemployeelist()
+   {
+       $employeeModel = new EmployeeModel();
+       $employee = $employeeModel->findAll();
+       $userStatus = session()->get('userStatus');
 
+       $data = [
+           'pageTitle' => 'Employee List',
+           'employee' => $employee,
+           'userStatus' => $userStatus
+       ];
+       return view('backend/pages/pendingemployee',$data);
+   }
    
 
    
