@@ -36,7 +36,6 @@ class AdminController extends BaseController
         $designations = $designationModel->findAll();
         $designationCount = $designationModel->countAllResults();
         $userStatus = session()->get('userStatus');
-        $leaveModel = new LeaveModel();
 
         $data = [
             'pageTitle' => 'Dashboard',
