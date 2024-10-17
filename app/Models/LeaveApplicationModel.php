@@ -58,6 +58,10 @@ class LeaveApplicationModel extends Model
     {
         return $this->where('status', 'Approved')->countAllResults();
     }
+    public function countPendingLeaves()
+    {
+        return $this->where('status', 'Pending')->countAllResults();
+    }
     
     
 }

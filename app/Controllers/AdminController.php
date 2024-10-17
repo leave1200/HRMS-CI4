@@ -36,13 +36,17 @@ class AdminController extends BaseController
         $designations = $designationModel->findAll();
         $designationCount = $designationModel->countAllResults();
         $userStatus = session()->get('userStatus');
-        
+        $leaveModel = new LeaveModel();
+        $approvedCount = $leaveModel->countApprovedLeaves();
+        $pendingCount = $leaveModel->countPendingLeaves();
 
         $data = [
             'pageTitle' => 'Dashboard',
             'employee' => $employee,
             'employeeCount' => $employeeCount,
             'designationCount' => $designationCount,
+            'approvedCount' => $approvedCount,
+            'pendingCount' => $pendingCount,
             'userStatus' => $userStatus
         ];
         return view('backend/pages/home', $data);
