@@ -677,9 +677,9 @@ public function updateDesignation()
     $model = new EmployeeModel();
     return $this->response->setJSON($model->getGenderCount());
    }
-   
-  public function pendingemployeelist()
-   {
+
+public function pendingemployeelist($id = null)
+{
     $model = new EmployeeModel();
 
     // Check if the request is an AJAX request to hire an employee
@@ -701,7 +701,8 @@ public function updateDesignation()
         'userStatus' => $userStatus
     ];
     return view('backend/pages/pendingemployee', $data);
-   }
+}
+
    
 
    
