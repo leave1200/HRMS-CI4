@@ -54,6 +54,10 @@ class LeaveApplicationModel extends Model
     
         return $applicationsWithDetails;
     }
+    public function countApprovedLeaves()
+    {
+        return $this->where('status', 'Approved')->countAllResults();
+    }
     
     
 }
