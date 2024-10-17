@@ -102,49 +102,40 @@
 				</a>
 			</div>
 		</div>
-    <div class="user-notification">
-    <div class="dropdown">
-        <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-            <i class="icon-copy dw dw-notification"></i>
-            <?php 
-            $totalPending = count($pendingEmployees) + count($pendingLeaves); // Assuming $pendingLeaves is defined
-            if ($totalPending > 0): ?>
-                <span class="notification-active"><?= $totalPending ?></span> <!-- Display total count -->
-            <?php endif; ?>
-            <span class="heartbit"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-            <h6 class="dropdown-header">Notifications</h6>
-
-            <!-- Pending Employees Section -->
-            <div class="pending-employees">
-                <h6 class="dropdown-header">Pending Employees</h6>
-                <ul class="list-group">
+        <div class="user-notification">
+            <div class="dropdown">
+                <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                    <i class="icon-copy dw dw-notification"></i>
                     <?php if (!empty($pendingEmployees)): ?>
-                        <?php foreach ($pendingEmployees as $employee): ?>
-                            <li class="list-group-item">
-                                <a href="<?= route_to('admin.pendinglist') ?>">
-                                    <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                                </a> has a pending result.
-                            </li>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <li class="list-group-item">No pending employee results.</li>
+                        <span class="notification-active"><?= count($pendingEmployees) ?></span> <!-- Display count -->
                     <?php endif; ?>
-                </ul>
-            </div>
+                    <span class="heartbit"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
+                    <h6 class="dropdown-header">Notifications</h6>
+                    <ul class="list-group">
+                        <?php if (!empty($pendingEmployees)): ?>
+                            <?php foreach ($pendingEmployees as $employee): ?>
+                                <li class="list-group-item">
+                                    <a href="<?= route_to('admin.pendinglist') ?>">
+                                        <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                    </a> has a pending result.
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li class="list-group-item">No pending results.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
 
-            <!-- Pending Leave Applications Section -->
-            <div class="pending-leaves">
-                <h6 class="dropdown-header">Pending Leave Applications</h6>
-                <ul class="list-group">
-                </ul>
+                <!-- Pending Leave Applications Section -->
+                <div class="pending-leaves">
+                    <h6 class="dropdown-header">Pending Leave Applications</h6>
+                    <ul class="list-group">
+                    </ul>
+                </div>
             </div>
-
         </div>
-    </div>
-</div>
-
 
 
 
