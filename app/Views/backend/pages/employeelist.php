@@ -45,6 +45,7 @@
             <tbody>
     <?php if (!empty($employee)): ?>
         <?php foreach ($employee as $index => $emp): ?>
+            <!-- <?php if ($emp['result'] !== 'Pending'): // Skip employees with status 'Pending' ?> -->
                 <tr>
                     <td><?= $index + 1 ?></td>
                     <td>
@@ -86,6 +87,7 @@
                         <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
                     </td>
                 </tr>
+            <!-- <?php endif; ?> -->
         <?php endforeach; ?>
     <?php else: ?>
         <tr>
