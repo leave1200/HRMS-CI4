@@ -1451,5 +1451,25 @@ public function leave_application()
 
             return $this->response->setJSON($data);
         }
+        public function deleteuser($id)
+    {
+        $userModel = new User();
+
+        // Get user ID from POST request
+        $id = $this->request->getPost('id');
+
+        // Attempt to delete the user
+        if ($userModel->delete($id)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'User deleted successfully.'
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'User could not be deleted.'
+            ]);
+        }
+    }
 
 }

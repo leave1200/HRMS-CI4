@@ -117,6 +117,10 @@ $routes->group('admin', static function($routes){
         $routes->post('holiday/create', 'AdminController::create', ['as' => 'admin.create_holidays']);
         $routes->post('admin/update-holidays', 'AdminController::updateHolidays', ['as' => 'admin.update_holidays']);
         $routes->post('admin/cancel-holidays', 'AdminController::cancelHolidays', ['as' => 'admin.cancel_holidays']);
+        
+
+        ////////////////////////////////////////////////users
+        $routes->post('user_delete', 'AdminController::deleteuser', ['as' => 'admin.deleteuser']);
 
 
     });
