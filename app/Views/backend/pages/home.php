@@ -73,12 +73,10 @@
 							<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
 								<div class="h5 mb-md-0">Employee</div>
 							</div>
-							<canvas id="employeeChart" width="400" height="200"></canvas>
+							<div id="employeeChart" style="width:100%; height:400px;"></div>
 						</div>
 					</div>
 				</div>
-
-
 				<div class="card-box pb-10">
 					<div class="h5 pd-20 mb-0">Employee</div>
 					<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -114,33 +112,40 @@
 						</div>
 					</div>
 				</div>
-				<script>
-    // Assuming you have data of the number of male and female employees
-    const maleEmployees = 45;  // Replace with your data
-    const femaleEmployees = 55; // Replace with your data
-
-    const ctx = document.getElementById('employeeChart').getContext('2d');
-    const employeeChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Male', 'Female'],
-            datasets: [{
-                label: '# of Employees',
-                data: [maleEmployees, femaleEmployees],
-                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Highcharts.chart('employeeChart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Total Number of Male and Female Employees'
+            },
+            xAxis: {
+                categories: ['Male', 'Female'],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Number of Employees'
                 }
-            }
-        }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Employees',
+                data: [45, 55] // Replace these numbers with your actual data
+
+            }]
+        });
     });
 </script>
+
 
 <?= $this->endSection()?>
 <?= $this->section('sidebar') ?>
