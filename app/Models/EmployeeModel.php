@@ -15,15 +15,19 @@ class EmployeeModel extends Model
     }
     public function getGenderCounts()
     {
-        // Ensure 'sex' values in the database are properly set as 'Male' and 'Female'
+        // Log the number of rows where 'sex' is 'Male'
         $maleCount = $this->where('sex', 'Male')->countAllResults();
+        
+        // Log the number of rows where 'sex' is 'Female'
         $femaleCount = $this->where('sex', 'Female')->countAllResults();
         
+        // Check if the counts are returning as expected
         return [
             'male' => $maleCount,
             'female' => $femaleCount
         ];
     }
+    
     
 
     
