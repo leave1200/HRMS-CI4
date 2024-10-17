@@ -13,33 +13,26 @@ class EmployeeModel extends Model
     {
         return $this->select('id, firstname, lastname, email, picture')->findAll(); // Include email in the selection
     }
-    public function getGenderCounts()
+    public function getEmployeeGenderData()
     {
-        // Get the gender counts using a single query with group by
-        $genderCounts = $this->select('sex, COUNT(*) as count')
-            ->groupBy('sex')
-            ->findAll();
+        try {
+            // Load the EmployeeModel
+            $this->load->model('EmployeeModel');
+            
+            // Fetch the gender counts
+            $genderData = $this->EmployeeModel->getGenderCounts();
+            
+            // Log the fetched data for debugging
+            log_message('debug', 'Fetched Gender Data: ' . json_encode($genderData));
     
-        log_message('debug', 'Gender Counts: ' . json_encode($genderCounts));
-    
-        // Initialize counts
-        $maleCount = 0;
-        $femaleCount = 0;
-    
-        foreach ($genderCounts as $gender) {
-            if (strcasecmp($gender['sex'], 'Male') === 0) {
-                $maleCount = (int)$gender['count'];
-            } elseif (strcasecmp($gender['sex'], 'Female') === 0) {
-                $femaleCount = (int)$gender['count'];
-            }
+            // Return the data as JSON response
+            return $this->response->setJSON($genderData);
+        } catch (\Exception $e) {
+            // Log the exception message
+            log_message('error', 'Error fetching gender data: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => 'An error occurred while fetching data.']);
         }
-    
-        return [
-            'Male' => $maleCount,
-            'Female' => $femaleCount
-        ];
     }
-    
     
 }
 
