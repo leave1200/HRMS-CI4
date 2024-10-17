@@ -103,30 +103,34 @@
 				</a>
 			</div>
 		</div>
-        <div class="user-notification">
-            <div class="dropdown">
-                <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                    <i class="icon-copy dw dw-notification"></i>
-                    <span class="heartbit">
-                </a>
-                <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-                    <h6 class="dropdown-header">Notifications</h6>
-                    <ul class="list-group">
-                        <?php if (!empty($pendingEmployees)): ?>
-                            <?php foreach ($pendingEmployees as $employee): ?>
-                                <li class="list-group-item">
-                                    <a href="<?= route_to('admin.pendinglist') ?>">
-                                        <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                                    </a> has a pending result.
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <li class="list-group-item">No pending results.</li>
-                        <?php endif; ?>
-                    </ul>
-                </div>
-            </div>
+    <div class="user-notification">
+    <div class="dropdown">
+        <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+            <i class="icon-copy dw dw-notification"></i>
+            <?php if (!empty($pendingEmployees)): ?>
+                <span class="badge badge-danger"><?= count($pendingEmployees) ?></span> <!-- Display count -->
+            <?php endif; ?>
+            <span class="heartbit"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
+            <h6 class="dropdown-header">Notifications</h6>
+            <ul class="list-group">
+                <?php if (!empty($pendingEmployees)): ?>
+                    <?php foreach ($pendingEmployees as $employee): ?>
+                        <li class="list-group-item">
+                            <a href="<?= route_to('admin.pendinglist') ?>">
+                                <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                            </a> has a pending result.
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="list-group-item">No pending results.</li>
+                <?php endif; ?>
+            </ul>
         </div>
+    </div>
+</div>
+
 
 
 
