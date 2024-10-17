@@ -75,8 +75,6 @@
                                 <td><?= esc($file['original_name']) ?></td>
                                 <td><?= esc($file['uploaded_at']) ?></td>
                                 <td>
-                                    <!-- View Inline (for viewable file types) -->
-                                    <a href="<?= route_to('viewFile', $file['id']) ?>" class="btn btn-info btn-sm" target="_blank">View</a>
                                     
                                     <!-- Download Link -->
                                     <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm">Download</a>
