@@ -127,17 +127,6 @@
                         <?php endif; ?>
                     </ul>
                     <ul class="list-group">
-                        <?php if (!empty($pendingEmployees)): ?>
-                            <?php foreach ($pendingEmployees as $employee): ?>
-                                <li class="list-group-item">
-                                    <a href="<?= route_to('admin.pendinglist') ?>">
-                                        <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                                    </a> has a pending result.
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <li class="list-group-item">No pending results.</li>
-                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
