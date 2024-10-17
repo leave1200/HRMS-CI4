@@ -680,15 +680,13 @@ public function updateDesignation()
    public function hire_employee($id)
    {
        $model = new EmployeeModel();
-       $data = ['result' => 'Hired'];
-   
-       // Attempt to update the employee's status
-       if ($model->update($id, $data)) {
-           return $this->response->setStatusCode(200)->setBody('Employee hired successfully.');
+
+       if ($model->hireEmployee($id)) {
+           return $this->response->setJSON(['success' => true]);
+       } else {
+           return $this->response->setJSON(['success' => false], 400);
        }
-       
-       return $this->response->setStatusCode(400, 'Failed to update employee status.');
-   } 
+   }
   public function pendingemployeelist()
    {
        $employeeModel = new EmployeeModel();
