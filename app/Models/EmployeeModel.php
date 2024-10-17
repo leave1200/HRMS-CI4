@@ -27,9 +27,9 @@ class EmployeeModel extends Model
         $femaleCount = 0;
     
         foreach ($genderCounts as $gender) {
-            if ($gender['sex'] === 'Male') {
+            if (strcasecmp($gender['sex'], 'Male') === 0) {
                 $maleCount = (int)$gender['count'];
-            } elseif ($gender['sex'] === 'Female') {
+            } elseif (strcasecmp($gender['sex'], 'Female') === 0) {
                 $femaleCount = (int)$gender['count'];
             }
         }
@@ -39,6 +39,7 @@ class EmployeeModel extends Model
             'Female' => $femaleCount
         ];
     }
+    
     
 }
 
