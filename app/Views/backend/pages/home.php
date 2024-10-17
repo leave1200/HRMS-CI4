@@ -114,10 +114,10 @@
 				</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('admin.gender')
+        fetch('<?= route_to('admin.gender') ?>')
             .then(response => response.json())
             .then(data => {
-                console.log('Data fetched from server:', data); // Add this line for debugging
+                console.log('Data fetched from server:', data); // Debugging
 
                 Highcharts.chart('employeeChart', {
                     chart: {
@@ -144,13 +144,14 @@
                     },
                     series: [{
                         name: 'Employees',
-                        data: [data.male, data.female] // Ensure this data is correctly set
+                        data: [data.male, data.female] // Correct data
                     }]
                 });
             })
             .catch(error => console.error('Error fetching employee data:', error));
     });
 </script>
+t>
 
 
 
