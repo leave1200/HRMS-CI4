@@ -19,6 +19,10 @@ class EmployeeModel extends Model
         $femaleCount = $this->where('sex', 'Female')->countAllResults();
         return ['Male' => $maleCount, 'Female' => $femaleCount];
     }
+    public function hireEmployee($id)
+    {
+        return $this->update($id, ['result' => 'hired']);
+    }
 }
 
 
