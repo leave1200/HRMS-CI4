@@ -1,6 +1,5 @@
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="page-header">
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
