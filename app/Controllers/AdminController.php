@@ -39,7 +39,6 @@ class AdminController extends BaseController
         $leaveModel = new LeaveApplicationModel();
         $approvedCount = $leaveModel->countApprovedLeaves();
         $pendingCount = $leaveModel->countPendingLeaves();
-        $employees = $employeeModel->where('status !=', 'Pending')->findAll();
 
         $data = [
             'pageTitle' => 'Dashboard',
