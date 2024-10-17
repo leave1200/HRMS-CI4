@@ -95,12 +95,14 @@
 									<tbody>
 										<?php if (!empty($employee)): ?>
 											<?php foreach ($employee as $index => $emp): ?>
+												<?php if ($emp['result'] !== 'Pending'): ?>
 												<tr>
 													<td><?= $index + 1 ?></td>
 													<td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
 													<td><?= htmlspecialchars($emp['dob']) ?></td>
 													<td><?= htmlspecialchars($emp['address']) ?></td>
 												</tr>
+												<?php endif; ?>
 											<?php endforeach; ?>
 										<?php else: ?>
 											<tr>
