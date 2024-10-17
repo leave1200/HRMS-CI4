@@ -109,7 +109,7 @@ $routes->group('admin', static function($routes){
         $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);
         $routes->post('mark-notifications-read', 'AdminController::markNotificationsRead');
         $routes->post('users/fetch', 'UserController::fetchUsers');
-        $routes->get('admin/pending-results', 'AdminController::fetchPendingResults', ['as' => 'admin.pending_results']);
+        $routes->get('pending_leaves', 'AdminController::fetchPendingLeaves', ['as' => 'admin.pending_leaves']);
 
 
         
