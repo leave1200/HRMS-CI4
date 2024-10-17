@@ -23,8 +23,8 @@ class EmployeeModel extends Model
         
         // Check if the counts are returning as expected
         return [
-            'male' => $maleCount,
-            'female' => $femaleCount
+            'Male' => $maleCount,
+            'Female' => $femaleCount
         ];
     }
     
