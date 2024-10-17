@@ -15,31 +15,18 @@ class EmployeeModel extends Model
     }
     public function getGenderCounts()
     {
-        // Get the gender counts using a single query with group by
-        $genderCounts = $this->select('sex, COUNT(*) as count')
-            ->groupBy('sex')
-            ->findAll();
-    
-        log_message('debug', 'Gender Counts: ' . json_encode($genderCounts));
-    
-        // Initialize counts
-        $maleCount = 0;
-        $femaleCount = 0;
-    
-        foreach ($genderCounts as $gender) {
-            if (strcasecmp($gender['sex'], 'Male') === 0) {
-                $maleCount = (int)$gender['count'];
-            } elseif (strcasecmp($gender['sex'], 'Female') === 0) {
-                $femaleCount = (int)$gender['count'];
-            }
-        }
-    
+        // Log the number of rows where 'sex' is 'Male'
+        $maleCount = $this->where('sex', 'Male')->countAllResults();
+        
+        // Log the number of rows where 'sex' is 'Female'
+        $femaleCount = $this->where('sex', 'Female')->countAllResults();
+        
+        // Check if the counts are returning as expected
         return [
             'Male' => $maleCount,
             'Female' => $femaleCount
         ];
     }
-    
     
 }
 
