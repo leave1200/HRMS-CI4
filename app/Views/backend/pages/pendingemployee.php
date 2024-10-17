@@ -54,28 +54,9 @@
                             <td><?= htmlspecialchars($emp['dob']) ?></td>
                             <td><?= htmlspecialchars($emp['email']) ?></td>
                             <td>
-							<button class="btn btn-primary edit-employee-btn"
-                                data-id="<?= $emp['id'] ?>"
-                                data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
-                                data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
-                                data-phone="<?= htmlspecialchars($emp['phone']) ?>"
-                                data-dob="<?= htmlspecialchars($emp['dob']) ?>"
-                                data-sex="<?= htmlspecialchars($emp['sex']) ?>"
-                                data-address="<?= htmlspecialchars($emp['address']) ?>"
-                                data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
-                                data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
-                                data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
-                                data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
-                                data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
-                                data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
-                                data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
-                                data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
-                                data-result="<?= htmlspecialchars($emp['result']) ?>"
-                                data-comment="<?= htmlspecialchars($emp['comment']) ?>"
-                                data-toggle="modal"
-                                data-target="#editEmployeeModal">
-                                Edit
-                            </button>
+                            <?php if ($emp['result'] === 'Pending'): ?>
+                                <button type="button" class="btn btn-sm btn-success" onclick="updateEmployeeStatus(<?= $emp['id'] ?>)">Hire</button>
+                            <?php endif; ?>
 
 									  <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Reject</button>
                             </td>
@@ -447,63 +428,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-
-<script>
-	$(document).ready(function() {
-    // Handle view button clicks
-    $('.view-btn').on('click', function() {
-        var id = $(this).data('id');
-
-        $.ajax({
-            type: 'POST',
-            url: '<?= route_to('employee_view') ?>',
-			data: { id: id },
-            dataType: 'json',
-            success: function(response) {
-				if(response) {
-				$('#view_picture').attr('src', response.picture ? '<?= base_url('backend/images/users/') ?>' + response.picture : '<?= base_url('backend/images/users/employee.png') ?>');
-                $('#view_firstname').val(response.firstname);
-				$('#view_lastname').val(response.lastname);
-                $('#view_phone').val(response.phone);
-                $('#view_email').val(response.email);
-                $('#view_dob').val(response.dob);
-                $('#view_sex').val(response.sex);
-                $('#view_address').val(response.address);
-                $('#view_p_school').val(response.p_school);
-                $('#view_s_school').val(response.s_school);
-                $('#view_t_school').val(response.t_school);
-                $('#view_interview_for').val(response.interview_for);
-                $('#view_interview_type').val(response.interview_type);
-                $('#view_interview_date').val(response.interview_date);
-                $('#view_interview_time').val(response.interview_time);
-                $('#view_behaviour').val(response.behaviour);
-                $('#view_result').val(response.result);
-                $('#view_comment').val(response.comment);
-                $('#view_sex').val(response.sex);
-            
-                $('#viewEmployeeModal').modal('show');
-			} else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No data found for this employee.'
-                        });
-                    }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while fetching the employee data.'
-                });
-            }
-        });
-    });
-});
-</script>   
+  
 <script>
 function deleteEmployee(id) {
     Swal.fire({
@@ -556,200 +481,24 @@ function deleteEmployee(id) {
 }
 </script>
 <script>
-$(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-    var $preview = $('#preview');
-
-    // Handle edit button clicks for profile picture
-    $('.edit-profile-picture-btn').on('click', function() {
-        var id = $(this).data('id');
-        $('#update_employee_id_picture').val(id);
-        $('#editProfilePictureModal').modal('show');
-    });
-
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            $preview.show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-        var reader;
-        var file;
-
-        if (files && files.length > 0) {
-            file = files[0];
-
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
+   function updateEmployeeStatus(employeeId) {
+    if (confirm('Are you sure you want to hire this employee?')) {
+        fetch(`<?= base_url('admin/hire_employee') ?>/${employeeId}`, {
+            method: 'PUT', // Or POST, depending on your setup
+            headers: {
+                'Content-Type': 'application/json'
             }
-        }
-    });
-
-    // Handle form submission
-    $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault();
-
-        var canvas;
-        var croppedImage;
-
-        if (cropper) {
-            canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_employee_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_profile_picture', // Ensure this URL matches your route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            }).then(() => {
-                            location.reload(); // Reload page or update table
-                        });
-                            $('#editProfilePictureModal').modal('hide');
-                            $('.avatar-photo').attr('src', response.new_picture_url);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
-    });
-});
-
-
-</script>
-<script>
-    $(document).ready(function() {
-        // Populate modal with employee data
-        $(document).on('click', '.edit-employee-btn', function() {
-            let employeeId = $(this).data('id');
-            $('#update_employee_id_personal').val(employeeId);
-            $('#update_employee_id_edu').val(employeeId);
-            $('#update_employee_id_interview').val(employeeId);
-            $('#update_employee_id_remarks').val(employeeId);
-
-            // Personal Details
-            $('#edit_firstname').val($(this).data('firstname'));
-            $('#edit_lastname').val($(this).data('lastname'));
-            $('#edit_phone').val($(this).data('phone'));
-            $('#edit_dob').val($(this).data('dob'));
-            $('#edit_sex').val($(this).data('sex'));
-            $('#edit_address').val($(this).data('address'));
-
-            // Educational Background
-            $('#edit_p_school').val($(this).data('p-school'));
-            $('#edit_s_school').val($(this).data('s-school'));
-            $('#edit_t_school').val($(this).data('t-school'));
-
-            // Interview
-            $('#edit_interview_for').val($(this).data('interview-for'));
-            $('#edit_interview_type').val($(this).data('interview-type'));
-            $('#edit_interview_date').val($(this).data('interview-date'));
-            $('#edit_interview_time').val($(this).data('interview-time'));
-
-            // Remarks
-            $('#edit_behaviour').val($(this).data('behaviour'));
-            $('#edit_result').val($(this).data('result'));
-            $('#edit_comment').val($(this).data('comment'));
-        });
-
-        // Function to handle form submissions
-        function handleFormSubmission(formId, url, successMessage) {
-            $(formId).on('submit', function(event) {
-                event.preventDefault();
-
-                let formData = $(this).serialize();
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: successMessage,
-                            }).then(() => {
-                                $('#editEmployeeModal').modal('hide'); // Close modal on success
-                                location.reload(); // Reload the page to reflect changes
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred while processing your request.',
-                        });
-                    }
-                });
-            });
-        }
-
-        // Initialize form submission handlers
-        handleFormSubmission('#editPersonalDetailsForm', '<?= route_to('update_personal_details') ?>', 'Personal details updated successfully.');
-        handleFormSubmission('#editEducationalBackgroundForm', '<?= route_to('update_educational_background') ?>', 'Educational background updated successfully.');
-        handleFormSubmission('#editInterviewForm', '<?= route_to('update_interview') ?>', 'Interview details updated successfully.');
-        handleFormSubmission('#editRemarksForm', '<?= route_to('update_remarks') ?>', 'Remarks updated successfully.');
-
-        // Date picker initialization
-        $('.date-picker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-
-        // Time picker initialization
-        $('.time-picker').timepicker({
-            showMeridian: false,
-            showSeconds: true,
-            defaultTime: false
-        });
-    });
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload(); // Reload to see updated list
+            } else {
+                alert('Failed to update status.');
+            }
+        })
+        .catch(error => console.error('Error updating employee status:', error));
+    }
+}
 </script>
 
 

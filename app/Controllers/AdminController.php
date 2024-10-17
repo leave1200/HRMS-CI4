@@ -677,6 +677,17 @@ public function updateDesignation()
     $model = new EmployeeModel();
     return $this->response->setJSON($model->getGenderCount());
    }
+   public function hire_employee($id)
+   {
+       $model = new EmployeeModel(); // Adjust based on your model
+       $data = ['result' => 'Hired'];
+       if ($model->update($id, $data)) {
+           return $this->response->setStatusCode(200)->setBody('Employee hired successfully.');
+       }
+       return $this->response->setStatusCode(400, 'Failed to update employee status.');
+   }
+   
+
    
    
    
