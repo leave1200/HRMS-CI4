@@ -133,13 +133,13 @@ function updateEmployeeStatus(id) {
         cancelButtonText: 'No, cancel!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`<?= base_url('admin/hire_employee/') ?>/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-
+            fetch(`<?= route_to('admin.hired') ?>`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id }) // Include the ID in the body
+            })
             .then(response => {
                 if (response.ok) {
                     Swal.fire('Hired!', 'Employee hired successfully.', 'success')
@@ -152,7 +152,6 @@ function updateEmployeeStatus(id) {
         }
     });
 }
-
 </script>
 
 
