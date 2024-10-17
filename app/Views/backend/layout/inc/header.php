@@ -189,21 +189,30 @@ $(document).ready(function() {
     // Optionally, set an interval to refresh notifications
     setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
 
-    // Handle dropdown toggle
+    // Handle dropdown toggle for notifications
     $('.user-notification .dropdown-toggle').on('click', function(e) {
         e.preventDefault(); // Prevent default anchor behavior
         $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
     });
 
-    // Close dropdown when clicking outside
+    // Handle dropdown toggle for user info
+    $('.user-info-dropdown .dropdown-toggle').on('click', function(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
+    });
+
+    // Close dropdowns when clicking outside
     $(document).on('click', function(e) {
         if (!$(e.target).closest('.user-notification').length) {
-            $('.notifications-dropdown').hide(); // Close the dropdown
+            $('.notifications-dropdown').hide(); // Close notifications dropdown
+        }
+        if (!$(e.target).closest('.user-info-dropdown').length) {
+            $('.user-info-dropdown .dropdown-menu').hide(); // Close user dropdown
         }
     });
 
-    // Prevent closing dropdown when clicking inside it
-    $('.notifications-dropdown').on('click', function(e) {
+    // Prevent closing dropdown when clicking inside them
+    $('.notifications-dropdown, .user-info-dropdown .dropdown-menu').on('click', function(e) {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
