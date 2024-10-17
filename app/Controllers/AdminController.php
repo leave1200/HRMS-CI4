@@ -31,7 +31,7 @@ class AdminController extends BaseController
     {
         $employeeModel = new EmployeeModel();
         $employee = $employeeModel->findAll();
-        $employeeCount = $employeeModel->countAllResults();
+        $employeeCount = $employeeModel->where('result !=', 'Pending')->countAllResults();
         $designationModel = new Designation();
         $designations = $designationModel->findAll();
         $designationCount = $designationModel->countAllResults();
