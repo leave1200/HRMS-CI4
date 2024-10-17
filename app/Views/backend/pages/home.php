@@ -1,5 +1,6 @@
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="page-header">
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
@@ -72,19 +73,12 @@
 						<div class="card-box height-100-p pd-20">
 							<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
 								<div class="h5 mb-md-0">Employee</div>
-								<div class="form-group mb-md-0">
-									<select class="form-control form-control-sm selectpicker">
-										<option value="">Last Week</option>
-										<option value="">Last Month</option>
-										<option value="">Last 6 Month</option>
-										<option value="">Last 1 year</option>
-									</select>
-								</div>
 							</div>
-							<!-- <div id="activities-chart"></div> -->
+							<canvas id="employeeChart" width="400" height="200"></canvas>
 						</div>
 					</div>
 				</div>
+
 
 				<div class="card-box pb-10">
 					<div class="h5 pd-20 mb-0">Employee</div>
@@ -121,6 +115,34 @@
 						</div>
 					</div>
 				</div>
+				<script>
+    // Assuming you have data of the number of male and female employees
+    const maleEmployees = 45;  // Replace with your data
+    const femaleEmployees = 55; // Replace with your data
+
+    const ctx = document.getElementById('employeeChart').getContext('2d');
+    const employeeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{
+                label: '# of Employees',
+                data: [maleEmployees, femaleEmployees],
+                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
 <?= $this->endSection()?>
 <?= $this->section('sidebar') ?>
     <?= view('backend/layout/inc/left-sidebar', ['userStatus' => $userStatus]) ?>
