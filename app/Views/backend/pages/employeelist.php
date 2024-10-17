@@ -20,9 +20,9 @@
         </div>
     </div>
 </div>
-<button onclick="printTable()" class="btn btn-primary"><i class="icon-copy fi-print"></i></i></button>
-<button onclick="exportToCSV()" class="btn btn-primary"><i class="icon-copy fi-page-csv"></i></button>
-<button class="btn btn-primary" onclick="exportToExcel()"><i class="icon-copy fi-page-export-excel"></i></button>
+<button onclick="printTable()" class="btn btn-primary"><i class="icon-copy fi-print">Print</i></i></button>
+<button onclick="exportToCSV()" class="btn btn-primary"><i class="icon-copy fi-page-csv">CSV</i></button>
+<button class="btn btn-primary" onclick="exportToExcel()"><i class="icon-copy fi-page-export-doc">Excel</i></button>
 <div class="pd-20 card-box mb-30">
     <div class="clearfix mb-20">
         <div class="pull-left">
