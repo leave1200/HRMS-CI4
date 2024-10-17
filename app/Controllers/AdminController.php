@@ -570,25 +570,19 @@ public function updateDesignation()
     
 
     
-    public function employeelist()
-    {
-        $employeeModel = new EmployeeModel();
-        $userModel = new User(); // Ensure you instantiate the UserModel
-         // Fetch employees who do not have a pending result and have an account in the users table
-         $employee = $employeeModel->where('result !=', 'Pending')
-         ->whereIn('id', function($query) use ($userModel) {
-             $query->select('id')->from($userModel->getTable());
-         })
-         ->findAll();
-        $userStatus = session()->get('userStatus');
+   public function employeelist()
+   {
+       $employeeModel = new EmployeeModel();
+       $employee = $employeeModel->findAll();
+       $userStatus = session()->get('userStatus');
 
-        $data = [
-            'pageTitle' => 'Employee List',
-            'employee' => $employee,
-            'userStatus' => $userStatus
-        ];
-        return view('backend/pages/employeelist',$data);
-    }
+       $data = [
+           'pageTitle' => 'Employee List',
+           'employee' => $employee,
+           'userStatus' => $userStatus
+       ];
+       return view('backend/pages/employeelist',$data);
+   }
     
     
    public function update_profile_picture()
