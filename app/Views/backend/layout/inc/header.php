@@ -138,17 +138,6 @@
             <div class="pending-leaves">
                 <h6 class="dropdown-header">Pending Leave Applications</h6>
                 <ul class="list-group">
-                    <?php if (!empty($pendingLeaves)): ?>
-                        <?php foreach ($pendingLeaves as $leave): ?>
-                            <li class="list-group-item">
-                                <a href="<?= route_to('admin.leaveApplications') ?>"> <!-- Adjust link as needed -->
-                                    <?= htmlspecialchars($leave['employee_name']) ?>
-                                </a> has a pending leave application (Type: <?= htmlspecialchars($leave['leave_type_name']) ?>, From: <?= htmlspecialchars($leave['la_start']) ?> to <?= htmlspecialchars($leave['la_end']) ?>).
-                            </li>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <li class="list-group-item">No pending leave applications.</li>
-                    <?php endif; ?>
                 </ul>
             </div>
 
