@@ -81,7 +81,7 @@
 
                                     
                                         <!-- Delete Action (using SweetAlert for confirmation) -->
-                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)">Delete</button>
+                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)"><i class="icon-copy fi-page-delete">Delete</i></button>
 
                                     
                                 </td>
