@@ -116,7 +116,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         Highcharts.chart('employeeChart', {
             chart: {
-                type: 'column'
+                type: 'bar'
             },
             title: {
                 text: 'Total Number of Male and Female Employees'
