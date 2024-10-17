@@ -681,8 +681,11 @@ public function updateDesignation()
        $genderData = $this->EmployeeModel->getGenderCounts();
        
        // Return the data as JSON response
-       return $this->response->setJSON($genderData);
+       return $this->output
+                   ->set_content_type('application/json')
+                   ->set_output(json_encode($genderData));
    }
+   
    
    
    
