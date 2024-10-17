@@ -21,7 +21,7 @@ class EmployeeModel extends Model
     }
     public function hireEmployee($id)
     {
-        return $this->update($id, ['result' => 'hired']);
+        return $this->update($id, ['result' => 'Hired']);
     }
 }
 
