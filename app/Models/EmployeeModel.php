@@ -15,10 +15,11 @@ class EmployeeModel extends Model
     }
     public function getGenderCount()
     {
-        $maleCount = $this->where('sex', 'Male')->countAllResults();
-        $femaleCount = $this->where('sex', 'Female')->countAllResults();
+        $maleCount = $this->where('sex', 'Male')->where('status !=', 'Pending')->countAllResults();
+        $femaleCount = $this->where('sex', 'Female')->where('status !=', 'Pending')->countAllResults();
         return ['Male' => $maleCount, 'Female' => $femaleCount];
     }
+    
     public function hireEmployee($id)
     {
         return $this->update($id, ['result' => 'Hired']); // Ensure 'result' matches your database column
