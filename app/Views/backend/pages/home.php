@@ -114,7 +114,7 @@
 				</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('/admin/getEmployeeGenderData')
+        fetch('admin.gender')
             .then(response => response.json())
             .then(data => {
                 console.log('Data fetched from server:', data); // Add this line for debugging
