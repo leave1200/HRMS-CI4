@@ -133,7 +133,7 @@ function updateEmployeeStatus(id) {
         cancelButtonText: 'No, cancel!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`<?= route_to('admin.hired') ?>/${id}`, {
+            fetch(`<?= base_url('admin/hire_employee/(:num)') ?>/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
