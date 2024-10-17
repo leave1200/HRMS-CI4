@@ -12,7 +12,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="<?= route_to('admin.home'); ?>">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Employee List
+                            Manage Uploads
                         </li>
                     </ol>
                 </nav>
