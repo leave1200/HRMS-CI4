@@ -167,13 +167,27 @@ $(document).ready(function() {
                 var notificationList = $('.notifications-dropdown .list-group');
                 notificationList.empty();
 
-                if (data.length > 0) {
-                    data.forEach(function(notification) {
+                // Handle pending employees
+                if (data.employees.length > 0) {
+                    data.employees.forEach(function(employee) {
                         notificationList.append('<li class="list-group-item">' + 
-                            notification.firstname + ' ' + notification.lastname + 
+                            employee.firstname + ' ' + employee.lastname + 
                             ' has a pending result.</li>');
                     });
-                } else {
+                }
+
+                // Handle pending leave applications
+                if (data.leaveApplications.length > 0) {
+                    data.leaveApplications.forEach(function(leave) {
+                        notificationList.append('<li class="list-group-item">' + 
+                            leave.employeeName + 
+                            ' has a pending leave application (Type: ' + leave.leaveType + 
+                            ', From: ' + leave.start + ' to ' + leave.end + ').</li>');
+                    });
+                }
+
+                // If no notifications
+                if (data.employees.length === 0 && data.leaveApplications.length === 0) {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
             },
@@ -216,5 +230,6 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
+
 
 </script>
