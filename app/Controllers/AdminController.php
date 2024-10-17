@@ -589,6 +589,19 @@ public function updateDesignation()
         ];
         return view('backend/pages/employeelist',$data);
     }
+    public function employeelist2()
+    {
+        $employeeModel = new EmployeeModel();
+        $employee = $employeeModel->findAll();
+        $userStatus = session()->get('userStatus');
+
+        $data = [
+            'pageTitle' => 'Employee List',
+            'employee' => $employee,
+            'userStatus' => $userStatus
+        ];
+        return view('backend/pages/employeelist',$data);
+    }
     
    public function update_profile_picture()
    {
