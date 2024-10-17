@@ -151,7 +151,7 @@
                     },
                     series: [{
                         name: 'Employees',
-                        data: [data.Male || 0, data.Female || 0] // Ensure this data is correctly set
+                        data: [data.Male || 12, data.Female || 1] // Ensure this data is correctly set
                     }]
                 });
             })
