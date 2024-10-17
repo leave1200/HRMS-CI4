@@ -677,16 +677,19 @@ public function updateDesignation()
     $model = new EmployeeModel();
     return $this->response->setJSON($model->getGenderCount());
    }
-   public function hire_employee($id)
+   public function hire_employee()
    {
        $model = new EmployeeModel();
-
-       if ($model->hireEmployee($id)) {
+       $input = $this->request->getJSON(); // Get JSON data
+   
+       // Check if the ID is provided
+       if (isset($input->id) && $model->hireEmployee($input->id)) {
            return $this->response->setJSON(['success' => true]);
        } else {
            return $this->response->setJSON(['success' => false], 400);
        }
    }
+   
   public function pendingemployeelist()
    {
        $employeeModel = new EmployeeModel();

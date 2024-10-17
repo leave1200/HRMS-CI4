@@ -61,8 +61,7 @@ $routes->group('admin', static function($routes){
         $routes->post('update_remarks', 'AdminController::updateRemarks',['as' => 'update_remarks']);
         $routes->get('employee/getEmployeeData', 'AdminController::getEmployeeData');
         $routes->get('pendingemployeelist','AdminController::pendingemployeelist',['as'=>'admin.pendingemployeelist']);
-        $routes->put('hired_employee', 'AdminController::hire_employee',['as'=>'admin.hired']);
-
+        $routes->put('hired_employee', 'AdminController::hire_employee', ['as' => 'admin.hired']);
         $routes->get('admin/getEmployeeGenderData', 'AdminController::getEmployeeGenderData',['as'=>'admin.gender']);
 
 
