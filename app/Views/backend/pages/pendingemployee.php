@@ -129,10 +129,10 @@ function updateEmployeeStatus(employeeId) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, hire!',
-        cancelButtonText: 'Cancel'
+        cancelButtonText: 'No, cancel!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`<?= route_to('admin.pendingemployeelist') ?>/${employeeId}`, {
+            fetch(`<?= route_to('admin.hire_employee') ?>/${employeeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,32 +140,17 @@ function updateEmployeeStatus(employeeId) {
             })
             .then(response => {
                 if (response.ok) {
-                    Swal.fire({
-                        title: 'Hired!',
-                        text: 'Employee hired successfully.',
-                        icon: 'success'
-                    }).then(() => {
-                        location.reload(); // Reload to see updated list
-                    });
+                    Swal.fire('Hired!', 'Employee hired successfully.', 'success')
+                        .then(() => location.reload());
                 } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to update status.',
-                        icon: 'error'
-                    });
+                    Swal.fire('Error!', 'Failed to update status.', 'error');
                 }
             })
-            .catch(error => {
-                console.error('Error updating employee status:', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'An error occurred while updating the status.',
-                    icon: 'error'
-                });
-            });
+            .catch(error => console.error('Error updating employee status:', error));
         }
     });
 }
+
 </script>
 
 

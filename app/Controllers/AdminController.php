@@ -678,30 +678,37 @@ public function updateDesignation()
     return $this->response->setJSON($model->getGenderCount());
    }
 
-public function pendingemployeelist($id = null)
-{
-    $model = new EmployeeModel();
-
-    // Check if the request is an AJAX request to hire an employee
-    if ($this->request->getMethod() === 'put' && $id !== null) {
-        $data = ['result' => 'Hired'];
-        if ($model->update($id, $data)) {
-            return $this->response->setStatusCode(200)->setBody('Employee hired successfully.');
-        }
-        return $this->response->setStatusCode(400, 'Failed to update employee status.');
-    }
-
-    // Regular request to fetch the employee list
-    $employee = $model->findAll();
-    $userStatus = session()->get('userStatus');
-
-    $data = [
-        'pageTitle' => 'Employee List',
-        'employee' => $employee,
-        'userStatus' => $userStatus
-    ];
-    return view('backend/pages/pendingemployee', $data);
-}
+   public function pendingemployeelist()
+   {
+       $model = new EmployeeModel();
+   
+       // Regular request to fetch the employee list
+       $employees = $model->findAll(); // Fetch all employees
+       $userStatus = session()->get('userStatus'); // Get user status from session
+   
+       // Prepare data for the view
+       $data = [
+           'pageTitle' => 'Employee List',
+           'employees' => $employees,
+           'userStatus' => $userStatus
+       ];
+   
+       return view('backend/pages/pendingemployee', $data); // Load the view
+   }
+   
+   public function hire_employee($id)
+   {
+       $model = new EmployeeModel();
+       $data = ['result' => 'Hired'];
+   
+       // Attempt to update the employee's status
+       if ($model->update($id, $data)) {
+           return $this->response->setStatusCode(200)->setBody('Employee hired successfully.');
+       }
+       
+       return $this->response->setStatusCode(400, 'Failed to update employee status.');
+   }
+   
 
    
 
