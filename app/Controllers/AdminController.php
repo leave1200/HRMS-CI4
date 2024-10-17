@@ -1430,43 +1430,22 @@ public function leave_application()
         return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
     }
     public function fetchPendingResults()
-    {
-        $employeeModel = new EmployeeModel();
-        $leaveModel = new LeaveApplicationModel();
-        $leaveTypeModel = new leave_typeModel();
-    
-        // Fetch employees with a pending result
-        $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-    
-        // Format the employee response
-        $employeeData = [];
-        foreach ($pendingEmployees as $employee) {
-            $employeeData[] = [
-                'firstname' => $employee['firstname'],
-                'lastname' => $employee['lastname']
-            ];
+        {
+            $employeeModel = new EmployeeModel();
+            
+            // Fetch employees with a pending result
+            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+
+            // Format the response
+            $data = [];
+            foreach ($pendingEmployees as $employee) {
+                $data[] = [
+                    'firstname' => $employee['firstname'],
+                    'lastname' => $employee['lastname']
+                ];
+            }
+
+            return $this->response->setJSON($data);
         }
-    
-        // Fetch pending leave applications
-        $pendingLeaves = $leaveModel->getPendingLeaveApplications($leaveTypeModel, $employeeModel);
-    
-        // Format the leave application response
-        $leaveData = [];
-        foreach ($pendingLeaves as $leave) {
-            $leaveData[] = [
-                'employeeName' => $leave['employee_name'],
-                'leaveType' => $leave['leave_type_name'],
-                'start' => $leave['la_start'],
-                'end' => $leave['la_end']
-            ];
-        }
-    
-        // Return a combined response
-        return $this->response->setJSON([
-            'employees' => $employeeData,
-            'leaveApplications' => $leaveData,
-        ]);
-    }
-    
 
 }
