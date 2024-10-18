@@ -32,6 +32,7 @@ class AdminController extends BaseController
         $employeeModel = new EmployeeModel();
         $employee = $employeeModel->findAll();
         $employeeCount = $employeeModel->where('result !=', 'Pending')->countAllResults();
+        $employeeCounts = $employeeModel->where('result !=', 'Hired')->countAllResults();
         $designationModel = new Designation();
         $designations = $designationModel->findAll();
         $designationCount = $designationModel->countAllResults();
@@ -44,6 +45,7 @@ class AdminController extends BaseController
             'pageTitle' => 'Dashboard',
             'employee' => $employee,
             'employeeCount' => $employeeCount,
+            'employeeCounts' => $employeeCounts,
             'designationCount' => $designationCount,
             'approvedCount' => $approvedCount,
             'pendingCount' => $pendingCount,
