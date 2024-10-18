@@ -21,11 +21,11 @@
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#F19EF7">
 							<div class="progress-box text-center">
 								<div style="display:inline;width:120px;height:120px;">
-									<canvas width="150" height="150" style="width: 120px; height: 120px;"></canvas>
+									<canvas width="150" height="150" style="width: 120px; height: 120px;"><span class="d-block"><i class="icon-copy fa fa-bank" aria-hidden="true" style="font-size: 50px;"></i>
+									</span></canvas>
 									<input type="text" class="knob dial1" value="<?= $designationCount ?>" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgcolor="#F19EF7" data-fgcolor="#1b00ff" data-angleoffset="180" readonly="readonly" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none rgb(255, 255, 255); font: bold 24px Arial; text-align: center; color: #fff; padding: 0px; appearance: none;font-size: 50px"></div>
 								<h5 class="text-white padding-top-10 h5">Deparment</h5>
-								<span class="d-block"><i class="icon-copy fa fa-bank" aria-hidden="true" style="font-size: 50px;"></i>
-								</span>
+								
 							</div>
 						</div>
 					</div>
