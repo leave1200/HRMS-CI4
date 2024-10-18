@@ -40,6 +40,10 @@ class AdminController extends BaseController
         $leaveModel = new LeaveApplicationModel();
         $approvedCount = $leaveModel->countApprovedLeaves();
         $pendingCount = $leaveModel->countPendingLeaves();
+        $positionModel = new Position();
+        $positions = $positionModel->findall();
+        $positionCount = $postionModel->countAllResults();
+
 
         $data = [
             'pageTitle' => 'Dashboard',
@@ -49,6 +53,7 @@ class AdminController extends BaseController
             'designationCount' => $designationCount,
             'approvedCount' => $approvedCount,
             'pendingCount' => $pendingCount,
+            'positionCount' => $positionCount,
             'userStatus' => $userStatus
         ];
         return view('backend/pages/home', $data);
