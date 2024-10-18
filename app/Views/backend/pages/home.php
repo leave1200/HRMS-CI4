@@ -81,10 +81,9 @@
 							<div class="progress-box text-center">
 								<div style="display:inline;width:120px;height:120px;"><canvas width="150" height="150" style="width: 120px; height: 120px;"></canvas><input type="text" class="knob dial4" value="<?= $pendingCount ?>" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgcolor="#660099" data-fgcolor="#a683eb" data-angleoffset="180" readonly="readonly" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none rgb(255, 255, 255); font: bold 24px Arial; text-align: center; color: white; padding: 0px; appearance: none;font-size: 50px;">
 							</div>
-								<h5 class="text-white padding-top-10 h5">
+								<h5 class="text-white padding-top-10 h5"><i class="icon-copy fa fa-user-circle" aria-hidden="true" style="font-size: 50px;"></i>
 									Pending Employees
 								</h5>
-								<span class="d-block"> <i class="fa text-white fa-line-chart"></i></span>
 							</div>
 						</div>
 					</div>
