@@ -113,7 +113,7 @@
 				<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
 						<div class="card-box height-100-p pd-20">
-							<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
+							<div class="d-flex flex-wrap align-items-center pb-0 pb-md-3">
 								<div class="h5 mb-md-0">Employees</div>
 							</div>
 							<div id="employeeChart" style="width: 100%; height: 400px;"></div>
