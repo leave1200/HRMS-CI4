@@ -41,7 +41,7 @@ class AdminController extends BaseController
         $approvedCount = $leaveModel->countApprovedLeaves();
         $pendingCount = $leaveModel->countPendingLeaves();
         $positionModel = new Position();
-        $positions = $positionModel->findall();
+        $positions = $positionModel->findAll();
         $positionCount = $postionModel->countAllResults();
 
 
