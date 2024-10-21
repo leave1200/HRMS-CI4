@@ -34,7 +34,7 @@ class LeaveApplicationModel extends Model
     
     public function getLeaveApplicationsWithDetails(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel)
     {
-        $leaveApplications = $this->findAll(); // Fetch all leave applications
+        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
     
         // Prepare an array to hold the applications with names
         $applicationsWithDetails = [];
