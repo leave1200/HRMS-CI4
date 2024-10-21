@@ -2,40 +2,44 @@
 <?= $this->section('content') ?>
 
 <div class="page-header">
-    <div class="row">
-        <div class="col-md-12">
-            <h4>Approved Leave Applications</h4>
-            <table id="approvedLeavesTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
+    <h1><?= esc($pageTitle) ?></h1>
+</div>
+
+<div class="table-responsive">
+    <table id="approvedLeavesTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($leaveApplications)): ?>
+                <?php foreach ($leaveApplications as $application): ?>
                     <tr>
-                        <th>ID</th>
-                        <th>Employee Name</th>
-                        <th>Leave Type</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Status</th>
+                        <td><?= esc($application['la_id']) ?></td>
+                        <td><?= esc($application['employee_name']) ?></td>
+                        <td><?= esc($application['leave_type_name']) ?></td>
+                        <td><?= esc($application['la_start']) ?></td>
+                        <td><?= esc($application['la_end']) ?></td>
+                        <td><?= esc($application['status']) ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($approvedLeaves as $leave): ?>
-                        <tr>
-                            <td><?= esc($leave['la_id']) ?></td>
-                            <td><?= esc($leave['employee_name']) ?></td>
-                            <td><?= esc($leave['leave_type_name']) ?></td>
-                            <td><?= esc($leave['la_start']) ?></td>
-                            <td><?= esc($leave['la_end']) ?></td>
-                            <td><?= esc($leave['status']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center">No approved leave applications found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
 <script>
 $(document).ready(function() {
-    // Initialize the approved leaves DataTable
     $('#approvedLeavesTable').DataTable({
         responsive: true,
     });
