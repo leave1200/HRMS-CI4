@@ -1349,7 +1349,12 @@ public function cancelHolidays()
 public function approvedLeaves()
     {
         $leaveModel = new LeaveApplicationModel();
-        $data['approvedLeaves'] = $leaveModel->where('status', 'Approved')->findAll();
+        $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
+        $data = [
+            'pageTitle' => 'Approved Leave Applications',
+            'leaveApplications' => $approvedLeaves // Pass approved leave applications
+        ];
+    
         
         return view('backend/pages/approved_leaves', $data); // Make sure to create this view file
     }
