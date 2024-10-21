@@ -123,9 +123,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#leaveApplicationsTable').DataTable({
-        responsive: true,
-    });
+    if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
+        // If it is, destroy it first
+        $('#leaveApplicationsTable').DataTable().destroy();
+    }
 
     $('#leaveApplicationForm').on('submit', function(e) {
         e.preventDefault();
