@@ -1352,7 +1352,7 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    $data['approvedLeaves'] = $leaveModel->where('status', 'approved')->findAll();
+    $data['approvedLeaves'] = $leaveModel->where('status', 'Approved')->findAll();
     
 
     // Fetch leave applications with details
