@@ -1160,6 +1160,41 @@ public function saveAttendance()
             'message' => 'Invalid leave type ID.'
         ]);
     }
+    public function approveLeave()
+    {
+        $leaveModel = new LeaveModel();
+
+        // Get the leave ID and new status from the request
+        $leaveId = $this->request->getPost('la_id');
+        $status = $this->request->getPost('status');
+
+        // Validate input
+        if (empty($leaveId) || empty($status)) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid input.',
+            ]);
+        }
+
+        // Update the leave application in the database
+        $data = [
+            'status' => $status,
+        ];
+
+        $updated = $leaveModel->update($leaveId, $data);
+
+        if ($updated) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'Leave application approved successfully.',
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to approve leave application.',
+            ]);
+        }
+    }
     
 
 

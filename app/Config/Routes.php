@@ -87,6 +87,7 @@ $routes->group('admin', static function($routes){
         $routes->post('update_leave', 'AdminController::updateLeave', ['as' => 'update_leave']);
         $routes->get('leave_application','AdminController::leave_application',['as'=>'admin.leave_application']);
         $routes->post('admin/leave_application', 'AdminController::submitLeaveApplication', ['as' => 'admin.submit_leave']);
+        $routes->post('admin/approve_leave', 'AdminController::approveLeave');
         $routes->get('setting','AdminController::setting',['as'=>'setting']);
         
 
