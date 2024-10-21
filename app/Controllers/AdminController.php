@@ -1351,7 +1351,7 @@ public function approvedLeaves()
         $leaveModel = new LeaveApplicationModel();
         $data['approvedLeaves'] = $leaveModel->where('status', 'Approved')->findAll();
         
-        return view('admin/approved_leaves', $data); // Make sure to create this view file
+        return view('backend/pages/approved_leaves', $data); // Make sure to create this view file
     }
 public function leave_application()
 {
