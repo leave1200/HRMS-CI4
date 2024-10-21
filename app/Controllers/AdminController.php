@@ -1346,6 +1346,13 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+public function approvedLeaves()
+    {
+        $leaveModel = new LeaveModel();
+        $data['approvedLeaves'] = $leaveModel->where('status', 'approved')->findAll();
+        
+        return view('admin/approved_leaves', $data); // Make sure to create this view file
+    }
 public function leave_application()
 {
     // Load the models
