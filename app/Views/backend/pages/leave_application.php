@@ -216,7 +216,7 @@ $(document).ready(function() {
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'POST',
-                    url: '<?= route_to('admin.approve_leave') ?>', // Your route to handle the approval
+                    url: '<?= route_to('admin.approve.leave') ?>', // Your route to handle the approval
                     data: { la_id: applicationId, status: 'approved' },
                     dataType: 'json',
                     success: function(response) {
