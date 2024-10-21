@@ -1358,7 +1358,7 @@ public function leave_application()
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
     
     // Retrieve all leave types
-    $leaveTypes = $leaveTypeModel->findAll();
+    $leaveTypes = $leaveTypeModel->where('status', 'Pending')->findAll();
 
     // Fetch employee names
     $employees = $employeeModel->getEmployeeNames();
