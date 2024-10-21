@@ -217,7 +217,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: 'POST',
                     url: '<?= route_to('admin.approve.leave') ?>', // Your route to handle the approval
-                    data: { la_id: applicationId, status: 'approved' },
+                    data: { la_id: applicationId, status: 'Approved' },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
