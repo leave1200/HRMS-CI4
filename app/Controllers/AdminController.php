@@ -1162,7 +1162,7 @@ public function saveAttendance()
     }
     public function approveLeave()
     {
-        $leaveModel = new LeaveModel();
+        $leaveModel = new LeaveApplicationModel();
 
         // Get the leave ID and new status from the request
         $leaveId = $this->request->getPost('la_id');
