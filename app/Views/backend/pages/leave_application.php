@@ -94,7 +94,7 @@
         <div class="col-md-12">
             <h4>Submitted Leave Applications</h4>
             <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-            <thead>
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Employee Name</th>
@@ -102,7 +102,6 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
-                        <th>Action</th> <!-- New Action Column -->
                     </tr>
                 </thead>
                 <tbody>
@@ -114,9 +113,6 @@
                             <td><?= esc($application['la_start']) ?></td>
                             <td><?= esc($application['la_end']) ?></td>
                             <td><?= esc($application['status']) ?></td>
-                            <td>
-                                <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
