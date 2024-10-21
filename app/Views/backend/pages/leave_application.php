@@ -94,7 +94,7 @@
         <div class="col-md-12">
             <h4>Submitted Leave Applications</h4>
             <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
+            <thead>
                     <tr>
                         <th>ID</th>
                         <th>Employee Name</th>
@@ -102,6 +102,7 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
+                        <th>Action</th> <!-- New Action Column -->
                     </tr>
                 </thead>
                 <tbody>
@@ -113,6 +114,9 @@
                             <td><?= esc($application['la_start']) ?></td>
                             <td><?= esc($application['la_end']) ?></td>
                             <td><?= esc($application['status']) ?></td>
+                            <td>
+                                <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -192,6 +196,49 @@ function calculateEndDate() {
         endDateInput.value = "";
     }
 }
+</script>
+<script>
+$(document).ready(function() {
+    $('#leaveApplicationsTable').DataTable({
+        responsive: true,
+    });
+
+    // Approve button click handler
+    $('.approve-btn').on('click', function() {
+        var applicationId = $(this).data('id');
+        
+        Swal.fire({
+            title: 'Confirm Approval',
+            text: 'Are you sure you want to approve this leave application?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, approve it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('admin.approve_leave') ?>', // Your route to handle the approval
+                    data: { la_id: applicationId, status: 'approved' },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire('Approved!', response.message, 'success').then(() => {
+                                location.reload(); // Reload the page after confirmation
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('AJAX Error:', xhr);
+                        Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
 </script>
 
 <?= $this->endSection() ?>
