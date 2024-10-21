@@ -1350,9 +1350,11 @@ public function approvedLeaves()
     {
         $leaveModel = new LeaveApplicationModel();
         $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
+        $userStatus = session()->get('userStatus');
         $data = [
             'pageTitle' => 'Approved Leave Applications',
-            'leaveApplications' => $approvedLeaves // Pass approved leave applications
+            'leaveApplications' => $approvedLeaves, // Pass approved leave applications
+            'userStatus' => $userStatus, // Pass user status if needed
         ];
     
         
