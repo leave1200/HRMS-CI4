@@ -63,7 +63,7 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="<?= route_to('admin.leave_application') ;?>">Leave Application</a></li>
-                            <li><a href="<?= route_to('admin.approve_leaves') ;?>">Holidays</a></li>
+                            <li><a href="<?= route_to('admin.approve_leaves') ;?>">Approved Leaves</a></li>
                             <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <li><a href="<?= route_to('admin.leave_type') ;?>">Leave Type</a></li>
                             <li><a href="<?= route_to('admin.holidays') ;?>">Holidays</a></li>
