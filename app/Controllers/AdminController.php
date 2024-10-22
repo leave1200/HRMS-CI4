@@ -1347,19 +1347,23 @@ public function cancelHolidays()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 public function approvedLeaves()
-    {
-        $leaveModel = new LeaveApplicationModel();
-        $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
-        $userStatus = session()->get('userStatus');
-        $data = [
-            'pageTitle' => 'Approved Leave Applications',
-            'leaveApplications' => $approvedLeaves, // Pass approved leave applications
-            'userStatus' => $userStatus, // Pass user status if needed
-        ];
+{
+    $leaveModel = new LeaveApplicationModel();
+    $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
     
-        
-        return view('backend/pages/approved_leaves', $data); // Make sure to create this view file
-    }
+    // Debugging output
+    log_message('debug', 'Approved Leaves: ' . print_r($approvedLeaves, true));
+    
+    $userStatus = session()->get('userStatus');
+    $data = [
+        'pageTitle' => 'Approved Leave Applications',
+        'leaveApplications' => $approvedLeaves,
+        'userStatus' => $userStatus,
+    ];
+    
+    return view('backend/pages/approved_leaves', $data);
+}
+
 public function leave_application()
 {
     // Load the models
