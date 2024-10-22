@@ -83,7 +83,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                <table class="data-table table stripe hover nowrap dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
+                <table class="data-table table stripe hover dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
                     <thead>
                         <tr role="row">
                             <th>#</th>
