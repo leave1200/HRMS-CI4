@@ -29,14 +29,15 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Employee</label>
-                    <select name="employee" id="employeeSelect" class="form-control" style="width: 50%; height: 38px" required>
-                        <option value="" disabled selected>Select an employee</option>
-                        <?php foreach ($employees as $employee): ?>
-                            <option value="<?= $employee['id'] ?>">
-                                <?= $employee['firstname'] ?> <?= $employee['lastname'] ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                            <input type="text" id="employeeFilter" class="form-control" placeholder="Filter employees..." style="margin-bottom: 10px;">
+                                <select name="employee" id="employeeSelect" class="form-control" style="height: 38px" required>
+                                    <option value="" disabled selected>Select an employee</option>
+                                    <?php foreach ($employees as $employee): ?>
+                                        <option value="<?= $employee['id'] ?>">
+                                            <?= $employee['firstname'] ?> <?= $employee['lastname'] ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                 </div>
                 <div class="form-group">
                     <label>Office</label>
@@ -250,6 +251,22 @@ function signOutAttendance(attendanceId, session) {
     });
 }
 
+</script>
+<script>
+    document.getElementById('employeeFilter').addEventListener('input', function() {
+        const filterValue = this.value.toLowerCase();
+        const options = document.querySelectorAll('#employeeSelect option');
+
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            option.style.display = text.includes(filterValue) ? '' : 'none';
+        });
+
+        // Reset the select if the filter is empty
+        if (filterValue === '') {
+            document.getElementById('employeeSelect').selectedIndex = 0;
+        }
+    });
 </script>
 
 <?= $this->endSection() ?>
