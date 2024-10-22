@@ -19,5 +19,8 @@ class AttendanceModel extends Model
             ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Fetch records where either sign-out is missing
             ->findAll();
     }
+    public function getCountRecords() {
+        $amCount = $this->where('sign_in IS NOT NULL')->countAllResults();
+    }
     
 }
