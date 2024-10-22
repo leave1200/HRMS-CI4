@@ -29,15 +29,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Employee</label>
-                            <input type="text" id="employeeFilter" class="form-control" placeholder="Filter employees..." style="margin-bottom: 10px;">
-                                <select name="employee" id="employeeSelect" class="form-control" style="height: 38px" required>
-                                    <option value="" disabled selected>Select an employee</option>
-                                    <?php foreach ($employees as $employee): ?>
-                                        <option value="<?= $employee['id'] ?>">
-                                            <?= $employee['firstname'] ?> <?= $employee['lastname'] ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                    <input type="text" id="employeeInput" class="form-control" placeholder="Type to filter employees..." autocomplete="off" required>
+                    <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                 </div>
                 <div class="form-group">
                     <label>Office</label>
