@@ -1354,7 +1354,7 @@ public function ApprovedLeaves()
         'pageTitle'=>'Approve Leave',
         'userStatus' => $userStatus
         );
-        return view('backend/pages/earn_leave', $data);
+        return view('backend/pages/leave_approved', $data);
 }
 
 
