@@ -43,6 +43,7 @@ class AdminController extends BaseController
         $positionModel = new \App\Models\Position();
         $positions = $positionModel->findAll();
         $positionCount = $positionModel->countAllResults();
+        $amAttendanceRecords = $attendanceModel->getAttendanceRecords();
         
 
 
@@ -55,6 +56,7 @@ class AdminController extends BaseController
             'approvedCount' => $approvedCount,
             'pendingCount' => $pendingCount,
             'positionCount' => $positionCount,
+            'amAttendanceRecord' => $amAttendanceRecord,
             'userStatus' => $userStatus
         ];
         return view('backend/pages/home', $data);
