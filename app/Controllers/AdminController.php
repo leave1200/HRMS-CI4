@@ -45,7 +45,7 @@ class AdminController extends BaseController
         $positionCount = $positionModel->countAllResults();
         $attendanceModel = new AttendanceModel();
         $attendances = $attendanceModel->findAll();
-        $amAttendanceRecords = $attendanceModel->countAllResults();
+        $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
         
 
 
