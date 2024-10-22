@@ -1348,17 +1348,13 @@ public function cancelHolidays()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 public function approvedLeaves()
 {
-    $leaveModel = new LeaveApplicationModel();
-    $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
     $userStatus = session()->get('userStatus');
 
-    $data = [
-        'pageTitle' => 'Approved Leave Applications',
-        'leaveApplications' => $approvedLeaves,
-        'userStatus' => $userStatus,
-    ];
-
-    return view('backend/pages/approved_leaves', $data);
+        $data = array(
+        'pageTitle'=>'Approve Leave',
+        'userStatus' => $userStatus
+        );
+        return view('backend/pages/approved_leaves', $data);
 }
 
 
