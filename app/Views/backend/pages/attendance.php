@@ -29,8 +29,52 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Employee</label>
-                    <input type="text" id="employeeInput" class="form-control" placeholder="Enter Employees Name" autocomplete="off" required>
-                        <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                    <?php if ($userStatus === 'ADMIN'): ?>
+        <input type="text" id="employeeInput" class="form-control" placeholder="Type to filter employees..." autocomplete="off" required>
+        <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+        
+        <script>
+            const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
+            const input = document.getElementById('employeeInput');
+            const list = document.getElementById('employeeList');
+
+            input.addEventListener('input', function() {
+                const filterValue = this.value.toLowerCase();
+                list.innerHTML = ''; // Clear previous results
+                list.style.display = 'none'; // Hide the list initially
+
+                if (filterValue) {
+                    const filteredEmployees = employees.filter(employee =>
+                        `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
+                    );
+
+                    filteredEmployees.forEach(employee => {
+                        const li = document.createElement('li');
+                        li.textContent = `${employee.firstname} ${employee.lastname}`;
+                        li.className = 'list-group-item'; // Bootstrap list group class
+                        li.onclick = () => {
+                            input.value = `${employee.firstname} ${employee.lastname}`;
+                            list.style.display = 'none'; // Hide the list after selection
+                        };
+                        list.appendChild(li);
+                    });
+
+                    if (filteredEmployees.length > 0) {
+                        list.style.display = 'block'; // Show the list if there are results
+                    }
+                }
+            });
+
+            // Hide the list if clicking outside
+            document.addEventListener('click', (event) => {
+                if (!input.contains(event.target) && !list.contains(event.target)) {
+                    list.style.display = 'none';
+                }
+            });
+        </script>
+    <?php else: ?>
+        <input type="text" id="employeeInput" class="form-control" value="<?= session()->get('username'); ?>" readonly>
+    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label>Office</label>
@@ -245,46 +289,6 @@ function signOutAttendance(attendanceId, session) {
 }
 
 </script>
-<script>
-    const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
-    const input = document.getElementById('employeeInput');
-    const list = document.getElementById('employeeList');
-
-    input.addEventListener('input', function() {
-        const filterValue = this.value.toLowerCase();
-        list.innerHTML = ''; // Clear previous results
-        list.style.display = 'none'; // Hide the list initially
-
-        if (filterValue) {
-            const filteredEmployees = employees.filter(employee =>
-                `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
-            );
-
-            filteredEmployees.forEach(employee => {
-                const li = document.createElement('li');
-                li.textContent = `${employee.firstname} ${employee.lastname}`;
-                li.className = 'list-group-item'; // Bootstrap list group class
-                li.onclick = () => {
-                    input.value = `${employee.firstname} ${employee.lastname}`;
-                    list.style.display = 'none'; // Hide the list after selection
-                };
-                list.appendChild(li);
-            });
-
-            if (filteredEmployees.length > 0) {
-                list.style.display = 'block'; // Show the list if there are results
-            }
-        }
-    });
-
-    // Hide the list if clicking outside
-    document.addEventListener('click', (event) => {
-        if (!input.contains(event.target) && !list.contains(event.target)) {
-            list.style.display = 'none';
-        }
-    });
-</script>
-
 <style>
     .list-group {
         border: 1px solid #ccc;
