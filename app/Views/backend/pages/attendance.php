@@ -73,7 +73,7 @@
                                 });
                             </script>
                         <?php else: ?>
-                            <input type="text" id="employeeInput" class="form-control" value="<?= session()->get('name'); ?>" readonly> <!-- Assuming 'name' holds the full name -->
+                            <input type="text" id="employeeInput" class="form-control" value="<?= get_user()->name ?>" readonly> <!-- Assuming 'name' holds the full name -->
                         <?php endif; ?>
                 </div>
                 <div class="form-group">
