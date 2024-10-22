@@ -1350,19 +1350,17 @@ public function approvedLeaves()
 {
     $leaveModel = new LeaveApplicationModel();
     $approvedLeaves = $leaveModel->where('status', 'Approved')->findAll();
-    
-    // Debugging output
-    log_message('debug', 'Approved Leaves: ' . print_r($approvedLeaves, true));
-    
     $userStatus = session()->get('userStatus');
+
     $data = [
         'pageTitle' => 'Approved Leave Applications',
         'leaveApplications' => $approvedLeaves,
         'userStatus' => $userStatus,
     ];
-    
+
     return view('backend/pages/approved_leaves', $data);
 }
+
 
 public function leave_application()
 {
