@@ -46,6 +46,7 @@ class AdminController extends BaseController
         $attendanceModel = new AttendanceModel();
         $attendances = $attendanceModel->findAll();
         $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
+        $pmAttendanceRecords = $attendanceModel->where('pm_sign_in IS NOT NULL')->countAllResults();
         
 
 
@@ -59,6 +60,7 @@ class AdminController extends BaseController
             'pendingCount' => $pendingCount,
             'positionCount' => $positionCount,
             'amAttendanceRecords' => $amAttendanceRecords,
+            'pmAttendanceRecords' => $pmAttendanceRecords,
             'userStatus' => $userStatus
         ];
         return view('backend/pages/home', $data);
