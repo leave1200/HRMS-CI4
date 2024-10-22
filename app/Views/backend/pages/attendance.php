@@ -29,7 +29,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Employee</label>
-                    <input type="text" id="employeeInput" class="form-control" placeholder="Type to filter employees..." autocomplete="off" required>
+                    <input type="text" id="employeeInput" class="form-control" placeholder="Enter Employees Name" autocomplete="off" required>
                         <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                 </div>
                 <div class="form-group">
