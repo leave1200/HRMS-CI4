@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label>Employee</label>
                     <input type="text" id="employeeInput" class="form-control" placeholder="Type to filter employees..." autocomplete="off" required>
-                    <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                        <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                 </div>
                 <div class="form-group">
                     <label>Office</label>
@@ -246,20 +246,59 @@ function signOutAttendance(attendanceId, session) {
 
 </script>
 <script>
-    document.getElementById('employeeFilter').addEventListener('input', function() {
+    const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
+    const input = document.getElementById('employeeInput');
+    const list = document.getElementById('employeeList');
+
+    input.addEventListener('input', function() {
         const filterValue = this.value.toLowerCase();
-        const options = document.querySelectorAll('#employeeSelect option');
+        list.innerHTML = ''; // Clear previous results
+        list.style.display = 'none'; // Hide the list initially
 
-        options.forEach(option => {
-            const text = option.textContent.toLowerCase();
-            option.style.display = text.includes(filterValue) ? '' : 'none';
-        });
+        if (filterValue) {
+            const filteredEmployees = employees.filter(employee =>
+                `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
+            );
 
-        // Reset the select if the filter is empty
-        if (filterValue === '') {
-            document.getElementById('employeeSelect').selectedIndex = 0;
+            filteredEmployees.forEach(employee => {
+                const li = document.createElement('li');
+                li.textContent = `${employee.firstname} ${employee.lastname}`;
+                li.className = 'list-group-item'; // Bootstrap list group class
+                li.onclick = () => {
+                    input.value = `${employee.firstname} ${employee.lastname}`;
+                    list.style.display = 'none'; // Hide the list after selection
+                };
+                list.appendChild(li);
+            });
+
+            if (filteredEmployees.length > 0) {
+                list.style.display = 'block'; // Show the list if there are results
+            }
+        }
+    });
+
+    // Hide the list if clicking outside
+    document.addEventListener('click', (event) => {
+        if (!input.contains(event.target) && !list.contains(event.target)) {
+            list.style.display = 'none';
         }
     });
 </script>
+
+<style>
+    .list-group {
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+    }
+    .list-group-item {
+        cursor: pointer;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
 
 <?= $this->endSection() ?>
