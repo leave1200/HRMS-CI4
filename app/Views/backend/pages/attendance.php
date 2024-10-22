@@ -250,7 +250,20 @@ function signOutAttendance(attendanceId, session) {
     const input = document.getElementById('employeeInput');
     const list = document.getElementById('employeeList');
 
-    input.addEventListener('input', function() {
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    function highlightMatch(name, filterValue) {
+        const regex = new RegExp(`(${filterValue})`, 'i'); // Case insensitive
+        return name.replace(regex, '<strong>$1</strong>');
+    }
+
+    input.addEventListener('input', debounce(function() {
         const filterValue = this.value.toLowerCase();
         list.innerHTML = ''; // Clear previous results
         list.style.display = 'none'; // Hide the list initially
@@ -260,9 +273,15 @@ function signOutAttendance(attendanceId, session) {
                 `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
             );
 
+            if (filteredEmployees.length === 0) {
+                list.innerHTML = '<li class="list-group-item">No employees found</li>';
+                list.style.display = 'block';
+                return;
+            }
+
             filteredEmployees.forEach(employee => {
                 const li = document.createElement('li');
-                li.textContent = `${employee.firstname} ${employee.lastname}`;
+                li.innerHTML = highlightMatch(`${employee.firstname} ${employee.lastname}`, filterValue);
                 li.className = 'list-group-item'; // Bootstrap list group class
                 li.onclick = () => {
                     input.value = `${employee.firstname} ${employee.lastname}`;
@@ -271,11 +290,9 @@ function signOutAttendance(attendanceId, session) {
                 list.appendChild(li);
             });
 
-            if (filteredEmployees.length > 0) {
-                list.style.display = 'block'; // Show the list if there are results
-            }
+            list.style.display = 'block'; // Show the list if there are results
         }
-    });
+    }, 300)); // Debounce delay
 
     // Hide the list if clicking outside
     document.addEventListener('click', (event) => {
@@ -284,6 +301,7 @@ function signOutAttendance(attendanceId, session) {
         }
     });
 </script>
+
 
 <style>
     .list-group {
