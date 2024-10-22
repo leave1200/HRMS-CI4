@@ -44,7 +44,7 @@ class AdminController extends BaseController
         $positions = $positionModel->findAll();
         $positionCount = $positionModel->countAllResults();
         $attendanceModel = new \App\Mdeols\AttendanceModel();
-        $amAttendanceRecords = $attendanceModel->getAttendanceRecords();
+        $amAttendanceRecords = $attendanceModel->getCountRecords();
         
 
 
