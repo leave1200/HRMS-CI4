@@ -29,9 +29,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Employee</label>
-                    <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." style="margin-bottom: 10px;" autocomplete="off">
-                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                <input type="hidden" name="employee" id="selectedEmployeeId" required>
+                    <select name="employee" id="employeeSelect" class="form-control" style="width: 50%; height: 38px" required>
+                        <option value="" disabled selected>Select an employee</option>
+                        <?php foreach ($employees as $employee): ?>
+                            <option value="<?= $employee['id'] ?>">
+                                <?= $employee['firstname'] ?> <?= $employee['lastname'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Office</label>
@@ -243,76 +248,6 @@ function signOutAttendance(attendanceId, session) {
             });
         }
     });
-}
-
-</script>
-<script>
-    document.getElementById('employeeFilter').addEventListener('input', function() {
-        const filterValue = this.value.toLowerCase();
-        const options = document.querySelectorAll('#employeeSelect option');
-
-        options.forEach(option => {
-            const text = option.textContent.toLowerCase();
-            option.style.display = text.includes(filterValue) ? '' : 'none';
-        });
-
-        // Reset the select if the filter is empty
-        if (filterValue === '') {
-            document.getElementById('employeeSelect').selectedIndex = 0;
-        }
-    });
-</script>
-<script>
-    const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
-
-const input = document.getElementById('employeeInput');
-const list = document.getElementById('employeeList');
-const selectedEmployeeId = document.getElementById('selectedEmployeeId');
-
-input.addEventListener('input', function() {
-    const filterValue = this.value.toLowerCase();
-    list.innerHTML = ''; // Clear previous results
-    list.style.display = 'none'; // Hide the list initially
-
-    if (filterValue) {
-        const filteredEmployees = employees.filter(employee =>
-            `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
-        );
-
-        filteredEmployees.forEach(employee => {
-            const li = document.createElement('li');
-            li.textContent = `${employee.firstname} ${employee.lastname}`;
-            li.className = 'list-group-item'; // Bootstrap list group class
-            li.onclick = () => {
-                input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
-                selectedEmployeeId.value = employee.id; // Set hidden input value
-                list.style.display = 'none'; // Hide the list after selection
-            };
-            list.appendChild(li);
-        });
-
-        if (filteredEmployees.length > 0) {
-            list.style.display = 'block'; // Show the list if there are results
-        }
-    }
-});
-
-// Hide the list if clicking outside
-document.addEventListener('click', (event) => {
-    if (!input.contains(event.target) && !list.contains(event.target)) {
-        list.style.display = 'none';
-    }
-});
-
-function signInEmployee() {
-    const selectedEmployee = selectedEmployeeId.value;
-    if (!selectedEmployee) {
-        alert("Please select an employee.");
-        return;
-    }
-
-    // Submit the form
-    document.getElementById('signInForm').submit();
 }
 
 </script>
