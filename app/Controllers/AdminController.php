@@ -745,6 +745,16 @@ public function attendance()
 {
     $employeeModel = new EmployeeModel();
     $employees = $employeeModel->findAll();
+    // Check for missing fields in employee data
+    if (!empty($employees)) {
+        foreach ($employees as $employee) {
+            if (!isset($employee['firstname']) || !isset($employee['lastname'])) {
+                log_message('error', 'Employee data is missing fields: ' . print_r($employee, true));
+            }
+        }
+    } else {
+        log_message('error', 'No employees found.');
+    }
     
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
