@@ -58,7 +58,7 @@ class AdminController extends BaseController
             'approvedCount' => $approvedCount,
             'pendingCount' => $pendingCount,
             'positionCount' => $positionCount,
-            'amAttendanceRecord' => $amAttendanceRecord,
+            'amAttendanceRecords' => $amAttendanceRecords,
             'userStatus' => $userStatus
         ];
         return view('backend/pages/home', $data);
