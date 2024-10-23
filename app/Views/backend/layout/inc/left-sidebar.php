@@ -82,12 +82,12 @@
                     </li>
                 <?php endif; ?>
 
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                     <a href="<?= route_to('setting'); ?>" class="dropdown-toggle no-arrow">
                         <span class="micon fa fa-gear"></span>
                         <span class="mtext"> Settings </span>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
