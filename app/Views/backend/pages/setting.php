@@ -59,14 +59,19 @@
                                                                 <span class="text-danger error-text phone_error"></span>
                                                             </div>
                                                         </div>
-                                                        <!-- <div class="col-md-6">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="">Email</label>
-                                                                <input type="text" class="form-control" name="email" placeholder="">
-                                                                <span class="text-danger error-text email_error"></span>
+                                                                <label for="">Meta Keywords</label>
+                                                                <input type="text" class="form-control" name="meta_keywords" placeholder="Enter Meta Keywords">
+                                                                <span class="text-danger error-text meta_keywords_error"></span>
                                                             </div>
-                                                        </div> -->
+                                                        </div>
                                                   </div>
+                                                  <div class="form-group">
+                                                                <label for="">Description</label>
+                                                                <textarea  name="description" id="" cols="4" rows="3" class="form-control"placeholder="Enter description">
+                                                                <span class="text-danger error-text description_error"></span>
+                                                            </div>
                                                 </form>
 											</div>
 										</div>
