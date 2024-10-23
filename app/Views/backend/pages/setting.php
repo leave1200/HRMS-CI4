@@ -13,7 +13,7 @@
 											<a href="<?= route_to('admin.home') ?>">Dashboard</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
-											UI Tabs
+											Setting
 										</li>
 									</ol>
 								</nav>
