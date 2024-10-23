@@ -1010,21 +1010,21 @@ public function saveAttendance()
                 // Get the current page number from the query string
                 $currentPage = $this->request->getVar('page') ?: 1;
             
-                // Get filter values from query string
+                // Get filter dates from query string
                 $name = $this->request->getVar('name');
                 $startDate = $this->request->getVar('start_date');
                 $endDate = $this->request->getVar('end_date');
             
                 // Prepare filter conditions
                 $filterConditions = [];
-                if ($name) {
-                    $filterConditions['name'] = $name; // Filter by name
-                }
+                
                 if ($startDate) {
-                    $filterConditions['sign_in >='] = $startDate . ' 00:00:00'; // Start of the day
+                    $startDateTime = $startDate . ' 00:00:00'; // Start of the day
+                    $filterConditions['sign_in >='] = $startDateTime;
                 }
                 if ($endDate) {
-                    $filterConditions['sign_in <='] = $endDate . ' 23:59:59'; // End of the day
+                    $endDateTime = $endDate . ' 23:59:59'; // End of the day
+                    $filterConditions['sign_in <='] = $endDateTime;
                 }
             
                 // Total number of records based on filters
@@ -1038,15 +1038,22 @@ public function saveAttendance()
                 // Initialize pager manually
                 $pager = \Config\Services::pager();
             
+                // Calculate if there is a previous page
+                $hasPrevious = ($currentPage > 1);
+            
+                // Calculate if there is a next page
+                $hasNext = ($currentPage * $perPage < $totalRecords);
+            
                 // Prepare data to pass to the view
                 $data = [
                     'attendances' => $attendances,
                     'pager' => $pager,
                     'perPage' => $perPage,
                     'currentPage' => $currentPage,
+                    'hasPrevious' => $hasPrevious,
+                    'hasNext' => $hasNext,
                     'startDate' => $startDate,
                     'endDate' => $endDate,
-                    'name' => $name, // Include name in data passed to the view
                     'pageTitle'=> 'Attendance Report',
                     'userStatus' => $userStatus
                 ];
@@ -1054,7 +1061,6 @@ public function saveAttendance()
                 // Load the view and pass the data
                 return view('backend/pages/attendance_report', $data);
             }
-            
             public function deleteAttendance()
             {
                 $attendanceModel = new \App\Models\AttendanceModel();
