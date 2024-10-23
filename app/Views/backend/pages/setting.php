@@ -33,12 +33,12 @@
 									<div class="tab-content">
 										<div class="tab-pane fade show active" id="general_setting" role="tabpanel">
 											<div class="pd-20">
-												
+												general setting
 											</div>
 										</div>
 										<div class="tab-pane fade" id="profile2" role="logo_favicon">
 											<div class="pd-20">
-												
+												logo
 											</div>
 										</div>
 									</div>
