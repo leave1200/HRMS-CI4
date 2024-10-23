@@ -1011,6 +1011,7 @@ public function saveAttendance()
                 $currentPage = $this->request->getVar('page') ?: 1;
             
                 // Get filter dates from query string
+                $name = $this->request->getVar('name');
                 $startDate = $this->request->getVar('start_date');
                 $endDate = $this->request->getVar('end_date');
             
