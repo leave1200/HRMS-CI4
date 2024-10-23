@@ -46,8 +46,16 @@ class CreateSettingsTable extends Migration
                 'constraint'=>'255',
                 'null'=>true,
             ],
-             'created_at timestamp default current_timestamp',
-              'updated_at timestamp default current_timestamp on update current_timestamp',
+            'created_at' => [
+                    'type' => 'DATETIME',
+                    'default' => 'CURRENT_TIMESTAMP',
+                ],
+                'updated_at' => [
+                    'type' => 'DATETIME',
+                    'default' => 'CURRENT_TIMESTAMP',
+                    'on_update' => 'CURRENT_TIMESTAMP',
+                ],
+
         ]);
         $this->forge->addKey('s_id', true);
         $this->forge->createTable('settings');
