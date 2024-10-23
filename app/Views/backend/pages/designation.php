@@ -42,9 +42,27 @@
         <div class="pull-left">
             <h4 class="text-blue h4">Assigned</h4>
         </div>
+        <div class="mb-10 pull-right">
+            <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
+        </div>
+<script>
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const rows = document.querySelectorAll('#DataTables_Table_0 tbody tr');
+
+    rows.forEach(row => {
+        const nameCell = row.cells[2]; // Assuming the Name is the third column
+        if (nameCell) {
+            const txtValue = nameCell.textContent || nameCell.innerText;
+            row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+        }
+    });
+}
+</script>
     </div>
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" id="DataTables_Table_0">
             <thead>
                 <tr>
                     <th scope="col">#</th>
