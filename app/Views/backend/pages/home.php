@@ -124,37 +124,38 @@
 
 				<div class="card-box pb-10">
 					<div class="h5 pd-20 mb-0">Employee</div>
-					<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-						<div class="row">
-							<div class="table-responsive">
-								<table class="table table-stripped" id="DataTables_Table_0" role="grid">
-									<thead>
-										<tr role="row">
-											<th>#</th>
-											<th>Name</th>
-											<th>Birth Date</th>
-											<th>Address</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php if (!empty($employee)): ?>
-											<?php foreach ($employee as $index => $emp): ?>
-												<?php if ($emp['result'] !== 'Pending'): ?>
-												<tr>
-													<td><?= $index + 1 ?></td>
-													<td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
-													<td><?= htmlspecialchars($emp['dob']) ?></td>
-													<td><?= htmlspecialchars($emp['address']) ?></td>
-												</tr>
-												<?php endif; ?>
-											<?php endforeach; ?>
-										<?php else: ?>
-											<tr>
-												<td colspan="4">No employees found</td>
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+							<div class="row">
+								<div class="table-responsive">
+									<table class="table table-stripped" id="DataTables_Table_0" role="grid">
+										<thead>
+											<tr role="row">
+												<th>#</th>
+												<th>Name</th>
+												<th>Birth Date</th>
+												<th>Address</th>
 											</tr>
-										<?php endif; ?>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											<?php if (!empty($employee)): ?>
+												<?php foreach ($employee as $index => $emp): ?>
+													<?php if ($emp['result'] !== 'Pending'): ?>
+													<tr>
+														<td><?= $index + 1 ?></td>
+														<td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
+														<td><?= htmlspecialchars($emp['dob']) ?></td>
+														<td><?= htmlspecialchars($emp['address']) ?></td>
+													</tr>
+													<?php endif; ?>
+												<?php endforeach; ?>
+											<?php else: ?>
+												<tr>
+													<td colspan="4">No employees found</td>
+												</tr>
+											<?php endif; ?>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
