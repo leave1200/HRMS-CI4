@@ -1388,60 +1388,74 @@ public function leave_application()
     return view('backend/pages/leave_application', $data);
 }
 
-    public function submitLeaveApplication()
-        {
-            log_message('info', 'Submit Leave Application started.');
+public function submitLeaveApplication()
+{
+    log_message('info', 'Submit Leave Application started.');
 
-            $leaveApplicationModel = new LeaveApplicationModel();
-            
-            $validation = \Config\Services::validation();
-            $validation->setRules([
-                'la_name' => 'required|integer',
-                'la_type' => 'required|integer',
-                'la_start' => 'required|valid_date',
-                'la_end' => 'required|valid_date',
-            ]);
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $holidayModel = new HolidayModel(); // Load the HolidayModel
+    
+    $validation = \Config\Services::validation();
+    $validation->setRules([
+        'la_name' => 'required|integer',
+        'la_type' => 'required|integer',
+        'la_start' => 'required|valid_date',
+        'la_end' => 'required|valid_date',
+    ]);
 
-            if (!$validation->withRequest($this->request)->run()) {
-                log_message('error', 'Validation errors: ' . json_encode($validation->getErrors()));
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Validation errors',
-                    'errors' => $validation->getErrors()
-                ]);
-            }
+    if (!$validation->withRequest($this->request)->run()) {
+        log_message('error', 'Validation errors: ' . json_encode($validation->getErrors()));
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'errors' => $validation->getErrors()
+        ]);
+    }
 
-            $la_start = $this->request->getPost('la_start');
-            $la_end = $this->request->getPost('la_end');
+    $la_start = $this->request->getPost('la_start');
+    $la_end = $this->request->getPost('la_end');
 
-            if (strtotime($la_start) > strtotime($la_end)) {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'End date must be after start date.'
-                ]);
-            }
+    if (strtotime($la_start) > strtotime($la_end)) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'End date must be after start date.'
+        ]);
+    }
 
-            $data = [
-                'la_name' => $this->request->getPost('la_name'),
-                'la_type' => $this->request->getPost('la_type'),
-                'la_start' => $la_start,
-                'la_end' => $la_end,
-                'status' => 'Pending',
-            ];
+    // Adjust the start date if it's a holiday
+    $la_start = $this->adjustIfHoliday($la_start, $holidayModel);
 
-            if ($leaveApplicationModel->insert($data)) {
-                return $this->response->setJSON([
-                    'status' => 'success',
-                    'message' => 'Leave application submitted successfully'
-                ]);
-            } else {
-                log_message('error', 'Database insert failed: ' . json_encode($leaveApplicationModel->errors()));
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Failed to submit leave application. Please try again.'
-                ]);
-            }
-        }
+    $data = [
+        'la_name' => $this->request->getPost('la_name'),
+        'la_type' => $this->request->getPost('la_type'),
+        'la_start' => $la_start,
+        'la_end' => $la_end,
+        'status' => 'Pending',
+    ];
+
+    if ($leaveApplicationModel->insert($data)) {
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Leave application submitted successfully'
+        ]);
+    } else {
+        log_message('error', 'Database insert failed: ' . json_encode($leaveApplicationModel->errors()));
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Failed to submit leave application. Please try again.'
+        ]);
+    }
+}
+
+private function adjustIfHoliday($date, $holidayModel)
+{
+    // Check if the date is in the holidays table
+    while ($holidayModel->where('date', $date)->first()) {
+        $date = date('Y-m-d', strtotime($date . ' +1 day')); // Move to the next day
+    }
+
+    return $date;
+}
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function setting(){
