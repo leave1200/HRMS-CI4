@@ -33,7 +33,7 @@
 									<div class="tab-content">
 										<div class="tab-pane fade show active" id="general_setting" role="tabpanel">
 											<div class="pd-20">
-												<form action="" method="POST" id="general_setting_form">
+												<form action="<?= route_to('update-general-settings') ?>" method="POST" id="general_setting_form">
                                                     <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" class="ci_csrf_data">
                                                   <div class="row">
                                                     <div class="col-md-6">
