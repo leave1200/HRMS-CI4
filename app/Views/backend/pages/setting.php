@@ -19,6 +19,7 @@
 								</nav>
 							</div>
 						</div>
+					</div>
                     <div class="pd-20 card-box md-4">
 								<div class="tab">
 									<ul class="nav nav-tabs customtab" role="tablist">
