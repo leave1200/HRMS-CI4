@@ -67,11 +67,6 @@
                                                             </div>
                                                         </div>
                                                   </div>
-                                                  <div class="form-group">
-                                                                <label for="">Description</label>
-                                                                <textarea  name="description" id="" cols="4" rows="3" class="form-control"placeholder="Enter description">
-                                                                <span class="text-danger error-text description_error"></span>
-                                                            </div>
                                                 </form>
 											</div>
 										</div>
