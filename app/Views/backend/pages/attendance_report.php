@@ -204,5 +204,21 @@ function deleteAttendance(id) {
     });
 }
 </script>
+<script>
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const rows = document.querySelectorAll('#DataTables_Table_0 tbody tr');
+
+    rows.forEach(row => {
+        const nameCell = row.cells[2]; // Assuming the Name is the third column
+        if (nameCell) {
+            const txtValue = nameCell.textContent || nameCell.innerText;
+            row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+        }
+    });
+}
+</script>
+
 
 <?= $this->endSection() ?>
