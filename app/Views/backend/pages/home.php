@@ -159,6 +159,7 @@
 					</div>
 				</div>
 			</div>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     fetch('<?= route_to('admin.gender') ?>')
