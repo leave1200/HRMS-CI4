@@ -37,7 +37,7 @@
         <div class="pull-left">
             <h4 class="text-blue h4">Sign In/Sign Out Record</h4>
         </div>
-        <div class="mb-20">
+        <div class="mb-10 pull-right">
             <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
         </div>
 
