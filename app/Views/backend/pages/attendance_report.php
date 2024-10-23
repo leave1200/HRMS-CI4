@@ -23,10 +23,6 @@
 <form method="get" action="<?= route_to('attendance_report') ?>" class="mb-4">
     <div class="form-group">
         <label for="start_date">Start Date:</label>
-        <input type="text" id="name" name="name" value="<?= esc($name) ?>" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="start_date">Start Date:</label>
         <input type="date" id="start_date" name="start_date" value="<?= esc($startDate) ?>" class="form-control">
     </div>
     <div class="form-group">
