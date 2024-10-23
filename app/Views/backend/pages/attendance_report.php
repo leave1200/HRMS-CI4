@@ -22,7 +22,7 @@
 <!-- Date Filter Form -->
 <form method="get" action="<?= route_to('attendance_report') ?>" class="mb-4">
     <div class="form-group">
-        <label for="start_date">Start Date:</label>
+        <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<?= esc($name) ?>" class="form-control">
     </div>
     <div class="form-group">
@@ -35,6 +35,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Filter</button>
 </form>
+
 
 <div class="pd-20 card-box mb-30">
     <div class="clearfix mb-20">

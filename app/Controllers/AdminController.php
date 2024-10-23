@@ -1017,6 +1017,9 @@ public function saveAttendance()
             
                 // Prepare filter conditions
                 $filterConditions = [];
+                if ($name) {
+                    $filterConditions['name'] = $name; // Filter by name
+                }
                 if ($startDate) {
                     $startDateTime = $startDate . ' 00:00:00'; // Start of the day
                     $filterConditions['sign_in >='] = $startDateTime;
