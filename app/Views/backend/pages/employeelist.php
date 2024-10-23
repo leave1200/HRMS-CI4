@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" id="DataTables_Table_0">
             <thead>
                 <tr>
                     <th scope="col">#</th>
