@@ -1387,7 +1387,7 @@ public function leave_application()
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
-
+//////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
 {
     log_message('info', 'Submit Leave Application started.');
@@ -1400,7 +1400,7 @@ public function submitLeaveApplication()
         'la_name' => 'required|integer',
         'la_type' => 'required|integer',
         'la_start' => 'required|valid_date',
-        'la_end' => 'required|valid_date',
+        'la_end' => 'required|valid_date', // The user selects start and end dates
     ]);
 
     if (!$validation->withRequest($this->request)->run()) {
@@ -1422,8 +1422,11 @@ public function submitLeaveApplication()
         ]);
     }
 
-    // Adjust the start date if it's a holiday
-    $la_start = $this->adjustIfHoliday($la_start, $holidayModel);
+    // Calculate the number of leave days requested (excluding holidays)
+    $total_leave_days = $this->calculateWorkingDays($la_start, $la_end, $holidayModel);
+
+    // Adjust the end date so that the total number of leave days is correct
+    $la_end = $this->adjustLeaveEndDate($la_start, $total_leave_days, $holidayModel);
 
     $data = [
         'la_name' => $this->request->getPost('la_name'),
@@ -1447,15 +1450,38 @@ public function submitLeaveApplication()
     }
 }
 
-private function adjustIfHoliday($date, $holidayModel)
+private function calculateWorkingDays($start_date, $end_date, $holidayModel)
 {
-    // Check if the date is in the holidays table
-    while ($holidayModel->where('date', $date)->first()) {
-        $date = date('Y-m-d', strtotime($date . ' +1 day')); // Move to the next day
+    $current_date = $start_date;
+    $working_days = 0;
+
+    // Count working days between start and end dates (excluding holidays)
+    while (strtotime($current_date) <= strtotime($end_date)) {
+        if (!$holidayModel->where('date', $current_date)->first()) {
+            $working_days++; // Count only non-holidays
+        }
+        $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
     }
 
-    return $date;
+    return $working_days;
 }
+
+private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayModel)
+{
+    $current_date = $start_date;
+    $days_counted = 0;
+
+    // Adjust the end date so that it accounts for holidays
+    while ($days_counted < $total_leave_days) {
+        if (!$holidayModel->where('date', $current_date)->first()) {
+            $days_counted++; // Only count non-holidays
+        }
+        $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
+    }
+
+    return date('Y-m-d', strtotime($current_date . ' -1 day')); // Return the correct end date
+}
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function setting(){
