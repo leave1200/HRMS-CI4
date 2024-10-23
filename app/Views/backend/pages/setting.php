@@ -33,7 +33,41 @@
 									<div class="tab-content">
 										<div class="tab-pane fade show active" id="general_setting" role="tabpanel">
 											<div class="pd-20">
-												general setting
+												<form action="" method="POST" id="general_setting_form">
+                                                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>" class="ci_csrf_data">
+                                                  <div class="row">
+                                                    <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">Title</label>
+                                                                <input type="text" class="form-control" name="title" placeholder="Enter a Title">
+                                                                <span class="text-danger error-text title_error"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">Email</label>
+                                                                <input type="text" class="form-control" name="email" placeholder="Enter a email">
+                                                                <span class="text-danger error-text email_error"></span>
+                                                            </div>
+                                                        </div>
+                                                  </div>
+                                                  <div class="row">
+                                                    <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">Phone</label>
+                                                                <input type="text" class="form-control" name="phone" placeholder=" Enter phone #">
+                                                                <span class="text-danger error-text phone_error"></span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">Email</label>
+                                                                <input type="text" class="form-control" name="email" placeholder="">
+                                                                <span class="text-danger error-text email_error"></span>
+                                                            </div>
+                                                        </div> -->
+                                                  </div>
+                                                </form>
 											</div>
 										</div>
 										<div class="tab-pane fade" id="profile2" role="logo_favicon">
