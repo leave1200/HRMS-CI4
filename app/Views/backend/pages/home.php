@@ -16,7 +16,8 @@
 							</nav>
 						</div>
 					</div>
-				</div><div class="row clearfix progress-box">
+				</div>
+				<div class="row clearfix progress-box">
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#F19EF7">
 							<div class="progress-box text-center">
