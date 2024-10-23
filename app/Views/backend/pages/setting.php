@@ -24,27 +24,19 @@
 								<div class="tab">
 									<ul class="nav nav-tabs customtab" role="tablist">
 										<li class="nav-item">
-											<a class="nav-link active" data-toggle="tab" href="#home2" role="tab" aria-selected="true">Home</a>
+											<a class="nav-link active" data-toggle="tab" href="#general_setting" role="tab" aria-selected="true">General Setting</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" data-toggle="tab" href="#profile2" role="tab" aria-selected="false">Profile</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" data-toggle="tab" href="#contact2" role="tab" aria-selected="false">Contact</a>
+											<a class="nav-link" data-toggle="tab" href="#logo_favicon" role="tab" aria-selected="false">Logo & Favicon</a>
 										</li>
 									</ul>
 									<div class="tab-content">
-										<div class="tab-pane fade show active" id="home2" role="tabpanel">
+										<div class="tab-pane fade show active" id="general_setting" role="tabpanel">
 											<div class="pd-20">
 												
 											</div>
 										</div>
-										<div class="tab-pane fade" id="profile2" role="tabpanel">
-											<div class="pd-20">
-												
-											</div>
-										</div>
-										<div class="tab-pane fade" id="contact2" role="tabpanel">
+										<div class="tab-pane fade" id="profile2" role="logo_favicon">
 											<div class="pd-20">
 												
 											</div>
