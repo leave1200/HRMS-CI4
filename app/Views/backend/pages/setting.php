@@ -75,7 +75,7 @@
                                                 </form>
 											</div>
 										</div>
-										<div class="tab-pane fade" id="profile2" role="logo_favicon">
+										<div class="tab-pane fade" id="logo_favicon" role="tabpane2">
 											<div class="pd-20">
 												logo
 											</div>
