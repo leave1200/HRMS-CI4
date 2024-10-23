@@ -122,7 +122,7 @@
 					</div>
 				</div>
 
-				<div class="card-box pb-10">
+				<!-- <div class="card-box pb-10">
 					<div class="h5 pd-20 mb-0">Employee</div>
 						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 							<div class="row">
@@ -159,7 +159,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
