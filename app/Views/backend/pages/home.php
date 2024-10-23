@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Data fetched from server:', data); // Log the response data
             Highcharts.chart('employeeChart', {
                 chart: {
-                    type: 'line'
+                    type: 'bar'
                 },
                 title: {
                     text: 'Total Number of Male and Female Employees'
