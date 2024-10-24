@@ -93,7 +93,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                <input class="btn btn-primary btn-lg btn-block" type="button" value="Sign In" onclick="submitForm()">
                 </div>
             </div>
         </div>
@@ -108,6 +108,16 @@
             document.getElementById('recaptcha_token').value = token;
         });
     });
+</script>
+<script>
+    function submitForm() {
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+                document.getElementById('recaptcha_token').value = token;
+                document.getElementById('loginForm').submit(); // Submit the form after setting the token
+            });
+        });
+    }
 </script>
 <script src="https://www.google.com/recaptcha/api.js"></script>
 
