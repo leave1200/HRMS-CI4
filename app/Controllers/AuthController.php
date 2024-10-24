@@ -55,7 +55,9 @@ class AuthController extends BaseController
             session()->set('recaptcha_token', $token);
 
             // Redirect to the login form after successful verification
-            return redirect()->to('hrmo-lawis.com'); // Adjust this route as necessary
+           // In the verifyReCaptcha method
+                return redirect()->to(route('admin.login.form'));
+                // Adjust this route as necessary
         } else {
             // Verification failed, redirect back to reCAPTCHA form
             return redirect()->to('/recaptcha-form')->with('fail', 'Please complete the reCAPTCHA verification.');
