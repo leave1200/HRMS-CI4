@@ -19,42 +19,58 @@ class AuthController extends BaseController
     {
         $this->userModel = new User(); // Load the UserModel
     }
-
     public function loginForm()
     {
         // Check system accessibility
         if (!$this->isSystemAccessible()) {
             session()->setFlashdata('system_accessible', false);
+            return redirect()->to('/'); // Adjust to redirect as necessary
         }
-    
+
         // Check if the reCAPTCHA token exists in the session
         $recaptchaToken = session()->get('recaptcha_token');
-    
+
         // If the token is not set or verification fails, redirect to reCAPTCHA form
         if (!$recaptchaToken || !$this->verifyReCaptcha($recaptchaToken)) {
-            return view('backend/pages/auth/recaptcha_form'); // Redirect to the reCAPTCHA form
+            return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
         }
-    
+
         return view('backend/pages/auth/login', [
             'pageTitle' => 'Login',
             'validation' => null,
         ]);
     }
-    
-    /**
-     * Verify reCAPTCHA token.
-     *
-     * @param string $token
-     * @return bool
-     */
-    private function verifyReCaptcha($token)
+
+    public function showForm()
+    {
+        return view('backend/pages/auth/recaptcha_form');
+    }
+
+    public function verifyReCaptcha()
+    {
+        $token = $this->request->getPost('recaptcha_token');
+
+        if ($this->verifyReCaptchaServer($token)) {
+            // Set the token in session for future verification
+            session()->set('recaptcha_token', $token);
+
+            // Redirect to the login form after successful verification
+            return redirect()->to('/login'); // Adjust this route as necessary
+        } else {
+            // Verification failed, redirect back to reCAPTCHA form
+            return redirect()->to('/recaptcha-form')->with('fail', 'Please complete the reCAPTCHA verification.');
+        }
+    }
+
+    private function verifyReCaptchaServer($token)
     {
         $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your actual secret key
         $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$token}");
         $responseKeys = json_decode($response, true);
-    
-        return intval($responseKeys["success"]) === 1; // Return true if verification was successful
+
+        return isset($responseKeys["success"]) && intval($responseKeys["success"]) === 1; // Return true if verification was successful
     }
+
     
 
     private function isSystemAccessible()
