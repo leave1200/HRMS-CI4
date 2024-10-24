@@ -86,7 +86,7 @@
                         const rows = document.querySelectorAll('#DataTables_Table_0_wrapper tbody tr');
 
                         rows.forEach(row => {
-                            const nameCell = row.cells[2]; // Assuming the Name is the third column
+                            const nameCell = row.cells[1]; // Assuming the Name is the third column
                             if (nameCell) {
                                 const txtValue = nameCell.textContent || nameCell.innerText;
                                 row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
