@@ -1,14 +1,13 @@
-
 <h2>Please verify you are not a robot</h2>
 <form action="<?= esc(route_to('captcha.verify')) ?>" method="POST">
     <input type="hidden" name="recaptcha_token" id="recaptcha_token">
     <button type="submit">Verify</button>
 </form>
 
-<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4mY"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4mY', { action: 'loginForm' }).then(function(token) {
+        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4mY', { action: 'homepage' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
