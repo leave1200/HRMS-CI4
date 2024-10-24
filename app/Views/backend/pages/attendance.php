@@ -74,11 +74,9 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
-                    <div id="DataTables_Table_0_filter" class="dataTables_filter">
-                        <label>Search:
-                            <input type="search" class="form-control form-control-sm" placeholder="Search" aria-controls="DataTables_Table_0" onkeyup="filterTable()">
-                        </label>
-                    </div>
+                <div class="mb-10 pull-right">
+                    <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
+                </div>
                     <script>
                     function filterTable() {
                         const input = document.getElementById('searchInput');
