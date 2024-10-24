@@ -1,3 +1,5 @@
+<?= $this->extend('backend/layout/auth-layout') ?>
+<?= $this->section('content') ?>
 <h2>Please verify you are not a robot</h2>
 <form action="<?= esc(route_to('captcha.verify')) ?>" method="POST">
     <input type="hidden" name="recaptcha_token" id="recaptcha_token">
@@ -12,3 +14,4 @@
         });
     });
 </script>
+<?= $this->endSection() ?>
