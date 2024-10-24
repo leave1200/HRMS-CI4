@@ -22,16 +22,6 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
-        $recaptchaResponse = $this->request->getPost('recaptcha_token');
-        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your secret key
-    
-        // Verify the CAPTCHA
-        $verifyCaptcha = $this->verifyRecaptcha($recaptchaResponse, $secretKey);
-    
-        if (!$verifyCaptcha || !$verifyCaptcha->success || $verifyCaptcha->score < 0.5) {
-            // CAPTCHA verification failed or low score
-            return redirect()->back()->with('fail', 'Captcha verification failed. Please try again.');
-        }
         // Assume we have a function to check system availability
         if (!$this->isSystemAccessible()) {
             session()->setFlashdata('system_accessible', false);
@@ -60,6 +50,15 @@ class AuthController extends BaseController
     }
     public function loginHandler()
     {
+        $recaptchaResponse = $this->request->getPost('recaptcha_token');
+        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your secret key
+    
+        // Verify the CAPTCHA
+        $verifyCaptcha = $this->verifyRecaptcha($recaptchaResponse, $secretKey);
+    
+        if (!$verifyCaptcha || !$verifyCaptcha->success || $verifyCaptcha->score < 0.5) {
+            // CAPTCHA verification failed or low score
+          
         // Check if the user is currently in a waiting state
         if (session()->get('wait_time') && session()->get('wait_time') > time()) {
             // Calculate remaining wait time
