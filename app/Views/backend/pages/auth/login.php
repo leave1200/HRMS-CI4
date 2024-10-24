@@ -93,15 +93,15 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()">
-                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
                 </div>
             </div>
         </div>
     </form>
 </div>
 
-<!-- Include reCAPTCHA API -->
+<!-- Include reCAPTCHA API
 <script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
     grecaptcha.ready(function() {
@@ -120,6 +120,6 @@
         });
     }
 </script>
-<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script> -->
 
 <?= $this->endSection() ?>
