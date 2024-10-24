@@ -21,25 +21,25 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
-        // Check if the user is already logged in
-        if (session()->get('isLoggedIn')) {
-            return redirect()->to(route('admin.home')); // Redirect to home if already logged in
+        // Check system accessibility
+        if (!$this->isSystemAccessible()) {
+            session()->setFlashdata('system_accessible', false);
+            return redirect()->to('/'); // Adjust to redirect as necessary
         }
-    
+
         // Check if the reCAPTCHA token exists in the session
         $recaptchaToken = session()->get('recaptcha_token');
-    
+
         // If the token is not set or verification fails, redirect to reCAPTCHA form
         if (!$recaptchaToken || !$this->verifyReCaptcha($recaptchaToken)) {
             return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
         }
-    
+
         return view('backend/pages/auth/login', [
             'pageTitle' => 'Login',
             'validation' => null,
         ]);
     }
-    
 
     public function showForm()
     {
@@ -55,7 +55,7 @@ class AuthController extends BaseController
             session()->set('recaptcha_token', $token);
 
             // Redirect to the login form after successful verification
-            return redirect()->to('/login'); // Adjust this route as necessary
+            return redirect()->to('hrmo-lawis.com'); // Adjust this route as necessary
         } else {
             // Verification failed, redirect back to reCAPTCHA form
             return redirect()->to('/recaptcha-form')->with('fail', 'Please complete the reCAPTCHA verification.');
