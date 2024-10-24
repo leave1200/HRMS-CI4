@@ -26,7 +26,7 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => '127.0.0.1',
+        'hostname'     => 'mysql.hostinger.com',
         'username'     => 'u510162695_hrsystemci',
         'password'     => '1Hrsystemci',
         'database'     => 'u510162695_hrsystemci',
