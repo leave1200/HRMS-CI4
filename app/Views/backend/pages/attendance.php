@@ -76,9 +76,24 @@
                 <div class="col-sm-12 col-md-6">
                     <div id="DataTables_Table_0_filter" class="dataTables_filter">
                         <label>Search:
-                            <input type="search" class="form-control form-control-sm" placeholder="Search" aria-controls="DataTables_Table_0">
+                            <input type="search" class="form-control form-control-sm" placeholder="Search" aria-controls="DataTables_Table_0" onkeyup="filterTable()">
                         </label>
                     </div>
+                    <script>
+                    function filterTable() {
+                        const input = document.getElementById('searchInput');
+                        const filter = input.value.toLowerCase();
+                        const rows = document.querySelectorAll('#DataTables_Table_0_wrapper tbody tr');
+
+                        rows.forEach(row => {
+                            const nameCell = row.cells[2]; // Assuming the Name is the third column
+                            if (nameCell) {
+                                const txtValue = nameCell.textContent || nameCell.innerText;
+                                row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+                            }
+                        });
+                    }
+                    </script>
                 </div>
             </div>
             <div class="row">
