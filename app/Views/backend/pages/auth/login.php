@@ -93,7 +93,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                <input class="btn btn-primary btn-lg btn-block" type="button" value="Sign In" onclick="submitForm()">
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
                 </div>
             </div>
         </div>
