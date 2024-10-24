@@ -142,6 +142,6 @@ $routes->group('admin', static function($routes){
        'send_password_reset_link']);
         $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
         $routes->get('/recaptcha-form', 'AuthController::showForm');
-        $routes->post('recaptcha-verify', 'AuthController::verify',  ['as' => 'captcha.verify']);
+        $routes->post('recaptcha-verify', 'AuthController::verifyReCaptcha',  ['as' => 'captcha.verify']);
     });
 });
