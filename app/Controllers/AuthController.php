@@ -27,11 +27,35 @@ class AuthController extends BaseController
             session()->setFlashdata('system_accessible', false);
         }
     
+        // Check if the reCAPTCHA token exists in the session
+        $recaptchaToken = session()->get('recaptcha_token');
+    
+        // If the token is not set or verification fails, redirect to reCAPTCHA form
+        if (!$recaptchaToken || !$this->verifyReCaptcha($recaptchaToken)) {
+            return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
+        }
+    
         return view('backend/pages/auth/login', [
             'pageTitle' => 'Login',
             'validation' => null,
         ]);
     }
+    
+    /**
+     * Verify reCAPTCHA token.
+     *
+     * @param string $token
+     * @return bool
+     */
+    private function verifyReCaptcha($token)
+    {
+        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your actual secret key
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$token}");
+        $responseKeys = json_decode($response, true);
+    
+        return intval($responseKeys["success"]) === 1; // Return true if verification was successful
+    }
+    
 
     private function isSystemAccessible()
     {
@@ -213,17 +237,4 @@ class AuthController extends BaseController
         }
     }
 
-    private function verifyRecaptcha($token, $secretKey)
-    {
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [
-            'secret' => $secretKey,
-            'response' => $token
-        ];
-
-        $client = \Config\Services::curlrequest();
-        $response = $client->setBody(http_build_query($data))->post($url);
-
-        return json_decode($response->getBody());
-    }
 }
