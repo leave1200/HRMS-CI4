@@ -127,6 +127,9 @@ $routes->group('admin', static function($routes){
         ////////////////////////////////////////////////users
         $routes->post('user_delete', 'AdminController::deleteuser', ['as' => 'admin.deleteuser']);
 
+        ///////////////////////////////////////////////////////////////////////
+
+
 
     });
 
@@ -138,5 +141,7 @@ $routes->group('admin', static function($routes){
        $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' =>
        'send_password_reset_link']);
         $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
+        $routes->get('/recaptcha-form', 'AuthController::showForm');
+        $routes->post('/recaptcha-verify', 'AuthController::verify');
     });
 });

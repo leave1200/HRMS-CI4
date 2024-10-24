@@ -32,7 +32,7 @@ class AuthController extends BaseController
     
         // If the token is not set or verification fails, redirect to reCAPTCHA form
         if (!$recaptchaToken || !$this->verifyReCaptcha($recaptchaToken)) {
-            return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
+            return redirect()->to('backend/pages/auth/recaptcha-form'); // Redirect to the reCAPTCHA form
         }
     
         return view('backend/pages/auth/login', [
