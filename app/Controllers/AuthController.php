@@ -13,6 +13,7 @@ use Carbon\Carbon;
 class AuthController extends BaseController
 {
     protected $helpers = ['url', 'form', 'CIMail', 'CIFunctions', 'session'];
+
     protected $userModel;
 
     public function __construct()
@@ -21,71 +22,37 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
-
-        // Check if the reCAPTCHA token exists in the session
-        $recaptchaToken = session()->get('recaptcha_token');
-
-        // If the token is not set or verification fails, redirect to reCAPTCHA form
-        if (!$recaptchaToken || !$this->verifyReCaptcha($recaptchaToken)) {
-            return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
+        // Assume we have a function to check system availability
+        if (!$this->isSystemAccessible()) {
+            session()->setFlashdata('system_accessible', false);
         }
-
+    
         return view('backend/pages/auth/login', [
             'pageTitle' => 'Login',
             'validation' => null,
         ]);
     }
-
-    public function showForm()
+    private function isSystemAccessible()
     {
-        return view('backend/pages/auth/recaptcha_form');
-    }
+        // Load the database connection service
+        $db = \Config\Database::connect();
 
-    public function verifyReCaptcha()
-    {
-        $token = $this->request->getPost('recaptcha_token');
-
-        if ($this->verifyReCaptchaServer($token)) {
-            // Set the token in session for future verification
-            session()->set('recaptcha_token', $token);
-
-            // Redirect to the login form after successful verification
-           // In the verifyReCaptcha method
-                return redirect()->to(route('admin.login.form'));
-                // Adjust this route as necessary
-        } else {
-            // Verification failed, redirect back to reCAPTCHA form
-            return redirect()->to('/recaptcha-form')->with('fail', 'Please complete the reCAPTCHA verification.');
+        // Check if the connection is successful
+        try {
+            // Perform a simple query to check the connection
+            $db->query("SELECT 1");
+            return true; // Connection is successful
+        } catch (\Exception $e) {
+            // Log the error or handle it as needed
+            log_message('error', 'Database connection failed: ' . $e->getMessage());
+            return false; // Connection failed
         }
     }
-
-    private function verifyReCaptchaServer($token)
-    {
-        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your actual secret key
-        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$token}");
-        $responseKeys = json_decode($response, true);
-
-        return isset($responseKeys["success"]) && intval($responseKeys["success"]) === 1; // Return true if verification was successful
-    }
-
-    
-
     public function loginHandler()
     {
-        // Get the CAPTCHA token from the form
-        $recaptchaResponse = $this->request->getPost('recaptcha_token');
-        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your secret key
-    
-        // Verify the CAPTCHA
-        $verifyCaptcha = $this->verifyRecaptcha($recaptchaResponse, $secretKey);
-
-        // Check if the CAPTCHA verification is successful
-        if (!$verifyCaptcha || !$verifyCaptcha->success || $verifyCaptcha->score < 0.5) {
-            return redirect()->route('admin.login.form')->with('fail', 'Captcha verification failed. Please try again.');
-        }
-
-        // Check if the user is in a waiting state (e.g., after too many login attempts)
+        // Check if the user is currently in a waiting state
         if (session()->get('wait_time') && session()->get('wait_time') > time()) {
+            // Calculate remaining wait time
             $remainingTime = session()->get('wait_time') - time();
             return view('backend/pages/auth/login', [
                 'pageTitle' => 'Login',
@@ -127,32 +94,33 @@ class AuthController extends BaseController
             ]);
         }
     
-        // If validation passes, check user credentials
+        // If validation passes, proceed to check user credentials
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
     
         // Verify the password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+            // Increment the attempt count
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
     
-            // Wait for 30 seconds after 3 incorrect attempts
+            // Wait for 5 seconds after 3 attempts
             if ($attempts >= 3) {
-                session()->set('wait_time', time() + 30);
+                session()->set('wait_time', time() + 30); // Wait for 30 seconds
                 return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
             }
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
     
-        // Reset login attempts if successful
+        // Reset the attempts if login is successful
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
         // Set user session or cookie using CIAuth
         CIAuth::setCIAuth($userInfo);
     
-        // Set session data for the logged-in user
+        // Set session data for logged-in user
         session()->set([
             'user_id' => $userInfo['id'],
             'username' => $userInfo['username'],
@@ -160,81 +128,104 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
     
-        // Redirect to the admin dashboard
+        // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
-
-    public function forgotForms()
-    {
-        return view('backend/pages/auth/forgot', [
-            'pageTitle' => 'Forgot password',
-            'validation' => null
-        ]);
+    
+    
+    
+    public function forgotForms(){
+        $data = array(
+            'pageTitle'=>'Forgot password',
+            'validation'=>null
+        );
+        return view('backend/pages/auth/forgot', $data);
     }
-
-    public function sendPasswordResetLink()
-    {
+    
+    public function sendPasswordResetLink(){
         $isValid = $this->validate([
-            'email' => [
-                'rules' => 'required|valid_email|is_not_unique[users.email]',
-                'errors' => [
-                    'required' => 'Email is required',
-                    'valid_email' => 'Please check the email field. It does not appear to be valid.',
-                    'is_not_unique' => 'Email does not exist in our system.',
-                ]
+            'email'=>[
+                'rules'=>'required|valid_email|is_not_unique[users.email]',
+                'errors'=>[
+                    'required'=>'Email required',
+                    'valid_email'=>'Please check email field. It does not appears to be Valid.',
+                    'is_not_unique'=>'Email not Exist in System',
+                ],
             ]
         ]);
 
-        if (!$isValid) {
-            return view('backend/pages/auth/forgot', [
-                'pageTitle' => 'Forgot password',
-                'validation' => $this->validator,
+        if( !$isValid ){
+            return view('backend/pages/auth/forgot',[
+                'pageTitle'=>'Forgot password',
+                'validation'=>$this->validator,
+            ]);
+        }else{
+           
+            $user = new User();
+            $user_info = $user->asObject()->where('email',$this->request->getVar('email'))->first();
+
+            //gerate token
+            $token = bin2hex(openssl_random_pseudo_bytes(65));
+
+           //get reset token
+           $password_reset_token = new PasswordResetToken();
+           $isOldTokenExists = $password_reset_token->asObject()->where('email',$user_info->email)->first();
+
+            if($isOldTokenExists){
+                // update existing token
+                $password_reset_token->where('email', $user_info->email)
+                                     ->set(['token'=>$token,'created_at'=>Carbon::now()])
+                                     ->update();
+            }
+            $password_reset_token->insert([
+                'email'=>$user_info->email,
+                'token'=>$token,
+                'created_at'=>Carbon::now()
             ]);
         }
 
-        // Proceed to generate and store a password reset token
-        $user = $this->userModel->asObject()->where('email', $this->request->getVar('email'))->first();
-        $token = bin2hex(openssl_random_pseudo_bytes(65));
-
-        // Check for existing token
-        $passwordResetToken = new PasswordResetToken();
-        $isOldTokenExists = $passwordResetToken->where('email', $user->email)->first();
-
-        if ($isOldTokenExists) {
-            // Update the existing token
-            $passwordResetToken->where('email', $user->email)
-                               ->set(['token' => $token, 'created_at' => Carbon::now()])
-                               ->update();
-        } else {
-            // Insert new token
-            $passwordResetToken->insert([
-                'email' => $user->email,
-                'token' => $token,
-                'created_at' => Carbon::now()
-            ]);
-        }
-
-        // Create the action link for resetting the password
+        // create action link
         $actionLink = route_to('admin.reset-password', $token);
-        $mail_data = ['actionLink' => $actionLink, 'user' => $user];
+
+        $mail_data = array(
+            'actionLink'=> $actionLink,
+            'user'=>$user_info,
+        );
+
         $view = \Config\Services::renderer();
         $mail_body = $view->setVar('mail_data', $mail_data)->render('email-templates/forgot-email-template');
 
-        // Send the email
-        $mailConfig = [
-            'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
-            'mail_from_name' => env('EMAIL_FROM_NAME'),
-            'mail_recipient_email' => $user->email,
-            'mail_recipient_name' => $user->name,
-            'mail_subject' => 'Reset Password',
-            'mail_body' => $mail_body
-        ];
+        $mailConfig = array(
+            'mail_from_email'=>env('EMAIL_FROM_ADDRESS'),
+            'mail_from_name'=>env('EMAIL_FROM_NAME'),
+            'mail_recipient_email'=>$user_info->email,
+            'mail_recipient_name'=>$user_info->name,
+            'mail_subject'=>'Reset Password',
+            'mail_body'=>$mail_body
 
-        if (sendEmail($mailConfig)) {
-            return redirect()->route('admin.forgot.form')->with('success', 'We have emailed your password reset link.');
-        } else {
-            return redirect()->route('admin.forgot.form')->with('fail', 'Something went wrong.');
+        );
+
+        // send email
+
+        if(sendEmail($mailConfig) ){
+            return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
+        }else{
+            return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
         }
+        
     }
 
+    /// user info
+    public function getName($id)
+    {
+        $userModel = new User();
+        $user = $userModel->find($id);
+
+        if ($user) {
+            $name = $user['name'];
+            return $this->response->setJSON(['name' => $name]);
+        } else {
+            return $this->response->setJSON(['error' => 'User not found'], 404);
+        }
+    }
 }
