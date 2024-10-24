@@ -21,11 +21,6 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
-        // Check system accessibility
-        if (!$this->isSystemAccessible()) {
-            session()->setFlashdata('system_accessible', false);
-            return redirect()->to('/'); // Adjust to redirect as necessary
-        }
 
         // Check if the reCAPTCHA token exists in the session
         $recaptchaToken = session()->get('recaptcha_token');
@@ -74,19 +69,6 @@ class AuthController extends BaseController
     }
 
     
-
-    private function isSystemAccessible()
-    {
-        // Check if the database connection is successful
-        $db = \Config\Database::connect();
-        try {
-            $db->query("SELECT 1");
-            return true; // Connection is successful
-        } catch (\Exception $e) {
-            log_message('error', 'Database connection failed: ' . $e->getMessage());
-            return false; // Connection failed
-        }
-    }
 
     public function loginHandler()
     {
