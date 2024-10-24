@@ -35,7 +35,7 @@ class AuthController extends BaseController
             return redirect()->to('/recaptcha-form'); // Redirect to the reCAPTCHA form
         }
 
-        return view('backend/pages/auth/login', [
+        return view('backend/pages/auth/', [
             'pageTitle' => 'Login',
             'validation' => null,
         ]);
