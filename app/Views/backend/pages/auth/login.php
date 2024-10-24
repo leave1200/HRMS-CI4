@@ -87,6 +87,9 @@
             </div>
         </div>
 
+        <!-- Google reCAPTCHA v3 Hidden Token Field -->
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
@@ -96,5 +99,15 @@
         </div>
     </form>
 </div>
+
+<!-- Include reCAPTCHA API -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+            document.getElementById('recaptcha_token').value = token;
+        });
+    });
+</script>
 
 <?= $this->endSection() ?>

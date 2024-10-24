@@ -22,6 +22,16 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
+        $recaptchaResponse = $this->request->getPost('recaptcha_token');
+        $secretKey = '6LfaHGsqAAAAAM7xGs-NS4gSJPaPqAZXeRZvjGnh'; // Replace with your secret key
+    
+        // Verify the CAPTCHA
+        $verifyCaptcha = $this->verifyRecaptcha($recaptchaResponse, $secretKey);
+    
+        if (!$verifyCaptcha || !$verifyCaptcha->success || $verifyCaptcha->score < 0.5) {
+            // CAPTCHA verification failed or low score
+            return redirect()->back()->with('fail', 'Captcha verification failed. Please try again.');
+        }
         // Assume we have a function to check system availability
         if (!$this->isSystemAccessible()) {
             session()->setFlashdata('system_accessible', false);
@@ -228,4 +238,18 @@ class AuthController extends BaseController
             return $this->response->setJSON(['error' => 'User not found'], 404);
         }
     }
+    private function verifyRecaptcha($token, $secretKey)
+        {
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $data = [
+                'secret' => $secretKey,
+                'response' => $token
+            ];
+
+            $client = \Config\Services::curlrequest();
+            $response = $client->setBody(http_build_query($data))
+                                ->post($url);
+
+            return json_decode($response->getBody());
+        }
 }
