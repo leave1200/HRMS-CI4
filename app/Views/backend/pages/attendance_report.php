@@ -158,15 +158,14 @@
 <script>
 
 function filterTable() {
-    // Get the value from the search input
     var input = document.getElementById('searchInput');
     var filter = input.value.toLowerCase();
     var table = document.getElementById('DataTables_Table_0');
     var rows = table.getElementsByTagName('tr');
 
-    // Initialize the filtered names array
-    let filteredNames = [];
-    
+    // Initialize the selected name variable
+    let selectedName = '';
+
     for (let i = 1; i < rows.length; i++) { // Skip the header row
         let cells = rows[i].getElementsByTagName('td');
         let nameCell = cells[2]; // Name is in the 3rd column (index 2)
@@ -175,33 +174,32 @@ function filterTable() {
             let nameValue = nameCell.textContent.toLowerCase();
             if (nameValue.includes(filter)) {
                 rows[i].style.display = ''; // Show the row
-                filteredNames.push(nameCell.textContent.trim()); // Capture the filtered name
+                selectedName = nameCell.textContent.trim(); // Capture the matching name
             } else {
                 rows[i].style.display = 'none'; // Hide the row
             }
         }
     }
 
-    return filteredNames; // Return the array of filtered names for printing
+    return selectedName; // Return the selected name for printing
 }
+
 function printDataTable() {
-    var names = filterTable(); // Call filterTable to get the names
-    // Clone the filtered content in the DataTable and remove unnecessary columns
+    var name = filterTable(); // Call filterTable to get the selected name
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
-        if (row.style.display !== 'none') { // Clone each row and remove extra cells for #, Name, Office, Position, and Action
-        let newRow = row.cloneNode(true);
-        newRow.removeChild(newRow.children[9]); // Remove Action (last column)
-        newRow.removeChild(newRow.children[0]); // Remove # (first column)
-        newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
-        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
-        newRow.removeChild(newRow.children[1]);
-        return newRow.outerHTML; // Convert back to HTML string
-    }
-    return '';
+        if (row.style.display !== 'none') {
+            let newRow = row.cloneNode(true);
+            newRow.removeChild(newRow.children[9]); // Remove Action (last column)
+            newRow.removeChild(newRow.children[0]); // Remove # (first column)
+            newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
+            newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
+            newRow.removeChild(newRow.children[1]);
+            return newRow.outerHTML; // Convert back to HTML string
+        }
+        return '';
     }).join('');
 
-    // Count the number of filtered days and Saturdays
     var numberOfDays = tableBody.querySelectorAll("tr").length;
     var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
         let dateCell = row.querySelector("td:nth-child(2)");
@@ -233,14 +231,15 @@ function printDataTable() {
         </div>
     `;
 
-    // Save and replace content for print, then restore it after
     var originalContent = document.body.innerHTML;
     document.body.innerHTML = printContent;
     window.print();
     document.body.innerHTML = originalContent;
     window.location.reload();
 }
+
 </script>
+
 
 
 
