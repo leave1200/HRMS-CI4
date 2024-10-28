@@ -88,22 +88,6 @@
                                 <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
                                 <input type="hidden" name="employee" id="selectedEmployeeId2" required>
                             </div>
-                            <div class="form-group">
-                                <label>Office</label>
-                                <select name="office" id="officeSelect2" class="form-control" style="width: 50%; height: 38px" required>
-                                    <?php foreach ($designations as $designation): ?>
-                                        <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Position</label>
-                                <select name="position" id="positionSelect2" class="form-control" style="width: 50%; height: 38px" required>
-                                    <?php foreach ($positions as $position): ?>
-                                        <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
 
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                         </div>
