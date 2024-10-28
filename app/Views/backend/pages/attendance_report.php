@@ -277,5 +277,47 @@ function filterTable() {
     });
 }
 </script>
+<script>
+  <script>
+function archiveAttendance(id) {
+    swal({
+        title: "Are you sure?",
+        text: "Do you really want to archive this attendance record?",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, archive it!"],
+        dangerMode: true,
+    })
+    .then((willArchive) => {
+        if (willArchive) {
+            fetch('/attendance/archive/' + id, { // Corrected URL to include the ID
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    swal("Archived!", "Attendance record archived successfully.", "success").then(() => {
+                        location.reload(); // Reload the page to see the changes
+                    });
+                } else {
+                    swal("Error!", "Failed to archive attendance record.", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                swal("Error!", "An error occurred. Please try again.", "error");
+            });
+        } else {
+            swal("Cancelled", "The attendance record is safe :)", "info");
+        }
+    });
+}
+</script>
+
+
+</script>
 
 <?= $this->endSection() ?>
