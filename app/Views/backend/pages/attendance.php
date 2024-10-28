@@ -17,43 +17,99 @@
         </div>
     </div>
 </div>
-<div class="pd-20 card-box mb-30">
-    <div class="clearfix">
-        <div class="pull-left">
-            <h4 class="text-blue h4">Attendance</h4>
-        </div>
-    </div>
-    <form id="signInForm" action="<?= route_to('attendance_save') ?>" method="post">
-        <?= csrf_field() ?>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Employee</label>
-                    <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
-                    <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                    <input type="hidden" name="employee" id="selectedEmployeeId" required>
+<div class="tabs">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#attendanceTab1">Attendance Tab 1</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#attendanceTab2">Attendance Tab 2</a>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <div id="attendanceTab1" class="tab-pane fade show active">
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">Attendance</h4>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Office</label>
-                    <select name="office" class="form-control" style="width: 50%; height: 38px" required>
-                        <?php foreach ($designations as $designation): ?>
-                            <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Position</label>
-                    <select name="position" class="form-control" style="width: 50%; height: 38px" required>
-                        <?php foreach ($positions as $position): ?>
-                            <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
+                <form id="signInForm1" action="<?= route_to('attendance_save') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <input type="text" id="employeeInput1" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
+                                <ul id="employeeList1" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="employee" id="selectedEmployeeId1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Office</label>
+                                <select name="office" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($designations as $designation): ?>
+                                        <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <select name="position" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($positions as $position): ?>
+                                        <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(1)">Sign In</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+        
+        <div id="attendanceTab2" class="tab-pane fade">
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">Attendance</h4>
+                    </div>
+                </div>
+                <form id="signInForm2" action="<?= route_to('attendance_save') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <input type="text" id="employeeInput2" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
+                                <ul id="employeeList2" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="employee" id="selectedEmployeeId2" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Office</label>
+                                <select name="office" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($designations as $designation): ?>
+                                        <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <select name="position" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($positions as $position): ?>
+                                        <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div class="card-box mb-30">
     <div class="pd-20">
         <h4 class="text-blue h4">Attendance Records</h4>
