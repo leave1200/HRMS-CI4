@@ -278,7 +278,6 @@ function filterTable() {
 }
 </script>
 <script>
-  <script>
 function archiveAttendance(id) {
     swal({
         title: "Are you sure?",
@@ -315,9 +314,6 @@ function archiveAttendance(id) {
         }
     });
 }
-</script>
-
-
 </script>
 
 <?= $this->endSection() ?>
