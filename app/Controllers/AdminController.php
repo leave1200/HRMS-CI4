@@ -861,7 +861,7 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for PM before signing in again.']);
     }
 
-    // If both AM and PM have been signed out, allow new AM sign-in
+    // If both AM has been signed out and PM has been signed out, allow new AM sign-in
     if ($hasPMSignOut) {
         $data = [
             'name' => $employee['firstname'] . ' ' . $employee['lastname'],
