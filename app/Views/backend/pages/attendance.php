@@ -373,23 +373,26 @@ function signOutAttendance(attendanceId, session) {
 }
 </script>
 <script>
-function fetchEmployeeData(tab) {
-    const employeeNumber = document.getElementById(`employeeNumberInput${tab}`).value;
-
-    // Get the DataTable instance
+$(document).ready(function() {
     const table = $('#yourDataTableId').DataTable(); // Replace with your actual DataTable ID
 
-    // Search for the employee number in the DataTable
-    const rowData = table.rows().data().toArray().find(row => row[0] === employeeNumber); // Adjust index based on your DataTable structure
+    // Event listener for row click
+    $('#yourDataTableId tbody').on('click', 'tr', function() {
+        const rowData = table.row(this).data(); // Get data for the clicked row
 
-    if (rowData) {
-        // Assuming the employee name is in the second column (index 1) and ID is in another column
-        document.getElementById(`employeeNameInput${tab}`).value = rowData[1]; // Adjust index as needed
-        document.getElementById(`selectedEmployeeId${tab}`).value = rowData[2]; // Adjust index for ID
-    } else {
-        alert('Employee not found');
-    }
-}
+        if (rowData) {
+            // Assuming the employee number is in the first column (index 0)
+            document.getElementById('employeeNumberInput2').value = rowData[0]; // Adjust index based on your DataTable
+            document.getElementById('employeeNameInput2').value = rowData[1]; // Adjust index for employee name
+            document.getElementById('selectedEmployeeId2').value = rowData[2]; // Adjust index for employee ID
+
+            // Optionally, you could also set office and position if they are part of the DataTable
+            document.querySelector(`select[name="office"]`).value = rowData[3]; // Adjust index for office
+            document.querySelector(`select[name="position"]`).value = rowData[4]; // Adjust index for position
+        }
+    });
+});
+
 
 </script>
 
