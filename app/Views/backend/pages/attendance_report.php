@@ -189,7 +189,7 @@ function printDataTable() {
     // Clone the filtered content in the DataTable and remove unnecessary columns
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
-        // Clone each row and remove extra cells for #, Name, Office, Position, and Action
+        if (row.style.display !== 'none') { // Clone each row and remove extra cells for #, Name, Office, Position, and Action
         let newRow = row.cloneNode(true);
         newRow.removeChild(newRow.children[9]); // Remove Action (last column)
         newRow.removeChild(newRow.children[0]); // Remove # (first column)
@@ -197,6 +197,8 @@ function printDataTable() {
         newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
         newRow.removeChild(newRow.children[1]);
         return newRow.outerHTML; // Convert back to HTML string
+    }
+    return '';
     }).join('');
 
     // Get the name from the first row of the filtered data
