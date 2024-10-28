@@ -70,36 +70,33 @@
                                 <td><?= htmlspecialchars($attendance['office']) ?></td>
                                 <td><?= htmlspecialchars($attendance['position']) ?></td>
                                 <td>
-                                        <?php 
-                                            // Display AM Sign In (time only)
-                                            $amSignInTime = isset($attendance['sign_in']) ? date('H:i:s', strtotime($attendance['sign_in'])) : 'N/A';
-                                            echo $amSignInTime;
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php 
-                                            // Display AM Sign Out (time only)
-                                            $amSignOutTime = isset($attendance['sign_out']) ? date('H:i:s', strtotime($attendance['sign_out'])) : 'N/A';
-                                            echo $amSignOutTime;
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php 
-                                            // Display PM Sign In (time only)
-                                            $pmSignInTime = isset($attendance['pm_sign_in']) ? date('H:i:s', strtotime($attendance['pm_sign_in'])) : 'N/A';
-                                            echo $pmSignInTime;
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php 
-                                            // Display PM Sign Out (time only)
-                                            $pmSignOutTime = isset($attendance['pm_sign_out']) ? date('H:i:s', strtotime($attendance['pm_sign_out'])) : 'N/A';
-                                            echo $pmSignOutTime;
-                                        ?>
-                                    </td>
-                                        <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+                                    <?php 
+                                        $amSignInTime = isset($attendance['sign_in']) ? date('H:i:s', strtotime($attendance['sign_in'])) : 'N/A';
+                                        echo $amSignInTime;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                        $amSignOutTime = isset($attendance['sign_out']) ? date('H:i:s', strtotime($attendance['sign_out'])) : 'N/A';
+                                        echo $amSignOutTime;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                        $pmSignInTime = isset($attendance['pm_sign_in']) ? date('H:i:s', strtotime($attendance['pm_sign_in'])) : 'N/A';
+                                        echo $pmSignInTime;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                        $pmSignOutTime = isset($attendance['pm_sign_out']) ? date('H:i:s', strtotime($attendance['pm_sign_out'])) : 'N/A';
+                                        echo $pmSignOutTime;
+                                    ?>
+                                </td>
+                                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
                                     <td>
                                         <button type="button" class="btn btn-secondary" onclick="deleteAttendance(<?= $attendance['id'] ?>)">Delete</button>
+                                        <button type="button" class="btn btn-primary" onclick="archiveAttendance(<?= $attendance['id'] ?>)">Archive</button>
                                     </td>
                                 <?php endif; ?>
                             </tr>
@@ -110,6 +107,7 @@
                         </tr>
                     <?php endif; ?>
                 </tbody>
+
             </table>
         </div>
     </div>
