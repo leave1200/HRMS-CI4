@@ -90,7 +90,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Office</label>
-                                <select name="office" class="form-control" style="width: 50%; height: 38px" required>
+                                <select name="office" id="officeSelect2" class="form-control" style="width: 50%; height: 38px" required>
                                     <?php foreach ($designations as $designation): ?>
                                         <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
                                     <?php endforeach; ?>
@@ -98,12 +98,13 @@
                             </div>
                             <div class="form-group">
                                 <label>Position</label>
-                                <select name="position" class="form-control" style="width: 50%; height: 38px" required>
+                                <select name="position" id="positionSelect2" class="form-control" style="width: 50%; height: 38px" required>
                                     <?php foreach ($positions as $position): ?>
                                         <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                         </div>
                     </div>
@@ -374,17 +375,22 @@ function signOutAttendance(attendanceId, session) {
 </script>
 <script>
 $(document).ready(function() {
-    const table = $('#DataTables_Table_0').DataTable(); // Ensure this matches your DataTable ID
+    const table = $('#DataTables_Table_0').DataTable();
 
-    // Handle row click to populate Employee data in the second tab
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
         const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
         const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
-        
+        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
+        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
+
         // Populate the fields in the PM Sign In form
-        $('#employeeNumberInput2').val(employeeId); // Set employee number
-        $('#employeeNameInput2').val(employeeName); // Set employee name
-        $('#selectedEmployeeId2').val(employeeId); // Set hidden input for form submission
+        $('#employeeNumberInput2').val(employeeId);
+        $('#employeeNameInput2').val(employeeName);
+        $('#selectedEmployeeId2').val(employeeId);
+
+        // Set Office and Position based on selected employee
+        $('#officeSelect2').val(officeId).change(); // Set the office select value
+        $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
 
