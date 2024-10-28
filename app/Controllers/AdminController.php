@@ -741,6 +741,39 @@ public function updateDesignation()
 
 
 
+public function attendance()
+{
+    $employeeModel = new EmployeeModel();
+    $employees = $employeeModel->findAll();
+    
+    
+    $designationModel = new Designation();
+    $designations = $designationModel->findAll();
+    
+    $positionModel = new Position();
+    $positions = $positionModel->findAll();
+    
+    $attendanceModel = new AttendanceModel();
+    
+    // Fetch attendance records including pm_sign_out
+    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+    $userStatus = session()->get('userStatus');
+
+    // Debugging: Log the fetched attendances
+    log_message('debug', 'Fetched attendances: ' . print_r($attendances, true));
+
+    $data = [
+        'pageTitle' => 'Attendance',
+        'employees' => $employees,
+        'designations' => $designations,
+        'positions' => $positions,
+        'attendances' => $attendances, // Include attendance records here
+        'userStatus' => $userStatus
+    ];
+    
+    return view('backend/pages/attendance', $data);
+}
+
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
@@ -881,7 +914,6 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
-
 
 // public function saveAttendance()
 // {
