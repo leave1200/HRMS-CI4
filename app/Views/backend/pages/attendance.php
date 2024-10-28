@@ -76,39 +76,39 @@
                     </div>
                 </div>
                 <form id="signInForm2" action="<?= route_to('attendance_save') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Employee Number</label>
-                            <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." required>
+                    <?= csrf_field() ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employee Number</label>
+                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Employee Name</label>
+                                <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
+                                <input type="hidden" name="employee" id="selectedEmployeeId2" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Office</label>
+                                <select name="office" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($designations as $designation): ?>
+                                        <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <select name="position" class="form-control" style="width: 50%; height: 38px" required>
+                                    <?php foreach ($positions as $position): ?>
+                                        <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                         </div>
-                        <div class="form-group">
-                            <label>Employee Name</label>
-                            <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
-                            <input type="hidden" name="employee" id="selectedEmployeeId2" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Office</label>
-                            <select name="office" class="form-control" style="width: 50%; height: 38px" required>
-                                <?php foreach ($designations as $designation): ?>
-                                    <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Position</label>
-                            <select name="position" class="form-control" style="width: 50%; height: 38px" required>
-                                <?php foreach ($positions as $position): ?>
-                                    <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-outline-primary mt-2" onclick="fetchEmployeeData(2)">Fetch Employee Data</button>
-                        <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                     </div>
-                </div>
-            </form>
+                </form>
+
             </div>
         </div>
     </div>
