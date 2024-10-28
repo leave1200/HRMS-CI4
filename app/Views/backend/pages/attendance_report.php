@@ -170,11 +170,7 @@ function printDataTable() {
             <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Date</th>
-                        <th>Name</th>
-                        <th>Office</th>
-                        <th>Position</th>
                         <th>AM Sign In</th>
                         <th>AM Sign Out</th>
                         <th>PM Sign In</th>
