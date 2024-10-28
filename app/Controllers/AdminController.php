@@ -835,26 +835,39 @@ public function saveAttendance()
         }
 
         // If PM sign-out has already been recorded, check the interval for a new sign-in
-               // Check if PM sign-out exists
-               if (!is_null($attendance['pm_sign_out'])) {
-                // If PM sign-out exists, allow new attendance record
-                $data = [
-                    'name' => $employee['firstname'] . ' ' . $employee['lastname'],
-                    'office' => $designation['name'],
-                    'position' => $position['position_name'],
-                    'sign_in' => $currentTime, // Record new sign-in time
-                    'sign_out' => null, // Initially null for AM sign-out
-                    'pm_sign_in' => null, // Initially null for PM sign-in
-                    'pm_sign_out' => null, // Initially null for PM sign-out
-                ];
-    
-                // Insert new attendance record for a new session
-                if ($attendanceModel->insert($data)) {
-                    return $this->response->setJSON(['success' => true, 'message' => 'New attendance record created successfully.']);
-                } else {
-                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
-                }
+        if (!is_null($attendance['pm_sign_out'])) {
+            // Get the PM sign-out time
+            $pmSignOutTime = new DateTime($attendance['pm_sign_out']);
+            $currentDateTime = new DateTime($currentTime);
+
+            // Calculate the interval in minutes
+            $interval = $pmSignOutTime->diff($currentDateTime);
+            if ($interval->i < 10 && $interval->h == 0) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Please wait at least 10 minutes after PM sign-out before signing in again.']);
             }
+
+            // If the interval is met, allow a new sign-in
+            $data = [
+                'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+                'office' => $designation['name'],
+                'position' => $position['position_name'],
+                'sign_in' => $currentTime, // Record new sign-in time
+                'sign_out' => null, // Initially null for AM sign-out
+                'pm_sign_in' => null, // Initially null for PM sign-in
+                'pm_sign_out' => null, // Initially null for PM sign-out
+            ];
+
+            // Insert new attendance record
+            if ($attendanceModel->insert($data)) {
+                return $this->response->setJSON(['success' => true, 'message' => 'New sign-in recorded successfully.']);
+            } else {
+                return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+            }
+        }
+
+        // If none of the conditions match, return a generic error
+        return $this->response->setJSON(['success' => false, 'message' => 'Invalid attendance operation.']);
+    }
 
     // If no attendance record exists for the employee today, create a new one
     $data = [
