@@ -806,7 +806,7 @@ public function saveAttendance()
 
     // Check if the employee has an existing attendance record for today
     $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
-                                  ->where('DATE(sign_in)', date('Y-m-d'))
+                                  ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
                                   ->first();
 
     // Prepare attendance data
@@ -816,71 +816,61 @@ public function saveAttendance()
     if ($attendance) {
         // Check if the employee has already signed in for AM
         if (!is_null($attendance['sign_in']) && is_null($attendance['sign_out'])) {
+            // AM sign-out hasn't been recorded yet
             return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
         }
-
+    
         // If AM sign-out exists, check the PM sign-in status
         if (!is_null($attendance['sign_in']) && !is_null($attendance['sign_out'])) {
             // Check if PM sign-in is already recorded
             if (is_null($attendance['pm_sign_in'])) {
                 // Proceed with PM sign-in
                 $attendanceModel->update($attendance['id'], [
-                    'pm_sign_in' => $currentTime,
+                    'pm_sign_in' => $currentTime, // Record PM sign-in time
                 ]);
                 return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
-            } elseif (!is_null($attendance['pm_sign_out'])) {
-                // If PM sign-out has already been recorded, check the interval for a new sign-in
-                $pmSignOutTime = new DateTime($attendance['pm_sign_out']);
-                $currentDateTime = new DateTime($currentTime);
-                $interval = $pmSignOutTime->diff($currentDateTime);
-
-                // Allow sign-in only if the interval is at least 10 minutes
-                if ($interval->i < 10 && $interval->h == 0) {
-                    return $this->response->setJSON(['success' => false, 'message' => 'Please wait at least 10 minutes after PM sign-out before signing in again.']);
-                }
-
-                // If the interval is met, allow a new sign-in
-                $data = [
-                    'name' => $employee['firstname'] . ' ' . $employee['lastname'],
-                    'office' => $designation['name'],
-                    'position' => $position['position_name'],
-                    'sign_in' => $currentTime,
-                    'sign_out' => null,
-                    'pm_sign_in' => null,
-                    'pm_sign_out' => null,
-                ];
-
-                // Insert new attendance record
-                if ($attendanceModel->insert($data)) {
-                    return $this->response->setJSON(['success' => true, 'message' => 'New sign-in recorded successfully.']);
-                } else {
-                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
-                }
             } else {
+                // PM sign-in already exists; check for PM sign-out
+                if (!is_null($attendance['pm_sign_out'])) {
+                    // Check the interval after PM sign-out
+                    $pmSignOutTime = new DateTime($attendance['pm_sign_out']);
+                    $currentDateTime = new DateTime($currentTime);
+                    $interval = $pmSignOutTime->diff($currentDateTime);
+    
+                    // Allow sign-in only if the interval is at least 10 minutes
+                    if ($interval->i < 10 && $interval->h == 0) {
+                        return $this->response->setJSON(['success' => false, 'message' => 'Please wait at least 10 minutes after PM sign-out before signing in again.']);
+                    }
+    
+                    // If the interval is met, allow a new sign-in
+                    $data = [
+                        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+                        'office' => $designation['name'],
+                        'position' => $position['position_name'],
+                        'sign_in' => $currentTime, // Record new sign-in time
+                        'sign_out' => null, // Initially null for AM sign-out
+                        'pm_sign_in' => null, // Initially null for PM sign-in
+                        'pm_sign_out' => null, // Initially null for PM sign-out
+                    ];
+    
+                    // Insert new attendance record
+                    if ($attendanceModel->insert($data)) {
+                        return $this->response->setJSON(['success' => true, 'message' => 'New sign-in recorded successfully.']);
+                    } else {
+                        return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+                    }
+                }
+    
+                // PM sign-out hasn't been recorded yet
                 return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for PM before signing in again.']);
             }
         }
+    
+        // If none of the conditions match, return a generic error
+        return $this->response->setJSON(['success' => false, 'message' => 'Invalid attendance operation.']);
     }
-
-    // If no attendance record exists for the employee today, create a new one
-    $data = [
-        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
-        'office' => $designation['name'],
-        'position' => $position['position_name'],
-        'sign_in' => $currentTime,
-        'sign_out' => null,
-        'pm_sign_in' => null,
-        'pm_sign_out' => null,
-    ];
-
-    // Insert new attendance record
-    if ($attendanceModel->insert($data)) {
-        return $this->response->setJSON(['success' => true, 'message' => 'AM sign-in recorded successfully.']);
-    } else {
-        return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
-    }
+    
 }
-
 
 // public function saveAttendance()
 // {
