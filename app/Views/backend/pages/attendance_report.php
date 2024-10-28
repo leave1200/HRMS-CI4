@@ -164,7 +164,7 @@ function printDataTable() {
         let newRow = row.cloneNode(true);
         newRow.removeChild(newRow.children[9]); // Remove Action (last column)
         newRow.removeChild(newRow.children[0]); // Remove # (first column)
-        newRow.removeChild(newRow.children[2]); // Remove Office (adjusted index after removing #)
+        newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
         newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
         return newRow.outerHTML; // Convert back to HTML string
     }).join('');
