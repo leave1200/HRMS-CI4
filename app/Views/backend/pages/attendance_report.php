@@ -156,7 +156,36 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
+function filterTable() {
+    // Get the value from the search input
+    var input = document.getElementById('searchInput');
+    var filter = input.value.toLowerCase();
+    var table = document.getElementById('DataTables_Table_0');
+    var rows = table.getElementsByTagName('tr');
+
+    // Initialize the filtered names array
+    let filteredNames = [];
+    
+    for (let i = 1; i < rows.length; i++) { // Skip the header row
+        let cells = rows[i].getElementsByTagName('td');
+        let nameCell = cells[2]; // Name is in the 3rd column (index 2)
+        
+        if (nameCell) {
+            let nameValue = nameCell.textContent.toLowerCase();
+            if (nameValue.includes(filter)) {
+                rows[i].style.display = ''; // Show the row
+                filteredNames.push(nameCell.textContent.trim()); // Capture the filtered name
+            } else {
+                rows[i].style.display = 'none'; // Hide the row
+            }
+        }
+    }
+
+    return filteredNames; // Return the array of filtered names for printing
+}
 function printDataTable() {
+    var names = filterTable(); // Call filterTable to get the names
     // Clone the filtered content in the DataTable and remove unnecessary columns
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
