@@ -163,24 +163,29 @@ function filterTable() {
     var table = document.getElementById('DataTables_Table_0');
     var rows = table.getElementsByTagName('tr');
 
-    // Initialize the selected name variable
     let selectedName = '';
+
+    console.log(`Filtering for: "${filter}"`); // Debugging
 
     for (let i = 1; i < rows.length; i++) { // Skip the header row
         let cells = rows[i].getElementsByTagName('td');
         let nameCell = cells[2]; // Name is in the 3rd column (index 2)
-        
+
         if (nameCell) {
             let nameValue = nameCell.textContent.toLowerCase();
+            console.log(`Checking row ${i}: "${nameValue}"`); // Debugging
+
             if (nameValue.includes(filter)) {
                 rows[i].style.display = ''; // Show the row
                 selectedName = nameCell.textContent.trim(); // Capture the matching name
+                console.log(`Matched name: "${selectedName}"`); // Debugging
             } else {
                 rows[i].style.display = 'none'; // Hide the row
             }
         }
     }
 
+    console.log(`Selected name: "${selectedName}"`); // Debugging
     return selectedName; // Return the selected name for printing
 }
 
