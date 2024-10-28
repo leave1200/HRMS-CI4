@@ -186,6 +186,11 @@ function filterTable() {
 
 function printDataTable() {
     var name = filterTable(); // Call filterTable to get the selected name
+    if (!name) {
+        alert('No matching records found.');
+        return; // Exit if no name is found
+    }
+
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
         if (row.style.display !== 'none') {
@@ -239,6 +244,7 @@ function printDataTable() {
 }
 
 </script>
+
 
 
 
