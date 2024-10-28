@@ -76,39 +76,39 @@
                     </div>
                 </div>
                 <form id="signInForm2" action="<?= route_to('attendance_save') ?>" method="post">
-                    <?= csrf_field() ?>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Employee Number</label>
-                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." required>
-                            </div>
-                            <div class="form-group">
-                                <label>Employee Name</label>
-                                <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
-                                <input type="hidden" name="employee" id="selectedEmployeeId2" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Office</label>
-                                <select name="office" class="form-control" style="width: 50%; height: 38px" required>
-                                    <?php foreach ($designations as $designation): ?>
-                                        <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Position</label>
-                                <select name="position" class="form-control" style="width: 50%; height: 38px" required>
-                                    <?php foreach ($positions as $position): ?>
-                                        <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
+                <?= csrf_field() ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Employee Number</label>
+                            <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." required>
                         </div>
+                        <div class="form-group">
+                            <label>Employee Name</label>
+                            <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
+                            <input type="hidden" name="employee" id="selectedEmployeeId2" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Office</label>
+                            <select name="office" class="form-control" style="width: 50%; height: 38px" required>
+                                <?php foreach ($designations as $designation): ?>
+                                    <option value="<?= $designation['id'] ?>"><?= $designation['name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Position</label>
+                            <select name="position" class="form-control" style="width: 50%; height: 38px" required>
+                                <?php foreach ($positions as $position): ?>
+                                    <option value="<?= $position['position_id'] ?>"><?= $position['position_name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary mt-2" onclick="fetchEmployeeData(2)">Fetch Employee Data</button>
+                        <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                     </div>
-                </form>
-
+                </div>
+            </form>
             </div>
         </div>
     </div>
@@ -373,26 +373,31 @@ function signOutAttendance(attendanceId, session) {
 }
 </script>
 <script>
-$(document).ready(function() {
-    const table = $('#yourDataTableId').DataTable(); // Replace with your actual DataTable ID
-
-    // Event listener for row click
-    $('#yourDataTableId tbody').on('click', 'tr', function() {
-        const rowData = table.row(this).data(); // Get data for the clicked row
-
-        if (rowData) {
-            // Assuming the employee number is in the first column (index 0)
-            document.getElementById('employeeNumberInput2').value = rowData[0]; // Adjust index based on your DataTable
-            document.getElementById('employeeNameInput2').value = rowData[1]; // Adjust index for employee name
-            document.getElementById('selectedEmployeeId2').value = rowData[2]; // Adjust index for employee ID
-
-            // Optionally, you could also set office and position if they are part of the DataTable
-            document.querySelector(`select[name="office"]`).value = rowData[3]; // Adjust index for office
-            document.querySelector(`select[name="position"]`).value = rowData[4]; // Adjust index for position
+    function fetchEmployeeData(tab) {
+    const employeeId = document.getElementById(`employeeIdInput${tab}`).value;
+    
+    // Assuming you have a function that fetches data from your DataTable
+    // This is a pseudo-code example, replace with your actual AJAX call or data fetching logic
+    $.ajax({
+        url: 'path_to_your_api_or_controller', // Replace with your API endpoint
+        method: 'GET',
+        data: { id: employeeId },
+        success: function(response) {
+            if (response && response.success) {
+                // Assuming your response contains the employee data
+                const employee = response.data;
+                document.getElementById(`employeeNameInput${tab}`).value = employee.name;
+                document.getElementById(`selectedEmployeeId${tab}`).value = employee.id;
+                // Populate other fields if needed
+            } else {
+                alert('Employee not found');
+            }
+        },
+        error: function() {
+            alert('Error fetching employee data');
         }
     });
-});
-
+}
 
 </script>
 
