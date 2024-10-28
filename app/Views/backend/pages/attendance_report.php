@@ -43,6 +43,7 @@
 
     </div>
     <button onclick="printDataTable()" class="btn btn-primary">Print</button>
+    <button onclick="fetchArchivedData()" class="btn btn-secondary">View Archived Records</button>
     <div class="table-responsive">
         <div id="print-area">
             <table class="data-table table stripe hover nowrap dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
