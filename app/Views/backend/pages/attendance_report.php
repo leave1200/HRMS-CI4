@@ -201,10 +201,6 @@ function printDataTable() {
     return '';
     }).join('');
 
-    // Get the name from the first row of the filtered data
-    var nameCell = tableBody.querySelector("tr td:nth-child(3)"); // Adjusting to get the Name
-    var name = nameCell ? nameCell.textContent.trim() : 'N/A';
-
     // Count the number of filtered days and Saturdays
     var numberOfDays = tableBody.querySelectorAll("tr").length;
     var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
