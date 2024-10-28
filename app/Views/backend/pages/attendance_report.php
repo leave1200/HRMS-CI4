@@ -262,30 +262,17 @@ function deleteAttendance(id) {
 </script>
 <script>
 function filterTable() {
-    // Get the value from the search input
-    var input = document.getElementById('searchInput');
-    var filter = input.value.toLowerCase();
-    var table = document.getElementById('DataTables_Table_0');
-    var rows = table.getElementsByTagName('tr');
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const rows = document.querySelectorAll('#DataTables_Table_0 tbody tr');
 
-    let filteredName = '';
-    
-    for (let i = 1; i < rows.length; i++) { // Skip the header row
-        let cells = rows[i].getElementsByTagName('td');
-        let nameCell = cells[2]; // Name is in the 3rd column (index 2)
-        
+    rows.forEach(row => {
+        const nameCell = row.cells[2]; // Assuming the Name is the third column
         if (nameCell) {
-            let nameValue = nameCell.textContent.toLowerCase();
-            if (nameValue.includes(filter)) {
-                rows[i].style.display = ''; // Show the row
-                filteredName = nameCell.textContent.trim(); // Capture the filtered name
-            } else {
-                rows[i].style.display = 'none'; // Hide the row
-            }
+            const txtValue = nameCell.textContent || nameCell.innerText;
+            row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
         }
-    }
-
-    return filteredName; // Return the filtered name for printing
+    });
 }
 </script>
 
