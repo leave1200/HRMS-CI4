@@ -290,7 +290,7 @@ function archiveAttendance(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance.archive') ?>/' + id, // Updated URL for archiving
+                url: '<?= route_to('attendance.archive') ?>', // Updated URL for archiving
                 type: 'POST',
                 success: function(response) {
                     Swal.fire(
