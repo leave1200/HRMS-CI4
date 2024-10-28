@@ -254,6 +254,40 @@ function printDataTable() {
 
 </script>
 
+<script>
+function fetchArchivedData() {
+    $.ajax({
+        url: '<?= route_to('attendance.archived') ?>', // Adjust this route according to your setup
+        type: 'GET',
+        success: function(data) {
+            const archivedData = JSON.parse(data); // Assuming the server returns JSON
+            let rows = '';
+
+            archivedData.forEach((record, index) => {
+                rows += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${record.date}</td>
+                        <td>${record.name}</td>
+                        <td>${record.office}</td>
+                        <td>${record.position}</td>
+                        <td>${record.am_sign_in}</td>
+                        <td>${record.am_sign_out}</td>
+                        <td>${record.pm_sign_in}</td>
+                        <td>${record.pm_sign_out}</td>
+                    </tr>
+                `;
+            });
+
+            $('#archivedData').html(rows); // Populate the modal with data
+            $('#archiveModal').modal('show'); // Show the modal
+        },
+        error: function(xhr) {
+            Swal.fire('Error!', 'Failed to fetch archived records.', 'error');
+        }
+    });
+}
+</script>
 
 
 

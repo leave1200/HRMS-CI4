@@ -76,6 +76,8 @@ $routes->group('admin', static function($routes){
         $routes->get('fetch_attendance_data', 'AdminController::fetchAttendanceData', ['as' => 'fetch_attendance_data']);
         $routes->post('attendance/delete', 'AdminController::deleteAttendance', ['as' => 'attendance.delete']);
         $routes->post('attendance/archive', 'AdminController::archiveAttendance', ['as' => 'attendance.archive']);
+        $routes->get('attendance/archived', 'AdminController::archived', ['as' => 'attendance.archived']);
+
 
 
 

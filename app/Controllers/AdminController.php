@@ -1098,6 +1098,14 @@ public function saveAttendance()
             
                 return $this->response->setStatusCode(400)->setBody('Error archiving attendance record.');
             }
+            public function archived()
+                {
+                    $attendanceModel = new \App\Models\AttendanceModel();
+                    $archivedRecords = $attendanceModel->where('att', 'archive')->findAll(); // Fetch archived records
+
+                    return $this->response->setJSON($archivedRecords);
+                }
+
             
             
             
