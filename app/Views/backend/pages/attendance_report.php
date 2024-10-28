@@ -160,26 +160,25 @@ function printDataTable() {
     // Clone the filtered content in the DataTable and remove unnecessary columns
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
-        // Clone each row and remove extra cells for Name, Office, and Position
+        // Clone each row and remove extra cells for #, Name, Office, Position, and Action
         let newRow = row.cloneNode(true);
-        newRow.removeChild(newRow.children[0]);
-        newRow.removeChild(newRow.children[2]); // Remove Name (assuming it’s the 3rd column)
-        newRow.removeChild(newRow.children[2]); // Remove Office (now the 3rd column after the previous removal)
-        newRow.removeChild(newRow.children[2]); // Remove Position (now the 3rd column after previous removals)
-        newRow.removeChild(newRow.children[6]);
+        newRow.removeChild(newRow.children[9]); // Remove Action (last column)
+        newRow.removeChild(newRow.children[0]); // Remove # (first column)
+        newRow.removeChild(newRow.children[2]); // Remove Office (adjusted index after removing #)
+        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
         return newRow.outerHTML; // Convert back to HTML string
     }).join('');
 
     // Get the name from the first row of the filtered data
-    var firstRow = tableBody.querySelector("tr");
-    var name = firstRow ? firstRow.querySelector("td:nth-child(3)").textContent.trim() : 'N/A';
+    var nameCell = tableBody.querySelector("tr td:nth-child(3)"); // Adjusting to get the Name
+    var name = nameCell ? nameCell.textContent.trim() : 'N/A';
 
     // Count the number of filtered days and Saturdays
     var numberOfDays = tableBody.querySelectorAll("tr").length;
     var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
         let dateCell = row.querySelector("td:nth-child(2)");
         let dateText = dateCell ? dateCell.textContent : '';
-        return new Date(dateText).getDay() === 6;
+        return new Date(dateText).getDay() === 6; // Saturday is day 6
     }).length;
 
     // Construct the custom print layout
@@ -214,6 +213,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 
