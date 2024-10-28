@@ -80,9 +80,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Employee</label>
-                                <input type="text" id="employeeInput2" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
-                                <ul id="employeeList2" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <label>Employee ID</label>
+                                <input type="text" id="employeeIdInput2" class="form-control" placeholder="Enter employee ID..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Employee Name</label>
+                                <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
                                 <input type="hidden" name="employee" id="selectedEmployeeId2" required>
                             </div>
                             <div class="form-group">
@@ -101,10 +104,12 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="fetchEmployeeData(2)">Fetch Employee Data</button>
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -367,6 +372,34 @@ function signOutAttendance(attendanceId, session) {
         }
     });
 }
+</script>
+<script>
+    function fetchEmployeeData(tab) {
+    const employeeId = document.getElementById(`employeeIdInput${tab}`).value;
+    
+    // Assuming you have a function that fetches data from your DataTable
+    // This is a pseudo-code example, replace with your actual AJAX call or data fetching logic
+    $.ajax({
+        url: 'path_to_your_api_or_controller', // Replace with your API endpoint
+        method: 'GET',
+        data: { id: employeeId },
+        success: function(response) {
+            if (response && response.success) {
+                // Assuming your response contains the employee data
+                const employee = response.data;
+                document.getElementById(`employeeNameInput${tab}`).value = employee.name;
+                document.getElementById(`selectedEmployeeId${tab}`).value = employee.id;
+                // Populate other fields if needed
+            } else {
+                alert('Employee not found');
+            }
+        },
+        error: function() {
+            alert('Error fetching employee data');
+        }
+    });
+}
+
 </script>
 
 <?= $this->endSection() ?>
