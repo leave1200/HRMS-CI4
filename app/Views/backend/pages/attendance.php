@@ -373,30 +373,22 @@ function signOutAttendance(attendanceId, session) {
 }
 </script>
 <script>
-    function fetchEmployeeData(tab) {
-    const employeeId = document.getElementById(`employeeIdInput${tab}`).value;
-    
-    // Assuming you have a function that fetches data from your DataTable
-    // This is a pseudo-code example, replace with your actual AJAX call or data fetching logic
-    $.ajax({
-        url: 'path_to_your_api_or_controller', // Replace with your API endpoint
-        method: 'GET',
-        data: { id: employeeId },
-        success: function(response) {
-            if (response && response.success) {
-                // Assuming your response contains the employee data
-                const employee = response.data;
-                document.getElementById(`employeeNameInput${tab}`).value = employee.name;
-                document.getElementById(`selectedEmployeeId${tab}`).value = employee.id;
-                // Populate other fields if needed
-            } else {
-                alert('Employee not found');
-            }
-        },
-        error: function() {
-            alert('Error fetching employee data');
-        }
-    });
+function fetchEmployeeData(tab) {
+    const employeeNumber = document.getElementById(`employeeNumberInput${tab}`).value;
+
+    // Get the DataTable instance
+    const table = $('#yourDataTableId').DataTable(); // Replace with your actual DataTable ID
+
+    // Search for the employee number in the DataTable
+    const rowData = table.rows().data().toArray().find(row => row[0] === employeeNumber); // Adjust index based on your DataTable structure
+
+    if (rowData) {
+        // Assuming the employee name is in the second column (index 1) and ID is in another column
+        document.getElementById(`employeeNameInput${tab}`).value = rowData[1]; // Adjust index as needed
+        document.getElementById(`selectedEmployeeId${tab}`).value = rowData[2]; // Adjust index for ID
+    } else {
+        alert('Employee not found');
+    }
 }
 
 </script>
