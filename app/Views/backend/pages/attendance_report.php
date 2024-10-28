@@ -279,41 +279,46 @@ function filterTable() {
 </script>
 <script>
 function archiveAttendance(id) {
-    swal({
-        title: "Are you sure?",
+    Swal.fire({
+        title: 'Are you sure?',
         text: "Do you really want to archive this attendance record?",
-        icon: "warning",
-        buttons: ["Cancel", "Yes, archive it!"],
-        dangerMode: true,
-    })
-    .then((willArchive) => {
-        if (willArchive) {
-            fetch('/attendance/archive/' + id, { // Corrected URL to include the ID
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    swal("Archived!", "Attendance record archived successfully.", "success").then(() => {
-                        location.reload(); // Reload the page to see the changes
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, archive it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= route_to('attendance.archive') ?>/' + id, // Updated URL for archiving
+                type: 'POST',
+                success: function(response) {
+                    Swal.fire(
+                        'Archived!',
+                        'Attendance record archived successfully.',
+                        'success'
+                    ).then(() => {
+                        location.reload(); 
                     });
-                } else {
-                    swal("Error!", "Failed to archive attendance record.", "error");
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Error!',
+                        'Failed to archive attendance record: ' + xhr.responseText,
+                        'error'
+                    );
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                swal("Error!", "An error occurred. Please try again.", "error");
             });
         } else {
-            swal("Cancelled", "The attendance record is safe :)", "info");
+            Swal.fire(
+                'Cancelled',
+                'The attendance record is safe :)',
+                'info'
+            );
         }
     });
 }
 </script>
+
 
 <?= $this->endSection() ?>
