@@ -158,24 +158,25 @@
 <script>
 
 function printDataTable() {
+    // Call filterTable to get the selected name
+    var filteredRows = Array.from(document.querySelectorAll("#DataTables_Table_0 tbody tr")).filter(row => row.style.display !== 'none');
+
+    // Get the name from the first filtered row (if available)
     var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
 
-    var tableBody = document.querySelector("#DataTables_Table_0 tbody");
-    var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
-        if (row.style.display !== 'none') {
-            let newRow = row.cloneNode(true);
-            newRow.removeChild(newRow.children[9]); // Remove Action (last column)
-            newRow.removeChild(newRow.children[0]); // Remove # (first column)
-            newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
-            newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
-            newRow.removeChild(newRow.children[1]);
-            return newRow.outerHTML; // Convert back to HTML string
-        }
-        return '';
+    var filteredTableContent = filteredRows.map(row => {
+        let newRow = row.cloneNode(true);
+        newRow.removeChild(newRow.children[9]); // Remove Action (last column)
+        newRow.removeChild(newRow.children[0]); // Remove # (first column)
+        newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
+        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
+        newRow.removeChild(newRow.children[1]);
+        return newRow.outerHTML; // Convert back to HTML string
     }).join('');
 
-    var numberOfDays = tableBody.querySelectorAll("tr").length;
-    var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
+    // Calculate number of days and Saturdays based on filtered rows
+    var numberOfDays = filteredRows.length;
+    var numberOfSaturdays = filteredRows.filter(row => {
         let dateCell = row.querySelector("td:nth-child(2)");
         let dateText = dateCell ? dateCell.textContent : '';
         return new Date(dateText).getDay() === 6; // Saturday is day 6
@@ -211,6 +212,7 @@ function printDataTable() {
     document.body.innerHTML = originalContent;
     window.location.reload();
 }
+
 
 </script>
 
