@@ -20,10 +20,10 @@
 <div class="tabs">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#attendanceTab1">Attendance Tab 1</a>
+            <a class="nav-link active" data-toggle="tab" href="#attendanceTab1">Sign In AM</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#attendanceTab2">Attendance Tab 2</a>
+            <a class="nav-link" data-toggle="tab" href="#attendanceTab2">Sign In PM</a>
         </li>
     </ul>
     
