@@ -157,20 +157,27 @@
 
 <script>
 function printDataTable() {
-    // Clone the filtered content in the DataTable
+    // Clone the filtered content in the DataTable and remove unnecessary columns
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
-    var filteredTableContent = tableBody.innerHTML;
-    
+    var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
+        // Clone each row and remove extra cells for Name, Office, and Position
+        let newRow = row.cloneNode(true);
+        newRow.removeChild(newRow.children[2]); // Remove Name (assuming it’s the 3rd column)
+        newRow.removeChild(newRow.children[2]); // Remove Office (now the 3rd column after the previous removal)
+        newRow.removeChild(newRow.children[2]); // Remove Position (now the 3rd column after previous removals)
+        return newRow.outerHTML; // Convert back to HTML string
+    }).join('');
+
     // Get the name from the first row of the filtered data
     var firstRow = tableBody.querySelector("tr");
-    var name = firstRow ? firstRow.querySelector("td:nth-child(3)").textContent.trim() : 'N/A'; // Assuming the name is in the 3rd column
+    var name = firstRow ? firstRow.querySelector("td:nth-child(3)").textContent.trim() : 'N/A';
 
-    // Count the number of filtered days
+    // Count the number of filtered days and Saturdays
     var numberOfDays = tableBody.querySelectorAll("tr").length;
     var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
-        let dateCell = row.querySelector("td:nth-child(2)"); // Assuming the date is in the 2nd column
+        let dateCell = row.querySelector("td:nth-child(2)");
         let dateText = dateCell ? dateCell.textContent : '';
-        return new Date(dateText).getDay() === 6; // Checks if the date is a Saturday
+        return new Date(dateText).getDay() === 6;
     }).length;
 
     // Construct the custom print layout
@@ -197,22 +204,15 @@ function printDataTable() {
         </div>
     `;
 
-    // Save the original content to restore it later
+    // Save and replace content for print, then restore it after
     var originalContent = document.body.innerHTML;
-
-    // Set the custom print layout to body
     document.body.innerHTML = printContent;
-
-    // Print the page
     window.print();
-
-    // Restore the original content
     document.body.innerHTML = originalContent;
-
-    // Reload the page to reset any JavaScript states if needed
     window.location.reload();
 }
 </script>
+
 
 
 
