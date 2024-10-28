@@ -182,7 +182,8 @@ function filterTable() {
         }
     }
 
-    return filteredNames; // Return the array of filtered names for printing
+    // Return the first filtered name or a default message if none
+    return filteredNames.length > 0 ? filteredNames[0] : "No Name Found"; 
 }
 
 function printDataTable() {
@@ -241,6 +242,7 @@ function printDataTable() {
 }
 
 </script>
+
 
 
 
