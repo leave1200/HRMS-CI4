@@ -162,6 +162,8 @@ function printDataTable() {
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
         // Clone each row and remove extra cells for Name, Office, and Position
         let newRow = row.cloneNode(true);
+        newRow.removeChild(newRow.children[9]);
+        newRow.removeChild(newRow.children[0]);
         newRow.removeChild(newRow.children[2]); // Remove Name (assuming it’s the 3rd column)
         newRow.removeChild(newRow.children[2]); // Remove Office (now the 3rd column after the previous removal)
         newRow.removeChild(newRow.children[2]); // Remove Position (now the 3rd column after previous removals)
