@@ -213,8 +213,7 @@ function printDataTable() {
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
             <h2>Attendance Report</h2>
-           <div><strong>Name:</strong></div>
-            <div>${names.length > 0 ? names.map(name => `<p>${name}</p>`).join('') : 'N/A'}</div> <!-- Display each unique name -->
+            <p><strong>Name:</strong> ${name}</p>
             <p><strong>Number of days:</strong> ${numberOfDays}</p>
             <p><strong>Number of Saturdays:</strong> ${numberOfSaturdays}</p>
             <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
