@@ -19,7 +19,9 @@ class User extends Model
         'password', 
         'picture', 
         'bio', 
-        'status'
+        'status',
+        'terms',
+        'policy'
     ];
 
     // Automatically handle created_at and updated_at fields
