@@ -158,15 +158,28 @@
 <script>
 function printDataTable() {
     // Clone the filtered content in the DataTable
-    var filteredTableContent = document.querySelector("#DataTables_Table_0 tbody").innerHTML;
+    var tableBody = document.querySelector("#DataTables_Table_0 tbody");
+    var filteredTableContent = tableBody.innerHTML;
+    
+    // Get the name from the first row of the filtered data
+    var firstRow = tableBody.querySelector("tr");
+    var name = firstRow ? firstRow.querySelector("td:nth-child(3)").textContent.trim() : 'N/A'; // Assuming the name is in the 3rd column
+
+    // Count the number of filtered days
+    var numberOfDays = tableBody.querySelectorAll("tr").length;
+    var numberOfSaturdays = Array.from(tableBody.querySelectorAll("tr")).filter(row => {
+        let dateCell = row.querySelector("td:nth-child(2)"); // Assuming the date is in the 2nd column
+        let dateText = dateCell ? dateCell.textContent : '';
+        return new Date(dateText).getDay() === 6; // Checks if the date is a Saturday
+    }).length;
 
     // Construct the custom print layout
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
             <h2>Attendance Report</h2>
-            <p><strong>Name:</strong> [Name]</p>
-            <p><strong>Number of days:</strong> [Number of Days]</p>
-            <p><strong>Number of Saturdays:</strong> [Number of Saturdays]</p>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Number of days:</strong> ${numberOfDays}</p>
+            <p><strong>Number of Saturdays:</strong> ${numberOfSaturdays}</p>
             <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
                 <thead>
                     <tr>
@@ -200,6 +213,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 <script>
