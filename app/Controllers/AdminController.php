@@ -1080,17 +1080,16 @@ public function saveAttendance()
             
                 return $this->response->setStatusCode(400)->setBody('Error deleting attendance record.');
             }
-            public function archive($id)
-                {
-                    $attendanceModel = new AttendanceModel();
-
-                    // Attempt to archive the attendance record
-                    if ($attendanceModel->archiveAttendance($id)) {
-                        return $this->response->setJSON(['status' => 'success']);
-                    } else {
-                        return $this->response->setJSON(['status' => 'error']);
-                    }
+            public function archive($id) {
+                $attendanceModel = new AttendanceModel();
+            
+                if ($attendanceModel->archiveAttendance($id)) {
+                    return $this->response->setJSON(['status' => 'success']);
+                } else {
+                    return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to update attendance record.']);
                 }
+            }
+            
             
 
 
