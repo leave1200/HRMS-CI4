@@ -79,23 +79,15 @@
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Employee Number</label>
-                            <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Employee number will be filled here..." required readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Employee Name</label>
-                            <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." required readonly>
-                            <input type="hidden" name="employee" id="selectedEmployeeId2" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Office</label>
-                            <input type="text" id="officeInput2" class="form-control" placeholder="Office will be filled here..." required readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Position</label>
-                            <input type="text" id="positionInput2" class="form-control" placeholder="Position will be filled here..." required readonly>
-                        </div>
+                            <div class="form-group">
+                                <label>Employee Number</label>
+                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." required readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Employee Name</label>
+                                <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
+                                <input type="hidden" name="employee" id="selectedEmployeeId2" required>
+                            </div>
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
                         </div>
                     </div>
@@ -366,20 +358,22 @@ function signOutAttendance(attendanceId, session) {
 </script>
 <script>
 $(document).ready(function() {
-    $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        const rowData = table.row(this).data(); // Get data for the clicked row
+        const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
+        const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
+        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
+        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
 
         // Populate the fields in the PM Sign In form
-        $('#employeeNumberInput2').val(rowData[0]); // Assuming ID is in the first column
-        $('#employeeNameInput2').val(rowData[1]); // Assuming Name is in the second column
-        $('#selectedEmployeeId2').val(rowData[0]); // Assuming ID is in the first column
-        
-        // Assuming Office and Position are in columns 3 and 4 respectively
-        $('#officeInput2').val(rowData[2]); // Assuming Office is in the third column
-        $('#positionInput2').val(rowData[3]); // Assuming Position is in the fourth column
+        $('#employeeNumberInput2').val(employeeId);
+        $('#employeeNameInput2').val(employeeName);
+        $('#selectedEmployeeId2').val(employeeId);
+
+        // Set Office and Position based on selected employee
+        $('#officeSelect2').val(officeId).change(); // Set the office select value
+        $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
 
