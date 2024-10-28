@@ -213,7 +213,7 @@ function printDataTable() {
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
             <h2>Attendance Report</h2>
-             <p><strong>Name:</strong> ${names.join(', ') || 'N/A'}</p> <!-- Join names with a comma -->
+            <p><strong>Name:</strong> ${name}</p>
             <p><strong>Number of days:</strong> ${numberOfDays}</p>
             <p><strong>Number of Saturdays:</strong> ${numberOfSaturdays}</p>
             <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
