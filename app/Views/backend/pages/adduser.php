@@ -121,7 +121,7 @@
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        window.location.href = data.redirect; // Redirect after success
+                        location.reload(); // Redirect after success
                     });
                 } else {
                     Swal.fire({
