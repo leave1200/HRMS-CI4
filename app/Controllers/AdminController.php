@@ -821,21 +821,14 @@ public function saveAttendance()
             return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
         }
 
-        // If AM sign-out exists, proceed with PM sign-in
+        // If AM sign-out exists, allow PM sign-in
         if (!is_null($attendance['sign_in']) && !is_null($attendance['sign_out'])) {
-            // Check if PM sign-in is already recorded
-            if (is_null($attendance['pm_sign_in'])) {
-                $attendanceModel->update($attendance['id'], [
-                    'pm_sign_in' => $currentTime, // Record PM sign-in time
-                ]);
-                return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
-            } else {
-                // PM sign-in already exists
-                return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
-            }
+            // Record PM sign-in time regardless of previous PM sign-in
+            $attendanceModel->update($attendance['id'], [
+                'pm_sign_in' => $currentTime, // Record PM sign-in time
+            ]);
+            return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
         }
-
-        // No need to check PM sign-out anymore
     }
 
     // If no attendance record exists for the employee today, create a new one
