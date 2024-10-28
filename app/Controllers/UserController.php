@@ -77,7 +77,9 @@ class UserController extends Controller
             'email' => $email,
             'password' => $password,
             'bio' => $bio,
-            'status' => $status
+            'status' => $status,
+            'policy' => 'NO', // Default value for policy
+            'terms' => 'NO'   // Default value for terms
         ];
     
         if (!$builder->insert($userData)) {
