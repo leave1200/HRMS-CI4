@@ -290,8 +290,9 @@ function archiveAttendance(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance.archive') ?>', // Updated URL for archiving
+                url: '<?= route_to('attendance.archive') ?>',
                 type: 'POST',
+                data: { id: id }, // Send the ID as part of the request data
                 success: function(response) {
                     Swal.fire(
                         'Archived!',
@@ -302,9 +303,12 @@ function archiveAttendance(id) {
                     });
                 },
                 error: function(xhr) {
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.message 
+                        ? xhr.responseJSON.message 
+                        : 'An unexpected error occurred.';
                     Swal.fire(
                         'Error!',
-                        'Failed to archive attendance record: ' + xhr.responseText,
+                        'Failed to archive attendance record: ' + errorMessage,
                         'error'
                     );
                 }

@@ -1080,15 +1080,25 @@ public function saveAttendance()
             
                 return $this->response->setStatusCode(400)->setBody('Error deleting attendance record.');
             }
-            public function archive($id) {
+            public function archiveAttendance()
+            {
                 $attendanceModel = new \App\Models\AttendanceModel();
+                
+                $id = $this->request->getPost('id'); // Retrieve the ID from POST data
             
-                if ($attendanceModel->archiveAttendance($id)) {
-                    return $this->response->setJSON(['status' => 'success']);
-                } else {
-                    return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to update attendance record.']);
+                // Find the attendance record by ID
+                $attendance = $attendanceModel->find($id);
+            
+                if ($attendance) {
+                    // Update the attendance record to archive it
+                    if ($attendanceModel->update($id, ['att' => 'archive'])) {
+                        return $this->response->setStatusCode(200)->setBody('Attendance record archived successfully.');
+                    }
                 }
+            
+                return $this->response->setStatusCode(400)->setBody('Error archiving attendance record.');
             }
+            
             
             
 
