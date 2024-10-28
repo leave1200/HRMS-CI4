@@ -187,7 +187,7 @@ function filterTable() {
 }
 
 function printDataTable() {
-    var name = filterTable(); // Call filterTable to get the selected name
+    var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
 
     var tableBody = document.querySelector("#DataTables_Table_0 tbody");
     var filteredTableContent = Array.from(tableBody.querySelectorAll("tr")).map(row => {
