@@ -165,8 +165,8 @@ function printDataTable() {
         newRow.removeChild(newRow.children[9]); // Remove Action (last column)
         newRow.removeChild(newRow.children[0]); // Remove # (first column)
         newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
-        newRow.removeChild(newRow.children[1]); // Remove Position (adjusted index after removing Office)
-        newRow.removeChild(newRow.children[2]);
+        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
+        newRow.removeChild(newRow.children[1]);
         return newRow.outerHTML; // Convert back to HTML string
     }).join('');
 
