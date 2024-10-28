@@ -827,11 +827,11 @@ public function saveAttendance()
                 $attendanceModel->update($attendance['id'], [
                     'pm_sign_in' => $currentTime, // Record PM sign-in time
                 ]);
-                return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);}
-            // } else {
-            //     // PM sign-in already exists
-            //     return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
-            // }
+                return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+            } else {
+                // PM sign-in already exists
+                return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+            }
         }
 
         // If PM sign-out has already been recorded, check the interval for a new sign-in
