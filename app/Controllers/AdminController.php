@@ -829,7 +829,7 @@ public function saveAttendance()
                 ]);
                 return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
             } else {
-                // PM sign-out already exists, allow new attendance
+                // PM sign-out already exists, check for new attendance
                 if (!is_null($attendance['pm_sign_out'])) {
                     // Insert a new attendance record for the next session
                     $data = [
@@ -850,8 +850,8 @@ public function saveAttendance()
                     }
                 }
 
-                // PM sign-in already exists
-                return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+                // PM sign-in already exists but no PM sign-out
+                return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for PM before signing in again.']);
             }
         }
 
@@ -877,6 +877,7 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
+
 
 // public function saveAttendance()
 // {
