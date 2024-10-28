@@ -1081,7 +1081,7 @@ public function saveAttendance()
                 return $this->response->setStatusCode(400)->setBody('Error deleting attendance record.');
             }
             public function archive($id) {
-                $attendanceModel = new AttendanceModel();
+                $attendanceModel = new \App\Models\AttendanceModel();
             
                 if ($attendanceModel->archiveAttendance($id)) {
                     return $this->response->setJSON(['status' => 'success']);
