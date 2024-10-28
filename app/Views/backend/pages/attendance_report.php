@@ -157,15 +157,54 @@
 
 <script>
 function printDataTable() {
-    var printContent = document.getElementById('print-area').innerHTML; 
-    var originalContent = document.body.innerHTML; 
+    // Clone the filtered content in the DataTable
+    var filteredTableContent = document.querySelector("#DataTables_Table_0 tbody").innerHTML;
 
-    document.body.innerHTML = printContent; 
-    window.print(); 
-    document.body.innerHTML = originalContent; 
-    window.location.reload(); 
+    // Construct the custom print layout
+    var printContent = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2>Attendance Report</h2>
+            <p><strong>Name:</strong> [Name]</p>
+            <p><strong>Number of days:</strong> [Number of Days]</p>
+            <p><strong>Number of Saturdays:</strong> [Number of Saturdays]</p>
+            <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Office</th>
+                        <th>Position</th>
+                        <th>AM Sign In</th>
+                        <th>AM Sign Out</th>
+                        <th>PM Sign In</th>
+                        <th>PM Sign Out</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredTableContent}
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    // Save the original content to restore it later
+    var originalContent = document.body.innerHTML;
+
+    // Set the custom print layout to body
+    document.body.innerHTML = printContent;
+
+    // Print the page
+    window.print();
+
+    // Restore the original content
+    document.body.innerHTML = originalContent;
+
+    // Reload the page to reset any JavaScript states if needed
+    window.location.reload();
 }
 </script>
+
 
 <script>
 function deleteAttendance(id) {
