@@ -805,24 +805,24 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
     }
 
-    // Prepare attendance data
+    // Prepare current timestamp
     $currentTime = date('Y-m-d H:i:s');
 
     // Check if the employee has any attendance records for today
-    $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
-                                  ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
-                                  ->first();
+    $attendanceRecords = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
+                                         ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
+                                         ->findAll();
 
-    // If there's no existing record for today, create a new one
-    if (!$attendance) {
+    // If there are no records for today, create a new AM sign-in
+    if (empty($attendanceRecords)) {
         $data = [
             'name' => $employee['firstname'] . ' ' . $employee['lastname'],
             'office' => $designation['name'],
             'position' => $position['position_name'],
             'sign_in' => $currentTime, // Record AM sign-in time
-            'sign_out' => null, // Initially null for AM sign-out
-            'pm_sign_in' => null, // Initially null for PM sign-in
-            'pm_sign_out' => null, // Initially null for PM sign-out
+            'sign_out' => null,
+            'pm_sign_in' => null,
+            'pm_sign_out' => null,
         ];
 
         // Insert new attendance record
@@ -831,35 +831,45 @@ public function saveAttendance()
         } else {
             return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
         }
-    } else {
-        // If there's an existing record
-        if (is_null($attendance['sign_out'])) {
-            // AM sign-out hasn't been recorded yet
+    }
+
+    // Loop through today's records to determine the state
+    foreach ($attendanceRecords as $attendance) {
+        // If AM has been signed in but not signed out
+        if (!is_null($attendance['sign_in']) && is_null($attendance['sign_out'])) {
             return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
-        } elseif (is_null($attendance['pm_sign_out'])) {
-            // PM sign-in exists but no PM sign-out
+        }
+
+        // If PM has been signed in but not signed out
+        if (!is_null($attendance['pm_sign_in']) && is_null($attendance['pm_sign_out'])) {
             return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for PM before signing in again.']);
         }
 
-        // If both AM and PM have been signed out, create a new record for AM sign-in
-        $data = [
-            'name' => $employee['firstname'] . ' ' . $employee['lastname'],
-            'office' => $designation['name'],
-            'position' => $position['position_name'],
-            'sign_in' => $currentTime, // Record AM sign-in time
-            'sign_out' => null, // Initially null for AM sign-out
-            'pm_sign_in' => null, // Initially null for PM sign-in
-            'pm_sign_out' => null, // Initially null for PM sign-out
-        ];
-
-        // Insert new attendance record
-        if ($attendanceModel->insert($data)) {
-            return $this->response->setJSON(['success' => true, 'message' => 'New AM sign-in recorded successfully.']);
-        } else {
-            return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+        // If both AM and PM have been signed out, allow new AM sign-in
+        if (is_null($attendance['sign_out']) && is_null($attendance['pm_sign_out'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Please complete your AM sign-out before signing in again.']);
         }
     }
+
+    // If all previous records are complete, create a new record for AM sign-in
+    $newData = [
+        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+        'office' => $designation['name'],
+        'position' => $position['position_name'],
+        'sign_in' => $currentTime, // Record AM sign-in time
+        'sign_out' => null,
+        'pm_sign_in' => null,
+        'pm_sign_out' => null,
+    ];
+
+    // Insert new attendance record
+    if ($attendanceModel->insert($newData)) {
+        return $this->response->setJSON(['success' => true, 'message' => 'New AM sign-in recorded successfully.']);
+    } else {
+        return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+    }
 }
+
 
 
 
