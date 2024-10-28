@@ -43,7 +43,7 @@
 
     </div>
     <button onclick="printDataTable()" class="btn btn-primary">Print</button>
-    <button onclick="fetchArchivedData()" class="btn btn-secondary">View Archived Records</button>
+    <!-- <button onclick="fetchArchivedData()" class="btn btn-secondary">View Archived Records</button> -->
     <div class="table-responsive">
         <div id="print-area">
             <table class="data-table table stripe hover nowrap dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
@@ -97,7 +97,7 @@
                                 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
                                     <td>
                                         <button type="button" class="btn btn-secondary" onclick="deleteAttendance(<?= $attendance['id'] ?>)">Delete</button>
-                                        <button type="button" class="btn btn-primary" onclick="archiveAttendance(<?= $attendance['id'] ?>)">Archive</button>
+                                        <!-- <button type="button" class="btn btn-primary" onclick="archiveAttendance(<?= $attendance['id'] ?>)">Archive</button> -->
                                     </td>
                                 <?php endif; ?>
                             </tr>
