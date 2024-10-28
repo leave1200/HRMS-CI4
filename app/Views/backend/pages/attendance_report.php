@@ -166,7 +166,7 @@ function printDataTable() {
         newRow.removeChild(newRow.children[2]); // Remove Name (assuming it’s the 3rd column)
         newRow.removeChild(newRow.children[2]); // Remove Office (now the 3rd column after the previous removal)
         newRow.removeChild(newRow.children[2]); // Remove Position (now the 3rd column after previous removals)
-        newRow.removeChild(newRow.children[9]);
+        newRow.removeChild(newRow.children[6]);
         return newRow.outerHTML; // Convert back to HTML string
     }).join('');
 
