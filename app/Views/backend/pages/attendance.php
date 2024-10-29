@@ -118,9 +118,9 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
-                <div class="mb-10 pull-right">
+                <!-- <div class="mb-10 pull-right">
                     <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
-                </div>
+                </div> -->
                     <script>
                     function filterTable() {
                         const input = document.getElementById('searchInput');
