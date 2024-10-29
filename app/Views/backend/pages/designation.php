@@ -31,8 +31,7 @@
                             <label>Designation</label>
                             <input type="text" class="form-control" name="designation" 
                                 style="width: 100%; height: 38px" 
-                                pattern="[A-Za-z\s]+" 
-                                title="Only alphabetic characters are allowed"
+                                oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" 
                                 required>
                             <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
                         </div>
