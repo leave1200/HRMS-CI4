@@ -843,15 +843,12 @@ public function savePmSignIn()
 {
     $attendanceModel = new AttendanceModel();
     $employeeModel = new EmployeeModel();
-    log_message('debug', 'Entered savePmSignIn method.');
 
     // Get employee data from POST request
     $employeeId = $this->request->getPost('employee');
-    log_message('debug', 'Employee ID: ' . $employeeId);
 
     // Fetch employee details
     $employee = $employeeModel->find($employeeId);
-    log_message('debug', 'Employee Data: ' . print_r($employee, true));
 
     // Validate employee data
     if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
