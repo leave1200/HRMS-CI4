@@ -812,34 +812,20 @@ public function saveAttendance()
         'name' => $employee['firstname'] . ' ' . $employee['lastname'],
         'office' => $designation['name'],
         'position' => $position['position_name'],
-        'sign_in' => null, // Initially null for AM sign-in
+        'sign_in' => null, // Set to null for AM sign-in initially
         'sign_out' => null, // Initially null for AM sign-out
         'pm_sign_in' => null, // Initially null for PM sign-in
         'pm_sign_out' => null, // Initially null for PM sign-out
     ];
 
-    // Check if the employee has an existing attendance record for today
-    $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
-                                  ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
-                                  ->first();
-
-    // If attendance record exists, allow PM sign-out and new record creation
-    if ($attendance) {
-        // Update the existing record to mark the PM sign-out if not already done
-        if (is_null($attendance['pm_sign_out'])) {
-            // Update with PM sign-out
-            $attendanceModel->update($attendance['id'], [
-                'pm_sign_out' => $currentTime,
-            ]);
-            return $this->response->setJSON(['success' => true, 'message' => 'PM sign-out recorded successfully.']);
-        }
-        
-        // If PM sign-out has already been recorded, create a new attendance record
-        // Set the PM sign-in as the current time
-        $attendanceData['pm_sign_in'] = $currentTime; // New PM sign-in
+    // Insert new attendance record
+    if ($this->request->getPost('pm_sign_in')) {
+        $attendanceData['pm_sign_in'] = $currentTime; // Record PM sign-in time
+    } else {
+        $attendanceData['sign_in'] = $currentTime; // Record AM sign-in time
     }
 
-    // Insert the new attendance record
+    // Insert the new attendance record regardless of previous records
     if ($attendanceModel->insert($attendanceData)) {
         return $this->response->setJSON(['success' => true, 'message' => 'Attendance recorded successfully.']);
     } else {
