@@ -168,7 +168,12 @@ function validateFileType(input) {
 
     // Check if the file extension is valid
     if (!allowedExtensions.exec(filePath)) {
-        alert('Invalid file type. Please upload a .doc, .docx, .csv, .xls, or .xlsx file.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid file type',
+            text: 'Please upload a .doc, .docx, .csv, .xls, or .xlsx file.',
+            confirmButtonText: 'OK'
+        });
         input.value = ''; // Clear the input
     }
 }
