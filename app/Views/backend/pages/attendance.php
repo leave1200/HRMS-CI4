@@ -76,22 +76,22 @@
                     </div>
                 </div>
                 <form id="pmsignInForm2" method="post">
-                        <?= csrf_field() ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Employee Number</label>
-                                    <input type="text" id="employeeNumberInput2" class="form-control" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Employee Name</label>
-                                    <input type="text" id="employeeNameInput2" class="form-control" readonly>
-                                    <input type="hidden" name="attendance_id" id="selectedAttendanceId" required> <!-- Hidden attendance ID -->
-                                </div>
-                                <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
+                    <?= csrf_field() ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employee Attendance ID</label>
+                                <input type="text" id="employeeNumberInput2" name="attendance_id" class="form-control" readonly required>
                             </div>
+                            <div class="form-group">
+                                <label>Employee Name</label>
+                                <input type="text" id="employeeNameInput2" class="form-control" readonly>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
-                    </form>
+                    </div>
+                </form>
+
             </div>
         </div>
 

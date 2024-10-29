@@ -840,31 +840,38 @@ public function saveAttendance()
     }
 }
 public function pmSave()
-    {
-        $attendanceModel = new AttendanceModel();
-        $attendanceId = $this->request->getPost('attendance_id');
+{
+    $attendanceModel = new AttendanceModel();
 
-        if (!$attendanceId) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Attendance ID is required.'
-            ]);
-        }
+    // Get the attendance record ID from the POST request
+    $attendanceId = $this->request->getPost('attendance_id');
 
-        $updateSuccess = $attendanceModel->updatePmSignInById($attendanceId);
-
-        if ($updateSuccess) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Employee successfully signed in for PM.'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Unable to sign in employee for PM.'
-            ]);
-        }
+    // Validate the attendance ID
+    if (!$attendanceId) {
+        return $this->response->setJSON(['success' => false, 'message' => 'Attendance ID is required.']);
     }
+
+    // Fetch the attendance record for the given ID
+    $attendance = $attendanceModel->find($attendanceId);
+
+    // Check if the attendance record exists and hasn't already recorded a PM sign-in
+    if (!$attendance) {
+        return $this->response->setJSON(['success' => false, 'message' => 'Attendance record not found.']);
+    } elseif (!is_null($attendance['pm_sign_in'])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+    }
+
+    // Update the PM sign-in time
+    $updateSuccess = $attendanceModel->update($attendanceId, ['pm_sign_in' => date('Y-m-d H:i:s')]);
+
+    // Return success or failure message
+    if ($updateSuccess) {
+        return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+    } else {
+        return $this->response->setJSON(['success' => false, 'message' => 'Failed to record PM sign-in.']);
+    }
+}
+
 
 
 
