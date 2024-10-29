@@ -172,6 +172,10 @@
                                                             <label for="view_sex">Sex</label>
                                                             <input type="text" id="view_sex" name="sex" class="form-control" readonly>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label for="view_age">Age</label>
+                                                            <input type="text" id="view_age" class="form-control" readonly>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
