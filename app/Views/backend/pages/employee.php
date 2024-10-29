@@ -211,6 +211,39 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+<script>
+    $(document).ready(function() {
+        // Restrict date range for DOB
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        $('#dob').attr('min', '1980-01-01');
+        $('#dob').attr('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+
+        // Calculate age based on DOB change
+        $('#dob').on('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+
+            // Verify if dob is valid
+            if (isNaN(dob)) {
+                $('#age').val('');
+                return;
+            }
+
+            // Calculate age
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDifference = today.getMonth() - dob.getMonth();
+
+            // Adjust age if birthday hasn't occurred yet this year
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            $('#age').val(age);
+        });
+    });
+</script>
+
 <!-- <script>
     $(document).ready(function() {
     // Define the default date (January 1, 2002)
@@ -239,7 +272,7 @@
     });
 });
 </script> -->
-<script>
+<!-- <script>
     // Get the current date
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -272,7 +305,7 @@
             document.getElementById('age').value = age;
         });
     };
-</script>
+</script> -->
 
 <?= $this->endSection() ?>
 
