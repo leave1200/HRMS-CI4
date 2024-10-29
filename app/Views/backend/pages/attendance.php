@@ -153,7 +153,7 @@
                             </thead>
                             <tbody>
                                 <?php if (!empty($attendances)): ?>
-                                    <?php foreach ($attendances as $attendance): ?>
+                                    <?php foreach ($attendances as $attendance): ?>a
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
@@ -174,17 +174,17 @@
                                                 <?php endif; ?>
                                             </td>
 
-                                            <!-- PM Sign Out status -->
+                                            <!-- PM Sign In and Out status -->
                                             <td>
-                                                <?php if (empty($attendance['pm_sign_out'])): ?>
-                                                    <?php if (!empty($attendance['pm_sign_in'])): ?>
-                                                        <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
+                                                <?php if (empty($attendance['pm_sign_in'])): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
+                                                    <?php if (empty($attendance['pm_sign_out'])): ?>
                                                         <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
                                                     <?php else: ?>
-                                                        <span>No PM Sign In</span>
+                                                        <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
                                                     <?php endif; ?>
-                                                <?php else: ?>
-                                                    <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -195,6 +195,7 @@
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
