@@ -59,7 +59,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                 <label for="address">Address :</label>
-                                <input type="text" class="form-control" id="address" name="address" required/>
+                                <input type="text" class="form-control" id="address" name="address" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
