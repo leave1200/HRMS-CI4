@@ -303,6 +303,61 @@ function signInEmployee() {
             });
         }
     });
+    function signInPmEmployee() {
+    const selectedEmployee = selectedEmployeeId.value; // Assuming this is the ID of the employee
+    if (!selectedEmployee) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please select an employee.',
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to sign in this employee for PM?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, sign in for PM!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: $('#pmSignInForm').attr('action'), // Ensure this points to the PM sign-in endpoint
+                method: $('#pmSignInForm').attr('method'),
+                data: $('#pmSignInForm').serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'PM Signed In',
+                            text: response.message,
+                        }).then(() => {
+                            location.reload(); // Reload the page to update attendance records
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error processing your request.',
+                    });
+                }
+            });
+        }
+    });
+}
+
 }
 
 function signOutAttendance(attendanceId, session) {
