@@ -213,33 +213,33 @@
 
 <script>
     $(document).ready(function() {
-        // Restrict date range for DOB
+        // Set date range for date of birth input
         const today = new Date();
         const currentYear = today.getFullYear();
         $('#dob').attr('min', '1980-01-01');
         $('#dob').attr('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
 
-        // Calculate age based on DOB change
+        // Calculate age when DOB changes
         $('#dob').on('change', function() {
             const dob = new Date(this.value);
             const today = new Date();
 
-            // Verify if dob is valid
             if (isNaN(dob)) {
+                console.log("Invalid date selected");  // Debugging line
                 $('#age').val('');
                 return;
             }
 
-            // Calculate age
             let age = today.getFullYear() - dob.getFullYear();
             const monthDifference = today.getMonth() - dob.getMonth();
 
-            // Adjust age if birthday hasn't occurred yet this year
             if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
                 age--;
             }
 
-            $('#age').val(age);
+            console.log("DOB:", dob); // Debugging line
+            console.log("Calculated Age:", age); // Debugging line
+            $('#age').val(age);  // Set the age value in the input field
         });
     });
 </script>
