@@ -249,23 +249,30 @@
     document.getElementById('dob').setAttribute('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
 </script>
 <script>
-    document.getElementById('dob').addEventListener('change', function() {
-        const dob = new Date(this.value);  // Date of Birth
-        const today = new Date();          // Current Date
-        
-        // Calculate age
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDifference = today.getMonth() - dob.getMonth();
-        
-        // Adjust age if the birthday hasn't occurred yet this year
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
+    window.onload = function() {
+        document.getElementById('dob').addEventListener('change', function() {
+            const dob = new Date(this.value);  // Date of Birth
+            const today = new Date();          // Current Date
 
-        document.getElementById('age').value = age;
-    });
+            // Check if dob is a valid date
+            if (isNaN(dob)) {
+                document.getElementById('age').value = "";
+                return;
+            }
+            
+            // Calculate age
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDifference = today.getMonth() - dob.getMonth();
+            
+            // Adjust age if the birthday hasn't occurred yet this year
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            document.getElementById('age').value = age;
+        });
+    };
 </script>
-
 
 <?= $this->endSection() ?>
 
