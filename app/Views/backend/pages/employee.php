@@ -65,7 +65,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="dob">Date of Birth :</label>
-                                    <input type="date" class="form-control date-picker" id="dob" name="dob" 
+                                    <input type="date" class="form-control" id="dob" name="dob" 
                                     placeholder="Select Date" required />
                                 </div>
                             </div>
