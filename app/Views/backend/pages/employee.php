@@ -104,7 +104,7 @@
                                     <input type="text" class="form-control" id="s_school" name="s_school" required/>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="t_school">Tertiary School Attended:</label>
                                     <input type="text" class="form-control" id="t_school" name="t_school" required/>
