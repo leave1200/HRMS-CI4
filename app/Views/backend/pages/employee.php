@@ -211,7 +211,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<script>
+<!-- <script>
     $(document).ready(function() {
     // Define the default date (January 1, 2002)
     var defaultDate = new Date(2002, 0, 1); // January is month 0
@@ -238,7 +238,7 @@
         }
     });
 });
-</script>
+</script> -->
 <script>
     // Get the current date
     const today = new Date();
