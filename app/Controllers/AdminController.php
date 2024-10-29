@@ -464,6 +464,7 @@ public function updateDesignation()
            'phone' => $request->getPost('phone'),
            'address' => $request->getPost('address'),
            'dob' => $request->getPost('dob'),
+           'age' => $request->getPost('age'),
            'p_school' => $request->getPost('p_school'),
            's_school' => $request->getPost('s_school'),
            't_school' => $request->getPost('t_school'),
@@ -498,6 +499,7 @@ public function updateDesignation()
                'lastname' => $this->request->getPost('lastname'),
                'phone' => $this->request->getPost('phone'),
                'dob' => $this->request->getPost('dob'),
+               'age' => $this->request->getPost('age'),
                'sex' => $this->request->getPost('sex'),
                'address' => $this->request->getPost('address'),
            ];
