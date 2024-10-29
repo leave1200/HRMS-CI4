@@ -31,13 +31,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="firstname">First Name :</label>
-                                    <input type="text" class="form-control" id="firstname" name="firstname" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" required>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" oninput="validateDesignation(this)" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="lastname">Last Name :</label>
-                                    <input type="text" class="form-control" id="lastname" name="lastname"oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" required/>
+                                    <input type="text" class="form-control" id="lastname" name="lastname" oninput="validateDesignation(this)" required/>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                 <label for="address">Address :</label>
-                                <input type="text" class="form-control" id="address" name="address" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
+                                <input type="text" class="form-control" id="address" name="address" oninput="validateDesignation2(this)" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -269,6 +269,19 @@ function calculateAge() {
     document.getElementById('dob').setAttribute('min', '1985-01-01');
     document.getElementById('dob').setAttribute('max', '2002-12-31');
 </script>
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid designation.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
 <!-- <script>
     window.onload = function() {
         document.getElementById('dob').addEventListener('change', function() {
@@ -294,6 +307,31 @@ function calculateAge() {
         });
     };
 </script> -->
+<script>
+function validateDesignation2(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z0-9\s,.]/g, '');
 
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
+<script>
+function validateDesignation1(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s,.]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
 <?= $this->endSection() ?>
 
