@@ -913,7 +913,7 @@ function calculateAge() {
         age--;
     }
 
-    document.getElementById("age").value = age;
+    document.getElementById("edit_age").value = age;
 }
 </script>
 <script>
