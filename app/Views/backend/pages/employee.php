@@ -65,7 +65,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="dob">Date of Birth :</label>
-                                    <input type="date" class="form-control dob" id="dob" name="dob" 
+                                    <input type="date" class="form-control dob-inpuy" id="dob" name="dob" 
                                     placeholder="Select Date" required />
                                 </div>
                             </div>
@@ -213,7 +213,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Listen for changes on any input with the dob-input class
-        document.querySelector('.dob').addEventListener('change', function() {
+        document.querySelector('.dob-input').addEventListener('change', function() {
             const dob = new Date(this.value);  // Get selected date from dob-input
             const today = new Date();
 
