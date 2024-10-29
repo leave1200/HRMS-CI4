@@ -434,6 +434,7 @@ public function updateDesignation()
            'phone' => 'required',
            'address' => 'required',
            'dob' => 'required',
+           'age' => 'required',
            'p_school' => 'required',
            's_school' => 'required',
            't_school' => 'required',
