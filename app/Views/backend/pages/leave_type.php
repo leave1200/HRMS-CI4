@@ -23,13 +23,13 @@
         <!-- Input for l_name -->
         <div class="mb-3">
             <label for="l_name" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="l_name" name="l_name" maxlength="255" required>
+            <input type="text" class="form-control" id="l_name" name="l_name" maxlength="255" oninput="validateDesignation(this)" required>
         </div>
 
         <!-- Input for l_description -->
         <div class="mb-3">
             <label for="l_description" class="form-label">Description:</label>
-            <input type="text" class="form-control" id="l_description" name="l_description" maxlength="255" required>
+            <input type="text" class="form-control" id="l_description" name="l_description" maxlength="255" oninput="validateDesignation(this)" required>
         </div>
 
         <!-- Input for l_days -->
@@ -112,13 +112,13 @@
                     <!-- Input for l_name -->
                     <div class="mb-3">
                         <label for="edit-l_name" class="form-label">Name:</label> <!-- Corrected for label association -->
-                        <input type="text" class="form-control" id="edit-l_name" name="l_name" maxlength="255" required>
+                        <input type="text" class="form-control" id="edit-l_name" name="l_name" maxlength="255" oninput="validateDesignation(this)" required>
                     </div>
 
                     <!-- Input for l_description -->
                     <div class="mb-3">
                         <label for="edit-l_description" class="form-label">Description:</label> <!-- Corrected for label association -->
-                        <input type="text" class="form-control" id="edit-l_description" name="l_description" maxlength="255" required>
+                        <input type="text" class="form-control" id="edit-l_description" name="l_description" maxlength="255" oninput="validateDesignation(this)" required>
                     </div>
 
                     <!-- Input for l_days -->
@@ -333,5 +333,17 @@ $(document).ready(function() {
 </script>
 
 
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
 
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid designation.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
 <?= $this->endSection() ?>
