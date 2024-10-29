@@ -84,7 +84,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                 <label for="age">Age :</label>
-                                <input type="text" class="form-control age-input" name="age" required readonly />
+                                <input type="text" class="form-control" id="age" name="age" required readonly />
                                 </div>
                             </div>
                         </div>
@@ -211,31 +211,29 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Listen for changes on any input with the dob-input class
-        document.querySelector('.dob-input').addEventListener('change', function() {
-            const dob = new Date(this.value);  // Get selected date from dob-input
-            const today = new Date();
+    function calculateAge() {
+        const dobInput = document.getElementById('dob').value;
+        const dob = new Date(dobInput);  // Get the date from dob input
+        const today = new Date();        // Current date
 
-            // Ensure dob is valid
-            if (isNaN(dob.getTime())) {
-                document.querySelector('.age-input').value = ''; // Clear age field if date is invalid
-                return;
-            }
-            
-            // Calculate age
-            let age = today.getFullYear() - dob.getFullYear();
-            const monthDifference = today.getMonth() - dob.getMonth();
-            
-            // Adjust age if the birthday hasn't occurred yet this year
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-                age--;
-            }
+        // Validate date input
+        if (isNaN(dob.getTime())) {
+            document.getElementById('age').value = ""; // Clear age if date is invalid
+            return;
+        }
+        
+        // Calculate age
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDifference = today.getMonth() - dob.getMonth();
 
-            // Update all age-input fields with the calculated age
-            document.querySelector('.age-input').value = age;
-        });
-    });
+        // Adjust age if birthday hasn't occurred this year
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        // Set the calculated age in the age input field
+        document.getElementById('age').value = age;
+    }
 </script>
 
 <!-- <script>
