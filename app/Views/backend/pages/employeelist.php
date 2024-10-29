@@ -297,6 +297,10 @@
                                             <label for="edit_dob">Date of Birth</label>
                                             <input type="text" id="edit_dob" name="dob" class="form-control date-picker" placeholder="Select Date" required>
                                         </div>
+                                        <div class="form-group">
+                                                <label class="col-sm-12 col-md-2 col-form-label">Age</label>
+                                                    <input class="form-control" type="text" id="edit_age" name="age" readonly required>
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -506,6 +510,7 @@ document.getElementById('profile_picture').addEventListener('change', function()
                 $('#view_phone').val(response.phone);
                 $('#view_email').val(response.email);
                 $('#view_dob').val(response.dob);
+                $('#view_age').val(response.age);
                 $('#view_sex').val(response.sex);
                 $('#view_address').val(response.address);
                 $('#view_p_school').val(response.p_school);
@@ -789,6 +794,7 @@ $(document).ready(function() {
             $('#edit_lastname').val($(this).data('lastname'));
             $('#edit_phone').val($(this).data('phone'));
             $('#edit_dob').val($(this).data('dob'));
+            $('#edit_age').val($(this).data('age'));
             $('#edit_sex').val($(this).data('sex'));
             $('#edit_address').val($(this).data('address'));
 
@@ -884,7 +890,84 @@ function filterTable() {
     });
 }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function calculateAge() {
+    const dobInput = document.getElementById("dob").value;
 
+    if (!dobInput) {
+        document.getElementById("age").value = ""; // Clear age if no date is selected
+        return;
+    }
 
+    const dob = new Date(dobInput);
+    const today = new Date();
+
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
+
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+
+    document.getElementById("age").value = age;
+}
+</script>
+<script>
+    // Get the current date
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    
+    // Set the minimum and maximum dates
+    document.getElementById('dob').setAttribute('min', '1985-01-01');
+    document.getElementById('dob').setAttribute('max', '2002-12-31');
+</script>
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
+<script>
+function validateDesignation2(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z0-9\s,.]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
+<script>
+function validateDesignation1(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s,.]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
+<script>
+    // Set the minimum date to today
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
+        document.getElementById('interview_date').setAttribute('min', formattedDate);
+    });
+</script>
 
 <?= $this->endSection() ?>
