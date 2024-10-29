@@ -338,16 +338,7 @@ function validateDesignation1(input) {
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
-        const interviewDateInput = document.getElementById('interview_date');
-
-        // You can also set the input type to "date" if you want a date picker
-        interviewDateInput.setAttribute('min', formattedDate);
-        
-        // If using a date picker library, initialize it here
-        // Example for jQuery UI Datepicker:
-        $(interviewDateInput).datepicker({
-            minDate: 0 // Prevent selection of past dates
-        });
+        document.getElementById('interview_date').setAttribute('min', formattedDate);
     });
 </script>
 <?= $this->endSection() ?>
