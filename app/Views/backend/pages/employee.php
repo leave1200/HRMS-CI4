@@ -265,7 +265,7 @@
     });
 });
 </script> -->
-<!-- <script>
+<script>
     // Get the current date
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -274,7 +274,7 @@
     document.getElementById('dob').setAttribute('min', '1980-01-01');
     document.getElementById('dob').setAttribute('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
 </script>
-<script>
+<!-- <script>
     window.onload = function() {
         document.getElementById('dob').addEventListener('change', function() {
             const dob = new Date(this.value);  // Date of Birth
