@@ -261,4 +261,13 @@ function validateDesignation(input) {
     }
 }
 </script>
+<script>
+    // Set the minimum date to today
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
+        document.getElementById('date').setAttribute('min', formattedDate);
+    });
+</script>
+
 <?= $this->endSection() ?>
