@@ -210,36 +210,29 @@
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
 <script>
-    $(document).ready(function() {
-        // Set date range for date of birth input
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        $('#dob').attr('min', '1980-01-01');
-        $('#dob').attr('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
-
-        // Calculate age when DOB changes
-        $('#dob').on('change', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('dob').addEventListener('change', function() {
             const dob = new Date(this.value);
             const today = new Date();
-
-            if (isNaN(dob)) {
-                console.log("Invalid date selected");  // Debugging line
-                $('#age').val('');
+            
+            if (isNaN(dob.getTime())) {
+                console.error("Invalid date format");
                 return;
             }
-
+            
             let age = today.getFullYear() - dob.getFullYear();
             const monthDifference = today.getMonth() - dob.getMonth();
-
+            
             if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
                 age--;
             }
-
-            console.log("DOB:", dob); // Debugging line
-            console.log("Calculated Age:", age); // Debugging line
-            $('#age').val(age);  // Set the age value in the input field
+            
+            // Log for debugging
+            console.log("Age calculated: ", age);
+            
+            // Set the calculated age in the input field
+            document.getElementById('age').value = age;
         });
     });
 </script>
