@@ -77,7 +77,8 @@ $routes->group('admin', static function($routes){
         $routes->post('attendance/delete', 'AdminController::deleteAttendance', ['as' => 'attendance.delete']);
         $routes->post('attendance/archive', 'AdminController::archiveAttendance', ['as' => 'attendance.archive']);
         $routes->get('attendance/archived', 'AdminController::archived', ['as' => 'attendance.archived']);
-        $routes->post('attendance/pm-signin', 'AdminController::pmSignIn', ['as' => 'attendance.pm_save']);
+        $routes->post('attendance/pm_save', 'AttendanceController::pmSave', ['as' => 'attendance.pm_save']);
+
 
 
 

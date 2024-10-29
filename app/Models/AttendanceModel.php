@@ -19,6 +19,14 @@ class AttendanceModel extends Model
             ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Fetch records where either sign-out is missing
             ->findAll();
     }
+    public function signInPm($employeeId)
+{
+    return $this->db->table('attendance')
+        ->set('pm_sign_in', date('H:i:s'))
+        ->where('employee_id', $employeeId)
+        ->where('date', date('Y-m-d'))
+        ->update();
+}
     
     
 }

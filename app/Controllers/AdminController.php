@@ -839,60 +839,53 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
-public function savePmSignIn()
+public function pmSave()
 {
-    $attendanceModel = new AttendanceModel();
-    $employeeModel = new EmployeeModel();
+    // Load necessary models or libraries
+    $this->load->model('AttendanceModel');
 
-    // Get employee data from POST request
-    $employeeId = $this->request->getPost('employee');
-
-    // Fetch employee details
-    $employee = $employeeModel->find($employeeId);
-
-    // Validate employee data
-    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
-        return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+    // Validate the POST data
+    $employeeId = $this->request->getPost('employee_id');
+    if (!$employeeId) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Employee ID is required.'
+        ]);
     }
 
-    // Check if the employee has an existing attendance record for today
-    $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
-                                  ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
-                                  ->first();
-
-    // Prepare current time for the PM sign-in
-    $currentTime = date('Y-m-d H:i:s');
-
-    // If attendance record exists, check if PM sign-in can proceed
-    if ($attendance) {
+    try {
         // Check if the employee has already signed in for PM
-        if (!is_null($attendance['pm_sign_in'])) {
-            return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+        $alreadySignedIn = $this->AttendanceModel->isPmSignedIn($employeeId, date('Y-m-d'));
+
+        if ($alreadySignedIn) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Employee is already signed in for PM today.'
+            ]);
         }
 
-        // Check if AM sign-out has been recorded
-        if (is_null($attendance['sign_out'])) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
-        }
+        // Update the attendance record to mark the employee as signed in for PM
+        $updateSuccess = $this->AttendanceModel->signInPm($employeeId);
 
-        // Update the attendance record to record PM sign-in
-        $updateData = [
-            'pm_sign_in' => $currentTime,
-        ];
-
-        // Execute the update
-        $updateSuccess = $attendanceModel->update($attendance['id'], $updateData);
-        
-        // Check if the update was successful
         if ($updateSuccess) {
-            return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Employee successfully signed in for PM.'
+            ]);
         } else {
-            return $this->response->setJSON(['success' => false, 'message' => 'Failed to update PM sign-in.']);
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Unable to sign in employee for PM. Please try again.'
+            ]);
         }
-    } else {
-        return $this->response->setJSON(['success' => false, 'message' => 'No attendance record found for today.']);
+    } catch (\Exception $e) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'An error occurred: ' . $e->getMessage()
+        ]);
     }
 }
+
 
 
 
