@@ -876,13 +876,12 @@ public function pmSave()
     $currentTime = date('Y-m-d H:i:s');
 
     // Update the attendance record with PM sign-in time
-    $attendanceModel->update($attendanceId, [
-        'pm_sign_in' => $currentTime,
-    ]);
+    if (!$attendanceModel->update($attendanceId, ['pm_sign_in' => $currentTime])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'Failed to record PM sign-in.']);
+    }
 
     return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
 }
-
 
 
                 
