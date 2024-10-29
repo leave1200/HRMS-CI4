@@ -267,7 +267,7 @@ function calculateAge() {
     
     // Set the minimum and maximum dates
     document.getElementById('dob').setAttribute('min', '1985-01-01');
-    document.getElementById('dob').setAttribute('max', '2002-01-01');
+    document.getElementById('dob').setAttribute('max', '2002-12-31');
 </script>
 <!-- <script>
     window.onload = function() {
