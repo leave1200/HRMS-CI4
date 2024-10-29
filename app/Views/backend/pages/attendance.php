@@ -410,7 +410,7 @@ function signInPmEmployee() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance.pm_save') ?>', // Ensure this route is correct
+                url: '<?= route_to('attendance.pm_save') ?>',
                 method: 'POST',
                 data: { attendance_id: attendanceId },
                 dataType: 'json',
@@ -431,9 +431,8 @@ function signInPmEmployee() {
                         });
                     }
                 },
-                error: function(xhr) {
-                    // Log the full response for debugging
-                    console.error('AJAX Error:', xhr);
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr.responseText); // Log the full response for debugging
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -441,6 +440,7 @@ function signInPmEmployee() {
                     });
                 }
             });
+
         }
     });
 }
