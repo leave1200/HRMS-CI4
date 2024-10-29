@@ -302,7 +302,9 @@ function signInEmployee() {
             });
         }
     });
-    function signInPmEmployee() {
+
+}
+function signInPmEmployee() {
     const selectedEmployee = selectedEmployeeId.value; // Assuming this is the ID of the employee
     if (!selectedEmployee) {
         Swal.fire({
@@ -355,8 +357,6 @@ function signInEmployee() {
             });
         }
     });
-}
-
 }
 
 function signOutAttendance(attendanceId, session) {
