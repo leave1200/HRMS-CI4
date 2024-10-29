@@ -65,7 +65,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="dob">Date of Birth :</label>
-                                    <input type="date" class="form-control dob-inpuy" id="dob" name="dob" 
+                                    <input type="date" class="form-control dob-input" id="dob" name="dob" 
                                     placeholder="Select Date" onchange="calculateAge()" required />
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="interview_date">Interview Date :</label>
-                                    <input type="text" class="form-control date-picker" id="interview_date" name="interview_date" placeholder="Select Date" required/>
+                                    <input type="date" class="form-control" id="interview_date" name="interview_date" placeholder="Select Date" required/>
                                 </div>
                                 <div class="form-group">
 												<label>Interview Time :</label>
