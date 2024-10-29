@@ -167,7 +167,9 @@
                                                             <input type="text" id="view_dob" class="form-control" readonly>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2">
+                                                </div>
+                                                <div class="row">
+                                                <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="view_age">Age</label>
                                                             <input type="text" id="view_age" class="form-control" readonly>
