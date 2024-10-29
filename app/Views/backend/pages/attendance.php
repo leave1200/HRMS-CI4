@@ -231,6 +231,12 @@ input.addEventListener('input', function() {
             li.onclick = () => {
                 input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
                 selectedEmployeeId.value = employee.id; // Set hidden input value
+                
+                // Update PM sign-in fields
+                $('#employeeNumberInput2').val(employee.id);
+                $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
+                $('#selectedEmployeeId2').val(employee.id);
+
                 list.style.display = 'none'; // Hide the list after selection
             };
             list.appendChild(li);
@@ -241,6 +247,7 @@ input.addEventListener('input', function() {
         }
     }
 });
+
 
 // Hide the list if clicking outside
 document.addEventListener('click', (event) => {
