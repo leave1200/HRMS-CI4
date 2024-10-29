@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="firstname">First Name :</label>
-                                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
