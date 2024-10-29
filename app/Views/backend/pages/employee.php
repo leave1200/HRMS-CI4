@@ -266,8 +266,8 @@ function calculateAge() {
     const currentYear = today.getFullYear();
     
     // Set the minimum and maximum dates
-    document.getElementById('dob').setAttribute('min', '1980-01-01');
-    document.getElementById('dob').setAttribute('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+    document.getElementById('dob').setAttribute('min', '1985-01-01');
+    document.getElementById('dob').setAttribute('max', '2002-01-01');
 </script>
 <!-- <script>
     window.onload = function() {
