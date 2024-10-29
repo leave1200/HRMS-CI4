@@ -70,6 +70,7 @@
                             data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
                             data-phone="<?= htmlspecialchars($emp['phone']) ?>"
                             data-dob="<?= htmlspecialchars($emp['dob']) ?>"
+                             data-age="<?= htmlspecialchars($emp['age']) ?>"
                             data-sex="<?= htmlspecialchars($emp['sex']) ?>"
                             data-address="<?= htmlspecialchars($emp['address']) ?>"
                             data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
