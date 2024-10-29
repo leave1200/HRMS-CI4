@@ -83,8 +83,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                <label for="age">Age :</label>
-                                <input type="text" class="form-control" id="age" name="age" required/>
+                                    <label for="age">Age :</label>
+                                    <input type="text" class="form-control" id="age" name="age" readonly required/>
                                 </div>
                             </div>
                         </div>
@@ -209,32 +209,32 @@
                     </div>
 
 <script>
-    document.getElementById('dob').addEventListener('change', function() {
-        const dobInput = this.value;
-        console.log("Selected DOB:", dobInput);  // Debugging: Check selected DOB in the console
+document.getElementById('dob').addEventListener('change', function() {
+    const dobInput = this.value;
+    console.log("Selected DOB:", dobInput);  // Debugging: Check selected DOB in the console
 
-        // Ensure that the date is valid
-        if (!dobInput) {
-            document.getElementById('age').value = ""; // Clear age if no date is selected
-            return;
-        }
+    // Ensure that the date is valid
+    if (!dobInput) {
+        document.getElementById('age').value = ""; // Clear age if no date is selected
+        return;
+    }
 
-        const dob = new Date(dobInput);  // Convert selected DOB to Date object
-        const today = new Date();        // Current date
+    const dob = new Date(dobInput);  // Convert selected DOB to Date object
+    const today = new Date();        // Current date
 
-        // Calculate age
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDifference = today.getMonth() - dob.getMonth();
+    // Calculate age
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
 
-        // Adjust age if the birthday hasn't occurred yet this year
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
+    // Adjust age if the birthday hasn't occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
 
-        // Set the calculated age in the age input field
-        document.getElementById('age').value = age;
-        console.log("Calculated Age:", age);  // Debugging: Check calculated age in the console
-    });
+    // Set the calculated age in the age input field
+    document.getElementById('age').value = age;
+    console.log("Calculated Age:", age);  // Debugging: Check calculated age in the console
+});
 </script>
 
 <!-- <script>
