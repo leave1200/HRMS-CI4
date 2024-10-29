@@ -75,24 +75,23 @@
                         <h4 class="text-blue h4">Attendance</h4>
                     </div>
                 </div>
-                <form id="pmsignInForm2" action="<?= route_to('attendance.pm_save') ?>" method="post">
+                <form id="pmsignInForm2" method="post">
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Employee Number</label>
-                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." name="employee_id" required readonly>
+                                <input type="text" id="employeeNumberInput2" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Employee Name</label>
-                                <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
+                                <input type="text" id="employeeNameInput2" class="form-control" readonly>
                                 <input type="hidden" name="employee_id" id="selectedEmployeeId2" required>
                             </div>
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
 
@@ -390,7 +389,6 @@ $(document).ready(function() {
 <script>
 function signInPmEmployee() {
     const selectedEmployee = $('#selectedEmployeeId2').val();
-    console.log('PM Selected Employee ID:', selectedEmployee);
 
     if (!selectedEmployee) {
         Swal.fire({
@@ -401,50 +399,37 @@ function signInPmEmployee() {
         return;
     }
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You want to sign in this employee for PM?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, sign in for PM!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '<?= route_to('attendance.pm_save') ?>',
-                method: 'POST',
-                data: $('#pmsignInForm2').serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    console.log('AJAX Response:', response);
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'PM Signed In',
-                            text: response.message,
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', xhr.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error processing your request.',
-                    });
-                }
+    $.ajax({
+        url: '<?= route_to('attendance.pm_save') ?>',
+        method: 'POST',
+        data: { employee_id: selectedEmployee },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'PM Signed In',
+                    text: response.message,
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message,
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'There was an error processing your request.',
             });
         }
     });
 }
+
 </script>
 <?= $this->endSection() ?>

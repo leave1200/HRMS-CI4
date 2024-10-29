@@ -841,10 +841,9 @@ public function saveAttendance()
 }
 public function pmSave()
 {
-    $this->load->model('AttendanceModel');
+    $attendanceModel = new AttendanceModel();
+    $employeeId = $this->request->getPost('employee_id');
 
-    // Retrieve 'employee_id' from POST data
-    $employeeId = $this->request->getPost('id');
     if (!$employeeId) {
         return $this->response->setJSON([
             'success' => false,
@@ -852,35 +851,17 @@ public function pmSave()
         ]);
     }
 
-    try {
-        // Check if employee is already signed in for PM
-        $alreadySignedIn = $this->AttendanceModel->isPmSignedIn($employeeId, date('Y-m-d'));
+    $updateSuccess = $attendanceModel->updatePmSignIn($employeeId);
 
-        if ($alreadySignedIn) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Employee is already signed in for PM today.'
-            ]);
-        }
-
-        // Sign in employee for PM
-        $updateSuccess = $this->AttendanceModel->signInPm($employeeId);
-
-        if ($updateSuccess) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Employee successfully signed in for PM.'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Unable to sign in employee for PM. Please try again.'
-            ]);
-        }
-    } catch (\Exception $e) {
+    if ($updateSuccess) {
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Employee successfully signed in for PM.'
+        ]);
+    } else {
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'An error occurred: ' . $e->getMessage()
+            'message' => 'Unable to sign in employee for PM.'
         ]);
     }
 }
