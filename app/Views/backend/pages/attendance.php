@@ -61,7 +61,7 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(1)">Sign In</button>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
