@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         defaultDate: defaultDate, // Set default date to January 1, 2002
         onClose: function(selectedDate) {
             var date = $(this).datepicker('getDate');
-            if (!date) {
+            if (!date) {k
                 $(this).datepicker('setDate', defaultDate); // Set default date if no date is selected
             }
         }
