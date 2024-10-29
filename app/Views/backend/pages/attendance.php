@@ -410,7 +410,7 @@ function signInPmEmployee() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance.pm_save') ?>',
+                url: '<?= route_to('attendance.pm_save') ?>', // Ensure this route is correct
                 method: 'POST',
                 data: { attendance_id: attendanceId },
                 dataType: 'json',
@@ -431,11 +431,13 @@ function signInPmEmployee() {
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr) {
+                    // Log the full response for debugging
+                    console.error('AJAX Error:', xhr);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'There was an error processing your request.',
+                        text: 'There was an error processing your request. Please try again.',
                     });
                 }
             });
