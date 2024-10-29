@@ -65,7 +65,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="dob">Date of Birth :</label>
-                                    <input type="text" class="form-control date-picker" id="dob" name="dob" placeholder="Select Date" required/>
+                                        <input type="date" class="form-control date-picker" id="dob" name="dob" 
+                                        placeholder="Select Date" required />
                                 </div>
                             </div>
                         </div>
@@ -237,6 +238,15 @@
         }
     });
 });
+</script>
+<script>
+    // Get the current date
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    
+    // Set the minimum and maximum dates
+    document.getElementById('dob').setAttribute('min', '1950-01-01');
+    document.getElementById('dob').setAttribute('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
 </script>
 
 <?= $this->endSection() ?>
