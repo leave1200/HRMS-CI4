@@ -854,12 +854,25 @@ public function pmSave()
     }
 
     try {
-        // Update PM sign-in time
-        $updateSuccess = $attendanceModel->update($attendanceId, [
-            'pm_sign_in' => date('H:i:s')
-        ]);
+        // Fetch the existing attendance record to check if PM sign-in already exists
+        $attendanceRecord = $attendanceModel->find($attendanceId);
+        
+        // Check if the PM sign-in already exists for the given attendance ID
+        if (!is_null($attendanceRecord['pm_sign_in'])) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'PM sign-in has already been recorded for this attendance.'
+            ]);
+        }
 
-        if ($updateSuccess) {
+        // Prepare the data for inserting a new PM sign-in record
+        $data = [
+            'id' => $attendanceId, // Assuming you're using the same ID, which might need adjusting
+            'pm_sign_in' => date('H:i:s'), // Insert the current time
+        ];
+
+        // Insert the new PM sign-in record
+        if ($attendanceModel->update($attendanceId, $data)) {
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'PM sign-in recorded successfully.'
@@ -877,6 +890,7 @@ public function pmSave()
         ]);
     }
 }
+
 
 
 
