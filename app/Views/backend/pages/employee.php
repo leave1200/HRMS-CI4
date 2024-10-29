@@ -95,19 +95,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="p_school">Primary School Attended:</label>
-                                    <input type="text"class="form-control" id="p_school" name="p_school" required/>
+                                    <input type="text"class="form-control" id="p_school" name="p_school" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="s_school">Secondary School Attended :</label>
-                                    <input type="text" class="form-control" id="s_school" name="s_school" required/>
+                                    <input type="text" class="form-control" id="s_school" name="s_school" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="t_school">Tertiary School Attended:</label>
-                                    <input type="text" class="form-control" id="t_school" name="t_school" required/>
+                                    <input type="text" class="form-control" id="t_school" name="t_school" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="interview_for">Interview For :</label>
-                                    <input type="text" class="form-control" id="interview_for" name="interview_for" required/>
+                                    <input type="text" class="form-control" id="interview_for" name="interview_for" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                                 <div class="form-group">
                                     <label for="interview_type">Interview Type :</label>
@@ -132,7 +132,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="interview_date">Interview Date :</label>
-                                    <input type="text" class="form-control date-picker" id="interview_date" name="interview_date" placeholder="Select Date" required/>
+                                    <input type="text" class="form-control date-picker" id="interview_date" name="interview_date" placeholder="Select Date" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                                 <div class="form-group">
 												<label>Interview Time :</label>
@@ -152,7 +152,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="behaviour">Behaviour :</label>
-                                    <input type="text" class="form-control" id="behaviour" name="behaviour" required/>
+                                    <input type="text" class="form-control" id="behaviour" name="behaviour" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required/>
                                 </div>
                                 <div class="form-group">
                                     <label for="result">Result :</label>
@@ -167,7 +167,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="comment">Comments :</label>
-                                    <textarea class="form-control" id="comment" name="comment" required></textarea>
+                                    <textarea class="form-control" id="comment" name="comment" oninput="this.value = this.value.replace(/[^A-Za-z\s,.]/g, '')" required></textarea>
                                 </div>
                             </div>
                         </div>
