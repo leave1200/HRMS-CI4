@@ -105,7 +105,7 @@
     <div class="pb-20">
         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <!-- <div class="col-sm-12 col-md-6">
                     <div class="dataTables_length" id="DataTables_Table_0_length">
                         <label>Show
                             <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="custom-select custom-select-sm form-control form-control-sm">
@@ -117,7 +117,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6"> -->
                 <!-- <div class="mb-10 pull-right">
                     <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
                 </div> -->
