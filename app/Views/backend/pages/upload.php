@@ -38,7 +38,8 @@
         <?= csrf_field() ?>
         <div class="form-group">
             <label for="file">Choose File to Upload:</label>
-            <input type="file" name="file" id="file" class="form-control" required accept=".doc, .docx, .csv, .xls, .xlsx">
+            <input type="file" name="file" id="file" class="form-control" required 
+                accept=".doc,.docx,.csv,.xls,.xlsx" onchange="validateFileType(this)">
             <button type="submit" class="btn btn-primary mt-3"><i class="icon-copy fi-upload-cloud">Upload</i></button>
         </div>
     </form>
@@ -159,6 +160,18 @@
             });
         }
     });
+</script>
+<script>
+function validateFileType(input) {
+    const allowedExtensions = /(\.doc|\.docx|\.csv|\.xls|\.xlsx)$/i;
+    const filePath = input.value;
+
+    // Check if the file extension is valid
+    if (!allowedExtensions.exec(filePath)) {
+        alert('Invalid file type. Please upload a .doc, .docx, .csv, .xls, or .xlsx file.');
+        input.value = ''; // Clear the input
+    }
+}
 </script>
 
 <?= $this->endSection() ?>
