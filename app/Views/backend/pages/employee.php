@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label for="dob">Date of Birth :</label>
                                     <input type="date" class="form-control dob-inpuy" id="dob" name="dob" 
-                                    placeholder="Select Date" required />
+                                    placeholder="Select Date" onchange="calculateAge()" required />
                                 </div>
                             </div>
                         </div>
@@ -81,10 +81,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="age">Age :</label>
-                                    <input type="text" class="form-control" id="age" name="age" readonly required/>
+                            <div class="form-group row">
+                                <label class="col-sm-12 col-md-2 col-form-label">Age</label>
+                                <div class="col-sm-12 col-md-10">
+                                    <input class="form-control" type="text" id="age" name="age" readonly required>
                                 </div>
                             </div>
                         </div>
@@ -210,29 +210,26 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#dob').on('change', function() {
-            const dobInput = $(this).val();
+function calculateAge() {
+    const dobInput = document.getElementById("dob").value;
 
-            if (!dobInput) {
-                $('#age').val(""); // Clear age if no date is selected
-                return;
-            }
+    if (!dobInput) {
+        document.getElementById("age").value = ""; // Clear age if no date is selected
+        return;
+    }
 
-            const dob = new Date(dobInput);
-            const today = new Date();
+    const dob = new Date(dobInput);
+    const today = new Date();
 
-            let age = today.getFullYear() - dob.getFullYear();
-            const monthDifference = today.getMonth() - dob.getMonth();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
 
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-                age--;
-            }
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
 
-            $('#age').val(age);
-            console.log("Calculated Age:", age); // Debugging
-        });
-    });
+    document.getElementById("age").value = age;
+}
 </script>
 
 <!-- <script>
