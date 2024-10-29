@@ -18,14 +18,14 @@
     </div>
 </div>
 <div class="tabs">
-    <ul class="nav nav-tabs">
+    <!-- <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#attendanceTab1">Sign In AM</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#attendanceTab2">Sign In PM</a>
         </li>
-    </ul>
+    </ul> -->
     
     <div class="tab-content">
         <div id="attendanceTab1" class="tab-pane fade show active">
@@ -68,7 +68,7 @@
             </div>
         </div>
         
-        <div id="attendanceTab2" class="tab-pane fade">
+        <!-- <div id="attendanceTab2" class="tab-pane fade">
             <div class="pd-20 card-box mb-30">
                 <div class="clearfix">
                     <div class="pull-left">
@@ -92,7 +92,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </div>
