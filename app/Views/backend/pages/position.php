@@ -27,7 +27,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="position" style="width: 100%; height: 38px" required>
+                    <input type="text" class="form-control" name="position" style="width: 100%; height: 38px" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" required>
                     <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
                 </div>
             </div>
