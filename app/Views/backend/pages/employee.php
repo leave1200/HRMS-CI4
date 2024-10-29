@@ -250,13 +250,14 @@
 </script>
 <script>
     document.getElementById('dob').addEventListener('change', function() {
-        const dob = new Date(this.value);
-        const today = new Date();
+        const dob = new Date(this.value);  // Date of Birth
+        const today = new Date();          // Current Date
         
+        // Calculate age
         let age = today.getFullYear() - dob.getFullYear();
         const monthDifference = today.getMonth() - dob.getMonth();
         
-        // Adjust age if the birthday hasn't occurred this year yet
+        // Adjust age if the birthday hasn't occurred yet this year
         if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
             age--;
         }
