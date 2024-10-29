@@ -860,7 +860,7 @@ public function savePmSignIn()
                                   ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
                                   ->first();
 
-    // Prepare attendance data
+    // Prepare current time for the PM sign-in
     $currentTime = date('Y-m-d H:i:s');
 
     // If attendance record exists, check if PM sign-in can proceed
@@ -875,15 +875,25 @@ public function savePmSignIn()
             return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
         }
 
-        // Record PM sign-in
-        $attendanceModel->update($attendance['id'], [
+        // Update the attendance record to record PM sign-in
+        $updateData = [
             'pm_sign_in' => $currentTime,
-        ]);
-        return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+        ];
+
+        // Execute the update
+        $updateSuccess = $attendanceModel->update($attendance['id'], $updateData);
+        
+        // Check if the update was successful
+        if ($updateSuccess) {
+            return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'Failed to update PM sign-in.']);
+        }
     } else {
         return $this->response->setJSON(['success' => false, 'message' => 'No attendance record found for today.']);
     }
 }
+
 
 
 
