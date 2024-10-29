@@ -76,22 +76,22 @@
                     </div>
                 </div>
                 <form id="pmsignInForm2" method="post">
-                    <?= csrf_field() ?>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Employee Number</label>
-                                <input type="text" id="employeeNumberInput2" class="form-control" readonly>
+                        <?= csrf_field() ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employee Number</label>
+                                    <input type="text" id="employeeNumberInput2" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Employee Name</label>
+                                    <input type="text" id="employeeNameInput2" class="form-control" readonly>
+                                    <input type="hidden" name="attendance_id" id="selectedAttendanceId" required> <!-- Hidden attendance ID -->
+                                </div>
+                                <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                             </div>
-                            <div class="form-group">
-                                <label>Employee Name</label>
-                                <input type="text" id="employeeNameInput2" class="form-control" readonly>
-                                <input type="hidden" name="employee_id" id="selectedEmployeeId2" required>
-                            </div>
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
-                    </div>
-                </form>
+                    </form>
             </div>
         </div>
 
@@ -388,13 +388,13 @@ $(document).ready(function() {
 </script>
 <script>
 function signInPmEmployee() {
-    const selectedEmployee = $('#selectedEmployeeId2').val();
+    const attendanceId = $('#selectedAttendanceId').val();  // Assuming attendance ID is stored in this input
 
-    if (!selectedEmployee) {
+    if (!attendanceId) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select an employee.',
+            text: 'Please select an attendance record.',
         });
         return;
     }
@@ -402,7 +402,7 @@ function signInPmEmployee() {
     $.ajax({
         url: '<?= route_to('attendance.pm_save') ?>',
         method: 'POST',
-        data: { employee_id: selectedEmployee },
+        data: { attendance_id: attendanceId },
         dataType: 'json',
         success: function(response) {
             if (response.success) {
@@ -430,6 +430,7 @@ function signInPmEmployee() {
         }
     });
 }
+
 
 </script>
 <?= $this->endSection() ?>

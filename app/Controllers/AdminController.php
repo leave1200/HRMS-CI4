@@ -840,31 +840,31 @@ public function saveAttendance()
     }
 }
 public function pmSave()
-{
-    $attendanceModel = new AttendanceModel();
-    $employeeId = $this->request->getPost('employee_id');
+    {
+        $attendanceModel = new AttendanceModel();
+        $attendanceId = $this->request->getPost('attendance_id');
 
-    if (!$employeeId) {
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Employee ID is required.'
-        ]);
+        if (!$attendanceId) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Attendance ID is required.'
+            ]);
+        }
+
+        $updateSuccess = $attendanceModel->updatePmSignInById($attendanceId);
+
+        if ($updateSuccess) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Employee successfully signed in for PM.'
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Unable to sign in employee for PM.'
+            ]);
+        }
     }
-
-    $updateSuccess = $attendanceModel->updatePmSignIn($employeeId);
-
-    if ($updateSuccess) {
-        return $this->response->setJSON([
-            'success' => true,
-            'message' => 'Employee successfully signed in for PM.'
-        ]);
-    } else {
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Unable to sign in employee for PM.'
-        ]);
-    }
-}
 
 
 
