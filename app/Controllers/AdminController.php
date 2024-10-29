@@ -839,6 +839,51 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
+public function savePmSignIn()
+{
+    $attendanceModel = new AttendanceModel();
+    $employeeModel = new EmployeeModel();
+
+    // Get employee data from POST request
+    $employeeId = $this->request->getPost('employee');
+
+    // Fetch employee details
+    $employee = $employeeModel->find($employeeId);
+
+    // Validate employee data
+    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+    }
+
+    // Check if the employee has an existing attendance record for today
+    $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])
+                                  ->where('DATE(sign_in)', date('Y-m-d')) // Ensure it's for the current day
+                                  ->first();
+
+    // Prepare attendance data
+    $currentTime = date('Y-m-d H:i:s');
+
+    // If attendance record exists, check if PM sign-in can proceed
+    if ($attendance) {
+        // Check if the employee has already signed in for PM
+        if (!is_null($attendance['pm_sign_in'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+        }
+
+        // Check if AM sign-out has been recorded
+        if (is_null($attendance['sign_out'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Please sign out for AM before signing in for PM.']);
+        }
+
+        // Record PM sign-in
+        $attendanceModel->update($attendance['id'], [
+            'pm_sign_in' => $currentTime,
+        ]);
+        return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+    } else {
+        return $this->response->setJSON(['success' => false, 'message' => 'No attendance record found for today.']);
+    }
+}
 
 
 
