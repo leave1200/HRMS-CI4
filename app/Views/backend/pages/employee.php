@@ -141,7 +141,7 @@
 													placeholder="Select time"
 													type="text"
                                                     name="interview_time"
-												/>
+												required />
 											</div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="behaviour">Behaviour :</label>
-                                    <input type="text" class="form-control" id="behaviour" name="behaviour" reuired/>
+                                    <input type="text" class="form-control" id="behaviour" name="behaviour" required/>
                                 </div>
                                 <div class="form-group">
                                     <label for="result">Result :</label>
@@ -167,7 +167,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="comment">Comments :</label>
-                                    <textarea class="form-control" id="comment" name="comment"></textarea>
+                                    <textarea class="form-control" id="comment" name="comment" required></textarea>
                                 </div>
                             </div>
                         </div>
