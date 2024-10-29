@@ -10,7 +10,7 @@
 			</div>
 			<nav aria-label="breadcrumb" role="navigation">
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="<?= route_to('admin.home') ?>">">Home</a></li>
+					<li class="breadcrumb-item"><a href="<?= route_to('admin.home') ?>">Home</a></li>
 					<li class="breadcrumb-item active" aria-current="page">Holidays</li>
 				</ol>
 			</nav>
@@ -52,7 +52,7 @@
           <input type="hidden" id="updateHolidayId" name="id">
           <div class="form-group">
             <label for="updateName">Holiday Name</label>
-            <input type="text" class="form-control" id="updateName" name="name" required>
+            <input type="text" class="form-control" id="updateName" name="name" oninput="validateDesignation(this)" required>
           </div>
           <div class="form-group">
             <label for="updateDate">Holiday Date</label>
@@ -248,5 +248,17 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
 
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid text.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
 <?= $this->endSection() ?>
