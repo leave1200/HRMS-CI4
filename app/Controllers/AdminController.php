@@ -844,7 +844,7 @@ public function pmSave()
     $this->load->model('AttendanceModel');
 
     // Retrieve 'employee_id' from POST data
-    $employeeId = $this->request->getPost('employee_id');
+    $employeeId = $this->request->getPost('id');
     if (!$employeeId) {
         return $this->response->setJSON([
             'success' => false,

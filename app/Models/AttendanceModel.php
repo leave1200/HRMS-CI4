@@ -23,7 +23,7 @@ class AttendanceModel extends Model
 {
     return $this->db->table('attendance')
         ->set('pm_sign_in', date('H:i:s'))
-        ->where('employee_id', $employeeId)
+        ->where('id', $employeeId)
         ->where('date', date('Y-m-d'))
         ->update();
 }
@@ -31,7 +31,7 @@ class AttendanceModel extends Model
 public function isPmSignedIn($employeeId, $date)
 {
     return $this->db->table('attendance')
-        ->where('employee_id', $employeeId)
+        ->where('id', $employeeId)
         ->where('date', $date)
         ->where('pm_sign_in IS NOT NULL')
         ->countAllResults() > 0;
