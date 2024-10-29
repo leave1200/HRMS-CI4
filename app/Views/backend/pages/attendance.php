@@ -153,7 +153,7 @@
                             </thead>
                             <tbody>
                                 <?php if (!empty($attendances)): ?>
-                                    <?php foreach ($attendances as $attendance): ?>a
+                                    <?php foreach ($attendances as $attendance): ?>
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
