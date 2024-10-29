@@ -841,10 +841,9 @@ public function saveAttendance()
 }
 public function pmSave()
 {
-    // Load necessary models or libraries
     $this->load->model('AttendanceModel');
 
-    // Validate the POST data
+    // Retrieve 'employee_id' from POST data
     $employeeId = $this->request->getPost('employee_id');
     if (!$employeeId) {
         return $this->response->setJSON([
@@ -854,7 +853,7 @@ public function pmSave()
     }
 
     try {
-        // Check if the employee has already signed in for PM
+        // Check if employee is already signed in for PM
         $alreadySignedIn = $this->AttendanceModel->isPmSignedIn($employeeId, date('Y-m-d'));
 
         if ($alreadySignedIn) {
@@ -864,7 +863,7 @@ public function pmSave()
             ]);
         }
 
-        // Update the attendance record to mark the employee as signed in for PM
+        // Sign in employee for PM
         $updateSuccess = $this->AttendanceModel->signInPm($employeeId);
 
         if ($updateSuccess) {
@@ -885,6 +884,7 @@ public function pmSave()
         ]);
     }
 }
+
 
 
 

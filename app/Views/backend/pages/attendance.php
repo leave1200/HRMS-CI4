@@ -81,17 +81,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Employee Number</label>
-                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." name="id" required readonly>
+                                <input type="text" id="employeeNumberInput2" class="form-control" placeholder="Enter employee number..." name="employee_id" required readonly>
                             </div>
                             <div class="form-group">
                                 <label>Employee Name</label>
                                 <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
-                                <input type="hidden" name="employee" id="selectedEmployeeId2" required>
+                                <input type="hidden" name="employee_id" id="selectedEmployeeId2" required>
                             </div>
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
 
@@ -411,7 +412,7 @@ function signInPmEmployee() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= route_to('attendance.pm_save') ?>', // Ensure this matches the route
+                url: '<?= route_to('attendance.pm_save') ?>',
                 method: 'POST',
                 data: $('#pmsignInForm2').serialize(),
                 dataType: 'json',
@@ -445,6 +446,5 @@ function signInPmEmployee() {
         }
     });
 }
-
 </script>
 <?= $this->endSection() ?>

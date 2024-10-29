@@ -28,5 +28,12 @@ class AttendanceModel extends Model
         ->update();
 }
     
-    
+public function isPmSignedIn($employeeId, $date)
+{
+    return $this->db->table('attendance')
+        ->where('employee_id', $employeeId)
+        ->where('date', $date)
+        ->where('pm_sign_in IS NOT NULL')
+        ->countAllResults() > 0;
+}
 }
