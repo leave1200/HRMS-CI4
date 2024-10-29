@@ -387,9 +387,7 @@ $(document).ready(function() {
 
 </script>
 <script>
-function signInPmEmployee() {
-    const attendanceId = $('#employeeNumberInput2').val(); // Get attendance ID directly from the input field
-
+function signInPmEmployee(attendanceId) {
     if (!attendanceId) {
         Swal.fire({
             icon: 'error',
@@ -412,10 +410,10 @@ function signInPmEmployee() {
             $.ajax({
                 url: '<?= route_to('attendance.pm_save') ?>',
                 method: 'POST',
-                data: { attendance_id: attendanceId },
+                data: { attendance_id: attendanceId }, // Use the passed attendance ID directly
                 dataType: 'json',
                 success: function(response) {
-                    if (response.success) {     
+                    if (response.success) {
                         Swal.fire({
                             icon: 'success',
                             title: 'PM Signed In',
@@ -440,9 +438,9 @@ function signInPmEmployee() {
                     });
                 }
             });
-
         }
     });
 }
+
 </script>
 <?= $this->endSection() ?>
