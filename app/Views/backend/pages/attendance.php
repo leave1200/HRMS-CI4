@@ -91,7 +91,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
 
@@ -388,49 +387,59 @@ $(document).ready(function() {
 </script>
 <script>
 function signInPmEmployee() {
-    const attendanceId = $('#selectedAttendanceId').val();  // Assuming attendance ID is stored in this input
+    const attendanceId = $('#employeeNumberInput2').val(); // Get attendance ID directly from the input field
 
     if (!attendanceId) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select an attendance record.',
+            text: 'Please select a valid attendance record.',
         });
         return;
     }
 
-    $.ajax({
-        url: '<?= route_to('attendance.pm_save') ?>',
-        method: 'POST',
-        data: { attendance_id: attendanceId },
-        dataType: 'json',
-        success: function(response) {
-            if (response.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'PM Signed In',
-                    text: response.message,
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message,
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'There was an error processing your request.',
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to sign in for PM?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, sign in for PM!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= route_to('attendance.pm_save') ?>',
+                method: 'POST',
+                data: { attendance_id: attendanceId },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'PM Signed In',
+                            text: response.message,
+                        }).then(() => {
+                            location.reload(); // Reload the page on success
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error processing your request.',
+                    });
+                }
             });
         }
     });
 }
-
-
 </script>
 <?= $this->endSection() ?>
