@@ -89,7 +89,7 @@
                                 <input type="hidden" name="employee" id="selectedEmployeeId2" required>
                             </div>
 
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee(2)">Sign In</button>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
