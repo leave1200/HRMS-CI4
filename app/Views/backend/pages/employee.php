@@ -84,7 +84,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                 <label for="age">Age :</label>
-                                <input type="text" class="form-control" id="age" name="age" required/>
+                                <input type="text" class="form-control" id="age" name="age" required readonly />
                                 </div>
                             </div>
                         </div>
@@ -248,6 +248,23 @@
     document.getElementById('dob').setAttribute('min', '1980-01-01');
     document.getElementById('dob').setAttribute('max', `${currentYear}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
 </script>
+<script>
+    document.getElementById('dob').addEventListener('change', function() {
+        const dob = new Date(this.value);
+        const today = new Date();
+        
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDifference = today.getMonth() - dob.getMonth();
+        
+        // Adjust age if the birthday hasn't occurred this year yet
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        document.getElementById('age').value = age;
+    });
+</script>
+
 
 <?= $this->endSection() ?>
 
