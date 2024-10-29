@@ -28,7 +28,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <input type="text" class="form-control" name="position" style="width: 100%; height: 38px" 
-                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" required>
+                    oninput="validateDesignation(this)" required>
                     <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
                 </div>
             </div>
@@ -275,6 +275,18 @@ function filterTable() {
         });
     }
 </script>
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
 
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid designation.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
 
 <?= $this->endSection() ?>
