@@ -387,8 +387,10 @@ $(document).ready(function() {
 
 </script>
 <script>
-    function signInPmEmployee() {
-    const selectedEmployee = selectedEmployeeId.value; // Assuming this is the ID of the employee
+function signInPmEmployee() {
+    const selectedEmployee = $('#selectedEmployeeId2').val(); // Use the PM ID field
+    console.log('PM Selected Employee ID:', selectedEmployee); // Debugging line
+
     if (!selectedEmployee) {
         Swal.fire({
             icon: 'error',
@@ -409,9 +411,9 @@ $(document).ready(function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: $('#pmSignInForm').attr('action'), // Ensure this points to the PM sign-in endpoint
-                method: $('#pmSignInForm').attr('method'),
-                data: $('#pmSignInForm').serialize(),
+                url: $('#pmsignInForm2').attr('action'),
+                method: $('#pmsignInForm2').attr('method'),
+                data: $('#pmsignInForm2').serialize(),
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
@@ -420,7 +422,7 @@ $(document).ready(function() {
                             title: 'PM Signed In',
                             text: response.message,
                         }).then(() => {
-                            location.reload(); // Reload the page to update attendance records
+                            location.reload(); // Reload to update records
                         });
                     } else {
                         Swal.fire({
