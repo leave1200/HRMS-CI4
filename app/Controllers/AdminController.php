@@ -846,7 +846,42 @@ public function saveAttendance()
     } else {
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
+    
 }
+public function pmSave()
+    {
+        $attendanceModel = new AttendanceModel();
+        
+        // Get attendance ID from the POST request
+        $attendanceId = $this->request->getPost('attendance_id');
+
+        // Validate the attendance ID
+        if (!$attendanceId) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Attendance ID is required.']);
+        }
+
+        // Find the attendance record
+        $attendance = $attendanceModel->find($attendanceId);
+        
+        if (!$attendance) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Attendance record not found.']);
+        }
+
+        // Check if PM sign-in is already recorded
+        if (!is_null($attendance['pm_sign_in'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded for today.']);
+        }
+
+        // Get current time
+        $currentTime = date('Y-m-d H:i:s');
+
+        // Update the attendance record with PM sign-in time
+        $attendanceModel->update($attendanceId, [
+            'pm_sign_in' => $currentTime,
+        ]);
+
+        return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+    }
 
 
                 
