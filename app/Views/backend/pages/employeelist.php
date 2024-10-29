@@ -893,7 +893,7 @@ function filterTable() {
     });
 }
 </script>
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 function calculateAge() {
     const dobInput = document.getElementById("dob").value;
@@ -971,6 +971,6 @@ function validateDesignation1(input) {
         const formattedDate = today.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
         document.getElementById('interview_date').setAttribute('min', formattedDate);
     });
-</script> -->
+</script>
 
 <?= $this->endSection() ?>
