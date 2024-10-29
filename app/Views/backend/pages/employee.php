@@ -211,29 +211,32 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script>
-    function calculateAge() {
-        const dobInput = document.getElementById('dob').value;
-        const dob = new Date(dobInput);  // Get the date from dob input
-        const today = new Date();        // Current date
+    document.getElementById('dob').addEventListener('change', function() {
+        const dobInput = this.value;
+        console.log("Selected DOB:", dobInput);  // Debugging: Check selected DOB in the console
 
-        // Validate date input
-        if (isNaN(dob.getTime())) {
-            document.getElementById('age').value = ""; // Clear age if date is invalid
+        // Ensure that the date is valid
+        if (!dobInput) {
+            document.getElementById('age').value = ""; // Clear age if no date is selected
             return;
         }
-        
+
+        const dob = new Date(dobInput);  // Convert selected DOB to Date object
+        const today = new Date();        // Current date
+
         // Calculate age
         let age = today.getFullYear() - dob.getFullYear();
         const monthDifference = today.getMonth() - dob.getMonth();
 
-        // Adjust age if birthday hasn't occurred this year
+        // Adjust age if the birthday hasn't occurred yet this year
         if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
             age--;
         }
 
         // Set the calculated age in the age input field
         document.getElementById('age').value = age;
-    }
+        console.log("Calculated Age:", age);  // Debugging: Check calculated age in the console
+    });
 </script>
 
 <!-- <script>
