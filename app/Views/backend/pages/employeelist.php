@@ -894,7 +894,7 @@ function filterTable() {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function calculateAge() {
-    const dobInput = document.getElementById("edit_dob").value;
+    const dobInput = document.getElementById("dob").value;
 
     if (!dobInput) {
         document.getElementById("age").value = ""; // Clear age if no date is selected
