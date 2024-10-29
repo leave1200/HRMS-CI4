@@ -10,7 +10,7 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= route_to('admin.home')?>">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Designation</li>
+                    <li class="breadcrumb-item active" aria-current="page">Department</li>
                 </ol>
             </nav>
         </div>
@@ -29,7 +29,11 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Designation</label>
-                            <input type="text" class="form-control" name="designation" style="width: 100%; height: 38px" required>
+                            <input type="text" class="form-control" name="designation" 
+                                style="width: 100%; height: 38px" 
+                                pattern="[A-Za-z\s]+" 
+                                title="Only alphabetic characters are allowed"
+                                required>
                             <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
                         </div>
                     </div>
