@@ -296,7 +296,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="edit_dob">Date of Birth</label>
-                                            <input type="text" id="edit_dob" name="dob" class="form-control date-picker" placeholder="Select Date" required>
+                                            <input type="text" id="edit_dob" name="dob" class="form-control date-picker" placeholder="Select Date" onchange="calculateAge()" required>
                                         </div>
                                         <div class="form-group">
                                                 <label class="col-sm-12 col-md-2 col-form-label">Age</label>
