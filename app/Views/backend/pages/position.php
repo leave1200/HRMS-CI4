@@ -282,7 +282,7 @@ function validateDesignation(input) {
 
     // Trim whitespace and check if input is empty
     if (input.value.trim() === '') {
-        input.setCustomValidity('Please enter a valid designation.'); // Set custom validity message
+        input.setCustomValidity('Please enter a valid Position.'); // Set custom validity message
     } else {
         input.setCustomValidity(''); // Clear the custom validity message
     }
