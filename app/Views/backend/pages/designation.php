@@ -20,7 +20,7 @@
 <div class="pd-20 card-box mb-30">
     <div class="clearfix">
         <div class="pull-left">
-            <h4 class="text-blue h4">Designation</h4>
+            <h4 class="text-blue h4">Department</h4>
         </div>
     </div>
         <form id="designationForm" action="<?= route_to('designation_save') ?>" method="post">
@@ -28,10 +28,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Designation</label>
+                            <label>Department</label>
                             <input type="text" class="form-control" name="designation" 
                                 style="width: 100%; height: 38px" 
-                                oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" 
+                                oninput="validateDesignation(this)" 
                                 required>
                             <button type="submit" class="btn btn-outline-primary mt-2">Add</button>
                         </div>
@@ -281,6 +281,20 @@ function deleteDesignation(id) {
         });
     });
 </script>
+<script>
+function validateDesignation(input) {
+    // Replace invalid characters
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
+
+    // Trim whitespace and check if input is empty
+    if (input.value.trim() === '') {
+        input.setCustomValidity('Please enter a valid designation.'); // Set custom validity message
+    } else {
+        input.setCustomValidity(''); // Clear the custom validity message
+    }
+}
+</script>
+
 
 
 
