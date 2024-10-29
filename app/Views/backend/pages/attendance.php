@@ -388,8 +388,8 @@ $(document).ready(function() {
 </script>
 <script>
 function signInPmEmployee() {
-    const selectedEmployee = $('#selectedEmployeeId2').val(); // Use the PM ID field
-    console.log('PM Selected Employee ID:', selectedEmployee); // Debugging line
+    const selectedEmployee = $('#selectedEmployeeId2').val();
+    console.log('PM Selected Employee ID:', selectedEmployee);
 
     if (!selectedEmployee) {
         Swal.fire({
@@ -416,13 +416,14 @@ function signInPmEmployee() {
                 data: $('#pmsignInForm2').serialize(),
                 dataType: 'json',
                 success: function(response) {
+                    console.log('AJAX Response:', response); // Log the response
                     if (response.success) {
                         Swal.fire({
                             icon: 'success',
                             title: 'PM Signed In',
                             text: response.message,
                         }).then(() => {
-                            location.reload(); // Reload to update records
+                            location.reload();
                         });
                     } else {
                         Swal.fire({
@@ -432,7 +433,8 @@ function signInPmEmployee() {
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr.responseText); // Log the error details
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -443,5 +445,6 @@ function signInPmEmployee() {
         }
     });
 }
+
 </script>
 <?= $this->endSection() ?>
