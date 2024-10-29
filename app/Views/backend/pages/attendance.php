@@ -411,12 +411,12 @@ function signInPmEmployee() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: $('#pmsignInForm2').attr('action'),
-                method: $('#pmsignInForm2').attr('method'),
+                url: '<?= route_to('attendance.pm_save') ?>', // Ensure this matches the route
+                method: 'POST',
                 data: $('#pmsignInForm2').serialize(),
                 dataType: 'json',
                 success: function(response) {
-                    console.log('AJAX Response:', response); // Log the response
+                    console.log('AJAX Response:', response);
                     if (response.success) {
                         Swal.fire({
                             icon: 'success',
@@ -434,7 +434,7 @@ function signInPmEmployee() {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('AJAX Error:', xhr.responseText); // Log the error details
+                    console.error('AJAX Error:', xhr.responseText);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
