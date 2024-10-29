@@ -75,7 +75,7 @@
                         <h4 class="text-blue h4">Attendance</h4>
                     </div>
                 </div>
-                <form id="signInForm2" action="<?= route_to('attendance_save') ?>" method="post">
+                <form id="signInForm2" action="<?= route_to('attendance_pm_save') ?>" method="post">
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
@@ -88,14 +88,13 @@
                                 <input type="text" id="employeeNameInput2" class="form-control" placeholder="Employee's name will be filled here..." readonly>
                                 <input type="hidden" name="employee" id="selectedEmployeeId2" required>
                             </div>
-
                             <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
+
     </div>
 </div>
 
