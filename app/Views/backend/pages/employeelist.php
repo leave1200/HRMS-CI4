@@ -300,12 +300,12 @@
                                             <label for="edit_dob">Date of Birth</label>
                                             <input type="date" id="edit_dob" name="dob" class="form-control dob-input" placeholder="Select Date" onchange="calculateAge()" required>
                                         </div>
-                                        <div class="form-group">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                                 <label for="edit_age" class="col-sm-12 col-md-2 col-form-label">Age</label>
                                                     <input class="form-control" type="text" id="edit_age" name="age" readonly required>
                                             </div>
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <label for="edit_sex">Sex :</label>
                                     <input type="text" id="edit_sex" name="sex" class="form-control" required>
