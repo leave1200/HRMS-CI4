@@ -35,15 +35,15 @@
                         <h4 class="text-blue h4">Attendance</h4>
                     </div>
                 </div>
-                <form id="signInForm1" action="<?= route_to('attendance_save') ?>" method="post">
+                <form id="signInForm" action="<?= route_to('attendance_save') ?>" method="post">
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Employee</label>
-                                <input type="text" id="employeeInput1" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
-                                <ul id="employeeList1" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="employee" id="selectedEmployeeId1" required>
+                                <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
+                                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="employee" id="selectedEmployeeId" required>
                             </div>
                             <div class="form-group">
                                 <label>Office</label>
