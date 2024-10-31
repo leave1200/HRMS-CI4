@@ -193,7 +193,7 @@
 $(document).ready(function() {
     var cropper;
     var $image = $('#image');
-    var $preview = $('#preview');
+    var $preview = $('.preview');
 
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
@@ -232,7 +232,7 @@ $(document).ready(function() {
         }
     });
 
-    // Handle form submission
+    // Handle form submission for profile picture
     $('#editProfilePictureForm').on('submit', function(e) {
         e.preventDefault();
 
@@ -286,53 +286,53 @@ $(document).ready(function() {
             }, 'image/png');
         }
     });
-});
-</script>
+    <!-- Cropper CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
+<!-- Cropper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    // Handle change password form submission
+    $('#change_password_form').on('submit', function(e) {
+        e.preventDefault();
+        
+        // CSRF hash
+        var csrfName = $('.ci_csrf_data').attr('name');
+        var csrfHash = $('.ci_csrf_data').val();
+        var form = this;
+        var formdata = new FormData(form);
+        formdata.append(csrfName, csrfHash);
 
-
-
-<script>
-    /$('#change_password_form').on('submit', function(e){
-    e.preventDefault();
-    // CSRF hash
-    var csrfName = $('.ci_csrf_data').attr('name');
-    var csrfHash = $('.ci_csrf_data').val();
-    var form = this;
-    var formdata = new FormData(form);
-    formdata.append(csrfName, csrfHash);
-
-    $.ajax({
-        url: $(form).attr('action'),
-        method: $(form).attr('method'),
-        data: formdata,
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function(){
-            toastr.remove();
-            $(form).find('span.error-text').text('');
-        },
-        success: function(response){
-            if (response.trim() === 'success') {
-                $(form)[0].reset();
-                toastr.success('Password has been changed successfully.');
-            } else {
-                // If the response contains an error message, display it
-                toastr.error(response);
+        $.ajax({
+            url: $(form).attr('action'),
+            method: $(form).attr('method'),
+            data: formdata,
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                toastr.remove();
+                $(form).find('span.error-text').text(''); // Clear previous errors
+            },
+            success: function(response) {
+                if (response.trim() === 'success') {
+                    $(form)[0].reset();
+                    toastr.success('Password has been changed successfully.');
+                } else {
+                    // If the response contains an error message, display it
+                    toastr.error(response);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred. Please try again.');
+                console.error('Error:', error);
             }
-        },
-        error: function(xhr, status, error){
-            toastr.error('An error occurred. Please try again.');
-            console.error('Error:', error);
-        }
+        });
     });
 });
 </script>
-<?= $this->endSection() ?>
 
-<?= $this->section('scripts') ?>
 
 <?= $this->endSection() ?> 
 
