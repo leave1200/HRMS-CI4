@@ -173,24 +173,30 @@ class AdminController extends BaseController
         $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
         // Attempt to move the uploaded file
-        if ($file && $file->isValid() && $file->move($path, $new_filename)) {
-            // Delete the old picture if it exists
-            if ($old_picture != null && file_exists($path . $old_picture)) {
-                unlink($path . $old_picture);
+        if ($file && $file->isValid()) {
+            if ($file->move($path, $new_filename)) {
+                // Delete the old picture if it exists
+                if ($old_picture != null && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture);
+                }
+    
+                // Update the user's profile picture in the database
+                $user->where('id', $user_info->id)
+                    ->set(['picture' => $new_filename])
+                    ->update();
+    
+                // Return a success response
+                echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_picture_name' => $new_filename]);
+            } else {
+                // Return an error response if the file move failed
+                echo json_encode(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
-    
-            // Update the user's profile picture in the database
-            $user->where('id', $user_info->id)
-                ->set(['picture' => $new_filename])
-                ->update();
-    
-            // Return a success response
-            echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_picture_name' => $new_filename]);
         } else {
-            // Return an error response if something went wrong
-            echo json_encode(['status' => 0, 'msg' => 'Something went wrong.']);
+            // Return an error response if the file is not valid
+            echo json_encode(['status' => 0, 'msg' => 'Invalid file or no file uploaded.']);
         }
     }
+    
     
 
     
