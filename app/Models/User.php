@@ -65,5 +65,11 @@ class User extends Model
     {
         return password_verify($password, $hashedPassword);
     }
+
+    public function updatePictureDirect($userId, $newFilename)
+    {
+        // Update the user's picture field in the database
+        return $this->update($userId, ['picture' => $newFilename]);
+    }
     
 }
