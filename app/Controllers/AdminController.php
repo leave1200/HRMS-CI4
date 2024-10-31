@@ -79,7 +79,8 @@ class AdminController extends BaseController
     }
     public function profile()
     {
-        $userId = session()->get('user_id'); // Assuming you store the user's ID in session
+        $userModel = new User();
+        $userId = session()->get('id'); // Assuming you store the user's ID in session
         $user = $this->userModel->find($userId); // Replace with your actual model method to fetch user data
     
         return view('backend/profile', [
