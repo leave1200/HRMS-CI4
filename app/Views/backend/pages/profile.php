@@ -77,22 +77,22 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="name">Name</label>
+                                                        <label for="">Name</label>
                                                         <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
                                                         <span class="text-danger error-text name_error" id="name"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="username">Username</label>
+                                                        <label for="">Username</label>
                                                         <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
                                                         <span class="text-danger error-text username_error" id="username"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="bio">Bio</label>
-                                                <textarea name="bio" id="bio" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
+                                                <label for="">Bio</label>
+                                                <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
                                                 <span class="text-danger error-text bio_error"></span>
                                             </div>
                                             <div class="form-group">
@@ -124,21 +124,21 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="current_password">Current Password</label>
+                                                        <label for="">Current Password</label>
                                                         <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
                                                         <span class="text-danger error-text current_password_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="new_password">New Password</label>
+                                                        <label for="">New Password</label>
                                                         <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
                                                         <span class="text-danger error-text new_password_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="confirm_new_password">Confirm New Password</label>
+                                                        <label for="">Confirm new Password</label>
                                                         <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                         <span class="text-danger error-text confirm_new_password_error"></span>
                                                     </div>
@@ -148,6 +148,7 @@
                                                 <button type="submit" class="btn btn-primary">Change password</button>
                                             </div>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -159,150 +160,174 @@
     </div>
 </div>
 
-
+<!-- Modal for editing profile picture -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="editProfilePictureForm" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfilePictureModalLabel">Update Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Hidden input to store user ID -->
+                <input type="hidden" id="update_user_id_picture" value="">
+                
+                <!-- Image upload input -->
+                <div>
+                    <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
+                    <input type="file" id="profile_picture" accept="image/*">
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" id="update_user_id_picture" name="id" value="<?= get_user()->id ?>">
-                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
-                    <div class="preview" style="width: 100%; overflow: hidden; display:none;">
-                        <img id="image" src="" alt="Preview" style="max-width: 100%;"/>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
+                <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="cropAndUpload" class="btn btn-primary">Crop and Upload</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Cropper CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
-<!-- Cropper JS -->
+<!-- Include Cropper.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    let cropper;
+    var cropper;
+    var $image = $('#image');
 
-    // Handle edit icon click to open modal and initialize cropper
+    // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
-        const userId = $(this).data('id');
-        $('#update_user_id_picture').val(userId);
-
-        // Set the current profile picture as the preview image in the modal
-        const currentImageSrc = $(this).find('.avatar-photo').attr('src');
-        $('#image').attr('src', currentImageSrc);
-        $('.preview').show();
-
-        // Initialize cropper on the image
-        if (cropper) {
-            cropper.destroy();
-        }
-        cropper = new Cropper(document.getElementById('image'), {
-            aspectRatio: 1,
-            viewMode: 1,
-            autoCropArea: 1,
-            responsive: true,
-            background: false,
-            modal: true,
-        });
-
-        // Show the modal
+        var id = $(this).data('id');
+        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
         $('#editProfilePictureModal').modal('show');
     });
 
-    $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission
-
-        // Get cropped canvas data
-        const canvas = cropper.getCroppedCanvas({
-            width: 150,
-            height: 150,
-        });
-
-        // Convert canvas to blob
-        canvas.toBlob(function(blob) {
-            const formData = new FormData();
-            formData.append('id', $('#update_user_id_picture').val());
-            formData.append('profile_picture', blob, 'profile.jpg'); // Change the file name if needed
-
-            $.ajax({
-                url: '<?= route_to('update-profile-picture') ?>',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    var res = JSON.parse(response);
-                    if (res.status === 1) {
-                        alert(res.msg);
-                        // Update the profile picture on the main page if needed
-                        $('.avatar-photo').attr('src', '<?= empty(get_user()->picture) ? "/images/users/userav-min.png" : "/images/users/" . get_user()->picture ?>' + res.new_picture_name);
-                    } else {
-                        alert(res.msg);
-                    }
-                },
-                error: function() {
-                    alert('An error occurred while updating the profile picture.');
-                }
+    // Handle file input change
+    $('#profile_picture').on('change', function(event) {
+        var files = event.target.files;
+        var done = function(url) {
+            $image.attr('src', url).show();
+            cropper = new Cropper($image[0], {
+                aspectRatio: 1,
+                viewMode: 1,
+                preview: '.preview'
             });
-        });
+        };
+
+        if (files && files.length > 0) {
+            var file = files[0];
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+    // Handle cropping and upload
+    $('#cropAndUpload').on('click', function() {
+        if (cropper) {
+            var canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500,
+            });
+
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
+
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('update-profile-picture') ?>',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.status == 1) {
+                            // Update the profile picture displayed on the page
+                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.msg,
+                            }).then(() => {
+                                // Reload page or update table
+                            });
+                            $('#editProfilePictureModal').modal('hide');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.msg,
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                        });
+                    }
+                });
+            }, 'image/png');
+        }
+    });
+});
+
+
+</script>
+
+
+<script>
+    /$('#change_password_form').on('submit', function(e){
+    e.preventDefault();
+    // CSRF hash
+    var csrfName = $('.ci_csrf_data').attr('name');
+    var csrfHash = $('.ci_csrf_data').val();
+    var form = this;
+    var formdata = new FormData(form);
+    formdata.append(csrfName, csrfHash);
+
+    $.ajax({
+        url: $(form).attr('action'),
+        method: $(form).attr('method'),
+        data: formdata,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function(){
+            toastr.remove();
+            $(form).find('span.error-text').text('');
+        },
+        success: function(response){
+            if (response.trim() === 'success') {
+                $(form)[0].reset();
+                toastr.success('Password has been changed successfully.');
+            } else {
+                // If the response contains an error message, display it
+                toastr.error(response);
+            }
+        },
+        error: function(xhr, status, error){
+            toastr.error('An error occurred. Please try again.');
+            console.error('Error:', error);
+        }
     });
 });
 </script>
-<script>
+<?= $this->endSection() ?>
 
-    // Handle change password form submission
-    $('#change_password_form').on('submit', function(e) {
-        e.preventDefault();
-        
-        // CSRF hash
-        var csrfName = $('.ci_csrf_data').attr('name');
-        var csrfHash = $('.ci_csrf_data').val();
-        var form = this;
-        var formdata = new FormData(form);
-        formdata.append(csrfName, csrfHash);
-
-        $.ajax({
-            url: $(form).attr('action'),
-            method: $(form).attr('method'),
-            data: formdata,
-            processData: false,
-            contentType: false,
-            cache: false,
-            beforeSend: function() {
-                toastr.remove();
-                $(form).find('span.error-text').text(''); // Clear previous errors
-            },
-            success: function(response) {
-                if (response.trim() === 'success') {
-                    $(form)[0].reset();
-                    toastr.success('Password has been changed successfully.');
-                } else {
-                    // If the response contains an error message, display it
-                    toastr.error(response);
-                }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('An error occurred. Please try again.');
-                console.error('Error:', error);
-            }
-        });
-    });
-</script>
-
+<?= $this->section('scripts') ?>
 
 <?= $this->endSection() ?> 
 
