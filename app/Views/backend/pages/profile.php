@@ -1,3 +1,4 @@
+
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
 
@@ -12,25 +13,23 @@
                     <nav aria-label="breadcrumb" role="navigation">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="<?= route_to('admin.home'); ?>">Home</a>
+                                <a href="<?= route_to('admin.home');?>">Home</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Profile
+                            </li>
                         </ol>
                     </nav>
                 </div>
             </div>
         </div>
-        
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                     <!-- Trigger Button -->
                     <div class="profile-photo">
                         <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                            <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" 
-                                 alt="Profile Photo" 
-                                 class="avatar-photo ci-avatar-photo" 
-                                 style="width: 150px; height: 150px; border-radius: 30%;">
+                            <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
                             <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -38,7 +37,6 @@
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
             </div>
-
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
                     <div class="profile-tab height-100-p">
@@ -52,10 +50,27 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <!-- Personal Details Tab -->
                                 <div class="tab-pane fade active show" id="personal_details" role="tabpanel">
                                     <div class="pd-20">
-                                        <?= view('components/alerts') ?> <!-- Include alert component for error/success messages -->
+                                        <?php if (session()->has('errors')): ?>
+                                            <div class="alert alert-danger">
+                                                <?php foreach (session('errors') as $error): ?>
+                                                    <p><?= $error ?></p>
+                                                <?php endforeach ?>
+                                            </div>
+                                        <?php endif ?>
+
+                                        <?php if (session()->has('success')): ?>
+                                            <div class="alert alert-success">
+                                                <?= session('success') ?>
+                                            </div>
+                                        <?php endif ?>
+
+                                        <?php if (session()->has('error')): ?>
+                                            <div class="alert alert-danger">
+                                                <?= session('error') ?>
+                                            </div>
+                                        <?php endif ?>
 
                                         <form action="<?= route_to('update-personal-details'); ?>" method="POST" id="personal_details_form">
                                             <?= csrf_field(); ?>
@@ -81,16 +96,28 @@
                                                 <span class="text-danger error-text bio_error"></span>
                                             </div>
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    Save changes
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-
-                                <!-- Change Password Tab -->
                                 <div class="tab-pane fade" id="change_password" role="tabpanel">
                                     <div class="pd-20 profile-task-wrap">
-                                        <?= view('components/alerts') ?> <!-- Include alert component for error/success messages -->
+                                        <?php if (session()->has('errors')): ?>
+                                            <div class="alert alert-danger">
+                                                <?php foreach (session('errors') as $error): ?>
+                                                    <p><?= $error ?></p>
+                                                <?php endforeach ?>
+                                            </div>
+                                        <?php endif ?>
+
+                                        <?php if (session()->has('success')): ?>
+                                            <div class="alert alert-success">
+                                                <?= session('success') ?>
+                                            </div>
+                                        <?php endif ?>
 
                                         <form action="<?= route_to('change-password') ?>" method="POST" id="change_password_form">
                                             <?= csrf_field(); ?>
@@ -132,7 +159,7 @@
     </div>
 </div>
 
-<!-- Modal for Profile Picture Edit -->
+
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -192,39 +219,91 @@ $(document).ready(function() {
             modal: true,
         });
 
-        // Show modal
+        // Show the modal
         $('#editProfilePictureModal').modal('show');
     });
 
-    // Handle the form submission for profile picture update
     $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default form submission
 
-        const canvas = cropper.getCroppedCanvas();
+        // Get cropped canvas data
+        const canvas = cropper.getCroppedCanvas({
+            width: 150,
+            height: 150,
+        });
+
+        // Convert canvas to blob
         canvas.toBlob(function(blob) {
             const formData = new FormData();
-            formData.append('profile_picture', blob);
             formData.append('id', $('#update_user_id_picture').val());
+            formData.append('profile_picture', blob, 'profile.jpg'); // Change the file name if needed
 
             $.ajax({
                 url: '<?= route_to('update-profile-picture') ?>',
                 type: 'POST',
                 data: formData,
-                processData: false,
                 contentType: false,
+                processData: false,
                 success: function(response) {
-                    // Handle success response
-                    $('#editProfilePictureModal').modal('hide');
-                    location.reload(); // Reload the page to see changes
+                    var res = JSON.parse(response);
+                    if (res.success) {
+                        alert(res.message);
+                        // Update the profile picture on the main page
+                        $('.avatar-photo').attr('src', res.new_picture_url);
+                    } else {
+                        alert(res.message);
+                    }
                 },
-                error: function(xhr) {
-                    // Handle error response
-                    console.log(xhr.responseText);
+                error: function() {
+                    alert('An error occurred while updating the profile picture.');
                 }
             });
         });
     });
 });
+
+</script>
+<script>
+
+    // Handle change password form submission
+    $('#change_password_form').on('submit', function(e) {
+        e.preventDefault();
+        
+        // CSRF hash
+        var csrfName = $('.ci_csrf_data').attr('name');
+        var csrfHash = $('.ci_csrf_data').val();
+        var form = this;
+        var formdata = new FormData(form);
+        formdata.append(csrfName, csrfHash);
+
+        $.ajax({
+            url: $(form).attr('action'),
+            method: $(form).attr('method'),
+            data: formdata,
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                toastr.remove();
+                $(form).find('span.error-text').text(''); // Clear previous errors
+            },
+            success: function(response) {
+                if (response.trim() === 'success') {
+                    $(form)[0].reset();
+                    toastr.success('Password has been changed successfully.');
+                } else {
+                    // If the response contains an error message, display it
+                    toastr.error(response);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred. Please try again.');
+                console.error('Error:', error);
+            }
+        });
+    });
 </script>
 
-<?= $this->endSection() ?>
+
+<?= $this->endSection() ?> 
+
