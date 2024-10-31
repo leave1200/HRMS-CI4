@@ -246,12 +246,12 @@ $(document).ready(function() {
                 processData: false,
                 success: function(response) {
                     var res = JSON.parse(response);
-                    if (res.success) {
-                        alert(res.message);
-                        // Update the profile picture on the main page
-                        $('.avatar-photo').attr('src', res.new_picture_url);
+                    if (res.status === 1) {
+                        alert(res.msg);
+                        // Update the profile picture on the main page if needed
+                        $('.avatar-photo').attr('src', '<?= empty(get_user()->picture) ? "/images/users/userav-min.png" : "/images/users/" . get_user()->picture ?>' + res.new_picture_name);
                     } else {
-                        alert(res.message);
+                        alert(res.msg);
                     }
                 },
                 error: function() {
@@ -261,7 +261,6 @@ $(document).ready(function() {
         });
     });
 });
-
 </script>
 <script>
 
