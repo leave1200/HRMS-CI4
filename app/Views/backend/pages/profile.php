@@ -232,36 +232,45 @@
 </script>
 <script>
 $(document).ready(function() {
+    $(document).ready(function() {
     var cropper;
+    var $image = $('#image');
+    var $preview = $('#preview');
 
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
-        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
+        $('#update_usera_id_picture').val(id);
         $('#editProfilePictureModal').modal('show');
     });
 
-    // Handle the file input change event to load and crop the image
-    $('#profile_picture_input').on('change', function(event) {
+    // Handle file input change
+    $('#profile_picture').on('change', function(event) {
         var files = event.target.files;
         var done = function(url) {
-            $('#profile_picture').attr('src', url);
+            $image.attr('src', url).show();
+            $preview.show();
+            cropper = new Cropper($image[0], {
+                aspectRatio: 1,
+                viewMode: 1,
+                preview: '.preview'
+            });
         };
+        var reader;
+        var file;
 
         if (files && files.length > 0) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                done(reader.result);
-            };
-            reader.readAsDataURL(files[0]);
+            file = files[0];
 
-            // Once the image is loaded, initialize the cropper
-            $('#profile_picture').on('load', function() {
-                cropper = new Cropper(this, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                });
-            });
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                reader = new FileReader();
+                reader.onload = function() {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     });
 
