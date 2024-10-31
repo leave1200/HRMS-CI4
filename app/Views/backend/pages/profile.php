@@ -197,7 +197,7 @@
 
 
     $('#user_profile_file').ijaboCropTool({
-          preview : '.image-previewer',
+          preview : '.ci-avatar-photo',
           setRatio:1,
           allowedExtensions: ['jpg', 'jpeg','png'],
           processUrl:'',
