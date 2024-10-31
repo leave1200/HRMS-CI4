@@ -161,34 +161,40 @@ class AdminController extends BaseController
     
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
-        $validation = \Config\Services::validation();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
-        
+        $userModel = new \App\Models\User(); // Initialize your User model
+    
         // Check if the file is uploaded
-        if (!$request->getFile('profile_picture')->isValid()) {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'No valid picture uploaded.']);
+        if ($imagefile = $request->getFile('profile_picture')) {
+            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+                $newName = $imagefile->getRandomName(); // Generate a random name for the uploaded file
+                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName); // Move the file to the specified directory
+    
+                // Prepare data for updating the database
+                $data = ['picture' => $newName];
+    
+                // Update user profile picture in the database
+                if ($userModel->update($user_id, $data)) {
+                    return $this->response->setJSON([
+                        'status' => 1,
+                        'msg' => 'Profile picture updated successfully!',
+                        'new_picture_url' => base_url('backend/images/users/' . $newName) // Return the new picture URL
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'status' => 0,
+                        'msg' => 'Failed to update profile picture'
+                    ]);
+                }
+            }
         }
     
-        // Get the uploaded file
-        $file = $request->getFile('profile_picture');
-    
-        // Generate a new picture name
-        $newPictureName = $user_id . '_' . time() . '.' . $file->getExtension();
-        $file->move(WRITEPATH . 'uploads/users/', $newPictureName); // Move the file to the uploads directory
-    
-        // Update user profile picture in the database
-        $userModel = new \App\Models\User();
-        $updateStatus = $userModel->update($user_id, ['picture' => $newPictureName]);
-    
-        // Check if update was successful
-        if ($updateStatus) {
-            return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newPictureName]);
-        } else {
-            // Log the error for debugging
-            log_message('error', 'Failed to update profile picture for user ID: ' . $user_id);
-            return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update profile picture.']);
-        }
+        return $this->response->setJSON([
+            'status' => 0,
+            'msg' => 'Invalid image file'
+        ]);
     }
+    
     
     
     
