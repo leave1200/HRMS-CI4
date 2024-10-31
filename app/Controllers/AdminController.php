@@ -153,49 +153,39 @@ class AdminController extends BaseController
     //     return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
     // }
     
-    
-    
-    
-    
-    public function updatePersonalPictures() {
-        $userId = $this->request->getPost('id');
-        $file = $this->request->getFile('profile_picture');
+    public function updatePersonalPictures()
+    {
+        $request = Services::request();
+        $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
+
+        // Get the uploaded file
+        $file = $request->getFile('profile_picture');
 
         // Validate the uploaded file
         if ($file && $file->isValid() && !$file->hasMoved()) {
+            // Check the file type (optional)
+            if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+                return redirect()->back()->with('error', 'Only JPEG, PNG, and GIF files are allowed.');
+            }
+
             // Generate a new filename
-            $newFileName = $userId . '_' . $file->getName();
+            $newFileName = $user_id . '_' . $file->getName();
             $filePath = WRITEPATH . 'uploads/users/' . $newFileName;
 
             // Move the file to the desired location
             if ($file->move(WRITEPATH . 'uploads/users', $newFileName)) {
-                // Update the user's profile picture in the database
-                $userModel = new UserModel();
-                $userModel->update($userId, ['picture' => $newFileName]);
+                $userModel = new User();
+                // Update user profile picture in the database
+                $userModel->update($user_id, ['picture' => $newFileName]);
 
-                return $this->response->setJSON([
-                    'status' => 1,
-                    'msg' => 'Profile picture updated successfully!',
-                    'new_picture_name' => $newFileName,
-                ]);
+                return redirect()->back()->with('success', 'Profile picture updated successfully!');
             } else {
-                return $this->response->setJSON([
-                    'status' => 0,
-                    'msg' => 'Failed to move the uploaded file.',
-                ]);
+                return redirect()->back()->with('error', 'Failed to move the uploaded file.');
             }
         } else {
-            return $this->response->setJSON([
-                'status' => 0,
-                'msg' => 'Invalid file uploaded.',
-            ]);
+            return redirect()->back()->with('error', 'Invalid file uploaded.');
         }
     }
-    
-    
-    
-    
-
     
     
 
