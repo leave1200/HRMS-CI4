@@ -29,7 +29,7 @@
                <!-- Trigger Button -->
                <div class="profile-photo">
                     <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
                         <i class="fa fa-pencil edit-icon" aria-hidden="true"></i> 
                     </a>
                 </div>
