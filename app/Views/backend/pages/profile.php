@@ -26,13 +26,13 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-               <!-- Trigger Button -->
-               <div class="profile-photo">
-                    <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
-                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i> 
-                    </a>
-                </div>
+                    <!-- Trigger Button -->
+                    <div class="profile-photo">
+                        <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
+                            <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
+                            <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
+                        </a>
+                    </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -105,49 +105,49 @@
                                 </div>
                                 <div class="tab-pane fade" id="change_password" role="tabpanel">
                                     <div class="pd-20 profile-task-wrap">
-                                    <?php if (session()->has('errors')): ?>
-                                        <div class="alert alert-danger">
-                                            <?php foreach (session('errors') as $error): ?>
-                                                <p><?= $error ?></p>
-                                            <?php endforeach ?>
-                                        </div>
-                                    <?php endif ?>
+                                        <?php if (session()->has('errors')): ?>
+                                            <div class="alert alert-danger">
+                                                <?php foreach (session('errors') as $error): ?>
+                                                    <p><?= $error ?></p>
+                                                <?php endforeach ?>
+                                            </div>
+                                        <?php endif ?>
 
-                                    <?php if (session()->has('success')): ?>
-                                        <div class="alert alert-success">
-                                            <?= session('success') ?>
-                                        </div>
-                                    <?php endif ?>
+                                        <?php if (session()->has('success')): ?>
+                                            <div class="alert alert-success">
+                                                <?= session('success') ?>
+                                            </div>
+                                        <?php endif ?>
 
-                                    <form action="<?= route_to('change-password') ?>" method="POST" id="change_password_form">
-                                        <?= csrf_field(); ?>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="">Current Password</label>
-                                                    <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
-                                                    <span class="text-danger error-text current_password_error"></span>
+                                        <form action="<?= route_to('change-password') ?>" method="POST" id="change_password_form">
+                                            <?= csrf_field(); ?>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Current Password</label>
+                                                        <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
+                                                        <span class="text-danger error-text current_password_error"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">New Password</label>
+                                                        <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
+                                                        <span class="text-danger error-text new_password_error"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Confirm new Password</label>
+                                                        <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
+                                                        <span class="text-danger error-text confirm_new_password_error"></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="">New Password</label>
-                                                    <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
-                                                    <span class="text-danger error-text new_password_error"></span>
-                                                </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">Change password</button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="">Confirm new Password</label>
-                                                    <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
-                                                    <span class="text-danger error-text confirm_new_password_error"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Change password</button>
-                                        </div>
-                                    </form>
+                                        </form>
 
                                     </div>
                                 </div>
@@ -157,6 +157,9 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
 <!-- Modal for editing profile picture -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
