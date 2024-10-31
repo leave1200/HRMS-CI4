@@ -226,45 +226,56 @@ $(document).ready(function() {
         }
     });
 
-    // Handle the upload button click
-        $(document).ready(function() {
-        var cropper;
+    $('#uploadProfilePicture').on('click', function() {
+        var formData = new FormData();
+        var userId = $('#update_user_id_picture').val();
+        var fileInput = $('#profile_picture')[0];
 
-        // Handle edit button clicks for profile picture
-        $('.edit-profile-picture-btn').on('click', function() {
-            var id = $(this).data('id');
-            $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
-            $('#editProfilePictureModal').modal('show'); // Show the modal
-        });
+        if (fileInput.files.length > 0) {
+            formData.append('profile_picture', fileInput.files[0]);
+            formData.append('id', userId); // Add user ID to the form data
 
-        // Handle the file input change event to load and crop the image
-        $('#profile_picture_input').on('change', function(event) {
-            var files = event.target.files;
-            var done = function(url) {
-                $('#profile_picture').attr('src', url).show(); // Show image once loaded
-            };
-
-            if (files && files.length > 0) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(files[0]);
-
-                // Once the image is loaded, initialize the cropper
-                $('#profile_picture').on('load', function() {
-                    cropper = new Cropper(this, {
-                        aspectRatio: 1,
-                        viewMode: 1,
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('update-profile-picture') ?>',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('Response:', response); // Log the response
+                    if (response.status == 1) {
+                        // Update the profile picture displayed on the page
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name + '?t=' + new Date().getTime()); // Append timestamp to avoid caching
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.msg,
+                        }).then(() => {
+                            $('#editProfilePictureModal').modal('hide');
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.msg,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
                     });
-                });
-            }
-        });
-
-        // Handle the upload button click
-        $('#uploadProfilePicture').on('click', function() {
-            // Your upload logic
-        });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please select a file to upload.',
+            });
+        }
     });
 });
 
