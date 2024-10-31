@@ -761,6 +761,13 @@ public function attendance()
     // Fetch attendance records including pm_sign_out
     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
+    $currentUserName = session()->get('name'); // Assuming this is the user's name
+    $userId = session()->get('userStatus'); // Assuming this is the user ID
+    $userModel = new User(); // Adjust this to your actual user model
+    $currentUser = $userModel->find($userId);
+    $currentUserName = $currentUser ? $currentUser['name'] : null; // Get the name or set to null if not found
+
+
 
     // Debugging: Log the fetched attendances
     log_message('debug', 'Fetched attendances: ' . print_r($attendances, true));
