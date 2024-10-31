@@ -28,13 +28,10 @@
                 <div class="pd-20 card-box height-100-p">
                     <!-- Trigger Button -->
                     <div class="profile-photo">
-                    <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                        <img src="<?= get_user()->picture ? base_url('images/users/' . htmlspecialchars(get_user()->picture)) : base_url('images/users/userav-min.png') ?>" 
-                            alt="Profile Photo" 
-                            class="avatar-photo ci-avatar-photo" 
-                            style="width: 150px; height: 150px; border-radius: 30%;">
+                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
+                            <img src="<?= $user['picture'] ? base_url('backend/images/users/' . htmlspecialchars($user['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
                             <i class="icon-copy dw dw-edit-1"></i>
-                    </a>
+                        </a>
                 </div>
 
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
