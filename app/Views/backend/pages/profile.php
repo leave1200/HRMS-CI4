@@ -199,7 +199,7 @@ $(document).ready(function() {
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
-        $('#update_employee_id_picture').val(id); // This line is for storing the user ID
+        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
         $('#editProfilePictureModal').modal('show');
     });
 
@@ -229,42 +229,57 @@ $(document).ready(function() {
         }
     });
 
-// Handle edit button clicks for profile picture
-        $('.edit-profile-picture-btn').on('click', function() {
-            var id = $(this).data('id');
-            $('#update_user_id_picture').val(id); // Store the user ID in a more appropriate input
-            $('#editProfilePictureModal').modal('show');
-        });
+    // Handle cropping and upload
+    $('#cropAndUpload').on('click', function() {
+        if (cropper) {
+            var canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500,
+            });
 
-        // Handle cropping and upload
-        $('#cropAndUpload').on('click', function() {
-            if (cropper) {
-                var canvas = cropper.getCroppedCanvas({
-                    width: 500,
-                    height: 500,
-                });
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
 
-                canvas.toBlob(function(blob) {
-                    var formData = new FormData();
-                    formData.append('profile_picture', blob);
-                    formData.append('id', $('#update_user_id_picture').val()); // Updated to use the new ID
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?= route_to('update-profile-picture') ?>',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // Handle response...
-                        },
-                        error: function(xhr) {
-                            // Handle error...
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('update-profile-picture') ?>',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Handle response...
+                        if (response.status == 1) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.msg,
+                            }).then(() => {
+                                location.reload(); // Reload page or update table
+                            });
+                            $('#editProfilePictureModal').modal('hide');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.msg,
+                            });
                         }
-                    });
-                }, 'image/png');
-            }
-        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                        });
+                    }
+                });
+            }, 'image/png');
+        }
+    });
+});
+
 
 </script>
 
