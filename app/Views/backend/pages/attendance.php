@@ -61,7 +61,8 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
+                            <!-- <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button> -->
+                            <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
@@ -443,4 +444,32 @@ function signInPmEmployee(attendanceId) {
 }
 
 </script>
+<script>
+        function checkButtonVisibility() {
+            // Set the timezone to Asia/Manila
+            const options = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit' };
+            const now = new Date().toLocaleString('en-US', options);
+
+            const [hours, minutes] = now.split(':').map(Number);
+
+            // Convert to 24-hour format
+            const currentTime = hours * 60 + minutes;
+
+            // Define time ranges in minutes from 00:00
+            const range1Start = 7 * 60 + 30; // 07:30 AM
+            const range1End = 8 * 60 + 30;   // 08:30 AM
+            const range2Start = 12 * 60 + 30; // 12:30 PM
+            const range2End = 13 * 60 + 30;   // 01:30 PM
+
+            // Check if current time is within the defined ranges
+            const isVisible = (currentTime >= range1Start && currentTime <= range1End) ||
+                              (currentTime >= range2Start && currentTime <= range2End);
+
+            // Set button visibility
+            document.getElementById('signInButton').style.display = isVisible ? 'block' : 'none';
+        }
+
+        // Run the function on page load
+        window.onload = checkButtonVisibility;
+    </script>
 <?= $this->endSection() ?>
