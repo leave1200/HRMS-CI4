@@ -170,10 +170,10 @@ class AdminController extends BaseController
     
             // Generate a new filename
             $newFileName = $user_id . '_' . $file->getName();
-            $filePath = WRITEPATH . 'uploads/users/' . $newFileName;
+            $filePath = WRITEPATH . 'images/users/' . $newFileName;
     
             // Move the file to the desired location
-            if ($file->move(WRITEPATH . 'uploads/users', $newFileName)) {
+            if ($file->move(WRITEPATH . 'images/users', $newFileName)) {
                 // Assuming your model successfully updates the user's profile picture
                 $userModel->update($user_id, ['picture' => $newFileName]);
                 
