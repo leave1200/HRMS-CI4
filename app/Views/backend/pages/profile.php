@@ -161,7 +161,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
  <script>
     let cropper;
 
