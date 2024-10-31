@@ -28,15 +28,15 @@
                 <div class="pd-20 card-box height-100-p">
                     <!-- Trigger Button -->
                     <div class="profile-photo">
-                    <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                    <img src="<?= !empty($user['picture']) ? base_url('/images/users/' . htmlspecialchars($user['picture'])) : base_url('/images/users/userav-min.png') ?>" 
-                        alt="Profile Photo" 
-                        class="avatar-photo ci-avatar-photo" 
-                        style="width: 150px; height: 150px; border-radius: 30%;">
-                    <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
-                </a>
+                    <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
+                        <img src="<?= get_user()->picture ? base_url('images/users/' . htmlspecialchars(get_user()->picture)) : base_url('images/users/userav-min.png') ?>" 
+                            alt="Profile Photo" 
+                            class="avatar-photo ci-avatar-photo" 
+                            style="width: 150px; height: 150px; border-radius: 30%;">
+                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
+                    </a>
+                </div>
 
-                    </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -226,52 +226,53 @@ $(document).ready(function() {
         }
     });
 
-   // Handle the upload button click
-$('#uploadProfilePicture').on('click', function() {
-    var formData = new FormData();
-    var userId = $('#update_user_id_picture').val();
-    var newPictureName = /* your logic to get the new picture name */;
+    // Handle the upload button click
+    $('#uploadProfilePicture').on('click', function() {
+        var formData = new FormData();
+        var userId = $('#update_user_id_picture').val();
+        
+        // Get cropped canvas
+        var canvas = cropper.getCroppedCanvas();
+        canvas.toBlob(function(blob) {
+            formData.append('profile_picture', blob);
+            formData.append('id', userId); // Add user ID to the form data
 
-    // Assuming you have the new picture name, append it to form data
-    formData.append('new_picture_name', newPictureName);
-    formData.append('id', userId); // Add user ID to the form data
-
-    $.ajax({
-        type: 'POST',
-        url: '<?= route_to('admin.update-profile-picture') ?>',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.status == 1) {
-                // Update the profile picture displayed on the page
-                $('.avatar-photo').attr('src', '/images/users/' + newPictureName);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: response.msg,
-                }).then(() => {
-                    $('#editProfilePictureModal').modal('hide');
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.msg,
-                });
-            }
-        },
-        error: function(xhr) {
-            console.error('Error details:', xhr.responseJSON);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('admin.update-profile-picture') ?>',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 1) {
+                        // Update the profile picture displayed on the page
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.msg,
+                        }).then(() => {
+                            $('#editProfilePictureModal').modal('hide');
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.msg,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error details:', xhr.responseJSON);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                    });
+                }
             });
-        }
+        });
     });
-});
-
 });
 
 </script>
