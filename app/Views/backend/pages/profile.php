@@ -195,30 +195,22 @@
 <script>
 $(document).ready(function() {
     let cropper;
-    
-    // Show modal and initialize cropper when a profile picture is chosen
-    $('#profile_picture').change(function(event) {
-        const files = event.target.files;
-        const done = (url) => {
-            $('#image').attr('src', url);
-        };
-        
-        if (files && files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                done(e.target.result);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-        
+
+    // Handle edit icon click to open modal and initialize cropper
+    $('.edit-profile-picture-btn').on('click', function() {
+        const userId = $(this).data('id');
+        $('#update_user_id_picture').val(userId);
+
+        // Set the current profile picture as the preview image in the modal
+        const currentImageSrc = $(this).find('.avatar-photo').attr('src');
+        $('#image').attr('src', currentImageSrc);
         $('.preview').show();
-        
+
+        // Initialize cropper on the image
         if (cropper) {
             cropper.destroy();
         }
-        
-        const image = document.getElementById('image');
-        cropper = new Cropper(image, {
+        cropper = new Cropper(document.getElementById('image'), {
             aspectRatio: 1,
             viewMode: 1,
             autoCropArea: 1,
@@ -226,6 +218,9 @@ $(document).ready(function() {
             background: false,
             modal: true,
         });
+
+        // Show the modal
+        $('#editProfilePictureModal').modal('show');
     });
 
     $('#editProfilePictureForm').on('submit', function(e) {
