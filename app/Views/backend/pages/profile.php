@@ -197,101 +197,33 @@
 
 <script>
 $(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-    var $preview = $('.preview');
-
-    // Handle edit button clicks for profile picture
-    $('.edit-profile-picture-btn').on('click', function() {
-        var id = $(this).data('id');
-        $('#update_user_id_picture').val(id);
-        $('#editProfilePictureModal').modal('show');
-    });
-
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            $preview.show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-        var reader;
-        var file;
-
-        if (files && files.length > 0) {
-            file = files[0];
-
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    // Handle form submission for profile picture
     $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default form submission
 
-        var canvas;
-        var croppedImage;
+        var formData = new FormData(this); // Create a FormData object
 
-        if (cropper) {
-            canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_user_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL matches your route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                $('#editProfilePictureModal').modal('hide');
-                                location.reload(); // Reload page or update table
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
+        $.ajax({
+            url: '<?= route_to('update-profile-picture') ?>', // Update with your server-side script URL
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                var res = JSON.parse(response);
+                if (res.status === 1) {
+                    alert(res.msg);
+                    // Update the profile picture preview if needed
+                    $('#image').attr('src', 'images/users/' + res.new_picture_name).show();
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error: function() {
+                alert('An error occurred while updating the profile picture.');
+            }
+        });
     });
+});
 
     // Handle change password form submission
     $('#change_password_form').on('submit', function(e) {
