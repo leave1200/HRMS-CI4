@@ -26,11 +26,11 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                    <div class="profile-photo">
-                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
-                    </div>
+                <div class="profile-photo">
+                    <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                    <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
+                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" id="profileImage" alt="" class="avatar-photo ci-avatar-photo">
+                </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -158,45 +158,66 @@
 
 
 
-<link rel="stylesheet" href="./extra-assets/ijaboCropTool/ijaboCropTool.min.css">
-<script src="./extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
- <script>
-    $(document).ready(function() {
-        $('#personal_details_from').on('submit', function(e) {
-            var form = this;
+        <script>
+    let cropper;
+    const profileImage = document.getElementById('profileImage');
+    const userFileInput = document.getElementById('user_profile_file');
 
-            // Perform validation if needed
-            var valid = true;
-
-            if (valid) {
-                // If validation passes, allow form to submit naturally
-                form.submit();
-            } else {
-                // Prevent form submission if validation fails
-                e.preventDefault();
-            }
-        });
+    userFileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profileImage.src = e.target.result;
+                if (cropper) {
+                    cropper.destroy(); // Destroy previous cropper instance
+                }
+                cropper = new Cropper(profileImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    preview: '.ci-avatar-photo',
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
+    function uploadCroppedImage() {
+        cropper.getCroppedCanvas().toBlob((blob) => {
+            const formData = new FormData();
+            formData.append('user_profile_file', blob);
+            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); // CSRF token
 
-    $('#user_profile_file').ijaboCropTool({
-    preview: '.ci-avatar-photo',
-    setRatio: 1,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-    processUrl: '<?= route_to('update-profile-picture') ?>',
-    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    onSuccess:function(responseText, element, status) {
-        if( status == 1 ) {
-            toastr.success('message');
-        } else {
-            toastr.error('message');
-        }
-    },
-    onError: function(message, element, status) {
-        alert(message);
+            $.ajax({
+                url: '<?= route_to('update-profile-picture') ?>',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 1) {
+                        toastr.success('Profile picture updated successfully!');
+                        profileImage.src = URL.createObjectURL(blob); // Update preview
+                    } else {
+                        toastr.error(response.msg || 'An error occurred');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('An error occurred while uploading the image.');
+                }
+            });
+        });
     }
-});
+
+    // Call uploadCroppedImage when needed, for example:
+    document.querySelector('.edit-avatar').addEventListener('click', function() {
+        if (cropper) {
+            uploadCroppedImage();
+        }
+    });
 </script>
+
+
 <script>
     /$('#change_password_form').on('submit', function(e){
     e.preventDefault();
