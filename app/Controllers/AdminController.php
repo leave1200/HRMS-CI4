@@ -129,75 +129,73 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updateProfilePicture()
-    {
-        if ($this->request->getMethod() === 'post') {
-            $userId = $this->request->getPost('id');
-            $file = $this->request->getFile('profile_picture');
-    
-            // Validate the file
-            if ($file->isValid() && !$file->hasMoved()) {
-                // Generate a new filename or keep it the same
-                $newFilename = $file->getRandomName();
-    
-                // Move the file to the desired location
-                $file->move(WRITEPATH . 'uploads/users', $newFilename);
-    
-                // Update the user's picture in the database
-                $this->userModel->update($userId, ['picture' => $newFilename]);
-    
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
-            } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
-            }
-        }
-    
-        return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
-    }
-    
-    
-
-    //  public function updatePersonalPictures(){
+    // public function updatePersonalPictures() {
     //     $request = \Config\Services::request();
     //     $user_id = CIAuth::id();
     //     $user = new User();
-    //     $user_info = $user->asObject()->where('id',$user_id)->first();
-
-    //     $path ='images/users/';
-    //     $file = $request->getFile('user_profile_file');
+    //     $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+    //     $path = 'images/users/';
+    //     $file = $request->getFile('profile_picture');
     //     $old_picture = $user_info->picture;
-    //     $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
-
-    //     if( $file->move($path,$new_filename) ){
-    //         if( $old_picture != null && file_exists($path.$old_picture) ){
-    //             unlink($path.$old_picture);
+    //     $new_filename = 'UIMG_' . $user_id . $file->getRandomName();
+    
+    //     if ($file->move($path, $new_filename)) {
+    //         if ($old_picture != null && file_exists($path . $old_picture)) {
+    //             unlink($path . $old_picture);
     //         }
-    //         $user->where('id',$user_info->id)
-    //              ->set(['picture'=>$new_filename])
-    //              ->update();
-
-    //              echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
-    //     }else{
-    //         echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+    //         $user->where('id', $user_info->id)
+    //             ->set(['picture' => $new_filename])
+    //             ->update();
+    
+    //         echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
+    //     } else {
+    //         echo json_encode(['status' => 0, 'msg' => 'Something went wrong.']);
     //     }
-    //     // $upload_image = \Config\Services::image()
-    //     //                 ->withFile($file)
-    //     //                 ->resize(450,450,true,'height')
-    //     //                 ->save($path.$new_filename);
-        
-    //     // if( $upload_image ){
-    //     //     if( $old_picture != null && file_exists($path.$new_filename) ){
-    //     //         unlink($path.$old_picture);
-    //     //     }
-    //     //     $user->where('id',$user_info->id)
-    //     //                     ->set(['picture'->$new_filename])
-    //     //                     ->update();
+    // }
+    
 
-    //     //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
-    //     // }else{
-    //     //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
-    //     // }
-    // } 
+     public function updatePersonalPictures(){
+        $request = \Config\Services::request();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id',$user_id)->first();
+
+        $path ='images/users/';
+        $file = $request->getFile('user_profile_file');
+        $old_picture = $user_info->picture;
+        $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+        if( $file->move($path,$new_filename) ){
+            if( $old_picture != null && file_exists($path.$old_picture) ){
+                unlink($path.$old_picture);
+            }
+            $user->where('id',$user_info->id)
+                 ->set(['picture'=>$new_filename])
+                 ->update();
+
+                 echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+        }else{
+            echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+        }
+        // $upload_image = \Config\Services::image()
+        //                 ->withFile($file)
+        //                 ->resize(450,450,true,'height')
+        //                 ->save($path.$new_filename);
+        
+        // if( $upload_image ){
+        //     if( $old_picture != null && file_exists($path.$new_filename) ){
+        //         unlink($path.$old_picture);
+        //     }
+        //     $user->where('id',$user_info->id)
+        //                     ->set(['picture'->$new_filename])
+        //                     ->update();
+
+        //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
+        // }else{
+        //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+        // }
+    } 
     public function changePassword()
     {
         $request = \Config\Services::request();
