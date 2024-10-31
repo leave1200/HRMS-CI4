@@ -77,16 +77,21 @@ class AdminController extends BaseController
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    public function profile(){
+    public function profile() {
         $userModel = new User();
-        $user = $userModel->findAll();
+        $userId = CIAuth::id(); // Assuming CIAuth is your authentication service
+        $user = $userModel->find($userId); // Get the current user's data
         $userStatus = session()->get('userStatus');
+        
         $data = array(
-            'pageTitle'=>'Profile',
+            'pageTitle' => 'Profile',
+            'user' => $user, // Pass the user data to the view
             'userStatus' => $userStatus
         );
+        
         return view('backend/pages/profile', $data);
     }
+    
     public function updatePersonalDetails() {
         $request = \Config\Services::request();
         $validation = \Config\Services::validation();
