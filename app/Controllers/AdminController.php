@@ -139,28 +139,24 @@ class AdminController extends BaseController
         $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
         $old_picture = $user_info->picture;
     
-        if ($this->request->getMethod() == 'post') {
-            $userId = $this->request->getPost('id');
-            $file = $this->request->getFile('profile_picture');
+        if ($file && $file->isValid() && !$file->hasMoved()) { // Check if the file is valid
+            $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Ensure unique filename
     
-            if ($file && $file->isValid()) {
-                // Generate a new filename
-                $newName = $file->getRandomName();
+            if ($file->move($path, $new_filename)) {
+                if ($old_picture != null && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture); // Delete old picture if exists
+                }
+                $user->where('id', $user_info->id)
+                    ->set(['picture' => $new_filename])
+                    ->update();
     
-                // Move the file to the desired location
-                $file->move(FCPATH . 'images/users', $newName);
-    
-                // Update the user's profile picture in the database
-                $userModel = new UserModel();
-                $userModel->update($userId, ['picture' => $newName]);
-    
-                return $this->response->setJSON(['status' => 1, 'new_picture_name' => $newName, 'msg' => 'Profile picture updated successfully.']);
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
             } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
+                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
         }
     
-        return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
+        return $this->response->setJSON(['status' => 0, 'msg' => 'No valid file uploaded.']);
     }
     
     
