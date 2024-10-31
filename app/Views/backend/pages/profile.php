@@ -158,6 +158,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="<?= base_url('/backend/extra-assets/ijaboCropTool/ijaboCropTool.min.js') ?>"></script>
 <script>
         $('#personal_details_from').on('submit', function(e) {
             e.preventDefault();
