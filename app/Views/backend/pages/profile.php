@@ -28,8 +28,8 @@
                 <div class="pd-20 card-box height-100-p">
                <!-- Trigger Button -->
                <div class="profile-photo">
-                    <a href="javascript:;" data-id="<?= get_user()->id ?>" class="edit-profile-picture-btn">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo">
+                    <a href="javascript:;" data-id="<?= get_user()->id ?>" class="edit-profile-picture-btn" id="editProfilePicture">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" id="profileImage">
                         <i class="fa fa-pencil edit-icon" aria-hidden="true"></i> 
                     </a>
                 </div>
