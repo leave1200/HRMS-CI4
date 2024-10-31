@@ -157,7 +157,7 @@
                                     <?php foreach ($attendances as $attendance): ?>
                                         <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
                                         <?php if (esc($attendance['name']) === esc($currentUserName)): // Compare with logged-in user's name ?>
-                                        <?php endif; ?>
+
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
@@ -194,14 +194,12 @@
                                         </tr>
                                         
                                         <?php endif; ?>
-
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
                                         <td colspan="6">No attendance records found.</td>
                                     </tr>
-                                    <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
-                                <?php endif; ?>
                                 <?php endif; ?>
                             </tbody>
 
