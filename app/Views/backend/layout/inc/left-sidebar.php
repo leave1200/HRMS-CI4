@@ -69,7 +69,7 @@
                             <?php endif; ?>
                         </ul>
                     </li>
-					<?php if (isset($userStatus) && $userStatus !== '' && $userStatus !== 'STAFF'): ?>
+					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="micon fa fa-user-plus"></span>
@@ -80,7 +80,7 @@
                             <li><a href="<?= route_to('user.list') ;?>">Users List</a></li>
                         </ul>
                     </li>
-                    <?php endif; ?>
+                <?php endif; ?>
 
                 <!-- <li class="dropdown">
                     <a href="<?= route_to('setting'); ?>" class="dropdown-toggle no-arrow">
