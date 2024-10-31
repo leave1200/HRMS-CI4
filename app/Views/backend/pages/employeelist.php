@@ -53,7 +53,7 @@
                     <td><?= $index + 1 ?></td>
                     <td>
                         <a href="#" class="edit-profile-picture-btn" data-id="<?= $emp['id'] ?>">
-                            <img src="<?= $emp['picture'] ? base_url('backend/images/users/' . htmlspecialchars($emp['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
+                            <img src="<?= $emp['picture'] ? base_url('/images/users/' . htmlspecialchars($emp['picture'])) : base_url('/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
                             <i class="icon-copy dw dw-edit-1"></i>
                         </a>
                     </td>
