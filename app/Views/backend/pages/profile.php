@@ -174,14 +174,21 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <input type="file" id="profile_picture_input" accept="image/*">
-                <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%; display:none;">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="uploadProfilePicture" class="btn btn-primary">Upload</button>
-            </div>
+            <form id="editProfilePictureForm" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="update_employee_id_picture" name="id" value="">
+                    <div class="form-group">
+                        <label for="profile_picture">Upload Profile Picture</label>
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
+                        <img id="image" style="display:none;"/>
+                        <div class="preview" id="preview"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -258,44 +265,49 @@ $(document).ready(function() {
         }
     });
 
-    // Handle the upload button click
-        $('#uploadProfilePicture').on('click', function() {
-            var formData = new FormData();
-            var userId = $('#update_user_id_picture').val();
-            
-            // Get cropped canvas
-            var canvas = cropper.getCroppedCanvas();
+    $('#editProfilePictureForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var canvas;
+        var croppedImage;
+
+        if (cropper) {
+            canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500,
+            });
+
             canvas.toBlob(function(blob) {
-                formData.append('profile_picture', blob); // Append the blob to formData
-                formData.append('id', userId); // Add user ID to the form data
+                var formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', $('#update_user_id_picture').val());
 
                 $.ajax({
                     type: 'POST',
-                    url: '<?= route_to('admin.update-profile-picture') ?>',
+                    url: 'update_profile_picture', // Ensure this URL matches your route
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        if (response.status == 1) {
-                            // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                        if (response.success) {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: response.msg,
+                                text: response.message,
                             }).then(() => {
-                                $('#editProfilePictureModal').modal('hide');
-                            });
+                            location.reload(); // Reload page or update table
+                        });
+                            $('#editProfilePictureModal').modal('hide');
+                            $('.avatar-photo').attr('src', response.new_picture_url);
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: response.msg,
+                                text: response.message,
                             });
                         }
                     },
-                    error: function(xhr) {
-                        console.error('Error details:', xhr.responseJSON);
+                    error: function(xhr, status, error) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -303,8 +315,9 @@ $(document).ready(function() {
                         });
                     }
                 });
-            });
-        });
+            }, 'image/png');
+        }
+    
 });
 
 </script>
