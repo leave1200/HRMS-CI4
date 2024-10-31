@@ -136,38 +136,43 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        $path = 'public/images/users/';
-        $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
+        // Ensure the upload path exists and is writable
+        $path = WRITEPATH . 'uploads/users/'; // Move images to writable/uploads folder
+        if (!is_dir($path)) {
+            mkdir($path, 0755, true);
+        }
+    
+        $file = $request->getFile('profile_picture');
         $old_picture = $user_info->picture;
     
-        // Check if a file is uploaded
-        if (!$file) {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'No file uploaded.']);
+        // Check if a file was uploaded
+        if (!$file || !$file->isValid()) {
+            return $this->response->setJSON(['status' => 0, 'msg' => 'No valid file uploaded.']);
         }
     
-        if ($file && $file->isValid() && !$file->hasMoved()) { // Check if the file is valid
-            $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Ensure unique filename
+        // Generate a unique filename
+        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
-            // Attempt to move the uploaded file
-            if ($file->move($path, $new_filename)) {
-                // Delete old picture if exists
-                if ($old_picture != null && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture); // Remove the old picture
-                }
-    
-                // Update the user information in the database
-                if ($user->where('id', $user_info->id)->set(['picture' => $new_filename])->update()) {
-                    return $this->response->setJSON(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
-                } else {
-                    return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update database.']);
-                }
-            } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
+        // Move the uploaded file
+        if ($file->move($path, $new_filename)) {
+            // Delete old picture if it exists
+            if ($old_picture && file_exists($path . $old_picture)) {
+                unlink($path . $old_picture);
             }
-        }
     
-        return $this->response->setJSON(['status' => 0, 'msg' => 'No valid file uploaded.']);
+            // Update user info in the database
+            $updateResult = $user->update($user_info->id, ['picture' => $new_filename]);
+            
+            if ($updateResult) {
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $new_filename]);
+            } else {
+                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update database.']);
+            }
+        } else {
+            return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
+        }
     }
+    
     
     
     
