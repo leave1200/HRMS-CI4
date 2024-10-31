@@ -136,7 +136,7 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        $path = '/public/images/users/';
+        $path = '/images/users/';
         $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
         $old_picture = $user_info->picture;
     
