@@ -207,8 +207,8 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id',$user_id)->first();
 
-        $path ='images/users/';
-        $file = $request->getFile('user_profile_file');
+        $path ='backend/images/users/';
+        $file = $request->getFile('profile_picture');
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
 
@@ -226,7 +226,7 @@ class AdminController extends BaseController
         }
     } 
 
-    
+
     public function changePassword()
     {
         $request = \Config\Services::request();
