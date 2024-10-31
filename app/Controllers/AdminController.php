@@ -161,6 +161,7 @@ class AdminController extends BaseController
     
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
+        $validation = \Config\Services::validation();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
         
         // Check if the file is uploaded
