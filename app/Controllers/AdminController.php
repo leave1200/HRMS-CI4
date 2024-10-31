@@ -129,73 +129,82 @@ class AdminController extends BaseController
             }
         }
     }
-    // public function updatePersonalPictures() {
-    //     $request = \Config\Services::request();
-    //     $user_id = CIAuth::id();
-    //     $user = new User();
-    //     $user_info = $user->asObject()->where('id', $user_id)->first();
-    
-    //     $path = 'images/users/';
-    //     $file = $request->getFile('profile_picture');
-    //     $old_picture = $user_info->picture;
-    //     $new_filename = 'UIMG_' . $user_id . $file->getRandomName();
-    
-    //     if ($file->move($path, $new_filename)) {
-    //         if ($old_picture != null && file_exists($path . $old_picture)) {
-    //             unlink($path . $old_picture);
-    //         }
-    //         $user->where('id', $user_info->id)
-    //             ->set(['picture' => $new_filename])
-    //             ->update();
-    
-    //         echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
-    //     } else {
-    //         echo json_encode(['status' => 0, 'msg' => 'Something went wrong.']);
-    //     }
-    // }
-    
-
-     public function updatePersonalPictures(){
+    public function updatePersonalPictures() {
         $request = \Config\Services::request();
         $user_id = CIAuth::id();
         $user = new User();
-        $user_info = $user->asObject()->where('id',$user_id)->first();
-
-        $path ='images/users/';
-        $file = $request->getFile('user_profile_file');
+        $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+        $path = 'images/users/';
+        $file = $request->getFile('profile_picture'); // Ensure the key matches what's sent from JavaScript
         $old_picture = $user_info->picture;
-        $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
-
-        if( $file->move($path,$new_filename) ){
-            if( $old_picture != null && file_exists($path.$old_picture) ){
-                unlink($path.$old_picture);
+    
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Generate a new filename
+    
+            if ($file->move($path, $new_filename)) {
+                // Delete the old picture if it exists
+                if ($old_picture != null && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture);
+                }
+    
+                // Update the database with the new picture name
+                $user->where('id', $user_info->id)
+                     ->set(['picture' => $new_filename])
+                     ->update();
+    
+                echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
+            } else {
+                echo json_encode(['status' => 0, 'msg' => 'File move failed.']);
             }
-            $user->where('id',$user_info->id)
-                 ->set(['picture'=>$new_filename])
-                 ->update();
-
-                 echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
-        }else{
-            echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+        } else {
+            echo json_encode(['status' => 0, 'msg' => 'Invalid file upload.']);
         }
-        // $upload_image = \Config\Services::image()
-        //                 ->withFile($file)
-        //                 ->resize(450,450,true,'height')
-        //                 ->save($path.$new_filename);
-        
-        // if( $upload_image ){
-        //     if( $old_picture != null && file_exists($path.$new_filename) ){
-        //         unlink($path.$old_picture);
-        //     }
-        //     $user->where('id',$user_info->id)
-        //                     ->set(['picture'->$new_filename])
-        //                     ->update();
+    }
+    
+    
 
-        //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
-        // }else{
-        //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
-        // }
-    } 
+    //  public function updatePersonalPictures(){
+    //     $request = \Config\Services::request();
+    //     $user_id = CIAuth::id();
+    //     $user = new User();
+    //     $user_info = $user->asObject()->where('id',$user_id)->first();
+
+    //     $path ='images/users/';
+    //     $file = $request->getFile('user_profile_file');
+    //     $old_picture = $user_info->picture;
+    //     $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+    //     if( $file->move($path,$new_filename) ){
+    //         if( $old_picture != null && file_exists($path.$old_picture) ){
+    //             unlink($path.$old_picture);
+    //         }
+    //         $user->where('id',$user_info->id)
+    //              ->set(['picture'=>$new_filename])
+    //              ->update();
+
+    //              echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+    //     }else{
+    //         echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+    //     }
+    //     // $upload_image = \Config\Services::image()
+    //     //                 ->withFile($file)
+    //     //                 ->resize(450,450,true,'height')
+    //     //                 ->save($path.$new_filename);
+        
+    //     // if( $upload_image ){
+    //     //     if( $old_picture != null && file_exists($path.$new_filename) ){
+    //     //         unlink($path.$old_picture);
+    //     //     }
+    //     //     $user->where('id',$user_info->id)
+    //     //                     ->set(['picture'->$new_filename])
+    //     //                     ->update();
+
+    //     //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
+    //     // }else{
+    //     //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+    //     // }
+    // } 
     public function changePassword()
     {
         $request = \Config\Services::request();
