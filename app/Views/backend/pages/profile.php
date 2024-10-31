@@ -249,14 +249,15 @@ $(document).ready(function() {
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        // Handle response...
                         if (response.status == 1) {
+                            // Update the profile picture displayed on the page
+                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
                                 text: response.msg,
                             }).then(() => {
-                                location.reload(); // Reload page or update table
+                                // Reload page or update table
                             });
                             $('#editProfilePictureModal').modal('hide');
                         } else {
