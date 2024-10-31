@@ -177,7 +177,7 @@
                 <!-- Image upload input -->
                 <div>
                     <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
-                    <input type="file" id="profile_picture" accept="image/*">
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
                 </div>
                 <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
             </div>
