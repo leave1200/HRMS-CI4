@@ -161,7 +161,6 @@
 </div>
 
 <!-- Edit Profile Picture Modal -->
-<!-- Edit Profile Picture Modal -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -172,8 +171,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%;">
+                <input type="file" id="profile_picture_input" accept="image/*">
+                <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%; display:none;">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -197,61 +196,46 @@ $(document).ready(function() {
         var id = $(this).data('id');
         $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
         $('#editProfilePictureModal').modal('show');
-
-        // Reset the cropper if it exists
-        if (cropper) {
-            cropper.destroy();
-        }
-
-        // Trigger the file input click
-        $('#fileInput').trigger('click');
     });
 
-    // Handle file selection
-    $('#fileInput').on('change', function(event) {
-    var files = event.target.files;
-    var done = function(url) {
-        $('#profile_picture').attr('src', url);
-    };
-    
-    if (files && files.length > 0) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            done(reader.result);
-            console.log('Image loaded successfully:', reader.result);
+    // Handle the file input change event to load and crop the image
+    $('#profile_picture_input').on('change', function(event) {
+        var files = event.target.files;
+        var done = function(url) {
+            $('#profile_picture').attr('src', url);
         };
-        reader.readAsDataURL(files[0]);
 
-        // Initialize the cropper once the image is loaded
-        $('#profile_picture').on('load', function() {
-            cropper = new Cropper(this, {
-                aspectRatio: 1,
-                viewMode: 1,
+        if (files && files.length > 0) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                done(reader.result);
+            };
+            reader.readAsDataURL(files[0]);
+
+            // Once the image is loaded, initialize the cropper
+            $('#profile_picture').on('load', function() {
+                cropper = new Cropper(this, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                });
             });
-            console.log('Cropper initialized:', cropper);
-        });
-    }
-});
-
+        }
+    });
 
     // Handle the upload button click
     $('#uploadProfilePicture').on('click', function() {
+        var formData = new FormData();
         var userId = $('#update_user_id_picture').val();
         
-        // Get the cropped canvas data
-        var canvas = cropper.getCroppedCanvas({
-            width: 300, // Set the desired width
-            height: 300 // Set the desired height
-        });
-
+        // Get cropped canvas
+        var canvas = cropper.getCroppedCanvas();
         canvas.toBlob(function(blob) {
-            var formData = new FormData();
-            formData.append('profile_picture', blob, 'cropped_image.png'); // Append the cropped image blob
+            formData.append('profile_picture', blob);
             formData.append('id', userId); // Add user ID to the form data
 
             $.ajax({
                 type: 'POST',
-                url: '<?= route_to('admin.update-profile-picture') ?>', // Ensure this URL is correct
+                url: '<?= route_to('admin.update-profile-picture') ?>',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -275,6 +259,7 @@ $(document).ready(function() {
                     }
                 },
                 error: function(xhr) {
+                    console.error('Error details:', xhr.responseJSON);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -285,6 +270,7 @@ $(document).ready(function() {
         });
     });
 });
+
 </script>
 
 

@@ -155,7 +155,7 @@ class AdminController extends BaseController
     
     public function updatePersonalPictures()
     {
-        $request = Services::request();
+        $request = \Config\Services::request();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
     
         // Get the uploaded file
@@ -165,7 +165,7 @@ class AdminController extends BaseController
         if ($file && $file->isValid() && !$file->hasMoved()) {
             // Check the file type (optional)
             if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
-                return redirect()->back()->with('error', 'Only JPEG, PNG, and GIF files are allowed.');
+                return $this->response->setJSON(['status' => 0, 'msg' => 'Only JPEG, PNG, and GIF files are allowed.']);
             }
     
             // Generate a new filename
@@ -178,15 +178,14 @@ class AdminController extends BaseController
                 // Update user profile picture in the database
                 $userModel->update($user_id, ['picture' => $newFileName]);
     
-                return redirect()->back()->with('success', 'Profile picture updated successfully!');
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newFileName]);
             } else {
-                return redirect()->back()->with('error', 'Failed to move the uploaded file.');
+                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
         } else {
-            return redirect()->back()->with('error', 'Invalid file uploaded.');
+            return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file uploaded.']);
         }
     }
-    
     
     
 
