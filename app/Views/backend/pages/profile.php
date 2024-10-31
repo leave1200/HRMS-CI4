@@ -155,10 +155,7 @@
                 </div>
             </div>
         </div>
-<?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
-<script>
+        <script>
     $(document).ready(function() {
         $('#personal_details_from').on('submit', function(e) {
             var form = this;
@@ -233,5 +230,9 @@
 
 
 </script>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+
 <?= $this->endSection() ?> 
 
