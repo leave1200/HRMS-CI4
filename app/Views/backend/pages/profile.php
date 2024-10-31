@@ -160,45 +160,37 @@
     </div>
 </div>
 
-<!-- Modal for editing profile picture -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Update Profile Picture</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Hidden input to store user ID -->
-                <input type="hidden" id="update_user_id_picture" value="">
-                
-                <!-- Image upload input -->
-                <div>
-                    <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
-                    <input type="file" id="profile_picture" accept="image/*">
+            <form id="editProfilePictureForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="cropAndUpload" class="btn btn-primary">Crop and Upload</button>
-            </div>
+                <div class="modal-body">
+                    <input type="hidden" id="update_user_id_picture" name="id">
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+                    <img id="image" src="" alt="Image" style="display:none;"/>
+                    <div class="preview" style="width: 100%; overflow: hidden; display:none;">
+                        <img src="" alt="Preview" style="max-width: 100%;"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 
-<!-- Include Cropper.js -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
@@ -206,86 +198,61 @@ $(document).ready(function() {
         $('#editProfilePictureModal').modal('show');
     });
 
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
+    // Handle the upload button click
+    $('#uploadProfilePicture').on('click', function() {
+        var formData = new FormData();
+        var userId = $('#update_user_id_picture').val();
+        var fileInput = $('#profile_picture')[0];
 
-        if (files && files.length > 0) {
-            var file = files[0];
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
+        if (fileInput.files.length > 0) {
+            formData.append('profile_picture', fileInput.files[0]);
+            formData.append('id', userId); // Add user ID to the form data
 
-    // Handle cropping and upload
-    $('#cropAndUpload').on('click', function() {
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                // Reload page or update table
-                            });
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL is correct
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 1) {
+                        // Update the profile picture displayed on the page
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.msg,
+                        }).then(() => {
                             $('#editProfilePictureModal').modal('hide');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
+                        });
+                    } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                            text: response.msg,
                         });
                     }
-                });
-            }, 'image/png');
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please select a file to upload.',
+            });
         }
     });
 });
-
-
 </script>
+
+
 
 
 <script>
