@@ -130,7 +130,7 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updateProfilePicture()
+    public function updatePersonalPictures()
     {
         try {
             $user_id = $this->request->getPost('id');
