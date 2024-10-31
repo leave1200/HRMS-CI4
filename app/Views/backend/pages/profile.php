@@ -157,138 +157,75 @@
                 </div>
             </div>
         </div>
-<!-- Edit Profile Picture Modal -->
-<div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="file" id="profile_picture" accept="image/*" style="display:none;">
-                <img id="image" src="" alt="Profile Picture" style="max-width: 100%; display:none;">
-                <div class="preview" style="overflow: hidden; width: 200px; height: 200px; border: 1px solid #ddd;"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="cropImageButton">Crop and Save</button>
-            </div>
-            <input type="hidden" id="update_employee_id_picture">
-        </div>
-    </div>
+<!-- Hidden input for file upload -->
+<input type="file" id="user_profile_file" style="display:none;" />
+
+<!-- Cropper container -->
+<div>
+    <img id="image" src="" alt="Profile Image" style="display:none;"/>
 </div>
-<!-- Include Bootstrap CSS/JS and jQuery in your HTML head -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<button id="crop" style="display:none;">Crop & Update</button>
+<img id="preview" alt="Cropped Image" style="display:none;"/>
+
+<!-- Include Cropper.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 <script>
-    $('.edit-profile-picture-btn').on('click', function() {
-    var id = $(this).data('id');
-    $('#update_employee_id_picture').val(id);
-    $('#profile_picture').click(); // Trigger file input click
-});
+    let cropper;
 
-</script>
-<script>
-$(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-    var $preview = $('.preview');
-
-    // Handle edit button clicks for profile picture
-    $('.edit-profile-picture-btn').on('click', function() {
-        var id = $(this).data('id');
-        $('#update_employee_id_picture').val(id);
-        $('#profile_picture').click(); // Trigger file input click
+    document.getElementById('editProfilePicture').addEventListener('click', function() {
+        document.getElementById('user_profile_file').click();
     });
 
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            $preview.show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-        var reader;
-        var file;
+    document.getElementById('user_profile_file').addEventListener('change', function(event) {
+        const files = event.target.files;
 
-        if (files && files.length > 0) {
-            file = files[0];
+        if (files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const image = document.getElementById('image');
+                image.src = e.target.result;
+                image.style.display = 'block';
+                document.getElementById('crop').style.display = 'block';
 
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
+                if (cropper) {
+                    cropper.destroy();
+                }
 
-    // Handle cropping and saving
-    $('#cropImageButton').on('click', function() {
-        var canvas;
-
-        if (cropper) {
-            canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_employee_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_profile_picture', // Ensure this URL matches your route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            }).then(() => {
-                                location.reload(); // Reload page or update table
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                            $('.avatar-photo').attr('src', response.new_picture_url);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
                 });
-            }, 'image/png');
+            };
+            reader.readAsDataURL(files[0]);
         }
     });
-});
+
+    document.getElementById('crop').addEventListener('click', function() {
+        const canvas = cropper.getCroppedCanvas();
+        canvas.toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('user_profile_file', blob);
+
+            fetch('path/to/your/updatePersonalPictures', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    // Update the profile image on the page
+                    document.getElementById('profileImage').src = URL.createObjectURL(blob);
+                    alert(data.msg);
+                } else {
+                    alert(data.msg);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }, 'image/jpeg');
+    });
 </script>
 
 
