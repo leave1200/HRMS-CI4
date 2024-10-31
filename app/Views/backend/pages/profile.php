@@ -162,129 +162,99 @@
 
 <?= $this->section('scripts') ?>
 <script>
-    $(document).ready(function() {
-        $('#personal_details_from').on('submit', function(e) {
-            var form = this;
+ <script>
+    let cropper;
 
-            // Perform validation if needed
-            var valid = true;
+    document.getElementById('user_profile_file').addEventListener('change', function (e) {
+        const files = e.target.files;
 
-            if (valid) {
-                // If validation passes, allow form to submit naturally
-                form.submit();
-            } else {
-                // Prevent form submission if validation fails
-                e.preventDefault();
+        if (files && files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                if (cropper) {
+                    cropper.destroy();
+                }
+                const image = document.createElement('img');
+                image.src = event.target.result;
+
+                // Create a new Cropper instance
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    ready: function () {
+                        const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL();
+                        document.querySelector('.ci-avatar-photo').src = croppedImageDataUrl; // Set the image preview
+                    },
+                });
+
+                // Append the image to a container in the DOM
+                const container = document.createElement('div');
+                container.appendChild(image);
+                document.body.appendChild(container);
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    });
+
+    // Handle the submission of the cropped image
+    document.getElementById('personal_details_form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (cropper) {
+            const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL('image/png');
+
+            // Prepare to send the cropped image via AJAX
+            $.ajax({
+                url: '<?= route_to('update-profile-picture') ?>',
+                method: 'POST',
+                data: {
+                    image: croppedImageDataUrl,
+                    <?= csrf_field(); ?>
+                },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success('Profile picture updated successfully.');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while uploading the image.');
+                }
+            });
+        } else {
+            toastr.error('Please upload and crop an image before submitting.');
+        }
+    });
+
+    $('#change_password_form').on('submit', function (e) {
+        e.preventDefault();
+        var form = this;
+        var formdata = new FormData(form);
+        $.ajax({
+            url: $(form).attr('action'),
+            method: $(form).attr('method'),
+            data: formdata,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                toastr.remove();
+                $(form).find('span.error-text').text('');
+            },
+            success: function (response) {
+                if (response.trim() === 'success') {
+                    $(form)[0].reset();
+                    toastr.success('Password has been changed successfully.');
+                } else {
+                    toastr.error(response);
+                }
+            },
+            error: function () {
+                toastr.error('An error occurred. Please try again.');
             }
         });
     });
-
-    let cropper;
-
-document.getElementById('user_profile_file').addEventListener('change', function (e) {
-    const files = e.target.files;
-    const done = (url) => {
-        document.getElementById('user_profile_file').value = '';
-        document.querySelector('.ci-avatar-photo').src = url;
-    };
-
-    if (files && files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            if (cropper) {
-                cropper.destroy();
-            }
-            const image = document.createElement('img');
-            image.src = event.target.result;
-
-            // Set up the cropper
-            cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 1,
-                ready: function () {
-                    // Display the cropping image
-                    const canvas = document.getElementById('cropperCanvas');
-                    canvas.width = 200; // Set your desired width
-                    canvas.height = 200; // Set your desired height
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(image, 0, 0, 200, 200);
-                    // When the user is satisfied with the crop
-                    const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL();
-                    done(croppedImageDataUrl);
-                },
-            });
-        };
-        reader.readAsDataURL(files[0]);
-    }
-});
-
-// Optionally, handle the submission of the cropped image
-document.getElementById('personal_details_form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const croppedCanvas = document.getElementById('cropperCanvas');
-    const croppedImageDataUrl = croppedCanvas.toDataURL('image/png');
-
-    // Prepare to send the cropped image via AJAX or form submission
-    // Example:
-    $.ajax({
-        url: '<?= route_to('update-profile-picture') ?>',
-        method: 'POST',
-        data: {
-            image: croppedImageDataUrl,
-            // Include other form data as needed
-            <?= csrf_field(); ?>
-        },
-        success: function (response) {
-            // Handle the response
-            if (response.success) {
-                toastr.success('Profile picture updated successfully.');
-            } else {
-                toastr.error(response.message);
-            }
-        },
-        error: function () {
-            toastr.error('An error occurred while uploading the image.');
-        }
-    });
-});
-
-
-$('#change_password_form').on('submit', function(e){
-    e.preventDefault();
-    // CSRF hash
-    var csrfName = $('.ci_csrf_data').attr('name');
-    var csrfHash = $('.ci_csrf_data').val();
-    var form = this;
-    var formdata = new FormData(form);
-    formdata.append(csrfName, csrfHash);
-
-    $.ajax({
-        url: $(form).attr('action'),
-        method: $(form).attr('method'),
-        data: formdata,
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function(){
-            toastr.remove();
-            $(form).find('span.error-text').text('');
-        },
-        success: function(response){
-            if (response.trim() === 'success') {
-                $(form)[0].reset();
-                toastr.success('Password has been changed successfully.');
-            } else {
-                // If the response contains an error message, display it
-                toastr.error(response);
-            }
-        },
-        error: function(xhr, status, error){
-            toastr.error('An error occurred. Please try again.');
-            console.error('Error:', error);
-        }
-    });
-});
-
+</script>
 
 </script>
 <?= $this->endSection() ?> 
