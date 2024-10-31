@@ -132,33 +132,21 @@ class AdminController extends BaseController
     }
     public function updatePersonalPictures()
     {
-        try {
-            $user_id = $this->request->getPost('id');
-            $picture = $this->request->getFile('profile_picture');
+        $userModel = new User();
 
-            // Check if the file is uploaded and is valid
-            if (!$picture || !$picture->isValid()) {
-                return $this->response->setJSON([
-                    'status' => 0,
-                    'msg' => 'Invalid picture file. Please upload a valid image.'
-                ]);
-            }
+        $userId = $this->request->getPost('id');
+        $file = $this->request->getFile('profile_picture');
 
-            // Debugging the file upload properties
-            if ($picture->hasMoved()) {
-                return $this->response->setJSON([
-                    'status' => 0,
-                    'msg' => 'The file has already been moved.'
-                ]);
-            }
+        // Check if the file is valid
+        if ($file->isValid() && !$file->hasMoved()) {
+            // Generate a unique filename for the profile picture
+            $newFilename = $file->getRandomName();
 
-            // Set file name and path, then move the file
-            $newFilename = $picture->getRandomName();
-            $picture->move(WRITEPATH . 'uploads/', $newFilename);
+            // Move the file to the intended directory
+            $file->move(WRITEPATH . 'uploads', $newFilename); // Change this to your path
 
-            // Update database directly
-            $userModel = new User();
-            $updateResult = $userModel->updatePictureDirect($user_id, $newFilename);
+            // Update the database
+            $updateResult = $userModel->updatePictureDirect($userId, $newFilename);
 
             if ($updateResult) {
                 return $this->response->setJSON([
@@ -172,10 +160,10 @@ class AdminController extends BaseController
                     'msg' => 'Failed to update profile picture in the database.'
                 ]);
             }
-        } catch (\Exception $e) {
+        } else {
             return $this->response->setJSON([
                 'status' => 0,
-                'msg' => 'An error occurred: ' . $e->getMessage()
+                'msg' => 'Invalid file upload.'
             ]);
         }
     }
