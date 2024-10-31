@@ -209,27 +209,30 @@ $(document).ready(function() {
 
     // Handle file selection
     $('#fileInput').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $('#profile_picture').attr('src', url);
+    var files = event.target.files;
+    var done = function(url) {
+        $('#profile_picture').attr('src', url);
+    };
+    
+    if (files && files.length > 0) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            done(reader.result);
+            console.log('Image loaded successfully:', reader.result);
         };
-        
-        if (files && files.length > 0) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                done(reader.result);
-            };
-            reader.readAsDataURL(files[0]);
+        reader.readAsDataURL(files[0]);
 
-            // Initialize the cropper once the image is loaded
-            $('#profile_picture').on('load', function() {
-                cropper = new Cropper(this, {
-                    aspectRatio: 1, // Set your preferred aspect ratio
-                    viewMode: 1,
-                });
+        // Initialize the cropper once the image is loaded
+        $('#profile_picture').on('load', function() {
+            cropper = new Cropper(this, {
+                aspectRatio: 1,
+                viewMode: 1,
             });
-        }
-    });
+            console.log('Cropper initialized:', cropper);
+        });
+    }
+});
+
 
     // Handle the upload button click
     $('#uploadProfilePicture').on('click', function() {
