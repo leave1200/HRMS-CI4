@@ -65,10 +65,5 @@ class User extends Model
     {
         return password_verify($password, $hashedPassword);
     }
-    public function get_user($user_id) {
-        $this->db->select('id, name, username, email, picture'); // Add any other fields you need
-        $this->db->from('users');
-        $this->db->where('id', $user_id);
-        return $this->db->get()->row();
-    }
+    
 }
