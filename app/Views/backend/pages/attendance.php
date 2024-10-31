@@ -193,7 +193,6 @@
                                             </td>
                                         </tr>
                                         <?php endif; ?>
-                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
