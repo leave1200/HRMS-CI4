@@ -161,6 +161,7 @@
 </div>
 
 <!-- Edit Profile Picture Modal -->
+<!-- Edit Profile Picture Modal -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -171,7 +172,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
                 <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%;">
             </div>
             <div class="modal-footer">
