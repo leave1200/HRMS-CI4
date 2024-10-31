@@ -196,9 +196,6 @@
         alert(message);
     }
 });
-
-
-
 </script>
 <script>
     /$('#change_password_form').on('submit', function(e){
