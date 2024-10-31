@@ -159,72 +159,74 @@ class AdminController extends BaseController
     //     return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
     // }
     
-    public function updatePersonalPictures() {
-        $request = \Config\Services::request();
-        $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
-        $userModel = new \App\Models\User(); // Initialize your User model
-    
-        // Check if the file is uploaded
-        if ($imagefile = $request->getFile('profile_picture')) {
-            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
-                $newName = $imagefile->getRandomName(); // Generate a random name for the uploaded file
-                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName); // Move the file to the specified directory
-    
-                // Prepare data for updating the database
-                $data = ['picture' => $newName];
-    
-                // Update user profile picture in the database
-                if ($userModel->update($user_id, $data)) {
-                    return $this->response->setJSON([
-                        'status' => 1,
-                        'msg' => 'Profile picture updated successfully!',
-                        'new_picture_url' => base_url('backend/images/users/' . $newName) // Return the new picture URL
-                    ]);
-                } else {
-                    return $this->response->setJSON([
-                        'status' => 0,
-                        'msg' => 'Failed to update profile picture'
-                    ]);
-                }
-            }
-        }
-    
-        return $this->response->setJSON([
-            'status' => 0,
-            'msg' => 'Invalid image file'
-        ]);
-    }
-    
-    
-    
-    
-    
-    
-
-    //  public function updatePersonalPictures(){
+    // public function updatePersonalPictures() {
     //     $request = \Config\Services::request();
-    //     $user_id = CIAuth::id();
-    //     $user = new User();
-    //     $user_info = $user->asObject()->where('id',$user_id)->first();
-
-    //     $path ='images/users/';
-    //     $file = $request->getFile('user_profile_file');
-    //     $old_picture = $user_info->picture;
-    //     $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
-
-    //     if( $file->move($path,$new_filename) ){
-    //         if( $old_picture != null && file_exists($path.$old_picture) ){
-    //             unlink($path.$old_picture);
+    //     $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
+    //     $userModel = new \App\Models\User(); // Initialize your User model
+    
+    //     // Check if the file is uploaded
+    //     if ($imagefile = $request->getFile('profile_picture')) {
+    //         if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+    //             $newName = $imagefile->getRandomName(); // Generate a random name for the uploaded file
+    //             $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName); // Move the file to the specified directory
+    
+    //             // Prepare data for updating the database
+    //             $data = ['picture' => $newName];
+    
+    //             // Update user profile picture in the database
+    //             if ($userModel->update($user_id, $data)) {
+    //                 return $this->response->setJSON([
+    //                     'status' => 1,
+    //                     'msg' => 'Profile picture updated successfully!',
+    //                     'new_picture_url' => base_url('backend/images/users/' . $newName) // Return the new picture URL
+    //                 ]);
+    //             } else {
+    //                 return $this->response->setJSON([
+    //                     'status' => 0,
+    //                     'msg' => 'Failed to update profile picture'
+    //                 ]);
+    //             }
     //         }
-    //         $user->where('id',$user_info->id)
-    //              ->set(['picture'=>$new_filename])
-    //              ->update();
-
-    //              echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
-    //     }else{
-    //         echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
     //     }
-    // } 
+    
+    //     return $this->response->setJSON([
+    //         'status' => 0,
+    //         'msg' => 'Invalid image file'
+    //     ]);
+    // }
+    
+    
+    
+    
+    
+    
+
+     public function updatePersonalPictures(){
+        $request = \Config\Services::request();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id',$user_id)->first();
+
+        $path ='images/users/';
+        $file = $request->getFile('user_profile_file');
+        $old_picture = $user_info->picture;
+        $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+        if( $file->move($path,$new_filename) ){
+            if( $old_picture != null && file_exists($path.$old_picture) ){
+                unlink($path.$old_picture);
+            }
+            $user->where('id',$user_info->id)
+                 ->set(['picture'=>$new_filename])
+                 ->update();
+
+                 echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+        }else{
+            echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+        }
+    } 
+
+    
     public function changePassword()
     {
         $request = \Config\Services::request();
