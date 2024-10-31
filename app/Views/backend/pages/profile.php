@@ -247,7 +247,7 @@ $(document).ready(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL is correct
+                url: '<?= route_to('admin.update-profile-picture') ?>', // Ensure this URL is correct
                 data: formData,
                 processData: false,
                 contentType: false,
