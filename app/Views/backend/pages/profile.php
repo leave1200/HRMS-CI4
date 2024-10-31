@@ -174,7 +174,7 @@
                 ontentType:false,
                 beforeSend:function(){
                     toastr.remove();
-                    $(form).find('span.error.text').text('');
+                    $(form).find('span.error-text').text('');
                 },
                 success:function(response){
                     if( $.isEmptyObject(response.error) ){
