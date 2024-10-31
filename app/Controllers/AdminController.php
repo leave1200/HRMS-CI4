@@ -139,7 +139,7 @@ class AdminController extends BaseController
         $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
         $old_picture = $user_info->picture;
     
-        if ($file && $file->isValid() && !$file->hasMoved()) { // Check if the file is valid
+        if ($file->move($path, $new_filename)) { // Check if the file is valid
             $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Ensure unique filename
     
             if ($file->move($path, $new_filename)) {
