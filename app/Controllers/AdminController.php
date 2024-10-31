@@ -139,28 +139,41 @@ class AdminController extends BaseController
         $file = $request->getFile('profile_picture'); // Ensure the key matches what's sent from JavaScript
         $old_picture = $user_info->picture;
     
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Generate a new filename
+        // Debugging: Check if the file is received
+        if (!$file) {
+            echo json_encode(['status' => 0, 'msg' => 'No file uploaded.']);
+            return;
+        }
     
-            if ($file->move($path, $new_filename)) {
-                // Delete the old picture if it exists
-                if ($old_picture != null && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture);
-                }
+        if (!$file->isValid()) {
+            echo json_encode(['status' => 0, 'msg' => 'File upload error: ' . $file->getErrorString() . ' (' . $file->getError() . ')']);
+            return;
+        }
     
-                // Update the database with the new picture name
-                $user->where('id', $user_info->id)
-                     ->set(['picture' => $new_filename])
-                     ->update();
+        if ($file->hasMoved()) {
+            echo json_encode(['status' => 0, 'msg' => 'File has already been moved.']);
+            return;
+        }
     
-                echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
-            } else {
-                echo json_encode(['status' => 0, 'msg' => 'File move failed.']);
+        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Generate a new filename
+    
+        if ($file->move($path, $new_filename)) {
+            // Delete the old picture if it exists
+            if ($old_picture != null && file_exists($path . $old_picture)) {
+                unlink($path . $old_picture);
             }
+    
+            // Update the database with the new picture name
+            $user->where('id', $user_info->id)
+                 ->set(['picture' => $new_filename])
+                 ->update();
+    
+            echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
         } else {
-            echo json_encode(['status' => 0, 'msg' => 'Invalid file upload.']);
+            echo json_encode(['status' => 0, 'msg' => 'File move failed.']);
         }
     }
+    
     
     
 
