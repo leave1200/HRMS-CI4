@@ -172,8 +172,7 @@
             </div>
             <div class="modal-body">
                 <!-- Hidden input to store user ID -->
-                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
-
+                <input type="hidden" id="update_user_id_picture" value="">
                 
                 <!-- Image upload input -->
                 <div>
