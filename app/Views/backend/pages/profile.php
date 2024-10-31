@@ -239,7 +239,7 @@ $(document).ready(function() {
 
                 $.ajax({
                     type: 'POST',
-                    url: 'updatePersonalPictures', // Ensure this URL matches your route
+                    url: '<?= route_to('update-profile-picture')?>', // Ensure this URL matches your route
                     data: formData,
                     processData: false,
                     contentType: false,
