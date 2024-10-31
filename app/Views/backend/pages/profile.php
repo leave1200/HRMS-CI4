@@ -226,26 +226,27 @@ $(document).ready(function() {
         }
     });
 
+    // Handle the upload button click
     $('#uploadProfilePicture').on('click', function() {
         var formData = new FormData();
         var userId = $('#update_user_id_picture').val();
-        var fileInput = $('#profile_picture')[0];
-
-        if (fileInput.files.length > 0) {
-            formData.append('profile_picture', fileInput.files[0]);
+        
+        // Get cropped canvas
+        var canvas = cropper.getCroppedCanvas();
+        canvas.toBlob(function(blob) {
+            formData.append('profile_picture', blob);
             formData.append('id', userId); // Add user ID to the form data
 
             $.ajax({
                 type: 'POST',
-                url: '<?= route_to('update-profile-picture') ?>',
+                url: '<?= route_to('admin.update-profile-picture') ?>',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    console.log('Response:', response); // Log the response
                     if (response.status == 1) {
                         // Update the profile picture displayed on the page
-                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name + '?t=' + new Date().getTime()); // Append timestamp to avoid caching
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
@@ -262,6 +263,7 @@ $(document).ready(function() {
                     }
                 },
                 error: function(xhr) {
+                    console.error('Error details:', xhr.responseJSON);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -269,13 +271,7 @@ $(document).ready(function() {
                     });
                 }
             });
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: 'Please select a file to upload.',
-            });
-        }
+        });
     });
 });
 
