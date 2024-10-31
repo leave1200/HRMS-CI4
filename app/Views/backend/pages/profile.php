@@ -1,4 +1,3 @@
-
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
 
@@ -26,7 +25,6 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                    <!-- Trigger Button -->
                     <div class="profile-photo">
                         <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
                             <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
@@ -179,26 +177,17 @@
                     <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
                     <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
                 </div>
-                <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="cropAndUpload" class="btn btn-primary">Crop and Upload</button>
+                <button type="button" id="uploadProfilePicture" class="btn btn-primary">Upload</button>
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- Include Cropper.js -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
 <script>
 $(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
@@ -209,124 +198,39 @@ $(document).ready(function() {
     // Handle file input change
     $('#profile_picture').on('change', function(event) {
         var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-
         if (files && files.length > 0) {
             var file = files[0];
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image').attr('src', e.target.result).show();
             }
+            reader.readAsDataURL(file);
         }
     });
 
-    // Handle cropping and upload
-    $('#cropAndUpload').on('click', function() {
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                // Optional: Reload page or update profile picture in a profile card, etc.
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
+    // Handle upload button click
+    $('#uploadProfilePicture').on('click', function() {
+        var userId = $('#update_user_id_picture').val();
+        var formData = new FormData();
+        formData.append('profile_picture', $('#profile_picture')[0].files[0]);
+        formData.append('user_id', userId);
+        
+        $.ajax({
+            url: "<?= route_to('upload-profile-picture'); ?>",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.success) {
+                    location.reload(); // Reload the page to see the new profile picture
+                } else {
+                    alert(response.error); // Show any error messages
+                }
+            }
+        });
     });
 });
 </script>
 
-
-
-<script>
-    /$('#change_password_form').on('submit', function(e){
-    e.preventDefault();
-    // CSRF hash
-    var csrfName = $('.ci_csrf_data').attr('name');
-    var csrfHash = $('.ci_csrf_data').val();
-    var form = this;
-    var formdata = new FormData(form);
-    formdata.append(csrfName, csrfHash);
-
-    $.ajax({
-        url: $(form).attr('action'),
-        method: $(form).attr('method'),
-        data: formdata,
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function(){
-            toastr.remove();
-            $(form).find('span.error-text').text('');
-        },
-        success: function(response){
-            if (response.trim() === 'success') {
-                $(form)[0].reset();
-                toastr.success('Password has been changed successfully.');
-            } else {
-                // If the response contains an error message, display it
-                toastr.error(response);
-            }
-        },
-        error: function(xhr, status, error){
-            toastr.error('An error occurred. Please try again.');
-            console.error('Error:', error);
-        }
-    });
-});
-</script>
 <?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
-
-<?= $this->endSection() ?> 
-

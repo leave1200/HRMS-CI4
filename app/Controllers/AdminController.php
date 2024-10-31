@@ -130,49 +130,29 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updatePersonalPictures()
+    public function uploadProfilePicture()
     {
-        $userModel = new User();
-
-        $userId = $this->request->getPost('id');
+        $userId = $this->request->getPost('user_id');
         $file = $this->request->getFile('profile_picture');
-
-        // Check if the file is valid
+    
         if ($file->isValid() && !$file->hasMoved()) {
-            // Generate a unique filename for the profile picture
-            $newFilename = $file->getRandomName();
-
-            // Move the file to the intended directory
-            $file->move(WRITEPATH . 'uploads', $newFilename); // Change this to your path
-
-            // Update the database
-            $updateResult = $userModel->updatePictureDirect($userId, $newFilename);
-
-            if ($updateResult) {
-                return $this->response->setJSON([
-                    'status' => 1,
-                    'msg' => 'Profile picture updated successfully.',
-                    'new_picture_name' => $newFilename
-                ]);
-            } else {
-                return $this->response->setJSON([
-                    'status' => 0,
-                    'msg' => 'Failed to update profile picture in the database.'
-                ]);
-            }
-        } else {
-            return $this->response->setJSON([
-                'status' => 0,
-                'msg' => 'Invalid file upload.'
-            ]);
+            // Generate a unique name for the uploaded file
+            $newName = $file->getRandomName();
+            $file->move(WRITEPATH . 'uploads/users/', $newName);
+    
+            // Update the user's picture in the database
+            $this->userModel->update($userId, ['picture' => $newName]);
+    
+            return $this->response->setJSON(['success' => true]);
         }
+    
+        return $this->response->setJSON(['success' => false, 'error' => 'Failed to upload image.']);
     }
     
     
     
     
-    
-    
+
     
     
 
