@@ -284,11 +284,11 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="edit_firstname">First Name</label>
-                                            <input type="text" id="edit_firstname" name="firstname" class="form-control" required>
+                                            <input type="text" id="edit_firstname" name="firstname" class="form-control" oninput="validateDesignation(this)" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="edit_lastname">Last Name</label>
-                                            <input type="text" id="edit_lastname" name="lastname" class="form-control" required>
+                                            <input type="text" id="edit_lastname" name="lastname" class="form-control" oninput="validateDesignation1(this)" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -312,7 +312,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_address">Address</label>
-                                    <input type="text" id="edit_address" name="address" class="form-control" required>
+                                    <input type="text" id="edit_address" name="address" class="form-control" oninput="validateDesignation2(this)" required>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary" id="updatePersonalDetailsBtn">Update Personal Details</button>
@@ -330,15 +330,15 @@
                             <div class="pd-20">
                                 <div class="form-group">
                                     <label for="edit_p_school">Primary School Attended</label>
-                                    <input type="text" id="edit_p_school" name="p_school" class="form-control" required>
+                                    <input type="text" id="edit_p_school" name="p_school" class="form-control" oninput="validateDesignation(this)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_s_school">Secondary School Attended</label>
-                                    <input type="text" id="edit_s_school" name="s_school" class="form-control" required>
+                                    <input type="text" id="edit_s_school" name="s_school" class="form-control" oninput="validateDesignation(this)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_t_school">Tertiary School Attended</label>
-                                    <input type="text" id="edit_t_school" name="t_school" class="form-control" required>
+                                    <input type="text" id="edit_t_school" name="t_school" class="form-control" oninput="validateDesignation(this)" required>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary" id="updateEducationalBackgroundBtn">Update Educational Background</button>
@@ -356,7 +356,7 @@
                             <div class="pd-20">
                                 <div class="form-group">
                                     <label for="edit_interview_for">Interview For</label>
-                                    <input type="text" id="edit_interview_for" name="interview_for" class="form-control" required>
+                                    <input type="text" id="edit_interview_for" name="interview_for" class="form-control" oninput="validateDesignation(this)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_interview_type">Interview Type</label>
@@ -390,7 +390,7 @@
                             <div class="pd-20">
                                 <div class="form-group">
                                     <label for="edit_behaviour">Behaviour</label>
-                                    <input type="text" id="edit_behaviour" name="behaviour" class="form-control" required>
+                                    <input type="text" id="edit_behaviour" name="behaviour" class="form-control" oninput="validateDesignation(this)" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_result">Result</label>
@@ -403,7 +403,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_comment">Comment</label>
-                                    <textarea id="edit_comment" name="comment" class="form-control" rows="3" required></textarea>
+                                    <textarea id="edit_comment" name="comment" class="form-control" rows="3" oninput="validateDesignation(this)" required></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary" id="updateRemarksBtn">Update Remarks</button>
