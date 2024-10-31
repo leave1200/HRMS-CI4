@@ -29,7 +29,7 @@
                     <!-- Trigger Button -->
                     <div class="profile-photo">
                         <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                            <img src="<?= !empty(get_user()->picture) ? '/images/users/' . get_user()->picture : '/images/users/userav-min.png' ?>" 
+                            <img src="<?= get_user()->picture ? base_url('images/users/' . htmlspecialchars(get_user()->picture)) : base_url('images/users/userav-min.png') ?>" 
                                 alt="Profile Photo" 
                                 class="avatar-photo ci-avatar-photo" 
                                 style="width: 150px; height: 150px; border-radius: 30%;">
