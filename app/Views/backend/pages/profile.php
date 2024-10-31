@@ -29,12 +29,13 @@
                     <!-- Trigger Button -->
                     <div class="profile-photo">
                     <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                        <img src="<?= !empty($user['picture']) ? base_url('/images/users/' . htmlspecialchars($user['picture'])) : base_url('/images/users/userav-min.png') ?>" 
-                            alt="Profile Photo" 
-                            class="avatar-photo ci-avatar-photo" 
-                            style="width: 150px; height: 150px; border-radius: 30%;">
-                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
-                    </a>
+                    <img src="<?= !empty($user['picture']) ? base_url('/images/users/' . htmlspecialchars($user['picture'])) : base_url('/images/users/userav-min.png') ?>" 
+                        alt="Profile Photo" 
+                        class="avatar-photo ci-avatar-photo" 
+                        style="width: 150px; height: 150px; border-radius: 30%;">
+                    <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
+                </a>
+
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -225,7 +226,7 @@ $(document).ready(function() {
         }
     });
 
-    // Handle the upload button click
+   // Handle the upload button click
 $('#uploadProfilePicture').on('click', function() {
     var formData = new FormData();
     var userId = $('#update_user_id_picture').val();
@@ -270,7 +271,7 @@ $('#uploadProfilePicture').on('click', function() {
         }
     });
 });
-
+});
 
 </script>
 
