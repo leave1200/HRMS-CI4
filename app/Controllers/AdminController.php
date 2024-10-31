@@ -132,27 +132,27 @@ class AdminController extends BaseController
     }
     public function updatePersonalPictures()
     {
-        $id = $this->request->getPost('id');
-        $file = $this->request->getFile('profile_picture');
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getPost('id');
     
-        // Validation for the file upload
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Define the upload path
-            $path = WRITEPATH . 'uploads/users/';
-            $newFileName = $file->getRandomName();
+            // Handle file upload
+            $file = $this->request->getFile('profile_picture');
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $newName = $file->getRandomName();
+                $file->move(WRITEPATH . 'uploads/users', $newName);
     
-            // Move the file to the desired directory
-            if ($file->move($path, $newFileName)) {
                 // Update the user's picture in the database
-                $this->userModel->update($id, ['picture' => $newFileName]);
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newFileName]);
+                $this->userModel->update($id, ['picture' => $newName]);
+    
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newName]);
             } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move uploaded file.']);
+                return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
             }
         }
     
-        return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file upload.']);
+        return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
     }
+    
     
     
     
