@@ -129,50 +129,51 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updatePersonalPictures() {
+    public function updatePersonalPictures()
+    {
         $request = \Config\Services::request();
-        $user_id = CIAuth::id();
-        $user = new User();
-        $user_info = $user->asObject()->where('id', $user_id)->first();
+        $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
+        $userModel = new User(); // Use your User model instead of EmployeeModel
     
-        $path = 'images/users/';
-        $file = $request->getFile('profile_picture'); // Ensure the key matches what's sent from JavaScript
-        $old_picture = $user_info->picture;
+        if ($imagefile = $request->getFile('user_profile_file')) {
+            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
+                $path = 'images/users/';
+                $imagefile->move($path, $newName);
     
-        // Debugging: Check if the file is received
-        if (!$file) {
-            echo json_encode(['status' => 0, 'msg' => 'No file uploaded.']);
-            return;
-        }
+                // Get the old picture for deletion
+                $user_info = $userModel->asObject()->where('id', $user_id)->first();
+                $old_picture = $user_info->picture;
     
-        if (!$file->isValid()) {
-            echo json_encode(['status' => 0, 'msg' => 'File upload error: ' . $file->getErrorString() . ' (' . $file->getError() . ')']);
-            return;
-        }
+                // Update the user picture in the database
+                $data = ['picture' => $newName];
     
-        if ($file->hasMoved()) {
-            echo json_encode(['status' => 0, 'msg' => 'File has already been moved.']);
-            return;
-        }
+                if ($userModel->update($user_id, $data)) {
+                    // Delete the old picture if it exists
+                    if ($old_picture != null && file_exists($path . $old_picture)) {
+                        unlink($path . $old_picture);
+                    }
     
-        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Generate a new filename
-    
-        if ($file->move($path, $new_filename)) {
-            // Delete the old picture if it exists
-            if ($old_picture != null && file_exists($path . $old_picture)) {
-                unlink($path . $old_picture);
+                    return $this->response->setJSON([
+                        'success' => true,
+                        'message' => 'Profile picture updated successfully',
+                        'new_picture_url' => base_url($path . $newName) // Update to return the URL if needed
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Failed to update profile picture'
+                    ]);
+                }
             }
-    
-            // Update the database with the new picture name
-            $user->where('id', $user_info->id)
-                 ->set(['picture' => $new_filename])
-                 ->update();
-    
-            echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
-        } else {
-            echo json_encode(['status' => 0, 'msg' => 'File move failed.']);
         }
+    
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Invalid image file'
+        ]);
     }
+    
     
     
     
