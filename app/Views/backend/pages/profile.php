@@ -77,22 +77,22 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="">Name</label>
+                                                        <label for="name">Name</label>
                                                         <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
                                                         <span class="text-danger error-text name_error" id="name"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="">Username</label>
+                                                        <label for="username">Username</label>
                                                         <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
                                                         <span class="text-danger error-text username_error" id="username"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="">Bio</label>
-                                                <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
+                                                <label for="bio">Bio</label>
+                                                <textarea name="bio" id="bio" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
                                                 <span class="text-danger error-text bio_error"></span>
                                             </div>
                                             <div class="form-group">
@@ -124,21 +124,21 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="">Current Password</label>
+                                                        <label for="current_password">Current Password</label>
                                                         <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
                                                         <span class="text-danger error-text current_password_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="">New Password</label>
+                                                        <label for="new_password">New Password</label>
                                                         <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
                                                         <span class="text-danger error-text new_password_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="">Confirm new Password</label>
+                                                        <label for="confirm_new_password">Confirm New Password</label>
                                                         <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                         <span class="text-danger error-text confirm_new_password_error"></span>
                                                     </div>
@@ -148,7 +148,6 @@
                                                 <button type="submit" class="btn btn-primary">Change password</button>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -159,6 +158,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

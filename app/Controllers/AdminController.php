@@ -158,44 +158,50 @@ class AdminController extends BaseController
     
     
     public function updatePersonalPictures() {
-        $request = \Config\Services::request();
         $user_id = CIAuth::id();
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
+        
+        // Retrieve the uploaded file
+        if ($file = $this->request->getFile('profile_picture')) {
+            // Check if the file is valid and has not moved
+            if ($file->isValid() && !$file->hasMoved()) {
+                // Generate a new filename
+                $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+                
+                // Move the file to the specified directory
+                $file->move(ROOTPATH . 'public/backend/images/users', $new_filename);
     
-        // Define the path to store the uploaded images
-        $path = 'images/users/';
-        // Get the uploaded file from the request
-        $file = $request->getFile('profile_picture'); // Match the name used in the JS script
-        $old_picture = $user_info->picture;
+                // Prepare data for updating the user's picture
+                $data = ['picture' => $new_filename];
     
-        // Generate a new filename
-        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
+                // Update the user's picture in the database
+                if ($user->where('id', $user_info->id)->set($data)->update()) {
+                    // Optional: Remove the old picture if it exists
+                    if ($user_info->picture != null && file_exists(ROOTPATH . 'public/backend/images/users/' . $user_info->picture)) {
+                        unlink(ROOTPATH . 'public/backend/images/users/' . $user_info->picture);
+                    }
     
-        // Attempt to move the uploaded file
-        if ($file && $file->isValid()) {
-            if ($file->move($path, $new_filename)) {
-                // Delete the old picture if it exists
-                if ($old_picture != null && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture);
+                    return $this->response->setJSON([
+                        'success' => true,
+                        'message' => 'Profile picture updated successfully',
+                        'new_picture_url' => base_url('backend/images/users/' . $new_filename) // Adjust path as needed
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Failed to update profile picture'
+                    ]);
                 }
-    
-                // Update the user's profile picture in the database
-                $user->where('id', $user_info->id)
-                    ->set(['picture' => $new_filename])
-                    ->update();
-    
-                // Return a success response
-                echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_picture_name' => $new_filename]);
-            } else {
-                // Return an error response if the file move failed
-                echo json_encode(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
-        } else {
-            // Return an error response if the file is not valid
-            echo json_encode(['status' => 0, 'msg' => 'Invalid file or no file uploaded.']);
         }
+    
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Invalid image file'
+        ]);
     }
+    
     
     
 
