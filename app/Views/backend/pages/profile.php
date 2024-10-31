@@ -254,13 +254,13 @@ $(document).ready(function() {
                     success: function(response) {
                         if (response.status == 1) {
                             // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
+                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
                                 text: response.msg,
                             }).then(() => {
-                                // Reload page or update table
+                                // Optional: Reload page or update profile picture in a profile card, etc.
                             });
                             $('#editProfilePictureModal').modal('hide');
                         } else {
@@ -283,9 +283,8 @@ $(document).ready(function() {
         }
     });
 });
-
-
 </script>
+
 
 
 <script>
