@@ -762,11 +762,6 @@ public function attendance()
     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
 
-
-
-    // Debugging: Log the fetched attendances
-    log_message('debug', 'Fetched attendances: ' . print_r($attendances, true));
-
     $data = [
         'pageTitle' => 'Attendance',
         'employees' => $employees,
