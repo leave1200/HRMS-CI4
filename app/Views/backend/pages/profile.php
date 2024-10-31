@@ -187,8 +187,12 @@
 </div>
 
 
+
 <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
 
 <script>
@@ -199,14 +203,14 @@ $(document).ready(function() {
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
         $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
-        $('#editProfilePictureModal').modal('show');
+        $('#editProfilePictureModal').modal('show'); // Show the modal
     });
 
     // Handle the file input change event to load and crop the image
     $('#profile_picture_input').on('change', function(event) {
         var files = event.target.files;
         var done = function(url) {
-            $('#profile_picture').attr('src', url);
+            $('#profile_picture').attr('src', url).show(); // Show image once loaded
         };
 
         if (files && files.length > 0) {
@@ -270,7 +274,6 @@ $('#uploadProfilePicture').on('click', function() {
             });
         }
     });
-});
 });
 
 </script>
