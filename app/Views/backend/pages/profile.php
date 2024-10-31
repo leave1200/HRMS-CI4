@@ -1,6 +1,7 @@
 
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="<?= base_url('/backend/extra-assets/ijaboCropTool/ijaboCropTool.min.css') ?>">
 
 <div class="pd-ltr-20 xs-pd-20-10">
     <div class="min-height-200px">
