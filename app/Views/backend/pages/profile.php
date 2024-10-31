@@ -29,13 +29,12 @@
                     <!-- Trigger Button -->
                     <div class="profile-photo">
                     <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                    <img src="<?= !empty($user['picture']) ? base_url('/images/users/' . htmlspecialchars($user['picture'])) : base_url('/images/users/userav-min.png') ?>" 
-                        alt="Profile Photo" 
-                        class="avatar-photo ci-avatar-photo" 
-                        style="width: 150px; height: 150px; border-radius: 30%;">
-                    <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
-                </a>
-
+                        <img src="<?= !empty($user['picture']) ? base_url('/images/users/' . htmlspecialchars($user['picture'])) : base_url('/images/users/userav-min.png') ?>" 
+                            alt="Profile Photo" 
+                            class="avatar-photo ci-avatar-photo" 
+                            style="width: 150px; height: 150px; border-radius: 30%;">
+                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
+                    </a>
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -273,6 +272,22 @@ $('#uploadProfilePicture').on('click', function() {
                 text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
             });
         }
+    });
+});
+$(document).ready(function() {
+    // Handle edit button clicks for profile picture
+    $('.edit-profile-picture-btn').on('click', function() {
+        var id = $(this).data('id');
+        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
+        $('#editProfilePictureModal').modal('show'); // Show the modal
+    });
+
+    // Optionally, you can also bind the click event directly to the pencil icon
+    $('.edit-icon').on('click', function(event) {
+        event.stopPropagation(); // Prevent the click event from bubbling up to the parent anchor tag
+        var id = $(this).closest('.edit-profile-picture-btn').data('id');
+        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
+        $('#editProfilePictureModal').modal('show'); // Show the modal
     });
 });
 
