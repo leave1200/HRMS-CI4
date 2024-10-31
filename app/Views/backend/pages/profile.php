@@ -158,8 +158,8 @@
 
 
 
-<link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
-<script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
+<link rel="stylesheet" href="./extra-assets/ijaboCropTool/ijaboCropTool.min.css">
+<script src="./extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
  <script>
     $(document).ready(function() {
         $('#personal_details_from').on('submit', function(e) {
