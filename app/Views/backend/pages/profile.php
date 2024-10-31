@@ -160,52 +160,66 @@
     </div>
 </div>
 
+<!-- Edit Profile Picture Modal -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="editProfilePictureForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="update_user_id_picture" name="id">
-                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
-                    <img id="image" src="" alt="Image" style="display:none;"/>
-                    <div class="preview" style="width: 100%; overflow: hidden; display:none;">
-                        <img src="" alt="Preview" style="max-width: 100%;"/>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="uploadProfilePicture" class="btn btn-primary">Upload</button>
+            </div>
         </div>
     </div>
 </div>
 
 
+<link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+
 
 <script>
 $(document).ready(function() {
+    var cropper;
+    
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
         $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
         $('#editProfilePictureModal').modal('show');
+        
+        // Initialize the cropper
+        var image = document.getElementById('profile_picture');
+        cropper = new Cropper(image, {
+            aspectRatio: 1, // Set your preferred aspect ratio
+            viewMode: 1,
+            ready: function() {
+                // Optionally, you can perform actions when the cropper is ready
+            }
+        });
     });
 
     // Handle the upload button click
     $('#uploadProfilePicture').on('click', function() {
-        var formData = new FormData();
         var userId = $('#update_user_id_picture').val();
-        var fileInput = $('#profile_picture')[0];
+        
+        // Get the cropped canvas data
+        var canvas = cropper.getCroppedCanvas({
+            width: 300, // Set the desired width
+            height: 300 // Set the desired height
+        });
 
-        if (fileInput.files.length > 0) {
-            formData.append('profile_picture', fileInput.files[0]);
+        canvas.toBlob(function(blob) {
+            var formData = new FormData();
+            formData.append('profile_picture', blob, 'cropped_image.png'); // Append the cropped image blob
             formData.append('id', userId); // Add user ID to the form data
 
             $.ajax({
@@ -241,15 +255,11 @@ $(document).ready(function() {
                     });
                 }
             });
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: 'Please select a file to upload.',
-            });
-        }
+        });
     });
 });
+</script>
+
 </script>
 
 

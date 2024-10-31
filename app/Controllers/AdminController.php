@@ -157,27 +157,27 @@ class AdminController extends BaseController
     {
         $request = Services::request();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
-
+    
         // Get the uploaded file
         $file = $request->getFile('profile_picture');
-
+    
         // Validate the uploaded file
         if ($file && $file->isValid() && !$file->hasMoved()) {
             // Check the file type (optional)
             if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                 return redirect()->back()->with('error', 'Only JPEG, PNG, and GIF files are allowed.');
             }
-
+    
             // Generate a new filename
             $newFileName = $user_id . '_' . $file->getName();
             $filePath = WRITEPATH . 'uploads/users/' . $newFileName;
-
+    
             // Move the file to the desired location
             if ($file->move(WRITEPATH . 'uploads/users', $newFileName)) {
                 $userModel = new User();
                 // Update user profile picture in the database
                 $userModel->update($user_id, ['picture' => $newFileName]);
-
+    
                 return redirect()->back()->with('success', 'Profile picture updated successfully!');
             } else {
                 return redirect()->back()->with('error', 'Failed to move the uploaded file.');
@@ -186,6 +186,7 @@ class AdminController extends BaseController
             return redirect()->back()->with('error', 'Invalid file uploaded.');
         }
     }
+    
     
     
 
