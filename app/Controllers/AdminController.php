@@ -133,48 +133,58 @@ class AdminController extends BaseController
     {
         $request = \Config\Services::request();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
-        $userModel = new User(); // Use your User model instead of EmployeeModel
+        $userModel = new User();
     
+        // Check if the file is uploaded
         if ($imagefile = $request->getFile('user_profile_file')) {
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
                 $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
                 $path = 'images/users/';
-                $imagefile->move($path, $newName);
+                // Move the file to the desired path
+                if ($imagefile->move($path, $newName)) {
+                    // Get the old picture for deletion
+                    $user_info = $userModel->asObject()->where('id', $user_id)->first();
+                    $old_picture = $user_info->picture;
     
-                // Get the old picture for deletion
-                $user_info = $userModel->asObject()->where('id', $user_id)->first();
-                $old_picture = $user_info->picture;
+                    // Update the user picture in the database
+                    $data = ['picture' => $newName];
     
-                // Update the user picture in the database
-                $data = ['picture' => $newName];
+                    if ($userModel->update($user_id, $data)) {
+                        // Delete the old picture if it exists
+                        if ($old_picture != null && file_exists($path . $old_picture)) {
+                            unlink($path . $old_picture);
+                        }
     
-                if ($userModel->update($user_id, $data)) {
-                    // Delete the old picture if it exists
-                    if ($old_picture != null && file_exists($path . $old_picture)) {
-                        unlink($path . $old_picture);
+                        return $this->response->setJSON([
+                            'success' => true,
+                            'message' => 'Profile picture updated successfully',
+                            'new_picture_url' => base_url($path . $newName)
+                        ]);
+                    } else {
+                        return $this->response->setJSON([
+                            'success' => false,
+                            'message' => 'Failed to update profile picture in the database'
+                        ]);
                     }
-    
-                    return $this->response->setJSON([
-                        'success' => true,
-                        'message' => 'Profile picture updated successfully',
-                        'new_picture_url' => base_url($path . $newName) // Update to return the URL if needed
-                    ]);
                 } else {
                     return $this->response->setJSON([
                         'success' => false,
-                        'message' => 'Failed to update profile picture'
+                        'message' => 'Failed to move the uploaded file'
                     ]);
                 }
+            } else {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Invalid image file or file has already been moved'
+                ]);
             }
         }
     
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Invalid image file'
+            'message' => 'No file uploaded'
         ]);
     }
-    
-    
     
     
 
