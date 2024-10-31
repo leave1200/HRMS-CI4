@@ -159,10 +159,6 @@
         </div>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
-<?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
         $('#personal_details_from').on('submit', function(e) {
@@ -274,5 +270,7 @@ document.querySelector('#saveProfileButton').addEventListener('click', uploadCro
 
 
 </script>
-<?= $this->endSection() ?> 
+
+<?= $this->endSection() ?>
+
 
