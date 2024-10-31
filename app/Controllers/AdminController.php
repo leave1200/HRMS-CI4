@@ -162,26 +162,30 @@ class AdminController extends BaseController
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
-    
-        // Get the new picture name from the request
-        $newPictureName = $request->getPost('profile_picture'); // Assuming the new picture name is sent in the POST request
-    
-        // Validate the new picture name
-        if (!$newPictureName) {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'No picture name provided.']);
+        
+        // Check if the file is uploaded
+        if (!$request->getFile('profile_picture')->isValid()) {
+            return $this->response->setJSON(['status' => 0, 'msg' => 'No valid picture uploaded.']);
         }
     
-        $userModel = new \App\Models\User();
+        // Get the uploaded file
+        $file = $request->getFile('profile_picture');
+    
+        // Generate a new picture name (you can customize the logic here)
+        $newPictureName = $user_id . '_' . time() . '.' . $file->getExtension();
+        $file->move(WRITEPATH . 'uploads/users/', $newPictureName); // Move the file to the uploads directory
     
         // Update user profile picture in the database
+        $userModel = new \App\Models\User();
         $updateStatus = $userModel->update($user_id, ['picture' => $newPictureName]);
     
         if ($updateStatus) {
-            return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!']);
+            return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newPictureName]);
         } else {
             return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update profile picture.']);
         }
     }
+    
     
     
     
