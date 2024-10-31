@@ -27,11 +27,13 @@
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                <!-- Trigger Button -->
-                        <div class="profile-photo">
-                            <a href="javascript:;" data-toggle="modal" data-target="#cropperModal" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                            <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
-                            <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" id="profileImage" alt="" class="avatar-photo ci-avatar-photo">
-                        </div>
+               <div class="profile-photo">
+                        <a href="javascript:;" data-toggle="modal" data-target="#cropperModal" class="edit-avatar">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" id="profileImage" alt="Profile Photo" class="avatar-photo ci-avatar-photo">
+                    </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -192,20 +194,22 @@
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function (e) {
-                cropperImage.src = e.target.result;
+            reader.onload = function (event) {
+                cropperImage.src = event.target.result;
+
+                // Initialize Cropper.js on the new image
                 if (cropper) {
-                    cropper.destroy(); // Destroy previous cropper instance
+                    cropper.destroy(); // Destroy the old cropper instance if it exists
                 }
                 cropper = new Cropper(cropperImage, {
                     aspectRatio: 1,
                     viewMode: 1,
                 });
+
+                // Open the modal after the image has been loaded
+                $('#cropperModal').modal('show');
             };
             reader.readAsDataURL(file);
-
-            // Open the modal
-            $('#cropperModal').modal('show');
         }
     });
 
@@ -222,7 +226,7 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    if (response.status == 1) {
+                    if (response.status === 1) {
                         toastr.success('Profile picture updated successfully!');
                         // Update the profile image preview
                         const profileImage = document.getElementById('profileImage');
@@ -240,6 +244,7 @@
         });
     });
 </script>
+
 
 
 
