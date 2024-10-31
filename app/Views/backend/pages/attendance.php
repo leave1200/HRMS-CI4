@@ -478,4 +478,37 @@ function signInPmEmployee(attendanceId) {
         // Run the function on page load
         window.onload = checkButtonVisibility;
     </script> -->
+    <script>
+    $(document).ready(function() {
+        var currentUserName = '<?= esc($currentUserName) ?>'; // Get the user's name from PHP
+
+        // Initialize DataTable
+        var table = $('#attendanceTable').DataTable({
+            // Your DataTable options
+            data: <?= json_encode($attendances) ?>, // Pass attendance data
+            columns: [
+                { data: 'id' },
+                { data: 'name' }, // Ensure this matches your data structure
+                { data: 'office' },
+                { data: 'position' },
+                { data: 'sign_in' },
+                { data: 'sign_out' },
+                { data: 'pm_sign_in' },
+                { data: 'pm_sign_out' }
+            ]
+        });
+
+        // Filter function
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var name = data[1]; // Adjust based on your column index for name
+                return name === currentUserName;
+            }
+        );
+
+        // Re-draw the table to apply the filter
+        table.draw();
+    });
+</script>
+
 <?= $this->endSection() ?>
