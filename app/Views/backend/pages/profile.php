@@ -172,7 +172,7 @@
             </div>
             <div class="modal-body">
                 <!-- Hidden input to store user ID -->
-                <input type="hidden" id="update_user_id_picture" value="">
+                <input type="hidden" id="update_user_id_picture" value="<?= old('id', get_user()->id) ?>">
                 
                 <!-- Image upload input -->
                 <div>
