@@ -744,46 +744,41 @@ public function updateDesignation()
 
 
 
-public function attendance()
-{
-    $employeeModel = new EmployeeModel();
-    $employees = $employeeModel->findAll();
+    public function attendance()
+    {
+        $employeeModel = new EmployeeModel();
+        $employees = $employeeModel->findAll();
+        
+        $designationModel = new Designation();
+        $designations = $designationModel->findAll();
+        
+        $positionModel = new Position();
+        $positions = $positionModel->findAll();
+        
+        $attendanceModel = new AttendanceModel();
+        
+        // Get the current user's name from the session
+        $currentUserName = session()->get('name'); // Assuming this is the user's name
     
+        // Fetch attendance records for the current user
+        $filteredAttendances = $attendanceModel->getAttendanceRecords($currentUserName);
     
-    $designationModel = new Designation();
-    $designations = $designationModel->findAll();
+        // Debugging: Log the filtered attendances
+        log_message('debug', 'Filtered attendances for user ' . $currentUserName . ': ' . print_r($filteredAttendances, true));
     
-    $positionModel = new Position();
-    $positions = $positionModel->findAll();
+        $data = [
+            'pageTitle' => 'Attendance',
+            'employees' => $employees,
+            'designations' => $designations,
+            'positions' => $positions,
+            'attendances' => $filteredAttendances, // Use the filtered attendance records
+            'userStatus' => session()->get('userStatus'),
+            'currentUserName' => $currentUserName
+        ];
+        
+        return view('backend/pages/attendance', $data);
+    }
     
-    $attendanceModel = new AttendanceModel();
-    
-    // Fetch attendance records including pm_sign_out
-    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-    $userStatus = session()->get('userStatus');
-    $currentUserName = session()->get('name'); // Assuming this is the user's name
-    $userId = session()->get('userStatus'); // Assuming this is the user ID
-    $userModel = new User(); // Adjust this to your actual user model
-    $currentUser = $userModel->find($userId);
-    $currentUserName = $currentUser ? $currentUser['name'] : null; // Get the name or set to null if not found
-
-
-
-    // Debugging: Log the fetched attendances
-    log_message('debug', 'Fetched attendances: ' . print_r($attendances, true));
-
-    $data = [
-        'pageTitle' => 'Attendance',
-        'employees' => $employees,
-        'designations' => $designations,
-        'positions' => $positions,
-        'attendances' => $attendances, // Include attendance records here
-        'userStatus' => $userStatus,
-        'currentUserName' => $currentUserName
-    ];
-    
-    return view('backend/pages/attendance', $data);
-}
 
 
 
