@@ -136,9 +136,20 @@ class AdminController extends BaseController
             $user_id = $this->request->getPost('id');
             $picture = $this->request->getFile('profile_picture');
 
-            // Validate file
-            if (!$picture->isValid() || !$picture->hasMoved()) {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid picture file.']);
+            // Check if the file is uploaded and is valid
+            if (!$picture || !$picture->isValid()) {
+                return $this->response->setJSON([
+                    'status' => 0,
+                    'msg' => 'Invalid picture file. Please upload a valid image.'
+                ]);
+            }
+
+            // Debugging the file upload properties
+            if ($picture->hasMoved()) {
+                return $this->response->setJSON([
+                    'status' => 0,
+                    'msg' => 'The file has already been moved.'
+                ]);
             }
 
             // Set file name and path, then move the file
@@ -150,12 +161,22 @@ class AdminController extends BaseController
             $updateResult = $userModel->updatePictureDirect($user_id, $newFilename);
 
             if ($updateResult) {
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'new_picture_name' => $newFilename]);
+                return $this->response->setJSON([
+                    'status' => 1,
+                    'msg' => 'Profile picture updated successfully.',
+                    'new_picture_name' => $newFilename
+                ]);
             } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
+                return $this->response->setJSON([
+                    'status' => 0,
+                    'msg' => 'Failed to update profile picture in the database.'
+                ]);
             }
         } catch (\Exception $e) {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'An error occurred: ' . $e->getMessage()]);
+            return $this->response->setJSON([
+                'status' => 0,
+                'msg' => 'An error occurred: ' . $e->getMessage()
+            ]);
         }
     }
     
