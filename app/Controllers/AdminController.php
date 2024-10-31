@@ -132,23 +132,34 @@ class AdminController extends BaseController
     }
     public function updatePictureDirect($user_id, $new_filename)
     {
-        // Connect to the database
-        $db = Database::connect();
-        $builder = $db->table('users');
+        try {
+            // Connect to the database
+            $db = Database::connect();
+            $builder = $db->table('users');
 
-        // Prepare the data to update
-        $updateData = ['picture' => $new_filename];
+            // Prepare the data to update
+            $updateData = ['picture' => $new_filename];
 
-        // Execute the update query directly
-        $updateResult = $builder->where('id', $user_id)->update($updateData);
+            // Execute the update query directly
+            $updateResult = $builder->where('id', $user_id)->update($updateData);
 
-        // Check for success or failure
-        if ($updateResult) {
-            return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
-        } else {
-            // Log any database errors
-            log_message('error', 'Database update failed: ' . $db->error());
-            return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update the profile picture.']);
+            // Check for success or failure
+            if ($db->affectedRows() > 0) {
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
+            } else {
+                // If no rows were affected, send a message with possible issues
+                return $this->response->setJSON([
+                    'status' => 0,
+                    'msg' => 'No rows were updated. Please check if the user ID exists or if the new filename is different.'
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            // Log the error message
+            log_message('error', 'Database update failed: ' . $e->getMessage());
+
+            // Return error response to client
+            return $this->response->setJSON(['status' => 0, 'msg' => 'An error occurred: ' . $e->getMessage()]);
         }
     }
     
