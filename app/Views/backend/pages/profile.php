@@ -159,127 +159,79 @@
 
 <?= $this->section('scripts') ?>
 <script>
-$(document).ready(function() {
-    var cropper;
-    var $image = $('#user_profile_file');
-    var $preview = $('.ci-avatar-photo');
+    $(document).ready(function() {
+        $('#personal_details_from').on('submit', function(e) {
+            var form = this;
 
-    // Handle file input change
-    $('#user_profile_file').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.ci-avatar-photo'
-            });
-        };
-        var reader, file;
+            // Perform validation if needed
+            var valid = true;
 
-        if (files && files.length > 0) {
-            file = files[0];
-
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function(e) {
-                    done(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    // Handle form submission for profile picture update
-    $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault();
-
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_employee_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'update_profile_picture', // Adjust URL as needed
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            }).then(() => {
-                                location.reload(); // Refresh to show updated picture
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                            $preview.attr('src', response.new_picture_url);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
-    });
-
-    // Handle password change form submission
-    $('#change_password_form').on('submit', function(e) {
-        e.preventDefault();
-        var csrfName = $('.ci_csrf_data').attr('name');
-        var csrfHash = $('.ci_csrf_data').val();
-        var form = this;
-        var formData = new FormData(form);
-        formData.append(csrfName, csrfHash);
-
-        $.ajax({
-            url: $(form).attr('action'),
-            method: $(form).attr('method'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            beforeSend: function() {
-                toastr.remove();
-                $(form).find('span.error-text').text('');
-            },
-            success: function(response) {
-                if (response.trim() === 'success') {
-                    $(form)[0].reset();
-                    toastr.success('Password has been changed successfully.');
-                } else {
-                    toastr.error(response);
-                }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('An error occurred. Please try again.');
-                console.error('Error:', error);
+            if (valid) {
+                // If validation passes, allow form to submit naturally
+                form.submit();
+            } else {
+                // Prevent form submission if validation fails
+                e.preventDefault();
             }
         });
     });
-});
-</script>
 
+
+    $('#user_profile_file').ijaboCropTool({
+    preview: '.ci-avatar-photo',
+    setRatio: 1,
+    allowedExtensions: ['jpg', 'jpeg', 'png'],
+    processUrl: '<?= route_to('update-profile-picture') ?>',
+    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    onSuccess:function(responseText, element, status) {
+        if( status == 1 ) {
+            toastr.success('message');
+        } else {
+            toastr.error('message');
+        }
+    },
+    onError: function(message, element, status) {
+        alert(message);
+    }
+});
+
+/$('#change_password_form').on('submit', function(e){
+    e.preventDefault();
+    // CSRF hash
+    var csrfName = $('.ci_csrf_data').attr('name');
+    var csrfHash = $('.ci_csrf_data').val();
+    var form = this;
+    var formdata = new FormData(form);
+    formdata.append(csrfName, csrfHash);
+
+    $.ajax({
+        url: $(form).attr('action'),
+        method: $(form).attr('method'),
+        data: formdata,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function(){
+            toastr.remove();
+            $(form).find('span.error-text').text('');
+        },
+        success: function(response){
+            if (response.trim() === 'success') {
+                $(form)[0].reset();
+                toastr.success('Password has been changed successfully.');
+            } else {
+                // If the response contains an error message, display it
+                toastr.error(response);
+            }
+        },
+        error: function(xhr, status, error){
+            toastr.error('An error occurred. Please try again.');
+            console.error('Error:', error);
+        }
+    });
+});
+
+
+</script>
 <?= $this->endSection() ?> 
 
