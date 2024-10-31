@@ -234,39 +234,39 @@ $(document).ready(function() {
             formData.append('id', userId); // Add user ID to the form data
 
             $.ajax({
-                type: 'POST',
-                url: '<?= route_to('admin.update-profile-picture') ?>',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status == 1) {
-                        // Update the profile picture displayed on the page
-                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.msg,
-                        }).then(() => {
-                            $('#editProfilePictureModal').modal('hide');
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.msg,
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    console.error('Error details:', xhr.responseJSON);
+            type: 'POST',
+            url: '<?= route_to('admin.update-profile-picture') ?>',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.status == 1) {
+                    // Update the profile picture displayed on the page
+                    $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.msg,
+                    }).then(() => {
+                        $('#editProfilePictureModal').modal('hide');
+                    });
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                        text: response.msg,
                     });
                 }
-            });
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                });
+            }
+        });
+
         });
     });
 });
