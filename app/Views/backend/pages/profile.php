@@ -1,3 +1,4 @@
+
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
 
@@ -25,6 +26,7 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
+                    <!-- Trigger Button -->
                     <div class="profile-photo">
                         <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
                             <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
@@ -174,8 +176,7 @@
                 
                 <!-- Image upload input -->
                 <div>
-                    <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
-                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -186,6 +187,7 @@
     </div>
 </div>
 
+
 <script>
 $(document).ready(function() {
     // Handle edit button clicks for profile picture
@@ -195,42 +197,103 @@ $(document).ready(function() {
         $('#editProfilePictureModal').modal('show');
     });
 
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        if (files && files.length > 0) {
-            var file = files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#image').attr('src', e.target.result).show();
-            }
-            reader.readAsDataURL(file);
+    // Handle the upload button click
+    $('#uploadProfilePicture').on('click', function() {
+        var formData = new FormData();
+        var userId = $('#update_user_id_picture').val();
+        var fileInput = $('#profile_picture')[0];
+
+        if (fileInput.files.length > 0) {
+            formData.append('profile_picture', fileInput.files[0]);
+            formData.append('id', userId); // Add user ID to the form data
+
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('update-profile-picture') ?>',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 1) {
+                        // Update the profile picture displayed on the page
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.msg,
+                        }).then(() => {
+                            $('#editProfilePictureModal').modal('hide');
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.msg,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please select a file to upload.',
+            });
         }
     });
+});
 
-    // Handle upload button click
-    $('#uploadProfilePicture').on('click', function() {
-        var userId = $('#update_user_id_picture').val();
-        var formData = new FormData();
-        formData.append('profile_picture', $('#profile_picture')[0].files[0]);
-        formData.append('user_id', userId);
-        
-        $.ajax({
-            url: "<?= route_to('upload-profile-picture'); ?>",
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                if (response.success) {
-                    location.reload(); // Reload the page to see the new profile picture
-                } else {
-                    alert(response.error); // Show any error messages
-                }
+</script>
+
+
+
+<script>
+    /$('#change_password_form').on('submit', function(e){
+    e.preventDefault();
+    // CSRF hash
+    var csrfName = $('.ci_csrf_data').attr('name');
+    var csrfHash = $('.ci_csrf_data').val();
+    var form = this;
+    var formdata = new FormData(form);
+    formdata.append(csrfName, csrfHash);
+
+    $.ajax({
+        url: $(form).attr('action'),
+        method: $(form).attr('method'),
+        data: formdata,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function(){
+            toastr.remove();
+            $(form).find('span.error-text').text('');
+        },
+        success: function(response){
+            if (response.trim() === 'success') {
+                $(form)[0].reset();
+                toastr.success('Password has been changed successfully.');
+            } else {
+                // If the response contains an error message, display it
+                toastr.error(response);
             }
-        });
+        },
+        error: function(xhr, status, error){
+            toastr.error('An error occurred. Please try again.');
+            console.error('Error:', error);
+        }
     });
 });
 </script>
-
 <?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+
+<?= $this->endSection() ?> 
+
