@@ -28,12 +28,10 @@
                 <div class="pd-20 card-box height-100-p">
                <!-- Trigger Button -->
                <div class="profile-photo">
-                        <a href="javascript:;" data-toggle="modal" data-target="#cropperModal" class="edit-avatar">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" id="profileImage" alt="Profile Photo" class="avatar-photo ci-avatar-photo">
-                    </div>
+                    <a href="javascript:;" data-id="<?= get_user()->id ?>" class="edit-profile-picture-btn">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo">
+                    </a>
+                </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -158,23 +156,26 @@
                 </div>
             </div>
         </div>
-<!-- Cropper Modal -->
-<div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel" aria-hidden="true">
+<!-- Edit Profile Picture Modal -->
+<div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cropperModalLabel">Crop Profile Picture</h5>
+                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <img id="cropperImage" style="max-width: 100%;" alt="Crop Image">
+                <input type="file" id="profile_picture" accept="image/*" style="display:none;">
+                <img id="image" src="" alt="Profile Picture" style="max-width: 100%; display:none;">
+                <div class="preview" style="overflow: hidden; width: 200px; height: 200px; border: 1px solid #ddd;"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="cropImageButton">Crop and Save</button>
             </div>
+            <input type="hidden" id="update_employee_id_picture">
         </div>
     </div>
 </div>
@@ -186,66 +187,101 @@
 
 
 <script>
-    let cropper;
-    const cropperImage = document.getElementById('cropperImage');
-    const userFileInput = document.getElementById('user_profile_file');
+$(document).ready(function() {
+    var cropper;
+    var $image = $('#image');
+    var $preview = $('.preview');
 
-    userFileInput.addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                cropperImage.src = event.target.result;
+    // Handle edit button clicks for profile picture
+    $('.edit-profile-picture-btn').on('click', function() {
+        var id = $(this).data('id');
+        $('#update_employee_id_picture').val(id);
+        $('#profile_picture').click(); // Trigger file input click
+    });
 
-                // Initialize Cropper.js on the new image
-                if (cropper) {
-                    cropper.destroy(); // Destroy the old cropper instance if it exists
-                }
-                cropper = new Cropper(cropperImage, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                });
+    // Handle file input change
+    $('#profile_picture').on('change', function(event) {
+        var files = event.target.files;
+        var done = function(url) {
+            $image.attr('src', url).show();
+            $preview.show();
+            cropper = new Cropper($image[0], {
+                aspectRatio: 1,
+                viewMode: 1,
+                preview: '.preview'
+            });
+        };
+        var reader;
+        var file;
 
-                // Open the modal after the image has been loaded
-                $('#cropperModal').modal('show');
-            };
-            reader.readAsDataURL(file);
+        if (files && files.length > 0) {
+            file = files[0];
+
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                reader = new FileReader();
+                reader.onload = function() {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     });
 
-    document.getElementById('cropImageButton').addEventListener('click', function () {
-        cropper.getCroppedCanvas().toBlob((blob) => {
-            const formData = new FormData();
-            formData.append('user_profile_file', blob);
-            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); // CSRF token
+    // Handle cropping and saving
+    $('#cropImageButton').on('click', function() {
+        var canvas;
 
-            $.ajax({
-                url: '<?= route_to('update-profile-picture') ?>',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.status === 1) {
-                        toastr.success('Profile picture updated successfully!');
-                        // Update the profile image preview
-                        const profileImage = document.getElementById('profileImage');
-                        profileImage.src = URL.createObjectURL(blob); // Update preview
-                    } else {
-                        toastr.error(response.msg || 'An error occurred');
-                    }
-                    // Close the modal
-                    $('#cropperModal').modal('hide');
-                },
-                error: function (xhr, status, error) {
-                    toastr.error('An error occurred while uploading the image.');
-                }
+        if (cropper) {
+            canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500,
             });
-        });
+
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', $('#update_employee_id_picture').val());
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'update_profile_picture', // Ensure this URL matches your route
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            }).then(() => {
+                                location.reload(); // Reload page or update table
+                            });
+                            $('#editProfilePictureModal').modal('hide');
+                            $('.avatar-photo').attr('src', response.new_picture_url);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                        });
+                    }
+                });
+            }, 'image/png');
+        }
     });
+});
 </script>
-
-
 
 
 <script>
