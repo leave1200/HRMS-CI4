@@ -26,19 +26,17 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                    <!-- Trigger Button -->
-                    <div class="profile-photo">
-                        <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= $user->id ?>"> <!-- Use $user from the database -->
-                            <img src="<?= empty($user->picture) ? '/images/users/userav-min.png' : '/images/users/' . $user->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
-                            <i class="fa fa-pencil edit-icon" aria-hidden="true"></i> 
-                        </a>
-                    </div>
-                    <h5 class="text-center h5 mb-0 ci-user-name"><?= $user->name ?></h5> <!-- Display the user's name -->
-                    <p class="text-center text-muted font-14 ci-user-email"><?= $user->email ?></p> <!-- Display the user's email -->
+               <!-- Trigger Button -->
+               <div class="profile-photo">
+                    <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
+                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
+                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i> 
+                    </a>
+                </div>
+                    <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
+                    <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
             </div>
-        </div>
-
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
                     <div class="profile-tab height-100-p">
