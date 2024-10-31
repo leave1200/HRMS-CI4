@@ -26,11 +26,12 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                <div class="profile-photo">
-                    <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                    <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
-                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" id="profileImage" alt="" class="avatar-photo ci-avatar-photo">
-                </div>
+               <!-- Trigger Button -->
+                        <div class="profile-photo">
+                            <a href="javascript:;" data-toggle="modal" data-target="#cropperModal" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                            <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" accept="image/*">
+                            <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" id="profileImage" alt="" class="avatar-photo ci-avatar-photo">
+                        </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -155,34 +156,55 @@
                 </div>
             </div>
         </div>
+<!-- Cropper Modal -->
+<div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cropperModalLabel">Crop Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="cropperImage" style="max-width: 100%;" alt="Crop Image">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="cropImageButton">Crop and Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-
-        <script>
+<script>
     let cropper;
-    const profileImage = document.getElementById('profileImage');
+    const cropperImage = document.getElementById('cropperImage');
     const userFileInput = document.getElementById('user_profile_file');
 
-    userFileInput.addEventListener('change', function(e) {
+    userFileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                profileImage.src = e.target.result;
+            reader.onload = function (e) {
+                cropperImage.src = e.target.result;
                 if (cropper) {
                     cropper.destroy(); // Destroy previous cropper instance
                 }
-                cropper = new Cropper(profileImage, {
+                cropper = new Cropper(cropperImage, {
                     aspectRatio: 1,
                     viewMode: 1,
-                    preview: '.ci-avatar-photo',
                 });
             };
             reader.readAsDataURL(file);
+
+            // Open the modal
+            $('#cropperModal').modal('show');
         }
     });
 
-    function uploadCroppedImage() {
+    document.getElementById('cropImageButton').addEventListener('click', function () {
         cropper.getCroppedCanvas().toBlob((blob) => {
             const formData = new FormData();
             formData.append('user_profile_file', blob);
@@ -194,28 +216,26 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     if (response.status == 1) {
                         toastr.success('Profile picture updated successfully!');
+                        // Update the profile image preview
+                        const profileImage = document.getElementById('profileImage');
                         profileImage.src = URL.createObjectURL(blob); // Update preview
                     } else {
                         toastr.error(response.msg || 'An error occurred');
                     }
+                    // Close the modal
+                    $('#cropperModal').modal('hide');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     toastr.error('An error occurred while uploading the image.');
                 }
             });
         });
-    }
-
-    // Call uploadCroppedImage when needed, for example:
-    document.querySelector('.edit-avatar').addEventListener('click', function() {
-        if (cropper) {
-            uploadCroppedImage();
-        }
     });
 </script>
+
 
 
 <script>
