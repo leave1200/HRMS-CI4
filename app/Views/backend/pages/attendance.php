@@ -457,7 +457,7 @@ function signInPmEmployee(attendanceId) {
 
             // Define time ranges in minutes from 00:00
             const range1Start = 7 * 60 + 30; // 07:30 AM
-            const range1End = 8 * 60 + 30;   // 08:30 AM
+            const range1End = 11 * 60 + 30;   // 08:30 AM
             const range2Start = 12 * 60 + 30; // 12:30 PM
             const range2End = 13 * 60 + 30;   // 01:30 PM
 
