@@ -171,6 +171,7 @@
                 </button>
             </div>
             <div class="modal-body">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
                 <img id="profile_picture" src="" alt="Profile Picture" style="max-width: 100%;">
             </div>
             <div class="modal-footer">
@@ -189,22 +190,44 @@
 <script>
 $(document).ready(function() {
     var cropper;
-    
+
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
         $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
         $('#editProfilePictureModal').modal('show');
+
+        // Reset the cropper if it exists
+        if (cropper) {
+            cropper.destroy();
+        }
+
+        // Trigger the file input click
+        $('#fileInput').trigger('click');
+    });
+
+    // Handle file selection
+    $('#fileInput').on('change', function(event) {
+        var files = event.target.files;
+        var done = function(url) {
+            $('#profile_picture').attr('src', url);
+        };
         
-        // Initialize the cropper
-        var image = document.getElementById('profile_picture');
-        cropper = new Cropper(image, {
-            aspectRatio: 1, // Set your preferred aspect ratio
-            viewMode: 1,
-            ready: function() {
-                // Optionally, you can perform actions when the cropper is ready
-            }
-        });
+        if (files && files.length > 0) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                done(reader.result);
+            };
+            reader.readAsDataURL(files[0]);
+
+            // Initialize the cropper once the image is loaded
+            $('#profile_picture').on('load', function() {
+                cropper = new Cropper(this, {
+                    aspectRatio: 1, // Set your preferred aspect ratio
+                    viewMode: 1,
+                });
+            });
+        }
     });
 
     // Handle the upload button click
@@ -260,7 +283,6 @@ $(document).ready(function() {
 });
 </script>
 
-</script>
 
 
 
