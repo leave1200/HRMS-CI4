@@ -132,26 +132,29 @@ class AdminController extends BaseController
     public function updatePersonalPictures()
     {
         $request = \Config\Services::request();
-        $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
+        $user_id = CIAuth::id(); // Get the current user's ID
         $userModel = new User();
     
         // Check if the file is uploaded
-        if ($imagefile = $request->getFile('profile_picture')) { // Use the correct key
+        if ($imagefile = $request->getFile('profile_picture')) {
+            // Validate the uploaded file
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
-                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
+                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName(); // Generate a unique name
                 $path = 'images/users/';
+    
                 // Move the file to the desired path
                 if ($imagefile->move($path, $newName)) {
                     // Get the old picture for deletion
                     $user_info = $userModel->asObject()->where('id', $user_id)->first();
                     $old_picture = $user_info->picture;
     
-                    // Update the user picture in the database
+                    // Prepare the data for updating the database
                     $data = ['picture' => $newName];
     
+                    // Update the user picture in the database
                     if ($userModel->update($user_id, $data)) {
                         // Delete the old picture if it exists
-                        if ($old_picture != null && file_exists($path . $old_picture)) {
+                        if ($old_picture && file_exists($path . $old_picture)) {
                             unlink($path . $old_picture);
                         }
     
@@ -185,6 +188,7 @@ class AdminController extends BaseController
             'message' => 'No file uploaded'
         ]);
     }
+    
     
     
     
