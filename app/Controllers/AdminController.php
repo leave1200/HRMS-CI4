@@ -77,14 +77,27 @@ class AdminController extends BaseController
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    public function profile(){
+    public function profile() {
+        // Get user ID from session
+        $userId = session()->get('user_id'); // Make sure you have stored user_id in session
+        
+        // Get user status from session
         $userStatus = session()->get('userStatus');
+        
+        // Load the user model and fetch user data
+        $userModel = new \App\Models\User(); // Adjust according to your actual model namespace
+        $user = $userModel->get_user($userId); // Fetch user data including picture
+    
+        // Prepare data to be passed to the view
         $data = array(
-            'pageTitle'=>'Profile',
-            'userStatus' => $userStatus
+            'pageTitle' => 'Profile',
+            'userStatus' => $userStatus,
+            'user' => $user // Add user data to the view
         );
+    
         return view('backend/pages/profile', $data);
     }
+    
     public function updatePersonalDetails() {
         $request = \Config\Services::request();
         $validation = \Config\Services::validation();
