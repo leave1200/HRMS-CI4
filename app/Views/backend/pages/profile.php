@@ -33,7 +33,7 @@
                             alt="Profile Photo" 
                             class="avatar-photo ci-avatar-photo" 
                             style="width: 150px; height: 150px; border-radius: 30%;">
-                        <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
+                            <i class="icon-copy dw dw-edit-1"></i>
                     </a>
                 </div>
 
