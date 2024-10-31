@@ -130,38 +130,25 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updatePersonalPictures() {
-        $request = \Config\Services::request();
-        $user_id = CIAuth::id(); // Replace CIAuth::id() with the method you use to get the authenticated user ID.
-        $user = new User();
-        $user_info = $user->asObject()->where('id', $user_id)->first();
-        
-        $path = 'public/images/users/';
-        $file = $request->getFile('profile_picture');
-        $old_picture = $user_info->picture;
-    
-        if (!$file || !$file->isValid() || $file->hasMoved()) {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file upload.']);
-        }
-    
-        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-    
-        if ($file->move($path, $new_filename)) {
-            if ($old_picture && file_exists($path . $old_picture)) {
-                unlink($path . $old_picture);
-            }
-    
-            // Attempt to update the picture in the database
-            $updateResult = $user->where('id', $user_id)->set(['picture' => $new_filename])->update();
-    
-            if ($updateResult) {
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'new_picture_name' => $new_filename]);
-            } else {
-                log_message('error', 'Database update failed for user ID ' . $user_id . ': ' . print_r($user->errors(), true));
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update database.']);
-            }
+    public function updatePictureDirect($user_id, $new_filename)
+    {
+        // Connect to the database
+        $db = Database::connect();
+        $builder = $db->table('users');
+
+        // Prepare the data to update
+        $updateData = ['picture' => $new_filename];
+
+        // Execute the update query directly
+        $updateResult = $builder->where('id', $user_id)->update($updateData);
+
+        // Check for success or failure
+        if ($updateResult) {
+            return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
         } else {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move uploaded file.']);
+            // Log any database errors
+            log_message('error', 'Database update failed: ' . $db->error());
+            return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update the profile picture.']);
         }
     }
     
