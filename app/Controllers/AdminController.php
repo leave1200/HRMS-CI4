@@ -129,7 +129,16 @@ class AdminController extends BaseController
             }
         }
     }
-    public function updateProfilePicture() {
+    public function updatePersonalPictures() {
+        $request = \Config\Services::request();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+        $path = 'images/users/';
+        $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
+        $old_picture = $user_info->picture;
+    
         if ($this->request->getMethod() == 'post') {
             $userId = $this->request->getPost('id');
             $file = $this->request->getFile('profile_picture');
@@ -153,7 +162,6 @@ class AdminController extends BaseController
     
         return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
     }
-    
     
     
     
