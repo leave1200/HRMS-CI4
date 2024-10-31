@@ -155,7 +155,7 @@
                             <tbody>
                                 <?php if (!empty($attendances)): ?>
                                     <?php foreach ($attendances as $attendance): ?>
-                                        <?php if (esc($attendance['name']) === esc($currentUserName)): // Compare with logged-in user's name ?>
+                                        <?php if (esc($attendance['id']) === esc($currentUserName)): // Compare with logged-in user's name ?>
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
