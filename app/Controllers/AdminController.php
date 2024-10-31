@@ -78,7 +78,8 @@ class AdminController extends BaseController
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
     public function profile(){
-        
+        $userModel = new User();
+        $user = $userModel->findAll();
         $userStatus = session()->get('userStatus');
         $data = array(
             'pageTitle'=>'Profile',
