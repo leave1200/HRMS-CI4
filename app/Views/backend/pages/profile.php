@@ -1,9 +1,6 @@
 
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
 
 <div class="pd-ltr-20 xs-pd-20-10">
     <div class="min-height-200px">
@@ -28,18 +25,15 @@
         </div>
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
-            <div class="pd-20 card-box height-100-p">
-                <div class="profile-photo">
-                    <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
-                    <button id="edit-avatar" class="edit-avatar ci-avatar-photo">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    <canvas id="cropperCanvas" style="display:none;"></canvas>
+                <div class="pd-20 card-box height-100-p">
+                    <div class="profile-photo">
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                    </div>
+                    <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
+                    <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
-                <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
-                <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
-            </div>
             </div>
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
@@ -164,99 +158,79 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
- <script>
-    let cropper;
+<script>
+    $(document).ready(function() {
+        $('#personal_details_from').on('submit', function(e) {
+            var form = this;
 
-    document.getElementById('user_profile_file').addEventListener('change', function (e) {
-        const files = e.target.files;
+            // Perform validation if needed
+            var valid = true;
 
-        if (files && files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                if (cropper) {
-                    cropper.destroy();
-                }
-                const image = document.createElement('img');
-                image.src = event.target.result;
-
-                // Create a new Cropper instance
-                cropper = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    ready: function () {
-                        const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL();
-                        document.querySelector('.ci-avatar-photo').src = croppedImageDataUrl; // Set the image preview
-                    },
-                });
-
-                // Append the image to a container in the DOM
-                const container = document.createElement('div');
-                container.appendChild(image);
-                document.body.appendChild(container);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-    });
-
-    // Handle the submission of the cropped image
-    document.getElementById('personal_details_form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        if (cropper) {
-            const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL('image/png');
-
-            // Prepare to send the cropped image via AJAX
-            $.ajax({
-                url: '<?= route_to('update-profile-picture') ?>',
-                method: 'POST',
-                data: {
-                    image: croppedImageDataUrl,
-                    <?= csrf_field(); ?>
-                },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success('Profile picture updated successfully.');
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function () {
-                    toastr.error('An error occurred while uploading the image.');
-                }
-            });
-        } else {
-            toastr.error('Please upload and crop an image before submitting.');
-        }
-    });
-
-    $('#change_password_form').on('submit', function (e) {
-        e.preventDefault();
-        var form = this;
-        var formdata = new FormData(form);
-        $.ajax({
-            url: $(form).attr('action'),
-            method: $(form).attr('method'),
-            data: formdata,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                toastr.remove();
-                $(form).find('span.error-text').text('');
-            },
-            success: function (response) {
-                if (response.trim() === 'success') {
-                    $(form)[0].reset();
-                    toastr.success('Password has been changed successfully.');
-                } else {
-                    toastr.error(response);
-                }
-            },
-            error: function () {
-                toastr.error('An error occurred. Please try again.');
+            if (valid) {
+                // If validation passes, allow form to submit naturally
+                form.submit();
+            } else {
+                // Prevent form submission if validation fails
+                e.preventDefault();
             }
         });
     });
-</script>
+
+
+    $('#user_profile_file').ijaboCropTool({
+    preview: '.ci-avatar-photo',
+    setRatio: 1,
+    allowedExtensions: ['jpg', 'jpeg', 'png'],
+    processUrl: '<?= route_to('update-profile-picture') ?>',
+    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    onSuccess:function(responseText, element, status) {
+        if( status == 1 ) {
+            toastr.success('message');
+        } else {
+            toastr.error('message');
+        }
+    },
+    onError: function(message, element, status) {
+        alert(message);
+    }
+});
+
+/$('#change_password_form').on('submit', function(e){
+    e.preventDefault();
+    // CSRF hash
+    var csrfName = $('.ci_csrf_data').attr('name');
+    var csrfHash = $('.ci_csrf_data').val();
+    var form = this;
+    var formdata = new FormData(form);
+    formdata.append(csrfName, csrfHash);
+
+    $.ajax({
+        url: $(form).attr('action'),
+        method: $(form).attr('method'),
+        data: formdata,
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function(){
+            toastr.remove();
+            $(form).find('span.error-text').text('');
+        },
+        success: function(response){
+            if (response.trim() === 'success') {
+                $(form)[0].reset();
+                toastr.success('Password has been changed successfully.');
+            } else {
+                // If the response contains an error message, display it
+                toastr.error(response);
+            }
+        },
+        error: function(xhr, status, error){
+            toastr.error('An error occurred. Please try again.');
+            console.error('Error:', error);
+        }
+    });
+});
+
 
 </script>
 <?= $this->endSection() ?> 
