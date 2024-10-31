@@ -778,7 +778,8 @@ public function attendance()
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include attendance records here
-        'userStatus' => $userStatus
+        'userStatus' => $userStatus,
+        'currentUserName' => $currentUserName
     ];
     
     return view('backend/pages/attendance', $data);
