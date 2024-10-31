@@ -230,56 +230,57 @@ $(document).ready(function() {
     });
 
     // Handle cropping and upload
-    $('#cropAndUpload').on('click', function() {
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
+// Handle cropping and upload
+$('#cropAndUpload').on('click', function() {
+    if (cropper) {
+        var canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500,
+        });
 
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
+        canvas.toBlob(function(blob) {
+            var formData = new FormData();
+            formData.append('profile_picture', blob);
+            formData.append('id', $('#update_user_id_picture').val());
 
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                // Reload page or update table
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('update-profile-picture') ?>',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status == 1) {
+                        // Update the profile picture displayed on the page
+                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.msg,
+                        }).then(() => {
+                            // Optionally reload the page or do other updates
+                        });
+                        $('#editProfilePictureModal').modal('hide');
+                    } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                            text: response.msg,
                         });
                     }
-                });
-            }, 'image/png');
-        }
-    });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
+                    });
+                }
+            });
+        }, 'image/png');
+    }
 });
+
 
 
 </script>
