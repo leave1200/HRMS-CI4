@@ -181,7 +181,7 @@
             preview: '.ci-avatar-photo',
             setRatio: 1,
             allowedExtensions: ['jpg', 'jpeg', 'png'],
-            processUrl: '<?= route_to('update-profile-picture') ?>',
+            processUrl: '',
             withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
             onSuccess:function(responseText, element, status) {
                 if( status == 1 ) {
