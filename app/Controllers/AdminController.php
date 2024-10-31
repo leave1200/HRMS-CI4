@@ -164,7 +164,7 @@ class AdminController extends BaseController
         $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
     
         // Get the new picture name from the request
-        $newPictureName = $request->getPost('new_picture_name'); // Assuming the new picture name is sent in the POST request
+        $newPictureName = $request->getPost('profile_picture'); // Assuming the new picture name is sent in the POST request
     
         // Validate the new picture name
         if (!$newPictureName) {
