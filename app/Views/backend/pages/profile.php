@@ -26,12 +26,10 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                    <!-- Trigger Button -->
                     <div class="profile-photo">
-                        <a href="javascript:;" class="edit-profile-picture-btn" data-id="<?= get_user()->id ?>">
-                            <img src="<?= empty(get_user()->picture) ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="Profile Photo" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 30%;">
-                            <i class="fa fa-pencil edit-icon" aria-hidden="true"></i>
-                        </a>
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -105,49 +103,49 @@
                                 </div>
                                 <div class="tab-pane fade" id="change_password" role="tabpanel">
                                     <div class="pd-20 profile-task-wrap">
-                                        <?php if (session()->has('errors')): ?>
-                                            <div class="alert alert-danger">
-                                                <?php foreach (session('errors') as $error): ?>
-                                                    <p><?= $error ?></p>
-                                                <?php endforeach ?>
-                                            </div>
-                                        <?php endif ?>
+                                    <?php if (session()->has('errors')): ?>
+                                        <div class="alert alert-danger">
+                                            <?php foreach (session('errors') as $error): ?>
+                                                <p><?= $error ?></p>
+                                            <?php endforeach ?>
+                                        </div>
+                                    <?php endif ?>
 
-                                        <?php if (session()->has('success')): ?>
-                                            <div class="alert alert-success">
-                                                <?= session('success') ?>
-                                            </div>
-                                        <?php endif ?>
+                                    <?php if (session()->has('success')): ?>
+                                        <div class="alert alert-success">
+                                            <?= session('success') ?>
+                                        </div>
+                                    <?php endif ?>
 
-                                        <form action="<?= route_to('change-password') ?>" method="POST" id="change_password_form">
-                                            <?= csrf_field(); ?>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">Current Password</label>
-                                                        <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
-                                                        <span class="text-danger error-text current_password_error"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">New Password</label>
-                                                        <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
-                                                        <span class="text-danger error-text new_password_error"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">Confirm new Password</label>
-                                                        <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
-                                                        <span class="text-danger error-text confirm_new_password_error"></span>
-                                                    </div>
+                                    <form action="<?= route_to('change-password') ?>" method="POST" id="change_password_form">
+                                        <?= csrf_field(); ?>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Current Password</label>
+                                                    <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
+                                                    <span class="text-danger error-text current_password_error"></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Change password</button>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">New Password</label>
+                                                    <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
+                                                    <span class="text-danger error-text new_password_error"></span>
+                                                </div>
                                             </div>
-                                        </form>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Confirm new Password</label>
+                                                    <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
+                                                    <span class="text-danger error-text confirm_new_password_error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Change password</button>
+                                        </div>
+                                    </form>
 
                                     </div>
                                 </div>
@@ -157,139 +155,47 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+<?= $this->endSection() ?>
 
-<!-- Modal for editing profile picture -->
-<div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Update Profile Picture</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Hidden input to store user ID -->
-                <input type="hidden" id="update_user_id_picture" value="">
-                
-                <!-- Image upload input -->
-                <div>
-                    <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
-                    <input type="file" id="profile_picture" accept="image/*">
-                </div>
-                <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="cropAndUpload" class="btn btn-primary">Crop and Upload</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Include Cropper.js -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
+<?= $this->section('scripts') ?>
 <script>
-$(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
+    $(document).ready(function() {
+        $('#personal_details_from').on('submit', function(e) {
+            var form = this;
 
-    // Handle edit button clicks for profile picture
-    $('.edit-profile-picture-btn').on('click', function() {
-        var id = $(this).data('id');
-        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
-        $('#editProfilePictureModal').modal('show');
-    });
+            // Perform validation if needed
+            var valid = true;
 
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-
-        if (files && files.length > 0) {
-            var file = files[0];
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
+            if (valid) {
+                // If validation passes, allow form to submit naturally
+                form.submit();
+            } else {
+                // Prevent form submission if validation fails
+                e.preventDefault();
             }
-        }
+        });
     });
 
-    // Handle cropping and upload
-    $('#cropAndUpload').on('click', function() {
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
 
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_user_id_picture').val()); // Updated to use the correct ID
+    $('#user_profile_file').ijaboCropTool({
+            preview: '.ci-avatar-photo',
+            setRatio: 1,
+            allowedExtensions: ['jpg', 'jpeg', 'png'],
+            processUrl: '<?= route_to('update-profile-picture') ?>',
+            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+            onSuccess:function(responseText, element, status) {
+                if( status == 1 ) {
+                    toastr.success('message');
+                } else {
+                    toastr.error('message');
+                }
+            },
+            onError: function(message, element, status) {
+                alert(message);
+            }
+        });
 
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            // Update the profile picture displayed on the page
-                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name); // Make sure to include the new filename in the response
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                // Reload page or update table
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
-    });
-});
-
-
-</script>
-
-
-<script>
-    /$('#change_password_form').on('submit', function(e){
+/$('#change_password_form').on('submit', function(e){
     e.preventDefault();
     // CSRF hash
     var csrfName = $('.ci_csrf_data').attr('name');
@@ -324,10 +230,8 @@ $(document).ready(function() {
         }
     });
 });
+
+
 </script>
-<?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
-
 <?= $this->endSection() ?> 
 
