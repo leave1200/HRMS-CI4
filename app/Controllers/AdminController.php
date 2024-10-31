@@ -130,23 +130,28 @@ class AdminController extends BaseController
             }
         }
     }
-    public function uploadProfilePicture()
+    public function updatePersonalPictures()
     {
-        $userId = $this->request->getPost('user_id');
+        $id = $this->request->getPost('id');
         $file = $this->request->getFile('profile_picture');
     
+        // Validation for the file upload
         if ($file->isValid() && !$file->hasMoved()) {
-            // Generate a unique name for the uploaded file
-            $newName = $file->getRandomName();
-            $file->move(WRITEPATH . 'uploads/users/', $newName);
+            // Define the upload path
+            $path = WRITEPATH . 'uploads/users/';
+            $newFileName = $file->getRandomName();
     
-            // Update the user's picture in the database
-            $this->userModel->update($userId, ['picture' => $newName]);
-    
-            return $this->response->setJSON(['success' => true]);
+            // Move the file to the desired directory
+            if ($file->move($path, $newFileName)) {
+                // Update the user's picture in the database
+                $this->userModel->update($id, ['picture' => $newFileName]);
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newFileName]);
+            } else {
+                return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move uploaded file.']);
+            }
         }
     
-        return $this->response->setJSON(['success' => false, 'error' => 'Failed to upload image.']);
+        return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file upload.']);
     }
     
     
