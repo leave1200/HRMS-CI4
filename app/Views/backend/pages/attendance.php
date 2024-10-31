@@ -155,7 +155,7 @@
                             <tbody>
                                 <?php if (!empty($attendances)): ?>
                                     <?php foreach ($attendances as $attendance): ?>
-                                        <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+                                        <?php if (isset($userStatus) && $userStatus !== ''): ?>
                                         <?php if (esc($attendance['name']) === esc($currentUserName)): // Compare with logged-in user's name ?>
                                         <?php endif; ?>
                                         <tr>
