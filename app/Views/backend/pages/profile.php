@@ -160,96 +160,135 @@
     </div>
 </div>
 
-<!-- Modal for editing profile picture -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Update Profile Picture</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Hidden input to store user ID -->
-                <input type="text" id="update_user_id_picture" value="<?= old('id', get_user()->id) ?>">
-                
-                <!-- Image upload input -->
-                <div>
-                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+            <form id="editProfilePictureForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="uploadProfilePicture" class="btn btn-primary">Upload</button>
-            </div>
+                <div class="modal-body">
+                    <input type="hidden" id="update_user_id_picture" name="id">
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+                    <img id="image" src="" alt="Image" style="display:none;"/>
+                    <div class="preview" style="width: 100%; overflow: hidden; display:none;">
+                        <img src="" alt="Preview" style="max-width: 100%;"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 
+
 <script>
 $(document).ready(function() {
+    var cropper;
+    var $image = $('#image');
+    var $preview = $('#preview');
+
     // Handle edit button clicks for profile picture
     $('.edit-profile-picture-btn').on('click', function() {
         var id = $(this).data('id');
-        $('#update_user_id_picture').val(id); // Store the user ID in the appropriate input
+        $('#update_user_id_picture').val(id);
         $('#editProfilePictureModal').modal('show');
     });
 
-    // Handle the upload button click
-    $('#uploadProfilePicture').on('click', function() {
-        var formData = new FormData();
-        var userId = $('#update_user_id_picture').val();
-        var fileInput = $('#profile_picture')[0];
+    // Handle file input change
+    $('#profile_picture').on('change', function(event) {
+        var files = event.target.files;
+        var done = function(url) {
+            $image.attr('src', url).show();
+            $preview.show();
+            cropper = new Cropper($image[0], {
+                aspectRatio: 1,
+                viewMode: 1,
+                preview: '.preview'
+            });
+        };
+        var reader;
+        var file;
 
-        if (fileInput.files.length > 0) {
-            formData.append('profile_picture', fileInput.files[0]);
-            formData.append('id', userId); // Add user ID to the form data
+        if (files && files.length > 0) {
+            file = files[0];
 
-            $.ajax({
-                type: 'POST',
-                url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL is correct
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status == 1) {
-                        // Update the profile picture displayed on the page
-                        $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.msg,
-                        }).then(() => {
-                            $('#editProfilePictureModal').modal('hide');
-                        });
-                    } else {
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                reader = new FileReader();
+                reader.onload = function() {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+    // Handle form submission
+    $('#editProfilePictureForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var canvas;
+        var croppedImage;
+
+        if (cropper) {
+            canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500,
+            });
+
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', $('#update_user_id_picture').val());
+
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL matches your route
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.status == 1) {
+                            $('.avatar-photo').attr('src', '/images/users/' + response.new_picture_name);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.msg,
+                            }).then(() => {
+                                $('#editProfilePictureModal').modal('hide');
+                                location.reload(); // Reload page or update table
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.msg,
+                            });
+                        }
+                    },
+                    error: function(xhr) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: response.msg,
+                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
                         });
                     }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                    });
-                }
-            });
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: 'Please select a file to upload.',
-            });
+                });
+            }, 'image/png');
         }
     });
 });
 </script>
+
 
 
 
