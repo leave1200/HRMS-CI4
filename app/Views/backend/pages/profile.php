@@ -162,25 +162,30 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                <h5 class="modal-title" id="editProfilePictureModalLabel">Update Profile Picture</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="file" id="profile_picture" accept="image/*">
-                <img id="image" src="" style="display:none;">
-                <div class="preview" style="width: 100px; height: 100px; overflow: hidden;">
-                    <img id="preview" src="" style="max-width: 100%;">
+                <!-- Hidden input to store user ID -->
+                <input type="hidden" id="update_user_id_picture" value="">
+                
+                <!-- Image upload input -->
+                <div>
+                    <img id="image" src="" alt="Profile Picture Preview" style="display:none; width: 100%; height: auto;"/>
+                    <input type="file" id="profile_picture" accept="image/*">
                 </div>
+                <div class="preview" style="width: 100%; height: 100px; overflow: hidden;"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="cropAndUpload">Crop & Upload</button>
+                <button type="button" id="cropAndUpload" class="btn btn-primary">Crop and Upload</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Include Cropper.js -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
@@ -224,56 +229,42 @@ $(document).ready(function() {
         }
     });
 
-    // Handle cropping and upload
-    $('#cropAndUpload').on('click', function() {
-        if (cropper) {
-            var canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
+// Handle edit button clicks for profile picture
+        $('.edit-profile-picture-btn').on('click', function() {
+            var id = $(this).data('id');
+            $('#update_user_id_picture').val(id); // Store the user ID in a more appropriate input
+            $('#editProfilePictureModal').modal('show');
+        });
 
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob); // Ensure this matches the backend key
-                formData.append('id', $('#update_employee_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL matches your route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.msg,
-                            }).then(() => {
-                                location.reload(); // Reload page or update table
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.msg,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
+        // Handle cropping and upload
+        $('#cropAndUpload').on('click', function() {
+            if (cropper) {
+                var canvas = cropper.getCroppedCanvas({
+                    width: 500,
+                    height: 500,
                 });
-            }, 'image/png');
-        }
-    });
-});
 
+                canvas.toBlob(function(blob) {
+                    var formData = new FormData();
+                    formData.append('profile_picture', blob);
+                    formData.append('id', $('#update_user_id_picture').val()); // Updated to use the new ID
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '<?= route_to('update-profile-picture') ?>',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            // Handle response...
+                        },
+                        error: function(xhr) {
+                            // Handle error...
+                        }
+                    });
+                }, 'image/png');
+            }
+        });
 
 </script>
 
