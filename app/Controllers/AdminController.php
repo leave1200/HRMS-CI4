@@ -136,7 +136,7 @@ class AdminController extends BaseController
         $userModel = new User();
     
         // Check if the file is uploaded
-        if ($imagefile = $request->getFile('user_profile_file')) {
+        if ($imagefile = $request->getFile('profile_picture')) { // Use the correct key
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
                 $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
                 $path = 'images/users/';
@@ -185,6 +185,7 @@ class AdminController extends BaseController
             'message' => 'No file uploaded'
         ]);
     }
+    
     
     
 
