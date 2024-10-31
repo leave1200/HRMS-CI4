@@ -190,7 +190,39 @@
 <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 
+<script>
+    document.getElementById('profile_picture').addEventListener('change', function() {
+    const fileInput = this;
+    const file = fileInput.files[0];
+    const maxSize = 1 * 1024 * 1024; // 10 MB
 
+    // Check if a file is selected
+    if (file) {
+        // Validate file type (only images)
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid file type',
+                text: 'Please select an image file (JPEG, PNG, GIF, WEBP).',
+            });
+            fileInput.value = ''; // Clear the input
+            return;
+        }
+
+        // Validate file size
+        if (file.size > maxSize) {
+            Swal.fire({
+                icon: 'error',
+                title: 'File too large',
+                text: 'The file size must not exceed 1MB.',
+            });
+            fileInput.value = ''; // Clear the input
+            return;
+        }
+    }
+});
+</script>
 <script>
 $(document).ready(function() {
     var cropper;
