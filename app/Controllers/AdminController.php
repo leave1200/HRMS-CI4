@@ -136,7 +136,7 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        $path = '/images/users/';
+        $path = 'public/images/users/';
         $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
         $old_picture = $user_info->picture;
     
@@ -144,11 +144,9 @@ class AdminController extends BaseController
             $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Ensure unique filename
     
             if ($file->move($path, $new_filename)) {
-                // Delete old picture if exists
                 if ($old_picture != null && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture); // Remove the old picture
+                    unlink($path . $old_picture); // Delete old picture if exists
                 }
-                // Update the user information in the database
                 $user->where('id', $user_info->id)
                     ->set(['picture' => $new_filename])
                     ->update();
@@ -161,7 +159,6 @@ class AdminController extends BaseController
     
         return $this->response->setJSON(['status' => 0, 'msg' => 'No valid file uploaded.']);
     }
-    
     
     
     
