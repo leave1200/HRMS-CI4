@@ -761,11 +761,6 @@ public function attendance()
     // Fetch attendance records including pm_sign_out
     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
-    $currentUserName = session()->get('name'); // Assuming this is the user's name
-    $userId = session()->get('userStatus'); // Assuming this is the user ID
-    $userModel = new User(); // Adjust this to your actual user model
-    $currentUser = $userModel->find($userId);
-    $currentUserName = $currentUser ? $currentUser['name'] : null; // Get the name or set to null if not found
 
 
 
@@ -778,8 +773,7 @@ public function attendance()
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include attendance records here
-        'userStatus' => $userStatus,
-        'currentUserName' => $currentUserName
+        'userStatus' => $userStatus
     ];
     
     return view('backend/pages/attendance', $data);
