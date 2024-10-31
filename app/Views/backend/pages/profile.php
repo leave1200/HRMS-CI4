@@ -234,12 +234,12 @@ $(document).ready(function() {
 
             canvas.toBlob(function(blob) {
                 var formData = new FormData();
-                formData.append('profile_picture', blob);
+                formData.append('profile_picture', blob); // Ensure this matches the backend key
                 formData.append('id', $('#update_employee_id_picture').val());
 
                 $.ajax({
                     type: 'POST',
-                    url: '<?= route_to('update-profile-picture')?>', // Ensure this URL matches your route
+                    url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL matches your route
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -273,6 +273,7 @@ $(document).ready(function() {
         }
     });
 });
+
 
 </script>
 
