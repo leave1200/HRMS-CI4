@@ -171,7 +171,7 @@ class AdminController extends BaseController
         // Get the uploaded file
         $file = $request->getFile('profile_picture');
     
-        // Generate a new picture name (you can customize the logic here)
+        // Generate a new picture name
         $newPictureName = $user_id . '_' . time() . '.' . $file->getExtension();
         $file->move(WRITEPATH . 'uploads/users/', $newPictureName); // Move the file to the uploads directory
     
@@ -179,12 +179,16 @@ class AdminController extends BaseController
         $userModel = new \App\Models\User();
         $updateStatus = $userModel->update($user_id, ['picture' => $newPictureName]);
     
+        // Check if update was successful
         if ($updateStatus) {
             return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newPictureName]);
         } else {
+            // Log the error for debugging
+            log_message('error', 'Failed to update profile picture for user ID: ' . $user_id);
             return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update profile picture.']);
         }
     }
+    
     
     
     
