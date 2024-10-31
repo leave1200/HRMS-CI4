@@ -201,7 +201,7 @@
 
 </script>
 <script>
-    $('#change_password_form').on('submit', function(e){
+    /$('#change_password_form').on('submit', function(e){
     e.preventDefault();
     // CSRF hash
     var csrfName = $('.ci_csrf_data').attr('name');
