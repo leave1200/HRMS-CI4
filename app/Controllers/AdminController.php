@@ -174,18 +174,14 @@ class AdminController extends BaseController
     
             // Move the file to the desired location
             if ($file->move(WRITEPATH . 'images/users', $newFileName)) {
-                // Assuming your model successfully updates the user's profile picture
+                $userModel = new User();
+                // Update user profile picture in the database
                 $userModel->update($user_id, ['picture' => $newFileName]);
-                
-                return $this->response->setJSON([
-                    'status' => 1,
-                    'msg' => 'Profile picture updated successfully!',
-                    'new_picture_name' => $newFileName // Return the new filename
-                ]);
+    
+                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newFileName]);
             } else {
                 return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
-            
         } else {
             return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file uploaded.']);
         }
