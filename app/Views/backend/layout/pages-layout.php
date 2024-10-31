@@ -78,7 +78,7 @@
 		<script src="/backend/src/plugins/sweetalert2/sweet-alert.init.js"></script>
 		<script src="/backend/sweetalert.min.js"></script>
 		<script src="/backend/sweetalert2@11.js"></script>
-		<!-- <script src="/backend/bootstrap.min.js"></script> -->
+		<script src="/backend/bootstrap.min.js"></script>
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<!-- <script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script> -->
