@@ -163,7 +163,7 @@
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="editProfilePictureForm">
+            <form id="editProfilePictureForm" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -171,11 +171,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="update_user_id_picture" name="id"  value="<?= old('id', get_user()->id) ?>">
+                    <input type="hidden" id="update_user_id_picture" name="id" value="<?= get_user()->id ?>">
                     <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
-                    <img id="image" src="" alt="Image" style="display:none;"/>
                     <div class="preview" style="width: 100%; overflow: hidden; display:none;">
-                        <img src="" alt="Preview" style="max-width: 100%;"/>
+                        <img id="image" src="" alt="Preview" style="max-width: 100%;"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -193,37 +192,82 @@
 <!-- Cropper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
 <script>
 $(document).ready(function() {
+    let cropper;
+    
+    // Show modal and initialize cropper when a profile picture is chosen
+    $('#profile_picture').change(function(event) {
+        const files = event.target.files;
+        const done = (url) => {
+            $('#image').attr('src', url);
+        };
+        
+        if (files && files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                done(e.target.result);
+            };
+            reader.readAsDataURL(files[0]);
+        }
+        
+        $('.preview').show();
+        
+        if (cropper) {
+            cropper.destroy();
+        }
+        
+        const image = document.getElementById('image');
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
+            responsive: true,
+            background: false,
+            modal: true,
+        });
+    });
+
     $('#editProfilePictureForm').on('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission
 
-        var formData = new FormData(this); // Create a FormData object
+        // Get cropped canvas data
+        const canvas = cropper.getCroppedCanvas({
+            width: 150,
+            height: 150,
+        });
 
-        $.ajax({
-            url: '<?= route_to('update-profile-picture') ?>', // Update with your server-side script URL
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                var res = JSON.parse(response);
-                if (res.status === 1) {
-                    alert(res.msg);
-                    // Update the profile picture preview if needed
-                    $('#image').attr('src', 'images/users/' + res.new_picture_name).show();
-                } else {
-                    alert(res.msg);
+        // Convert canvas to blob
+        canvas.toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('id', $('#update_user_id_picture').val());
+            formData.append('profile_picture', blob, 'profile.jpg'); // Change the file name if needed
+
+            $.ajax({
+                url: '<?= route_to('update-profile-picture') ?>',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    var res = JSON.parse(response);
+                    if (res.status === 1) {
+                        alert(res.msg);
+                        // Update the profile picture on the main page if needed
+                        $('.avatar-photo').attr('src', '<?= empty(get_user()->picture) ? "/images/users/userav-min.png" : "/images/users/" . get_user()->picture ?>' + res.new_picture_name);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while updating the profile picture.');
                 }
-            },
-            error: function() {
-                alert('An error occurred while updating the profile picture.');
-            }
+            });
         });
     });
 });
+</script>
+<script>
 
     // Handle change password form submission
     $('#change_password_form').on('submit', function(e) {
@@ -262,7 +306,6 @@ $(document).ready(function() {
             }
         });
     });
-});
 </script>
 
 
