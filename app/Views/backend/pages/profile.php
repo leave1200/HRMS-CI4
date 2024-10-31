@@ -209,7 +209,7 @@ $(document).ready(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '<?= route_to('update-profile-picture') ?>',
+                url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL is correct
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -249,8 +249,8 @@ $(document).ready(function() {
         }
     });
 });
-
 </script>
+
 
 
 
