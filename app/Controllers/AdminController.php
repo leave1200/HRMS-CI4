@@ -140,18 +140,27 @@ class AdminController extends BaseController
         $file = $request->getFile('profile_picture'); // Ensure this matches the file input name in your HTML
         $old_picture = $user_info->picture;
     
+        // Check if a file is uploaded
+        if (!$file) {
+            return $this->response->setJSON(['status' => 0, 'msg' => 'No file uploaded.']);
+        }
+    
         if ($file && $file->isValid() && !$file->hasMoved()) { // Check if the file is valid
             $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName(); // Ensure unique filename
     
+            // Attempt to move the uploaded file
             if ($file->move($path, $new_filename)) {
+                // Delete old picture if exists
                 if ($old_picture != null && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture); // Delete old picture if exists
+                    unlink($path . $old_picture); // Remove the old picture
                 }
-                $user->where('id', $user_info->id)
-                    ->set(['picture' => $new_filename])
-                    ->update();
     
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
+                // Update the user information in the database
+                if ($user->where('id', $user_info->id)->set(['picture' => $new_filename])->update()) {
+                    return $this->response->setJSON(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
+                } else {
+                    return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to update database.']);
+                }
             } else {
                 return $this->response->setJSON(['status' => 0, 'msg' => 'Failed to move the uploaded file.']);
             }
@@ -159,6 +168,7 @@ class AdminController extends BaseController
     
         return $this->response->setJSON(['status' => 0, 'msg' => 'No valid file uploaded.']);
     }
+    
     
     
     
