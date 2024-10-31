@@ -171,7 +171,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="update_user_id_picture" name="id"  value="<?= old('id', get_user()->id) ?>">
+                    <input type="text" id="update_user_id_picture" name="id"  value="<?= old('id', get_user()->id) ?>">
                     <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
                     <img id="image" src="" alt="Image" style="display:none;"/>
                     <div class="preview" style="width: 100%; overflow: hidden; display:none;">
