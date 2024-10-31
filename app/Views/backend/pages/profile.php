@@ -1,6 +1,9 @@
 
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
 
 <div class="pd-ltr-20 xs-pd-20-10">
     <div class="min-height-200px">
@@ -27,9 +30,9 @@
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                     <div class="profile-photo">
-                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar ci-avatar-photo"><i class="fa fa-pencil"></i></a>
-                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                    <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                        <canvas id="cropperCanvas" style="display:none;"></canvas>
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -176,26 +179,77 @@
         });
     });
 
+    let cropper;
 
-    $('#user_profile_file').ijaboCropTool({
-    preview: '.ci-avatar-photo',
-    setRatio: 1,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-    processUrl: '<?= route_to('update-profile-picture') ?>',
-    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    onSuccess:function(responseText, element, status) {
-        if( status == 1 ) {
-            toastr.success('message');
-        } else {
-            toastr.error('message');
-        }
-    },
-    onError: function(message, element, status) {
-        alert(message);
+document.getElementById('user_profile_file').addEventListener('change', function (e) {
+    const files = e.target.files;
+    const done = (url) => {
+        document.getElementById('user_profile_file').value = '';
+        document.querySelector('.ci-avatar-photo').src = url;
+    };
+
+    if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            if (cropper) {
+                cropper.destroy();
+            }
+            const image = document.createElement('img');
+            image.src = event.target.result;
+
+            // Set up the cropper
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 1,
+                ready: function () {
+                    // Display the cropping image
+                    const canvas = document.getElementById('cropperCanvas');
+                    canvas.width = 200; // Set your desired width
+                    canvas.height = 200; // Set your desired height
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(image, 0, 0, 200, 200);
+                    // When the user is satisfied with the crop
+                    const croppedImageDataUrl = cropper.getCroppedCanvas().toDataURL();
+                    done(croppedImageDataUrl);
+                },
+            });
+        };
+        reader.readAsDataURL(files[0]);
     }
 });
 
-/$('#change_password_form').on('submit', function(e){
+// Optionally, handle the submission of the cropped image
+document.getElementById('personal_details_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const croppedCanvas = document.getElementById('cropperCanvas');
+    const croppedImageDataUrl = croppedCanvas.toDataURL('image/png');
+
+    // Prepare to send the cropped image via AJAX or form submission
+    // Example:
+    $.ajax({
+        url: '<?= route_to('update-profile-picture') ?>',
+        method: 'POST',
+        data: {
+            image: croppedImageDataUrl,
+            // Include other form data as needed
+            <?= csrf_field(); ?>
+        },
+        success: function (response) {
+            // Handle the response
+            if (response.success) {
+                toastr.success('Profile picture updated successfully.');
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function () {
+            toastr.error('An error occurred while uploading the image.');
+        }
+    });
+});
+
+
+$('#change_password_form').on('submit', function(e){
     e.preventDefault();
     // CSRF hash
     var csrfName = $('.ci_csrf_data').attr('name');
