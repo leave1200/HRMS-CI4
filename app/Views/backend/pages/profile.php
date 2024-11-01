@@ -23,23 +23,30 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
-                <div class="pd-20 card-box height-100-p">
-                    <!-- Trigger Button -->
-                    <div class="profile-photo">
-                        <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                            <img src="<?= $user['picture'] ? base_url('backend/images/users/' . htmlspecialchars($user['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
-                            <!-- Trigger Button for Modal -->
-                                <button class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
-                                    <i class="icon-copy dw dw-edit-1"></i>
-                                </button>
-                        </a>
-                    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
+        <div class="pd-20 card-box height-100-p">
+            <!-- Profile Picture Form -->
+            <form action="<?= route_to('update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
+                <div class="profile-photo">
+                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
+                        <img src="<?= $user['picture'] ? base_url('backend/images/users/' . htmlspecialchars($user['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
+                    </a>
 
-                    <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
-                    <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
+                    <!-- Trigger Button for Modal -->
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
+                        <i class="icon-copy dw dw-edit-1"></i>
+                    </button>
                 </div>
-            </div>
+
+                <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
+                <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
+
+                <!-- Hidden Input for User ID -->
+                <input type="hidden" id="update_user_id_picture" name="id" value="<?= $user['id'] ?>">
+            </form>
+        </div>
+    </div>
+</div>
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
                     <div class="profile-tab height-100-p">
