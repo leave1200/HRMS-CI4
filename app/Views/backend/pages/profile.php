@@ -94,12 +94,12 @@
                                             <span class="text-danger error-text bio_error"></span>
                                         </div>
 
-                                        <!-- Profile Picture Upload Section -->
                                         <div class="form-group">
                                             <label for="">Profile Picture</label>
-                                            <input type="file" name="picture" id="user_profile_file" class="form-control">
+                                            <input type="file" name="picture" id="user_profile_file" class="form-control" accept=".jpg, .jpeg, .png">
                                             <span class="text-danger error-text picture_error"></span>
                                         </div>
+
                                         <div class="form-group">
                                             <label>Preview:</label>
                                             <div class="ci-avatar-photo">
