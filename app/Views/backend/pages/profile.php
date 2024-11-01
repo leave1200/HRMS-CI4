@@ -159,22 +159,41 @@
 
 <?= $this->section('scripts') ?>
 <script>
-    $(document).ready(function() {
         $('#personal_details_from').on('submit', function(e) {
+            e.preventDefault();
             var form = this;
+            var formdata = new FormData(form);
 
             // Perform validation if needed
-            var valid = true;
-
-            if (valid) {
-                // If validation passes, allow form to submit naturally
-                form.submit();
-            } else {
-                // Prevent form submission if validation fails
-                e.preventDefault();
-            }
+           $ajax({
+                url:$(form).attr('action'),
+                method:$(form).attr('method',
+                data:formdatata,
+                processData:false,
+                dataType:'json',
+                ontentType:false,
+                beforeSend:function(){
+                    toastr.remove();
+                    $(form).find('span.error-text').text('');
+                },
+                success:function(response){
+                    if( $.isEmptyObject(response.error) ){
+                        if( response.status == 1 ){
+                            $('.ci-user-name').each(function(){
+                                $(this).html(response.user_info.name);
+                            });
+                            toastr.success(response.msg);
+                    }else{
+                        toastr.error(response.msg);
+                    }
+                    }else{
+                        $.each(response.error, function(prefix, val){
+                            $(form).find('span.'+prefix+'_error').text(val);
+                        });
+                    }
+                }
+            });
         });
-    });
 
 
     $('#user_profile_file').ijaboCropTool({
