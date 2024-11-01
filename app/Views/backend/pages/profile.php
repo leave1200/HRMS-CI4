@@ -23,30 +23,34 @@
             </div>
         </div>
         <div class="row">
-    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
-        <div class="pd-20 card-box height-100-p">
-            <!-- Profile Picture Form -->
-            <form action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
-                <div class="profile-photo">
-                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                        <img src="<?= $user['picture'] ? base_url('images/users/' . htmlspecialchars($user['picture'])) : base_url('images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
-                    </a>
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
+                <div class="pd-20 card-box height-100-p">
+                    <!-- Profile Picture Form -->
+                    <form action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
+                        <div class="profile-photo">
+                            <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
+                                <img src="<?= $user['picture'] ? base_url('images/users/' . htmlspecialchars($user['picture'])) : base_url('images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
+                            </a>
 
-                    <!-- Trigger Button for Modal -->
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
-                        <i class="icon-copy dw dw-edit-1"></i>
-                    </button>
+                            <!-- Trigger Button for Modal -->
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
+                                <i class="icon-copy dw dw-edit-1"></i>
+                            </button>
+                        </div>
+
+                        <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
+                        <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
+
+                        <!-- Hidden Input for User ID -->
+                        <input type="hidden" id="update_user_id_picture" name="id" value="<?= $user['id'] ?>">
+
+                        <!-- Hidden Input for CSRF Token -->
+                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
+                    </form>
                 </div>
-
-                <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
-                <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
-
-                <!-- Hidden Input for User ID -->
-                <input type="hidden" id="update_user_id_picture" name="id" value="<?= $user['id'] ?>">
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
                     <div class="profile-tab height-100-p">
@@ -240,15 +244,18 @@ $(document).ready(function() {
         canvas.toBlob(function(blob) {
             var formData = new FormData();
             formData.append('croppedImage', blob);
+            
+            // Append CSRF token to form data
+            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); // Adjust as needed based on your server-side setup
 
-            $.ajax('admin.update-profile-picture', {
+            $.ajax('<?= route_to('admin.update-profile-picture') ?>', { // Make sure the URL is correct
                 method: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function(response) {
                     console.log('Success:', response);
-                    // Handle the response
+                    // Handle the response, e.g., update the profile picture in the UI
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
@@ -257,6 +264,7 @@ $(document).ready(function() {
         });
     });
 });
+
 
 </script>
 
