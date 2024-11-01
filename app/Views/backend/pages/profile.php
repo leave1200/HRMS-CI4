@@ -256,52 +256,52 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
    // Handle form submission
-document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevent default form submission
+        document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
 
-    if (cropper) {
-        cropper.getCroppedCanvas({
-            width: 500,
-            height: 500
-        }).toBlob(function(blob) {
-            const formData = new FormData();
-            formData.append('profile_picture', blob);
-            formData.append('id', document.getElementById('update_user_id_picture').value);
-            formData.append(csrfName, csrfToken); // Add CSRF token here
+            if (cropper) {
+                cropper.getCroppedCanvas({
+                    width: 500,
+                    height: 500
+                }).toBlob(function(blob) {
+                    const formData = new FormData();
+                    formData.append('profile_picture', blob);
+                    formData.append('id', document.getElementById('update_user_id_picture').value);
+                    formData.append(csrfName, csrfToken); // Add CSRF token here
 
-            // AJAX request to submit cropped image
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', this.action, true); // Ensure this URL matches your route
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                        }).then(() => {
-                            location.reload(); // Reload page or update table
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
-                    }
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while uploading the image.',
-                    });
-                }
-            };
-            xhr.send(formData); // Send the form data
-        }, 'image/png');
-    }
-});
+                    // AJAX request to submit cropped image
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', this.action, true); // Ensure this URL matches your route
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.message,
+                                }).then(() => {
+                                    location.reload(); // Reload page or update table
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while uploading the image.',
+                            });
+                        }
+                    };
+                    xhr.send(formData); // Send the form data
+                }, 'image/png');
+            }
+        });
 
 });
 </script>
