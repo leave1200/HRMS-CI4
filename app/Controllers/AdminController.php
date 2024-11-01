@@ -105,6 +105,14 @@ class AdminController extends BaseController
                     'min_length' => 'Username must have a minimum of 4 characters',
                     'is_unique' => 'Username already taken!'
                 ]
+            ],
+            'picture' => [
+                'rules' => 'uploaded[picture]|is_image[picture]|max_size[picture,2048]', // Max size 2MB
+                'errors' => [
+                    'uploaded' => 'You must upload a profile picture',
+                    'is_image' => 'The uploaded file must be an image',
+                    'max_size' => 'Image size must not exceed 2MB'
+                ]
             ]
         ]);
     
@@ -113,22 +121,34 @@ class AdminController extends BaseController
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         } else {
             $userModel = new \App\Models\User();
-            
+    
             // Update user details
-            $update = $userModel->update($user_id, [
+            $data = [
                 'name' => $request->getPost('name'),
                 'username' => $request->getPost('username'),
                 'bio' => $request->getPost('bio')
-            ]);
+            ];
+    
+            // Handle profile picture upload
+            if ($request->getFile('picture')->isValid()) {
+                $file = $request->getFile('picture');
+                $newFileName = $user_id . '.' . $file->getExtension(); // Create a unique file name
+                $file->move('path/to/uploads', $newFileName); // Move file to the desired directory
+    
+                // Add the picture path to the data array
+                $data['picture'] = 'path/to/uploads/' . $newFileName; // Set the correct path for the picture
+            }
+    
+            $update = $userModel->update($user_id, $data);
     
             if ($update) {
-                $user_info = $userModel->find($user_id);
                 return redirect()->back()->with('success', "Your personal details have been updated successfully.");
             } else {
                 return redirect()->back()->with('error', 'Something went wrong.');
             }
         }
     }
+    
     public function updatePersonalPictures()
     {
         $request = \Config\Services::request();
