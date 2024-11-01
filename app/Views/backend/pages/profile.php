@@ -281,9 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             }).then(() => {
                                 location.reload(); // Reload page or update table
                             });
-                            $('#editProfilePictureModal').modal('hide');
-                            // Update the avatar photo if needed
-                            // $('.avatar-photo').attr('src', response.new_picture_url);
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -304,9 +301,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
 </script>
+
 
 
 
