@@ -155,6 +155,8 @@
                 </div>
             </div>
         </div>
+        <link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
+		<script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
         <script>
              $('#user_profile_file').ijaboCropTool({
                     preview: '.ci-avatar-photo',
