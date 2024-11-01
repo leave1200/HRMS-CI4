@@ -23,7 +23,7 @@ $routes->group('admin', static function($routes){
         ///////profile
         $routes->get('profile','AdminController::profile',['as'=>'admin.profile']);
         $routes->post('update-personal-details','AdminController::updatePersonalDetails',['as'=>'update-personal-details']);
-        $routes->post('update-profile-picture','AdminController::updatePersonalPictures',['as'=>'admin.update-profile-picture']);  
+        $routes->post('update-profile-picture','AdminController::updatePersonalPictures',['as'=>'update-profile-picture']);  
         $routes->post('change-password','AdminController::changePassword',['as'=>'change-password']);
 
 
