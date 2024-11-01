@@ -224,6 +224,11 @@ class AdminController extends BaseController
             $path = 'backend/images/users/';
             $file = $request->getFile('profile_picture');
     
+            // Debug: Check if the file is received
+            if (!$file) {
+                return $this->response->setJSON(['success' => false, 'message' => 'No file received.']);
+            }
+    
             // Generate a new filename for the uploaded picture
             $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
@@ -244,18 +249,19 @@ class AdminController extends BaseController
                     // Return a success response
                     return $this->response->setJSON(['success' => true, 'message' => 'Your profile picture has been successfully updated.']);
                 } else {
-                    // Return a failure response if file move fails
+                    // Debug: File move error
                     return $this->response->setJSON(['success' => false, 'message' => 'Failed to move the uploaded file.']);
                 }
             } else {
-                // Return a failure response if the file is not valid
-                return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
+                // Debug: Check if file is valid
+                return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
             }
         }
     
         // Return an error response if the request is not AJAX
         return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
     }
+    
     
 
     //  public function updatePersonalPictures(){
