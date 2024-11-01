@@ -94,7 +94,9 @@ class AdminController extends BaseController
         $validation->setRules([
             'name' => [
                 'rules' => 'required',
-                'errors' => ['required' => 'Fullname is required']
+                'errors' => [
+                    'required' => 'Fullname is required'
+                ]
             ],
             'username' => [
                 'rules' => 'required|min_length[4]|is_unique[users.username,id,' . $user_id . ']',
@@ -103,54 +105,30 @@ class AdminController extends BaseController
                     'min_length' => 'Username must have a minimum of 4 characters',
                     'is_unique' => 'Username already taken!'
                 ]
-            ],
-            'picture' => [
-                'rules' => 'uploaded[picture]|is_image[picture]|max_size[picture,2048]|mime_in[picture,image/jpg,image/jpeg,image/png]',
-                'errors' => [
-                    'uploaded' => 'Profile picture is required',
-                    'is_image' => 'Uploaded file is not an image',
-                    'max_size' => 'Image size must not exceed 2MB',
-                    'mime_in' => 'Image must be of type jpg, jpeg, or png'
-                ]
             ]
         ]);
     
         if (!$validation->withRequest($request)->run()) {
+            // Validation failed, redirect back with errors
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         } else {
             $userModel = new \App\Models\User();
             
-            // Handle the profile picture upload
-            $pictureFile = $request->getFile('picture');
-            $pictureName = null;
-    
-            if ($pictureFile && $pictureFile->isValid()) {
-                $pictureName = $pictureFile->getRandomName();
-                $pictureFile->move(WRITEPATH . 'uploads/users', $pictureName); // Adjust path as necessary
-            }
-    
             // Update user details
-            $updateData = [
+            $update = $userModel->update($user_id, [
                 'name' => $request->getPost('name'),
                 'username' => $request->getPost('username'),
-                'bio' => $request->getPost('bio'),
-            ];
-    
-            if ($pictureName) {
-                $updateData['picture'] = $pictureName; // Include picture name if uploaded
-            }
-    
-            $update = $userModel->update($user_id, $updateData);
+                'bio' => $request->getPost('bio')
+            ]);
     
             if ($update) {
+                $user_info = $userModel->find($user_id);
                 return redirect()->back()->with('success', "Your personal details have been updated successfully.");
             } else {
                 return redirect()->back()->with('error', 'Something went wrong.');
             }
         }
     }
-    
-    
     public function updatePersonalPictures()
     {
         $request = \Config\Services::request();
