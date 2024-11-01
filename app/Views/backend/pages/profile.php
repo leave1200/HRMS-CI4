@@ -29,7 +29,10 @@
                     <div class="profile-photo">
                         <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
                             <img src="<?= $user['picture'] ? base_url('backend/images/users/' . htmlspecialchars($user['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
-                            <i class="icon-copy dw dw-edit-1"></i>
+                            <!-- Trigger Button for Modal -->
+                                <button class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
+                                    <i class="icon-copy dw dw-edit-1"></i>
+                                </button>
                         </a>
                     </div>
 
@@ -188,6 +191,10 @@
         </div>
     </div>
 </div>
+<!-- jQuery and Bootstrap JavaScript (Place these at the end of the body) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
 <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
