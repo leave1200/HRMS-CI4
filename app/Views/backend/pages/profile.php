@@ -48,73 +48,59 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                            <div class="tab-pane fade active show" id="personal_details" role="tabpanel">
-                                <div class="pd-20">
-                                    <?php if (session()->has('errors')): ?>
-                                        <div class="alert alert-danger">
-                                            <?php foreach (session('errors') as $error): ?>
-                                                <p><?= $error ?></p>
-                                            <?php endforeach ?>
-                                        </div>
-                                    <?php endif ?>
+                                <div class="tab-pane fade active show" id="personal_details" role="tabpanel">
+                                    <div class="pd-20">
+                                        <?php if (session()->has('errors')): ?>
+                                            <div class="alert alert-danger">
+                                                <?php foreach (session('errors') as $error): ?>
+                                                    <p><?= $error ?></p>
+                                                <?php endforeach ?>
+                                            </div>
+                                        <?php endif ?>
 
-                                    <?php if (session()->has('success')): ?>
-                                        <div class="alert alert-success">
-                                            <?= session('success') ?>
-                                        </div>
-                                    <?php endif ?>
+                                        <?php if (session()->has('success')): ?>
+                                            <div class="alert alert-success">
+                                                <?= session('success') ?>
+                                            </div>
+                                        <?php endif ?>
 
-                                    <?php if (session()->has('error')): ?>
-                                        <div class="alert alert-danger">
-                                            <?= session('error') ?>
-                                        </div>
-                                    <?php endif ?>
+                                        <?php if (session()->has('error')): ?>
+                                            <div class="alert alert-danger">
+                                                <?= session('error') ?>
+                                            </div>
+                                        <?php endif ?>
 
-                                    <form action="<?= route_to('update-personal-details'); ?>" method="POST" id="personal_details_form" enctype="multipart/form-data">
-                                        <?= csrf_field(); ?>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="">Name</label>
-                                                    <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
-                                                    <span class="text-danger error-text name_error" id="name"></span>
+                                        <form action="<?= route_to('update-personal-details'); ?>" method="POST" id="personal_details_form">
+                                            <?= csrf_field(); ?>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Name</label>
+                                                        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
+                                                        <span class="text-danger error-text name_error" id="name"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Username</label>
+                                                        <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
+                                                        <span class="text-danger error-text username_error" id="username"></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="">Username</label>
-                                                    <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
-                                                    <span class="text-danger error-text username_error" id="username"></span>
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="">Bio</label>
+                                                <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
+                                                <span class="text-danger error-text bio_error"></span>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Bio</label>
-                                            <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
-                                            <span class="text-danger error-text bio_error"></span>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="">Profile Picture</label>
-                                            <input type="file" name="picture" id="user_profile_file" class="form-control" accept=".jpg, .jpeg, .png">
-                                            <span class="text-danger error-text picture_error"></span>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Preview:</label>
-                                            <div class="ci-avatar-photo">
-                                                <img id="preview_image" src="<?= get_user()->picture ? base_url(get_user()->picture) : 'path/to/default/image.jpg' ?>" alt="Profile Picture" style="width: 100px; height: 100px; object-fit: cover;"/>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">
+                                                    Save changes
+                                                </button>
                                             </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">
-                                                Save changes
-                                            </button>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
                                 <div class="tab-pane fade" id="change_password" role="tabpanel">
                                     <div class="pd-20 profile-task-wrap">
                                     <?php if (session()->has('errors')): ?>
@@ -169,74 +155,25 @@
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="backend/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
-        $('#personal_details_form').on('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission
-        var form = this;
+        $('#personal_details_from').on('submit', function(e) {
+            var form = this;
 
-        // Perform validation if needed
-        var valid = true;
+            // Perform validation if needed
+            var valid = true;
 
-        // Example validation
-        var name = $('input[name="name"]').val().trim();
-        var username = $('input[name="username"]').val().trim();
-
-        if (!name) {
-            valid = false;
-            $('.name_error').text('Name is required.');
-        } else {
-            $('.name_error').text('');
-        }
-
-        if (!username) {
-            valid = false;
-            $('.username_error').text('Username is required.');
-        } else {
-            $('.username_error').text('');
-        }
-
-        // Validate if an image file is selected
-        var pictureFile = $('input[name="picture"]').val();
-        if (!pictureFile) {
-            valid = false;
-            $('.picture_error').text('Please upload a profile picture.');
-        } else {
-            $('.picture_error').text('');
-        }
-
-        if (valid) {
-            // Create a FormData object to handle the form submission
-            var formData = new FormData(form);
-
-            // Use AJAX to submit the form
-            $.ajax({
-                url: $(form).attr('action'), // URL to send the request
-                type: $(form).attr('method'), // HTTP method
-                data: formData, // Form data
-                contentType: false, // Do not set any content header
-                processData: false, // Do not process the data
-                success: function(response) {
-                    // Handle success (you can modify this based on your response structure)
-                    if (response.success) {
-                        toastr.success(response.message);
-                        // Optionally, refresh or redirect the page
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function(xhr) {
-                    // Handle error
-                    toastr.error('An error occurred while submitting the form.');
-                }
-            });
-        }
-    });
+            if (valid) {
+                // If validation passes, allow form to submit naturally
+                form.submit();
+            } else {
+                // Prevent form submission if validation fails
+                e.preventDefault();
+            }
+        });
     });
 
 
