@@ -207,59 +207,42 @@ class AdminController extends BaseController
     
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
-    
+        
         // Check if the request is an AJAX request
         if ($request->isAJAX()) {
-            // Retrieve the user ID from authentication service
             $user_id = CIAuth::id();
-            
-            // Create a new User model instance
             $user = new User();
-            
-            // Retrieve user information as an object
             $user_info = $user->asObject()->where('id', $user_id)->first();
-    
-            // Define the upload path for the profile picture
+            
             $path = 'backend/images/users/';
             $file = $request->getFile('profile_picture');
     
-            // Debug: Check if the file is received
-            if (!$file) {
-                return $this->response->setJSON(['success' => false, 'message' => 'No file received.']);
-            }
+            // Log file data
+            log_message('debug', 'File data: ' . json_encode($file));
     
-            // Generate a new filename for the uploaded picture
-            $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-    
-            // Check if the file is valid and not already moved
             if ($file->isValid() && !$file->hasMoved()) {
-                // Move the uploaded file to the specified path
+                $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
                 if ($file->move($path, $new_filename)) {
-                    // Delete the old picture if it exists
                     if ($user_info->picture && file_exists($path . $user_info->picture)) {
                         unlink($path . $user_info->picture);
                     }
     
-                    // Update the user's picture in the database
                     $user->where('id', $user_id)
                          ->set(['picture' => $new_filename])
                          ->update();
     
-                    // Return a success response
                     return $this->response->setJSON(['success' => true, 'message' => 'Your profile picture has been successfully updated.']);
                 } else {
-                    // Return a failure response if file move fails
                     return $this->response->setJSON(['success' => false, 'message' => 'Failed to move the uploaded file.']);
                 }
             } else {
-                // Return a failure response if the file is not valid
                 return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
             }
         }
     
-        // Return an error response if the request is not AJAX
         return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
     }
+    
     
     
     
