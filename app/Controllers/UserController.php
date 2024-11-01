@@ -94,7 +94,7 @@ class UserController extends Controller
     public function update_profile_picture()
     {
         $id = $this->request->getPost('id');
-        $userModel = new UserModel();
+        $userModel = new User();
     
         if ($imagefile = $this->request->getFile('profile_picture')) {
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
