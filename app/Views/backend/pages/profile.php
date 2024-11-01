@@ -155,66 +155,45 @@
                 </div>
             </div>
         </div>
-        <link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
-		<script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
-        <script>
-             $('#user_profile_file').ijaboCropTool({
-                    preview: '.ci-avatar-photo',
-                    setRatio: 1,
-                    allowedExtensions: ['jpg', 'jpeg', 'png'],
-                    processUrl: '<?= route_to('update-profile-picture') ?>',
-                    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-                    onSuccess:function(responseText, element, status) {
-                        if( status == 1 ) {
-                            toastr.success('message');
-                        } else {
-                            toastr.error('message');
-                        }
-                    },
-                    onError: function(message, element, status) {
-                        alert(message);
-                    }
-                });
-        </script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
+    $(document).ready(function() {
         $('#personal_details_from').on('submit', function(e) {
-            e.preventDefault();
             var form = this;
-            var formdata = new FormData(form);
 
             // Perform validation if needed
-           $ajax({
-                url:$(form).attr('action'),
-                method:$(form).attr('method',
-                data:formdatata,
-                processData:false,
-                dataType:'json',
-                ontentType:false,
-                beforeSend:function(){
-                    toastr.remove();
-                    $(form).find('span.error-text').text('');
-                },
-                success:function(response){
-                    if( $.isEmptyObject(response.error) ){
-                        if( response.status == 1 ){
-                            $('.ci-user-name').each(function(){
-                                $(this).html(response.user_info.name);
-                            });
-                            toastr.success(response.msg);
-                    }else{
-                        toastr.error(response.msg);
-                    }
-                    }else{
-                        $.each(response.error, function(prefix, val){
-                            $(form).find('span.'+prefix+'_error').text(val);
-                        });
-                    }
-                }
-            });
+            var valid = true;
+
+            if (valid) {
+                // If validation passes, allow form to submit naturally
+                form.submit();
+            } else {
+                // Prevent form submission if validation fails
+                e.preventDefault();
+            }
         });
+    });
+
+
+    $('#user_profile_file').ijaboCropTool({
+    preview: '.ci-avatar-photo',
+    setRatio: 1,
+    allowedExtensions: ['jpg', 'jpeg', 'png'],
+    processUrl: '<?= route_to('update-profile-picture') ?>',
+    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    onSuccess:function(responseText, element, status) {
+        if( status == 1 ) {
+            toastr.success('message');
+        } else {
+            toastr.error('message');
+        }
+    },
+    onError: function(message, element, status) {
+        alert(message);
+    }
+});
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
