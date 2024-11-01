@@ -29,7 +29,7 @@
                     <div class="profile-photo">
                         <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
                         <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -75,21 +75,21 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Name</label>
+                                                        <label for="">Name</label>
                                                         <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
                                                         <span class="text-danger error-text name_error" id="name"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label >Username</label>
+                                                        <label for="">Username</label>
                                                         <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
                                                         <span class="text-danger error-text username_error" id="username"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Bio</label>
+                                                <label for="">Bio</label>
                                                 <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
                                                 <span class="text-danger error-text bio_error"></span>
                                             </div>
@@ -122,21 +122,21 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>Current Password</label>
+                                                    <label for="">Current Password</label>
                                                     <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
                                                     <span class="text-danger error-text current_password_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>New Password</label>
+                                                    <label for="">New Password</label>
                                                     <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
                                                     <span class="text-danger error-text new_password_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>Confirm new Password</label>
+                                                    <label for="">Confirm new Password</label>
                                                     <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                     <span class="text-danger error-text confirm_new_password_error"></span>
                                                 </div>
@@ -178,7 +178,7 @@
 
 
     $('#user_profile_file').ijaboCropTool({
-    preview: '.avatar-photo',
+    preview: '.ci-avatar-photo',
     setRatio: 1,
     allowedExtensions: ['jpg', 'jpeg', 'png'],
     processUrl: '<?= route_to('update-profile-picture') ?>',
@@ -195,7 +195,7 @@
     }
 });
 
-$('#change_password_form').on('submit', function(e){
+/$('#change_password_form').on('submit', function(e){
     e.preventDefault();
     // CSRF hash
     var csrfName = $('.ci_csrf_data').attr('name');
