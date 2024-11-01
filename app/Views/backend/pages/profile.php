@@ -26,7 +26,7 @@
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
         <div class="pd-20 card-box height-100-p">
             <!-- Profile Picture Form -->
-            <form action="<?= route_to('update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
+            <form action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
                 <div class="profile-photo">
                     <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
                         <img src="<?= $user['picture'] ? base_url('images/users/' . htmlspecialchars($user['picture'])) : base_url('images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
