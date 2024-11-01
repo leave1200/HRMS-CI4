@@ -155,45 +155,145 @@
                 </div>
             </div>
         </div>
+        <!-- Edit Profile Picture Modal -->
+<div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editProfilePictureForm" action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="update_user_id_picture" name="id" value="">
+                    <div class="form-group">
+                        <label for="profile_picture">Upload Profile Picture</label>
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
+                        <img id="image" style="display:none;" />
+                        <div class="preview" id="preview"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+<script>
+    // Global variable for cropper
+let cropper;
+
+// Initialize the Cropper on file input change
+document.getElementById('profile_picture').addEventListener('change', function(event) {
+    const files = event.target.files;
+    const done = (url) => {
+        document.getElementById('image').src = url;
+        document.getElementById('image').style.display = 'block';
+    };
+
+    if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            done(e.target.result);
+        };
+        reader.readAsDataURL(files[0]);
+    }
+
+    // Initialize the Cropper
+    cropper = new Cropper(document.getElementById('image'), {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 1,
+        responsive: true,
+        crop(event) {
+            // Optional: Handle crop events if needed
+        }
+    });
+});
+
+// Handle form submission
+document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (cropper) {
+        cropper.getCroppedCanvas({
+            width: 500,
+            height: 500
+        }).toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('profile_picture', blob);
+            formData.append('id', document.getElementById('update_user_id_picture').value);
+            formData.append(csrfName, csrfToken); // Add CSRF token
+
+            // AJAX request to submit cropped image
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        toastr.success(response.message); // Adjust the message as needed
+                        location.reload(); // Reload the page or update as needed
+                    } else {
+                        toastr.error(response.message);
+                    }
+                } else {
+                    toastr.error('An error occurred while uploading the image.');
+                }
+            };
+            xhr.send(formData); // Send the form data
+        }, 'image/png');
+    } else {
+        alert("Please select an image and crop it before saving.");
+    }
+});
+
+</script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
-    $(document).ready(function() {
-        $('#personal_details_from').on('submit', function(e) {
-            var form = this;
+//     $(document).ready(function() {
+//         $('#personal_details_from').on('submit', function(e) {
+//             var form = this;
 
-            // Perform validation if needed
-            var valid = true;
+//             // Perform validation if needed
+//             var valid = true;
 
-            if (valid) {
-                // If validation passes, allow form to submit naturally
-                form.submit();
-            } else {
-                // Prevent form submission if validation fails
-                e.preventDefault();
-            }
-        });
-    });
+//             if (valid) {
+//                 // If validation passes, allow form to submit naturally
+//                 form.submit();
+//             } else {
+//                 // Prevent form submission if validation fails
+//                 e.preventDefault();
+//             }
+//         });
+//     });
 
 
-    $('#user_profile_file').ijaboCropTool({
-    preview: '.ci-avatar-photo',
-    setRatio: 1,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-    processUrl: '<?= route_to('update-profile-picture') ?>',
-    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    onSuccess:function(responseText, element, status) {
-        if( status == 1 ) {
-            toastr.success('message');
-        } else {
-            toastr.error('message');
-        }
-    },
-    onError: function(message, element, status) {
-        alert(message);
-    }
-});
+//     $('#user_profile_file').ijaboCropTool({
+//     preview: '.ci-avatar-photo',
+//     setRatio: 1,
+//     allowedExtensions: ['jpg', 'jpeg', 'png'],
+//     processUrl: '<?= route_to('update-profile-picture') ?>',
+//     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+//     onSuccess:function(responseText, element, status) {
+//         if( status == 1 ) {
+//             toastr.success('message');
+//         } else {
+//             toastr.error('message');
+//         }
+//     },
+//     onError: function(message, element, status) {
+//         alert(message);
+//     }
+// });
 
 /$('#change_password_form').on('submit', function(e){
     e.preventDefault();
