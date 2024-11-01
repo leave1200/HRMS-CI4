@@ -101,46 +101,22 @@ class AdminController extends BaseController
     
     public function updatePersonalDetails() {
         $request = \Config\Services::request();
-        $validation = \Config\Services::validation();
         $user_id = CIAuth::id();
     
-        // Validate the form input
-        $validation->setRules([
-            'name' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Fullname is required'
-                ]
-            ],
-            'username' => [
-                'rules' => 'required|min_length[4]|is_unique[users.username,id,' . $user_id . ']',
-                'errors' => [
-                    'required' => 'Username is required',
-                    'min_length' => 'Username must have a minimum of 4 characters',
-                    'is_unique' => 'Username already taken!'
-                ]
-            ]
-        ]);
+        $imageFile = $request->getFile('croppedImage');
     
-        if (!$validation->withRequest($request)->run()) {
-            // Validation failed, redirect back with errors
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
-        } else {
+        if ($imageFile->isValid() && !$imageFile->hasMoved()) {
+            $newName = $imageFile->getRandomName();
+            $imageFile->move(WRITEPATH . 'uploads', $newName); // or any directory you choose
+    
             $userModel = new \App\Models\User();
-            
-            // Update user details
-            $update = $userModel->update($user_id, [
-                'name' => $request->getPost('name'),
-                'username' => $request->getPost('username'),
-                'bio' => $request->getPost('bio')
+            $userModel->update($user_id, [
+                'picture' => $newName
             ]);
     
-            if ($update) {
-                $user_info = $userModel->find($user_id);
-                return redirect()->back()->with('success', "Your personal details have been updated successfully.");
-            } else {
-                return redirect()->back()->with('error', 'Something went wrong.');
-            }
+            return $this->response->setJSON(['success' => true, 'message' => 'Profile picture updated successfully!']);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'Failed to upload image.']);
         }
     }
     // public function updatePersonalPictures()
