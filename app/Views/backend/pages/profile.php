@@ -176,20 +176,67 @@
 <?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
-        $('#personal_details_from').on('submit', function(e) {
-            var form = this;
+        $('#personal_details_form').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+        var form = this;
 
-            // Perform validation if needed
-            var valid = true;
+        // Perform validation if needed
+        var valid = true;
 
-            if (valid) {
-                // If validation passes, allow form to submit naturally
-                form.submit();
-            } else {
-                // Prevent form submission if validation fails
-                e.preventDefault();
-            }
-        });
+        // Example validation
+        var name = $('input[name="name"]').val().trim();
+        var username = $('input[name="username"]').val().trim();
+
+        if (!name) {
+            valid = false;
+            $('.name_error').text('Name is required.');
+        } else {
+            $('.name_error').text('');
+        }
+
+        if (!username) {
+            valid = false;
+            $('.username_error').text('Username is required.');
+        } else {
+            $('.username_error').text('');
+        }
+
+        // Validate if an image file is selected
+        var pictureFile = $('input[name="picture"]').val();
+        if (!pictureFile) {
+            valid = false;
+            $('.picture_error').text('Please upload a profile picture.');
+        } else {
+            $('.picture_error').text('');
+        }
+
+        if (valid) {
+            // Create a FormData object to handle the form submission
+            var formData = new FormData(form);
+
+            // Use AJAX to submit the form
+            $.ajax({
+                url: $(form).attr('action'), // URL to send the request
+                type: $(form).attr('method'), // HTTP method
+                data: formData, // Form data
+                contentType: false, // Do not set any content header
+                processData: false, // Do not process the data
+                success: function(response) {
+                    // Handle success (you can modify this based on your response structure)
+                    if (response.success) {
+                        toastr.success(response.message);
+                        // Optionally, refresh or redirect the page
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    // Handle error
+                    toastr.error('An error occurred while submitting the form.');
+                }
+            });
+        }
+    });
     });
 
 
