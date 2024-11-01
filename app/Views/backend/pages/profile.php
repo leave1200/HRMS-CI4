@@ -23,34 +23,30 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
-                <div class="pd-20 card-box height-100-p">
-                    <!-- Profile Picture Form -->
-                    <form action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
-                        <div class="profile-photo">
-                            <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
-                                <img src="<?= $user['picture'] ? base_url('images/users/' . htmlspecialchars($user['picture'])) : base_url('images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
-                            </a>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
+        <div class="pd-20 card-box height-100-p">
+            <!-- Profile Picture Form -->
+            <form action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
+                <div class="profile-photo">
+                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $user['id'] ?>">
+                        <img src="<?= $user['picture'] ? base_url('images/users/' . htmlspecialchars($user['picture'])) : base_url('images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 150px; height: 150px; border-radius: 50%;">
+                    </a>
 
-                            <!-- Trigger Button for Modal -->
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
-                                <i class="icon-copy dw dw-edit-1"></i>
-                            </button>
-                        </div>
-
-                        <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
-                        <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
-
-                        <!-- Hidden Input for User ID -->
-                        <input type="hidden" id="update_user_id_picture" name="id" value="<?= $user['id'] ?>">
-
-                        <!-- Hidden Input for CSRF Token -->
-                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
-                    </form>
+                    <!-- Trigger Button for Modal -->
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editProfilePictureModal">
+                        <i class="icon-copy dw dw-edit-1"></i>
+                    </button>
                 </div>
-            </div>
-        </div>
 
+                <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
+                <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
+
+                <!-- Hidden Input for User ID -->
+                <input type="hidden" id="update_user_id_picture" name="id" value="<?= $user['id'] ?>">
+            </form>
+        </div>
+    </div>
+</div>
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-30">
                 <div class="card-box height-100-p overflow-hidden">
                     <div class="profile-tab height-100-p">
@@ -189,7 +185,7 @@
                     <input type="hidden" id="update_user_id_picture" name="id" value="">
                     <div class="form-group">
                         <label for="profile_picture">Upload Profile Picture</label>
-                        <input type="file" id="pictureInput" name="croppedImage" accept="image/*">
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
                         <img id="image" style="display:none;"/>
                         <div class="preview" id="preview"></div>
                     </div>
@@ -212,60 +208,102 @@
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    var $image = $('#image');
-    var cropper;
+document.addEventListener('DOMContentLoaded', function() {
+    let cropper;
+    const image = document.getElementById('image');
+    const preview = document.getElementById('preview');
 
-    $('#pictureInput').on('change', function(event) {
-        var files = event.target.files;
-        var done = function (url) {
-            $image.attr('src', url);
-        };
+    // Handle edit button clicks for profile picture
+    document.querySelectorAll('.edit-profile-picture-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            document.getElementById('update_user_id_picture').value = id;
+            $('#editProfilePictureModal').modal('show'); // Open the modal
+        });
+    });
+
+    // Handle file input change
+    document.getElementById('profile_picture').addEventListener('change', function(event) {
+        const files = event.target.files;
+
         if (files && files.length > 0) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                done(reader.result);
+            const file = files[0];
+            const maxSize = 1 * 1024 * 1024; // 1 MB
+
+            if (file.size > maxSize) {
+                alert("Please select an image file under 1 MB.");
+                this.value = ""; // Clear the file input
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                image.src = e.target.result;
+                image.style.display = 'block';
+
+                // Initialize cropper
+                if (cropper) {
+                    cropper.destroy(); // Destroy any existing cropper instance
+                }
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    preview: preview
+                });
             };
-            reader.readAsDataURL(files[0]);
+            reader.readAsDataURL(file);
         }
     });
 
-    $image.on('load', function() {
-        cropper = new Cropper($image[0], {
-            aspectRatio: 1,
-            crop: function(event) {
-                // You can get crop data here if needed
+   // Handle form submission
+        document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            if (cropper) {
+                cropper.getCroppedCanvas({
+                    width: 500,
+                    height: 500
+                }).toBlob(function(blob) {
+                    const formData = new FormData();
+                    formData.append('profile_picture', blob);
+                    formData.append('id', document.getElementById('update_user_id_picture').value);
+                    formData.append(csrfName, csrfToken); // Add CSRF token here
+
+                    // AJAX request to submit cropped image
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', this.action, true); // Ensure this URL matches your route
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.message,
+                                }).then(() => {
+                                    location.reload(); // Reload page or update table
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while uploading the image.',
+                            });
+                        }
+                    };
+                    xhr.send(formData); // Send the form data
+                }, 'image/png');
             }
         });
-    });
 
-    $('#uploadButton').on('click', function() {
-        var canvas = cropper.getCroppedCanvas();
-        canvas.toBlob(function(blob) {
-            var formData = new FormData();
-            formData.append('croppedImage', blob);
-            
-            // Append CSRF token to form data
-            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); // Adjust as needed based on your server-side setup
-
-            $.ajax('<?= route_to('admin.update-profile-picture') ?>', { // Make sure the URL is correct
-                method: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    console.log('Success:', response);
-                    // Handle the response, e.g., update the profile picture in the UI
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        });
-    });
 });
-
-
 </script>
 
 
