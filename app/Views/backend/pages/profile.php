@@ -207,72 +207,104 @@
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 
 <script>
-document.getElementById('profile_picture').addEventListener('change', function() {
-    const fileInput = this;
-    const file = fileInput.files[0];
-    const maxSize = 1 * 1024 * 1024; // 1 MB
+document.addEventListener('DOMContentLoaded', function() {
+    let cropper;
+    const image = document.getElementById('image');
+    const preview = document.getElementById('preview');
 
-    // Check if a file is selected and within the size limit
-    if (file && file.size <= maxSize) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const image = document.getElementById('image');
-            image.src = e.target.result;
-            image.style.display = 'block';
+    // Handle edit button clicks for profile picture
+    document.querySelectorAll('.edit-profile-picture-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            document.getElementById('update_user_id_picture').value = id;
+            $('#editProfilePictureModal').modal('show'); // Open the modal
+        });
+    });
 
-            // Initialize cropper with options
-            const cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 1,
-                autoCropArea: 1,
-                minContainerWidth: 250,
-                minContainerHeight: 250,
-            });
+    // Handle file input change
+    document.getElementById('profile_picture').addEventListener('change', function(event) {
+        const files = event.target.files;
 
-            document.getElementById('editProfilePictureForm').onsubmit = function(e) {
-                e.preventDefault(); // Prevent default submission
-                cropper.getCroppedCanvas().toBlob(blob => {
-                    const formData = new FormData();
-                    formData.append('id', document.getElementById('update_user_id_picture').value);
-                    formData.append('profile_picture', blob, 'cropped.png');
+        if (files && files.length > 0) {
+            const file = files[0];
+            const maxSize = 1 * 1024 * 1024; // 1 MB
 
-                    // AJAX to submit cropped image
-                    $.ajax({
-                        url: this.action,
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            if (response.success) {
-                                alert("Profile picture updated successfully!");
-                                location.reload();
-                            } else {
-                                alert("Failed to update profile picture.");
-                            }
-                        },
-                        error: function() {
-                            alert("An error occurred while uploading the image.");
-                        }
-                    });
+            if (file.size > maxSize) {
+                alert("Please select an image file under 1 MB.");
+                this.value = ""; // Clear the file input
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                image.src = e.target.result;
+                image.style.display = 'block';
+
+                // Initialize cropper
+                if (cropper) {
+                    cropper.destroy(); // Destroy any existing cropper instance
+                }
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    preview: preview
                 });
             };
-        };
-        reader.readAsDataURL(file);
-    } else {
-        alert("Please select an image file under 1 MB.");
-        fileInput.value = ""; // Clear the file input
-    }
-});
+            reader.readAsDataURL(file);
+        }
+    });
 
-$(document).ready(function() {
-    $('.edit-profile-picture-btn').on('click', function(e) {
-        e.preventDefault();
-        const id = $(this).data('id');
-        $('#update_user_id_picture').val(id);
-        $('#editProfilePictureModal').modal('show');
+    // Handle form submission
+    document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        if (cropper) {
+            cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            }).toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('profile_picture', blob);
+                formData.append('id', document.getElementById('update_user_id_picture').value);
+
+                // AJAX request to submit cropped image
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', this.action, true); // Ensure this URL matches your route
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            }).then(() => {
+                                location.reload(); // Reload page or update table
+                            });
+                            $('#editProfilePictureModal').modal('hide');
+                            // Update the avatar photo if needed
+                            // $('.avatar-photo').attr('src', response.new_picture_url);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while uploading the image.',
+                        });
+                    }
+                };
+                xhr.send(formData); // Send the form data
+            }, 'image/png');
+        }
     });
 });
+
 
 </script>
 
