@@ -230,32 +230,31 @@ document.getElementById('profile_picture').addEventListener('change', function()
             });
 
             document.getElementById('editProfilePictureForm').onsubmit = function(e) {
-                e.preventDefault();
-                
-                // Get the cropped image as a blob and submit the form
+                e.preventDefault(); // Prevent default submission
                 cropper.getCroppedCanvas().toBlob(blob => {
-                    // Create a new File from the blob for form submission
-                    const file = new File([blob], 'cropped.png', { type: 'image/png' });
-                    const formData = new FormData(this);
+                    const formData = new FormData();
+                    formData.append('id', document.getElementById('update_user_id_picture').value);
+                    formData.append('profile_picture', blob, 'cropped.png');
 
-                    // Append the cropped image as 'profile_picture'
-                    formData.set('profile_picture', file);
-
-                    // Set up an XMLHttpRequest to submit the form
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', this.action, true);
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            const response = JSON.parse(xhr.responseText);
+                    // AJAX to submit cropped image
+                    $.ajax({
+                        url: this.action,
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
                             if (response.success) {
                                 alert("Profile picture updated successfully!");
                                 location.reload();
                             } else {
                                 alert("Failed to update profile picture.");
                             }
+                        },
+                        error: function() {
+                            alert("An error occurred while uploading the image.");
                         }
-                    };
-                    xhr.send(formData);
+                    });
                 });
             };
         };
@@ -269,11 +268,12 @@ document.getElementById('profile_picture').addEventListener('change', function()
 $(document).ready(function() {
     $('.edit-profile-picture-btn').on('click', function(e) {
         e.preventDefault();
-        var id = $(this).data('id');
+        const id = $(this).data('id');
         $('#update_user_id_picture').val(id);
         $('#editProfilePictureModal').modal('show');
     });
 });
+
 </script>
 
 
