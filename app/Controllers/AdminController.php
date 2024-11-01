@@ -205,24 +205,43 @@ class AdminController extends BaseController
     
     
     
-    public function updateProfilePicture() {
-        $userId = $this->request->getPost('id');
-        $file = $this->request->getFile('profile_picture');
-    
-        if ($file->isValid() && !$file->hasMoved()) {
-            // Define the file path
-            $newName = $file->getRandomName();
-            $file->move('images/users', $newName); // Ensure this directory exists
-    
-            // Update user profile picture in the database
-            $this->userModel->update($userId, ['picture' => $newName]);
-    
-            return $this->response->setJSON(['success' => true, 'message' => 'Profile picture updated successfully.']);
+    public function updatePersonalPictures() {
+        $request = \Config\Services::request();
+        
+        if ($request->isAJAX()) {
+            $user_id = CIAuth::id();
+            $user = new User();
+            $user_info = $user->asObject()->where('id', $user_id)->first();
+            
+            $path = 'backend/images/users/';
+            $file = $request->getFile('profile_picture');
+        
+            log_message('debug', 'File data: ' . json_encode($file));
+        
+            if (!$file->isValid()) {
+                log_message('error', 'File error: ' . $file->getErrorString());
+                return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
+            }
+        
+            if (!$file->hasMoved()) {
+                $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
+                if ($file->move($path, $new_filename)) {
+                    if ($user_info->picture && file_exists($path . $user_info->picture)) {
+                        unlink($path . $user_info->picture);
+                    }
+                    $user->where('id', $user_id)
+                         ->set(['picture' => $new_filename])
+                         ->update();
+        
+                    return $this->response->setJSON(['success' => true, 'message' => 'Your profile picture has been successfully updated.']);
+                } else {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to move the uploaded file.']);
+                }
+            }
         }
-    
-        return $this->response->setJSON(['success' => false, 'message' => 'Failed to upload image.']);
+        
+        return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
     }
-    
     
     
     
