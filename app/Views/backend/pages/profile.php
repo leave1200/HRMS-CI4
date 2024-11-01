@@ -193,7 +193,6 @@
                     }
                 }
             });
-        });
 
 
     $('#user_profile_file').ijaboCropTool({
