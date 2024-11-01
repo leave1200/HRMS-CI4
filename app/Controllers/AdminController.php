@@ -79,18 +79,25 @@ class AdminController extends BaseController
     }
     public function profile() {
         $userModel = new User();
-        $userId = CIAuth::id(); // Assuming CIAuth is your authentication service
-        $user = $userModel->find($userId); // Get the current user's data
+        $userId = CIAuth::id(); // Retrieve the authenticated user's ID
+        
+        // Fetch user data based on authenticated ID
+        $user = $userModel->find($userId); 
+        
+        // Retrieve user status from the session
         $userStatus = session()->get('userStatus');
         
-        $data = array(
+        // Prepare data array for the view
+        $data = [
             'pageTitle' => 'Profile',
             'user' => $user, // Pass the user data to the view
-            'userStatus' => $userStatus
-        );
+            'userStatus' => $userStatus,
+        ];
         
+        // Load the profile view with user data
         return view('backend/pages/profile', $data);
     }
+    
     
     public function updatePersonalDetails() {
         $request = \Config\Services::request();
