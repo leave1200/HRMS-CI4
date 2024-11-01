@@ -193,62 +193,24 @@
                     }
                 }
             });
-
-
-    $('#user_profile_file').ijaboCropTool({
-    preview: '.ci-avatar-photo',
-    setRatio: 1,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-    processUrl: '<?= route_to('update-profile-picture') ?>',
-    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    onSuccess:function(responseText, element, status) {
-        if( status == 1 ) {
-            toastr.success('message');
-        } else {
-            toastr.error('message');
-        }
-    },
-    onError: function(message, element, status) {
-        alert(message);
-    }
-});
-
-$('#change_password_form').on('submit', function(e){
-    e.preventDefault();
-    // CSRF hash
-    var csrfName = $('.ci_csrf_data').attr('name');
-    var csrfHash = $('.ci_csrf_data').val();
-    var form = this;
-    var formdata = new FormData(form);
-    formdata.append(csrfName, csrfHash);
-
-    $.ajax({
-        url: $(form).attr('action'),
-        method: $(form).attr('method'),
-        data: formdata,
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function(){
-            toastr.remove();
-            $(form).find('span.error-text').text('');
-        },
-        success: function(response){
-            if (response.trim() === 'success') {
-                $(form)[0].reset();
-                toastr.success('Password has been changed successfully.');
-            } else {
-                // If the response contains an error message, display it
-                toastr.error(response);
+        });
+        $('#user_profile_file').ijaboCropTool({
+            preview: '.ci-avatar-photo',
+            setRatio: 1,
+            allowedExtensions: ['jpg', 'jpeg', 'png'],
+            processUrl: '<?= route_to('update-profile-picture') ?>',
+            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+            onSuccess:function(responseText, element, status) {
+                if( status == 1 ) {
+                    toastr.success('message');
+                } else {
+                    toastr.error('message');
+                }
+            },
+            onError: function(message, element, status) {
+                alert(message);
             }
-        },
-        error: function(xhr, status, error){
-            toastr.error('An error occurred. Please try again.');
-            console.error('Error:', error);
-        }
-    });
-});
-
+        });
 
 </script>
 <?= $this->endSection() ?> 
