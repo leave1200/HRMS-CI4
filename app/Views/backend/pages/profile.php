@@ -75,21 +75,21 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="name">Name</label>
+                                                        <label>Name</label>
                                                         <input type="text" name="name" class="form-control" placeholder="Enter full name" value="<?= old('name', get_user()->name) ?>">
                                                         <span class="text-danger error-text name_error" id="name"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="username">Username</label>
+                                                        <label >Username</label>
                                                         <input type="text" name="username" class="form-control" placeholder="Enter Username" value="<?= old('username', get_user()->username) ?>">
                                                         <span class="text-danger error-text username_error" id="username"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="bio">Bio</label>
+                                                <label>Bio</label>
                                                 <textarea name="bio" id="" cols="30" rows="10" class="form-control" placeholder="Bio....."><?= old('bio', get_user()->bio) ?></textarea>
                                                 <span class="text-danger error-text bio_error"></span>
                                             </div>
@@ -129,14 +129,14 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="password">New Password</label>
+                                                    <label>New Password</label>
                                                     <input type="password" class="form-control" placeholder="New password" name="new_password" value="<?= old('new_password') ?>">
                                                     <span class="text-danger error-text new_password_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="password">Confirm new Password</label>
+                                                    <label>Confirm new Password</label>
                                                     <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                     <span class="text-danger error-text confirm_new_password_error"></span>
                                                 </div>
