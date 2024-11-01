@@ -231,19 +231,22 @@ document.getElementById('profile_picture').addEventListener('change', function()
 
             document.getElementById('editProfilePictureForm').onsubmit = function(e) {
                 e.preventDefault();
+                
+                // Get the cropped image as a blob and submit the form
                 cropper.getCroppedCanvas().toBlob(blob => {
-                    const formData = new FormData();
-                    formData.append('id', document.getElementById('update_user_id_picture').value);
-                    formData.append('profile_picture', blob, 'cropped.png');
+                    // Create a new File from the blob for form submission
+                    const file = new File([blob], 'cropped.png', { type: 'image/png' });
+                    const formData = new FormData(this);
 
-                    // AJAX to submit cropped image
-                    $.ajax({
-                        url: '<?= route_to("update-profile-picture") ?>',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
+                    // Append the cropped image as 'profile_picture'
+                    formData.set('profile_picture', file);
+
+                    // Set up an XMLHttpRequest to submit the form
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', this.action, true);
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            const response = JSON.parse(xhr.responseText);
                             if (response.success) {
                                 alert("Profile picture updated successfully!");
                                 location.reload();
@@ -251,7 +254,8 @@ document.getElementById('profile_picture').addEventListener('change', function()
                                 alert("Failed to update profile picture.");
                             }
                         }
-                    });
+                    };
+                    xhr.send(formData);
                 });
             };
         };
@@ -262,7 +266,6 @@ document.getElementById('profile_picture').addEventListener('change', function()
     }
 });
 
-
 $(document).ready(function() {
     $('.edit-profile-picture-btn').on('click', function(e) {
         e.preventDefault();
@@ -271,8 +274,8 @@ $(document).ready(function() {
         $('#editProfilePictureModal').modal('show');
     });
 });
-
 </script>
+
 
 
 
