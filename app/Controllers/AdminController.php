@@ -219,16 +219,16 @@ class AdminController extends BaseController
             log_message('debug', 'File data: ' . json_encode($file));
         
             if (!$file->isValid()) {
-                log_message('error', 'File error: ' . $file->getErrorString());
                 return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
             }
+            
         
-            if (!$file->hasMoved()) {
+            if ($file->move($path, $new_filename)) {
                 $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
                 if ($file->move($path, $new_filename)) {
                     if ($user_info->picture && file_exists($path . $user_info->picture)) {
                         unlink($path . $user_info->picture);
-                    }
+                    }                    
                     $user->where('id', $user_id)
                          ->set(['picture' => $new_filename])
                          ->update();
