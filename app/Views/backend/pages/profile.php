@@ -155,6 +155,8 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="backend/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
