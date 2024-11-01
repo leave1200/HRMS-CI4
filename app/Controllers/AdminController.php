@@ -100,38 +100,36 @@ class AdminController extends BaseController
     
     
     public function updatePersonalDetails() {
-        // Get the user ID and file input
-    $userId = $this->request->getPost('id');
-    $file = $this->request->getFile('profile_picture');
-
-    // Check if the file is valid and exists
-    if ($file && $file->isValid()) {
-        // Define the upload path
-        $uploadPath = WRITEPATH . 'uploads/users/';
-        
-        // Ensure the directory exists
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0755, true); // Create the directory if it does not exist
-        }
-
-        // Move the uploaded file to the desired location
-        $newFileName = $userId . '_' . time() . '_' . $file->getName(); // Rename the file to prevent conflicts
-        if ($file->move($uploadPath, $newFileName)) {
-            // Update the user profile picture in the database
-            $userModel = new User(); // Assuming you have a User model
-            $data = [
-                'picture' => $newFileName // Update with the new file name
-            ];
-            
-            // Update the user record
-            if ($userModel->update($userId, $data)) {
-                return $this->response->setJSON(['success' => true]);
-            } else {
-                return $this->response->setJSON(['success' => false, 'message' => 'Database update failed.']);
+        $userId = $this->request->getPost('id');
+        $file = $this->request->getFile('profile_picture');
+    
+        if ($file && $file->isValid()) {
+            // Define the upload path
+            $uploadPath = WRITEPATH . 'uploads/users/';
+    
+            // Ensure the directory exists
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
             }
-        } else {
-            return $this->response->setJSON(['success' => false, 'message' => 'File move failed.']);
+    
+            // Generate a new filename
+            $newFilename = $userId . '_' . time() . '_' . $file->getName();
+    
+            // Move the uploaded file
+            if ($file->move($uploadPath, $newFilename)) {
+                // Update the user's picture in the database
+                $userModel = new User();
+                if ($userModel->updatePictureDirect($userId, $newFilename)) {
+                    return $this->response->setJSON(['success' => true]);
+                } else {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to update profile picture in the database.']);
+                }
+            } else {
+                return $this->response->setJSON(['success' => false, 'message' => 'Failed to move uploaded file.']);
+            }
         }
+    
+        return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
     }
 
     return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
