@@ -77,28 +77,14 @@ class AdminController extends BaseController
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    public function profile() {
-    $userModel = new User();
-    $userId = CIAuth::id(); // Retrieve the authenticated user's ID
-    
-    // Fetch user data based on authenticated ID
-    $user = $userModel->find($userId); 
-    
-    // Retrieve user status from the session
-    $userStatus = session()->get('userStatus');
-    
-    // Prepare data array for the view
-    $data = [
-        'pageTitle' => 'Profile',
-        'user' => $user, // Pass the user data to the view
-        'userStatus' => $userStatus,
-    ];
-    
-    // Load the profile view with user data
-    return view('backend/pages/profile', $data);
-}
-
-    
+    public function profile(){
+        $userStatus = session()->get('userStatus');
+        $data = array(
+            'pageTitle'=>'Profile',
+            'userStatus' => $userStatus
+        );
+        return view('backend/pages/profile', $data);
+    }
     public function updatePersonalDetails() {
         $request = \Config\Services::request();
         $validation = \Config\Services::validation();
@@ -143,106 +129,50 @@ class AdminController extends BaseController
             }
         }
     }
-    // public function updatePersonalPictures()
-    // {
-    //     if ($this->request->isAJAX()) {
-    //         $id = $this->request->getPost('id');
-    
-    //         // Handle file upload
-    //         $file = $this->request->getFile('profile_picture');
-    //         if ($file && $file->isValid() && !$file->hasMoved()) {
-    //             $newName = $file->getRandomName();
-    //             $file->move(WRITEPATH . 'uploads/users', $newName);
-    
-    //             // Update the user's picture in the database
-    //             $this->userModel->update($id, ['picture' => $newName]);
-    
-    //             return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully!', 'new_picture_name' => $newName]);
-    //         } else {
-    //             return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
-    //         }
-    //     }
-    
-    //     return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid request.']);
-    // }
-    
-    // public function updatePersonalPictures() {
-    //     $request = \Config\Services::request();
-    //     $user_id = CIAuth::id(); // Assuming CIAuth is your authentication service
-    //     $userModel = new \App\Models\User(); // Initialize your User model
-    
-    //     // Check if the file is uploaded
-    //     if ($imagefile = $request->getFile('profile_picture')) {
-    //         if ($imagefile->isValid() && !$imagefile->hasMoved()) {
-    //             $newName = $imagefile->getRandomName(); // Generate a random name for the uploaded file
-    //             $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName); // Move the file to the specified directory
-    
-    //             // Prepare data for updating the database
-    //             $data = ['picture' => $newName];
-    
-    //             // Update user profile picture in the database
-    //             if ($userModel->update($user_id, $data)) {
-    //                 return $this->response->setJSON([
-    //                     'status' => 1,
-    //                     'msg' => 'Profile picture updated successfully!',
-    //                     'new_picture_url' => base_url('backend/images/users/' . $newName) // Return the new picture URL
-    //                 ]);
-    //             } else {
-    //                 return $this->response->setJSON([
-    //                     'status' => 0,
-    //                     'msg' => 'Failed to update profile picture'
-    //                 ]);
-    //             }
-    //         }
-    //     }
-    
-    //     return $this->response->setJSON([
-    //         'status' => 0,
-    //         'msg' => 'Invalid image file'
-    //     ]);
-    // }
-    
-    
-    
-    
-    public function updatePersonalPictures() {
+    public function updatePersonalPictures()
+    {
         $request = \Config\Services::request();
-        
-        if ($request->isAJAX()) {
-            $user_id = CIAuth::id();
-            $user = new User();
-            $user_info = $user->asObject()->where('id', $user_id)->first();
-            
-            $path = 'backend/images/users/';
-            $file = $request->getFile('profile_picture');
-        
-            log_message('debug', 'File data: ' . json_encode($file));
-        
-            if (!$file->isValid()) {
-                return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
-            }
-            
-        
-            if ($file->move($path, $new_filename)) {
-                $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-                if ($file->move($path, $new_filename)) {
-                    if ($user_info->picture && file_exists($path . $user_info->picture)) {
-                        unlink($path . $user_info->picture);
-                    }                    
-                    $user->where('id', $user_id)
-                         ->set(['picture' => $new_filename])
-                         ->update();
-        
-                    return $this->response->setJSON(['success' => true, 'message' => 'Your profile picture has been successfully updated.']);
+        $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
+        $userModel = new User(); // Use your User model instead of EmployeeModel
+    
+        if ($imagefile = $request->getFile('user_profile_file')) {
+            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
+                $path = 'images/users/';
+                $imagefile->move($path, $newName);
+    
+                // Get the old picture for deletion
+                $user_info = $userModel->asObject()->where('id', $user_id)->first();
+                $old_picture = $user_info->picture;
+    
+                // Update the user picture in the database
+                $data = ['picture' => $newName];
+    
+                if ($userModel->update($user_id, $data)) {
+                    // Delete the old picture if it exists
+                    if ($old_picture != null && file_exists($path . $old_picture)) {
+                        unlink($path . $old_picture);
+                    }
+    
+                    return $this->response->setJSON([
+                        'success' => true,
+                        'message' => 'Profile picture updated successfully',
+                        'new_picture_url' => base_url($path . $newName) // Update to return the URL if needed
+                    ]);
                 } else {
-                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to move the uploaded file.']);
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Failed to update profile picture'
+                    ]);
                 }
             }
         }
-        
-        return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
-    }
     
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Invalid image file'
+        ]);
+    }
     
     
     
@@ -254,8 +184,8 @@ class AdminController extends BaseController
     //     $user = new User();
     //     $user_info = $user->asObject()->where('id',$user_id)->first();
 
-    //     $path ='backend/images/users/';
-    //     $file = $request->getFile('profile_picture');
+    //     $path ='images/users/';
+    //     $file = $request->getFile('user_profile_file');
     //     $old_picture = $user_info->picture;
     //     $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
 
@@ -271,62 +201,77 @@ class AdminController extends BaseController
     //     }else{
     //         echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
     //     }
+    //     // $upload_image = \Config\Services::image()
+    //     //                 ->withFile($file)
+    //     //                 ->resize(450,450,true,'height')
+    //     //                 ->save($path.$new_filename);
+        
+    //     // if( $upload_image ){
+    //     //     if( $old_picture != null && file_exists($path.$new_filename) ){
+    //     //         unlink($path.$old_picture);
+    //     //     }
+    //     //     $user->where('id',$user_info->id)
+    //     //                     ->set(['picture'->$new_filename])
+    //     //                     ->update();
+
+    //     //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
+    //     // }else{
+    //     //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+    //     // }
     // } 
-
-
-    // public function changePassword()
-    // {
-    //     $request = \Config\Services::request();
-    //     $validation = \Config\Services::validation();
-    //     $user_id = CIAuth::id();
-    //     $user = new User();
-    //     $user_info = $user->asObject()->where('id', $user_id)->first();
+    public function changePassword()
+    {
+        $request = \Config\Services::request();
+        $validation = \Config\Services::validation();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id', $user_id)->first();
     
-    //     // Validate the form
-    //     $validation->setRules([
-    //         'current_password' => [
-    //             'rules' => 'required|min_length[5]|check_current_password[current_password]',
-    //             'errors' => [
-    //                 'required' => 'Enter the current password',
-    //                 'min_length' => 'Password must have at least 5 characters',
-    //                 'check_current_password' => 'The current password is incorrect'
-    //             ]
-    //         ],
-    //         'new_password' => [
-    //             'rules' => 'required|min_length[5]|max_length[20]|is_password_strong[new_password]',
-    //             'errors' => [
-    //                 'required' => 'New password is required',
-    //                 'min_length' => 'New password must have at least 5 characters',
-    //                 'max_length' => 'New password must not exceed 20 characters',
-    //                 'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
-    //             ]
-    //         ],
-    //         'confirm_new_password' => [
-    //             'rules' => 'required|matches[new_password]',
-    //             'errors' => [
-    //                 'required' => 'Confirm new password',
-    //                 'matches' => 'Password mismatch.'
-    //             ]
-    //         ]
-    //     ]);
+        // Validate the form
+        $validation->setRules([
+            'current_password' => [
+                'rules' => 'required|min_length[5]|check_current_password[current_password]',
+                'errors' => [
+                    'required' => 'Enter the current password',
+                    'min_length' => 'Password must have at least 5 characters',
+                    'check_current_password' => 'The current password is incorrect'
+                ]
+            ],
+            'new_password' => [
+                'rules' => 'required|min_length[5]|max_length[20]|is_password_strong[new_password]',
+                'errors' => [
+                    'required' => 'New password is required',
+                    'min_length' => 'New password must have at least 5 characters',
+                    'max_length' => 'New password must not exceed 20 characters',
+                    'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
+                ]
+            ],
+            'confirm_new_password' => [
+                'rules' => 'required|matches[new_password]',
+                'errors' => [
+                    'required' => 'Confirm new password',
+                    'matches' => 'Password mismatch.'
+                ]
+            ]
+        ]);
     
-    //     if (!$validation->withRequest($request)->run()) {
-    //         // Validation failed
-    //         $errors = $validation->getErrors();
-    //         return redirect()->back()->withInput()->with('errors', $errors);
-    //     } else {
-    //         // Validation passed, update the password
-    //         $new_password = $request->getPost('new_password');
+        if (!$validation->withRequest($request)->run()) {
+            // Validation failed
+            $errors = $validation->getErrors();
+            return redirect()->back()->withInput()->with('errors', $errors);
+        } else {
+            // Validation passed, update the password
+            $new_password = $request->getPost('new_password');
     
-    //         // Hash the new password using bcrypt
-    //         $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+            // Hash the new password using bcrypt
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
     
-    //         // Update the user password in the database
-    //         $user->update($user_id, ['password' => $hashed_password]);
+            // Update the user password in the database
+            $user->update($user_id, ['password' => $hashed_password]);
     
-    //         return redirect()->back()->with('success', 'Password has been changed successfully.');
-    //     }
-    // }
+            return redirect()->back()->with('success', 'Password has been changed successfully.');
+        }
+    }
     
     
         
