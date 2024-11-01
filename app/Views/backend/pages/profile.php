@@ -180,7 +180,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="editProfilePictureForm" enctype="multipart/form-data">
+            <form id="editProfilePictureForm" action="<?= route_to('admin.update-profile-picture') ?>" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" id="update_user_id_picture" name="id" value="">
                     <div class="form-group">
@@ -198,6 +198,7 @@
         </div>
     </div>
 </div>
+
 <!-- jQuery and Bootstrap JavaScript (Place these at the end of the body) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

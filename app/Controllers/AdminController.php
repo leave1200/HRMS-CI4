@@ -205,7 +205,6 @@ class AdminController extends BaseController
     
     
     
-    
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
     
@@ -249,11 +248,11 @@ class AdminController extends BaseController
                     // Return a success response
                     return $this->response->setJSON(['success' => true, 'message' => 'Your profile picture has been successfully updated.']);
                 } else {
-                    // Debug: File move error
+                    // Return a failure response if file move fails
                     return $this->response->setJSON(['success' => false, 'message' => 'Failed to move the uploaded file.']);
                 }
             } else {
-                // Debug: Check if file is valid
+                // Return a failure response if the file is not valid
                 return $this->response->setJSON(['success' => false, 'message' => 'File upload failed: ' . $file->getError()]);
             }
         }
@@ -261,6 +260,7 @@ class AdminController extends BaseController
         // Return an error response if the request is not AJAX
         return $this->response->setJSON(['success' => false, 'message' => 'Invalid request.']);
     }
+    
     
     
 
