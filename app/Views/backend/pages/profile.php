@@ -26,9 +26,12 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
+                   <!-- Profile Picture Section -->
                     <div class="profile-photo">
-                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
@@ -155,7 +158,7 @@
                 </div>
             </div>
         </div>
-        <!-- Edit Profile Picture Modal -->
+<!-- Edit Profile Picture Modal -->
 <div class="modal fade" id="editProfilePictureModal" tabindex="-1" role="dialog" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -171,7 +174,7 @@
                     <div class="form-group">
                         <label for="profile_picture">Upload Profile Picture</label>
                         <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
-                        <img id="image" style="display:none;" />
+                        <img id="image" style="display:none; width:100%;" />
                         <div class="preview" id="preview"></div>
                     </div>
                 </div>
@@ -186,7 +189,7 @@
 <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 <script>
-    // Global variable for cropper
+   // Global variable for cropper
 let cropper;
 
 // Initialize the Cropper on file input change
@@ -203,18 +206,17 @@ document.getElementById('profile_picture').addEventListener('change', function(e
             done(e.target.result);
         };
         reader.readAsDataURL(files[0]);
-    }
-
-    // Initialize the Cropper
-    cropper = new Cropper(document.getElementById('image'), {
-        aspectRatio: 1,
-        viewMode: 1,
-        autoCropArea: 1,
-        responsive: true,
-        crop(event) {
-            // Optional: Handle crop events if needed
+        
+        // Initialize the Cropper after the image has been loaded
+        if (cropper) {
+            cropper.destroy(); // Destroy the previous instance if it exists
         }
-    });
+        cropper = new Cropper(document.getElementById('image'), {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
+        });
+    }
 });
 
 // Handle form submission
@@ -229,7 +231,7 @@ document.getElementById('editProfilePictureForm').addEventListener('submit', fun
             const formData = new FormData();
             formData.append('profile_picture', blob);
             formData.append('id', document.getElementById('update_user_id_picture').value);
-            formData.append(csrfName, csrfToken); // Add CSRF token
+            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); // Include CSRF token
 
             // AJAX request to submit cropped image
             const xhr = new XMLHttpRequest();
@@ -238,8 +240,8 @@ document.getElementById('editProfilePictureForm').addEventListener('submit', fun
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     if (response.success) {
-                        toastr.success(response.message); // Adjust the message as needed
-                        location.reload(); // Reload the page or update as needed
+                        toastr.success(response.message);
+                        location.reload(); // Reload or update UI as needed
                     } else {
                         toastr.error(response.message);
                     }
@@ -247,12 +249,13 @@ document.getElementById('editProfilePictureForm').addEventListener('submit', fun
                     toastr.error('An error occurred while uploading the image.');
                 }
             };
-            xhr.send(formData); // Send the form data
+            xhr.send(formData);
         }, 'image/png');
     } else {
         alert("Please select an image and crop it before saving.");
     }
 });
+
 
 </script>
 <?= $this->endSection() ?>
