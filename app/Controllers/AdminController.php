@@ -201,23 +201,6 @@ class AdminController extends BaseController
         }else{
             echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
         }
-        // $upload_image = \Config\Services::image()
-        //                 ->withFile($file)
-        //                 ->resize(450,450,true,'height')
-        //                 ->save($path.$new_filename);
-        
-        // if( $upload_image ){
-        //     if( $old_picture != null && file_exists($path.$new_filename) ){
-        //         unlink($path.$old_picture);
-        //     }
-        //     $user->where('id',$user_info->id)
-        //                     ->set(['picture'->$new_filename])
-        //                     ->update();
-
-        //     echo json_encode(['status'=>1,'msg'=>'Something wentt wrong.']);
-        // }else{
-        //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
-        // }
     } 
     public function changePassword()
     {
