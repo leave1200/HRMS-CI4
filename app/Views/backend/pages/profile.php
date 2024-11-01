@@ -183,16 +183,13 @@
     allowedExtensions: ['jpg', 'jpeg', 'png'],
     processUrl: '<?= route_to('update-profile-picture') ?>',
     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    onSuccess: function(responseText, element, status) {
-    let response = JSON.parse(responseText);
-    if (response.status === 1) {
-        toastr.success(response.msg);
-        // Update the profile picture
-        $('.ci-avatar-photo').attr('src', '/images/users/' + response.new_filename + '?' + new Date().getTime());
-    } else {
-        toastr.error(response.msg);
-    }
-},
+    onSuccess:function(responseText, element, status) {
+        if( status == 1 ) {
+            toastr.success('message');
+        } else {
+            toastr.error('message');
+        }
+    },
     onError: function(message, element, status) {
         alert(message);
     }
