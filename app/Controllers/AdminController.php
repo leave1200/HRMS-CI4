@@ -132,8 +132,6 @@ class AdminController extends BaseController
         return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
     }
 
-    return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
-    }
     // public function updatePersonalPictures()
     // {
     //     if ($this->request->isAJAX()) {
