@@ -4,6 +4,7 @@
 	<head>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="csrf-token-name" content="<?= csrf_token() ?>">
 		<title><?= isset($pageTitle) ? $pageTitle : 'New Page Title'; ?></title>
 
