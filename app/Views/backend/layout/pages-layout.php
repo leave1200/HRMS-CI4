@@ -42,7 +42,6 @@
 		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-knob@1.2.13/dist/jquery.knob.min.css"> -->
 		<link rel="stylesheet" href="/backend/src/plugins/timedropper/timedropper.css">
 		<link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<?= $this->renderSection('stylesheets') ?>
 	</head>
 	<body>
