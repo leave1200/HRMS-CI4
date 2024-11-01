@@ -189,7 +189,7 @@
                     <input type="hidden" id="update_user_id_picture" name="id" value="">
                     <div class="form-group">
                         <label for="profile_picture">Upload Profile Picture</label>
-                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
+                        <input type="file" id="pictureInput" name="croppedImage" accept="image/*">
                         <img id="image" style="display:none;"/>
                         <div class="preview" id="preview"></div>
                     </div>
