@@ -78,60 +78,71 @@ class AdminController extends BaseController
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
     public function profile() {
-        $userModel = new User();
-        $userId = CIAuth::id(); // Retrieve the authenticated user's ID
-        
-        // Fetch user data based on authenticated ID
-        $user = $userModel->find($userId); 
-        
-        // Retrieve user status from the session
-        $userStatus = session()->get('userStatus');
-        
-        // Prepare data array for the view
-        $data = [
-            'pageTitle' => 'Profile',
-            'user' => $user, // Pass the user data to the view
-            'userStatus' => $userStatus,
-        ];
-        
-        // Load the profile view with user data
-        return view('backend/pages/profile', $data);
-    }
+    $userModel = new User();
+    $userId = CIAuth::id(); // Retrieve the authenticated user's ID
     
+    // Fetch user data based on authenticated ID
+    $user = $userModel->find($userId); 
+    
+    // Retrieve user status from the session
+    $userStatus = session()->get('userStatus');
+    
+    // Prepare data array for the view
+    $data = [
+        'pageTitle' => 'Profile',
+        'user' => $user, // Pass the user data to the view
+        'userStatus' => $userStatus,
+    ];
+    
+    // Load the profile view with user data
+    return view('backend/pages/profile', $data);
+}
+
     
     public function updatePersonalDetails() {
-        $userId = $this->request->getPost('id');
-        $file = $this->request->getFile('profile_picture');
+        $request = \Config\Services::request();
+        $validation = \Config\Services::validation();
+        $user_id = CIAuth::id();
     
-        if ($file && $file->isValid()) {
-            // Define the upload path
-            $uploadPath = WRITEPATH . 'uploads/users/';
+        // Validate the form input
+        $validation->setRules([
+            'name' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Fullname is required'
+                ]
+            ],
+            'username' => [
+                'rules' => 'required|min_length[4]|is_unique[users.username,id,' . $user_id . ']',
+                'errors' => [
+                    'required' => 'Username is required',
+                    'min_length' => 'Username must have a minimum of 4 characters',
+                    'is_unique' => 'Username already taken!'
+                ]
+            ]
+        ]);
     
-            // Ensure the directory exists
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
+        if (!$validation->withRequest($request)->run()) {
+            // Validation failed, redirect back with errors
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        } else {
+            $userModel = new \App\Models\User();
+            
+            // Update user details
+            $update = $userModel->update($user_id, [
+                'name' => $request->getPost('name'),
+                'username' => $request->getPost('username'),
+                'bio' => $request->getPost('bio')
+            ]);
     
-            // Generate a new filename
-            $newFilename = $userId . '_' . time() . '_' . $file->getName();
-    
-            // Move the uploaded file
-            if ($file->move($uploadPath, $newFilename)) {
-                // Update the user's picture in the database
-                $userModel = new User();
-                if ($userModel->updatePictureDirect($userId, $newFilename)) {
-                    return $this->response->setJSON(['success' => true]);
-                } else {
-                    return $this->response->setJSON(['success' => false, 'message' => 'Failed to update profile picture in the database.']);
-                }
+            if ($update) {
+                $user_info = $userModel->find($user_id);
+                return redirect()->back()->with('success', "Your personal details have been updated successfully.");
             } else {
-                return $this->response->setJSON(['success' => false, 'message' => 'Failed to move uploaded file.']);
+                return redirect()->back()->with('error', 'Something went wrong.');
             }
         }
-    
-        return $this->response->setJSON(['success' => false, 'message' => 'File upload failed.']);
     }
-
     // public function updatePersonalPictures()
     // {
     //     if ($this->request->isAJAX()) {
@@ -195,24 +206,28 @@ class AdminController extends BaseController
     
     
     
-    
-
     public function updatePersonalPictures() {
         $request = \Config\Services::request();
     
         // Check if the request is an AJAX request
         if ($request->isAJAX()) {
+            // Retrieve the user ID from authentication service
             $user_id = CIAuth::id();
+            
+            // Create a new User model instance
             $user = new User();
+            
+            // Retrieve user information as an object
             $user_info = $user->asObject()->where('id', $user_id)->first();
     
+            // Define the upload path for the profile picture
             $path = 'backend/images/users/';
             $file = $request->getFile('profile_picture');
     
-            // Generate a new filename
+            // Generate a new filename for the uploaded picture
             $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
-            // Check if the file is valid and not moved yet
+            // Check if the file is valid and not already moved
             if ($file->isValid() && !$file->hasMoved()) {
                 // Move the uploaded file to the specified path
                 if ($file->move($path, $new_filename)) {
@@ -243,60 +258,85 @@ class AdminController extends BaseController
     }
     
 
+    //  public function updatePersonalPictures(){
+    //     $request = \Config\Services::request();
+    //     $user_id = CIAuth::id();
+    //     $user = new User();
+    //     $user_info = $user->asObject()->where('id',$user_id)->first();
 
-    public function changePassword()
-    {
-        $request = \Config\Services::request();
-        $validation = \Config\Services::validation();
-        $user_id = CIAuth::id();
-        $user = new User();
-        $user_info = $user->asObject()->where('id', $user_id)->first();
+    //     $path ='backend/images/users/';
+    //     $file = $request->getFile('profile_picture');
+    //     $old_picture = $user_info->picture;
+    //     $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+    //     if( $file->move($path,$new_filename) ){
+    //         if( $old_picture != null && file_exists($path.$old_picture) ){
+    //             unlink($path.$old_picture);
+    //         }
+    //         $user->where('id',$user_info->id)
+    //              ->set(['picture'=>$new_filename])
+    //              ->update();
+
+    //              echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+    //     }else{
+    //         echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+    //     }
+    // } 
+
+
+    // public function changePassword()
+    // {
+    //     $request = \Config\Services::request();
+    //     $validation = \Config\Services::validation();
+    //     $user_id = CIAuth::id();
+    //     $user = new User();
+    //     $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        // Validate the form
-        $validation->setRules([
-            'current_password' => [
-                'rules' => 'required|min_length[5]|check_current_password[current_password]',
-                'errors' => [
-                    'required' => 'Enter the current password',
-                    'min_length' => 'Password must have at least 5 characters',
-                    'check_current_password' => 'The current password is incorrect'
-                ]
-            ],
-            'new_password' => [
-                'rules' => 'required|min_length[5]|max_length[20]|is_password_strong[new_password]',
-                'errors' => [
-                    'required' => 'New password is required',
-                    'min_length' => 'New password must have at least 5 characters',
-                    'max_length' => 'New password must not exceed 20 characters',
-                    'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
-                ]
-            ],
-            'confirm_new_password' => [
-                'rules' => 'required|matches[new_password]',
-                'errors' => [
-                    'required' => 'Confirm new password',
-                    'matches' => 'Password mismatch.'
-                ]
-            ]
-        ]);
+    //     // Validate the form
+    //     $validation->setRules([
+    //         'current_password' => [
+    //             'rules' => 'required|min_length[5]|check_current_password[current_password]',
+    //             'errors' => [
+    //                 'required' => 'Enter the current password',
+    //                 'min_length' => 'Password must have at least 5 characters',
+    //                 'check_current_password' => 'The current password is incorrect'
+    //             ]
+    //         ],
+    //         'new_password' => [
+    //             'rules' => 'required|min_length[5]|max_length[20]|is_password_strong[new_password]',
+    //             'errors' => [
+    //                 'required' => 'New password is required',
+    //                 'min_length' => 'New password must have at least 5 characters',
+    //                 'max_length' => 'New password must not exceed 20 characters',
+    //                 'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
+    //             ]
+    //         ],
+    //         'confirm_new_password' => [
+    //             'rules' => 'required|matches[new_password]',
+    //             'errors' => [
+    //                 'required' => 'Confirm new password',
+    //                 'matches' => 'Password mismatch.'
+    //             ]
+    //         ]
+    //     ]);
     
-        if (!$validation->withRequest($request)->run()) {
-            // Validation failed
-            $errors = $validation->getErrors();
-            return redirect()->back()->withInput()->with('errors', $errors);
-        } else {
-            // Validation passed, update the password
-            $new_password = $request->getPost('new_password');
+    //     if (!$validation->withRequest($request)->run()) {
+    //         // Validation failed
+    //         $errors = $validation->getErrors();
+    //         return redirect()->back()->withInput()->with('errors', $errors);
+    //     } else {
+    //         // Validation passed, update the password
+    //         $new_password = $request->getPost('new_password');
     
-            // Hash the new password using bcrypt
-            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+    //         // Hash the new password using bcrypt
+    //         $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
     
-            // Update the user password in the database
-            $user->update($user_id, ['password' => $hashed_password]);
+    //         // Update the user password in the database
+    //         $user->update($user_id, ['password' => $hashed_password]);
     
-            return redirect()->back()->with('success', 'Password has been changed successfully.');
-        }
-    }
+    //         return redirect()->back()->with('success', 'Password has been changed successfully.');
+    //     }
+    // }
     
     
         
