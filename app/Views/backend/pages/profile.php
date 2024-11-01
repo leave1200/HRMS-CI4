@@ -199,6 +199,7 @@
     </div>
 </div>
 
+
 <!-- jQuery and Bootstrap JavaScript (Place these at the end of the body) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -208,102 +209,55 @@
 <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let cropper;
-    const image = document.getElementById('image');
-    const preview = document.getElementById('preview');
+document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
 
-    // Handle edit button clicks for profile picture
-    document.querySelectorAll('.edit-profile-picture-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            document.getElementById('update_user_id_picture').value = id;
-            $('#editProfilePictureModal').modal('show'); // Open the modal
-        });
-    });
+    if (cropper) {
+        cropper.getCroppedCanvas({
+            width: 500,
+            height: 500
+        }).toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('profile_picture', blob);
+            formData.append('id', document.getElementById('update_user_id_picture').value);
+            formData.append(csrfName, csrfToken); // Add CSRF token here
 
-    // Handle file input change
-    document.getElementById('profile_picture').addEventListener('change', function(event) {
-        const files = event.target.files;
-
-        if (files && files.length > 0) {
-            const file = files[0];
-            const maxSize = 1 * 1024 * 1024; // 1 MB
-
-            if (file.size > maxSize) {
-                alert("Please select an image file under 1 MB.");
-                this.value = ""; // Clear the file input
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                image.src = e.target.result;
-                image.style.display = 'block';
-
-                // Initialize cropper
-                if (cropper) {
-                    cropper.destroy(); // Destroy any existing cropper instance
+            // AJAX request to submit cropped image
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action, true); // Ensure this URL matches your route
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        }).then(() => {
+                            location.reload(); // Reload page or update table
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while uploading the image.',
+                    });
                 }
-                cropper = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    preview: preview
-                });
             };
-            reader.readAsDataURL(file);
-        }
-    });
-
-   // Handle form submission
-        document.getElementById('editProfilePictureForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            if (cropper) {
-                cropper.getCroppedCanvas({
-                    width: 500,
-                    height: 500
-                }).toBlob(function(blob) {
-                    const formData = new FormData();
-                    formData.append('profile_picture', blob);
-                    formData.append('id', document.getElementById('update_user_id_picture').value);
-                    formData.append(csrfName, csrfToken); // Add CSRF token here
-
-                    // AJAX request to submit cropped image
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', this.action, true); // Ensure this URL matches your route
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: response.message,
-                                }).then(() => {
-                                    location.reload(); // Reload page or update table
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: response.message,
-                                });
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while uploading the image.',
-                            });
-                        }
-                    };
-                    xhr.send(formData); // Send the form data
-                }, 'image/png');
-            }
-        });
-
+            xhr.send(formData); // Send the form data
+        }, 'image/png');
+    } else {
+        alert("Please select an image and crop it before saving.");
+    }
 });
+
 </script>
 
 
