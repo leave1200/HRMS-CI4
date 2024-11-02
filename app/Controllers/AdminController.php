@@ -137,47 +137,39 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        // Adjusted path for Hostinger
-        $path = __DIR__ . '/../../images/users/';
-        if (!is_dir($path)) {
-            mkdir($path, 0755, true);
-            log_message('info', 'Created directory: ' . $path);
-        }
-    
+        $path = FCPATH . 'images/users/';
         $file = $request->getFile('user_profile_file');
-        if (!$file || !$file->isValid()) {
-            log_message('error', 'Invalid file upload or no file uploaded.');
-            return $this->response->setJSON(['status' => 0, 'msg' => 'No file uploaded or file is invalid.']);
-        }
-    
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
-        // Move the file and check if it works
-        if ($file->move($path, $new_filename)) {
-            log_message('info', 'File moved successfully: ' . $new_filename);
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            if ($file->move($path, $new_filename)) {
+                log_message('info', 'File moved successfully to ' . $path . $new_filename);
     
-            if ($old_picture && file_exists($path . $old_picture)) {
-                unlink($path . $old_picture);
-                log_message('info', 'Old picture deleted: ' . $old_picture);
-            }
+                // Remove old picture if it exists
+                if ($old_picture && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture);
+                    log_message('info', 'Old picture deleted: ' . $old_picture);
+                }
     
-            // Update the database
-            $user->where('id', $user_info->id)
-                ->set(['picture' => $new_filename])
-                ->update();
-    
-            if ($user->db->affectedRows() > 0) {
-                return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
+                // Attempt to update the database using the new method
+                if ($user->updatePictureDirect($user_info->id, $new_filename)) {
+                    log_message('info', 'Database updated with new picture for user ID: ' . $user_info->id);
+                    return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
+                } else {
+                    log_message('error', 'Database update failed for new picture.');
+                    return $this->response->setJSON(['status' => 0, 'msg' => 'Database update failed.']);
+                }
             } else {
-                log_message('error', 'Database update failed.');
-                return $this->response->setJSON(['status' => 0, 'msg' => 'Database update failed.']);
+                log_message('error', 'File could not be moved.');
+                return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
             }
         } else {
-            log_message('error', 'File could not be moved.');
-            return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
+            log_message('error', 'Invalid file upload or no file uploaded.');
+            return $this->response->setJSON(['status' => 0, 'msg' => 'No file uploaded or file is invalid.']);
         }
     }
+    
     
     
     
