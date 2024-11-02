@@ -131,79 +131,31 @@ class AdminController extends BaseController
     }
 
 
-
-    public function updatePersonalPictures() {
+     public function updatePersonalPictures(){
         $request = \Config\Services::request();
         $user_id = CIAuth::id();
         $user = new User();
-        $user_info = $user->asObject()->where('id', $user_id)->first();
-    
-        // Use WRITEPATH to ensure it's writable
-        $path = WRITEPATH . 'uploads/';
-        $file = $this->request->getFile('user_profile_file');
-    
-        if ($file->isValid() && !$file->hasMoved()) {
-            // Use getRandomName for uniqueness
-            $new_image_name = $file->getRandomName();
-            
-            // Move the file
-            if ($file->move($path, $new_image_name)) {
-                // Optionally remove the old picture
-                if ($user_info->picture && file_exists($path . $user_info->picture)) {
-                    unlink($path . $user_info->picture);
-                }
-    
-                // Update the database
-                if ($user->update($user_info->id, ['picture' => $new_image_name])) {
-                    return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully']);
-                } else {
-                    return $this->response->setJSON(['status' => 0, 'msg' => 'Database update failed']);
-                }
-            } else {
-                return $this->response->setJSON(['status' => 0, 'msg' => 'File could not be moved: ' . $file->getErrorString()]);
+        $user_info = $user->asObject()->where('id',$user_id)->first();
+
+        $path ='./public/images/users/';
+        $file = $request->getFile('user_profile_file');
+        $old_picture = $user_info->picture;
+        $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+        if( $file->move($path,$new_filename) ){
+            if( $old_picture != null && file_exists($path.$old_picture) ){
+                unlink($path.$old_picture);
             }
-        } else {
-            return $this->response->setJSON(['status' => 0, 'msg' => 'Invalid file upload: ' . $file->getErrorString()]);
+            $user->where('id',$user_info->id)
+                 ->set(['picture'=>$new_filename])
+                 ->update();
+
+                 echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+        }else{
+            echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
         }
-    }
-    
-    
-    //  public function updatePersonalPictures(){
-    //     $request = \Config\Services::request();
-    //     $user_id = CIAuth::id();
-    //     $user = new User();
-    //     $user_info = $user->asObject()->where('id',$user_id)->first();
 
-
-    //     $path = 'images/users/';
-    //     $file = $this->request->getFile('user_profile_file');
-    //     $new_image_name = 'UIMG'.date('Ymd').uniqid().'.jpg';
-
-    //     if($file->move($path, $image_name)){
-    //         echo json_encode(['status'=>1, 'msg'=>'success', 'name'=>$new_image_name]); 
-    //     }else{
-    //         echo json_encode(['status'=>0, 'msg'=>'failed']);
-    //     }
-
-    //     // $path ='./public/images/users/';
-    //     // $file = $request->getFile('user_profile_file');
-    //     // $old_picture = $user_info->picture;
-    //     // $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
-
-    //     // if( $file->move($path,$new_filename) ){
-    //     //     if( $old_picture != null && file_exists($path.$old_picture) ){
-    //     //         unlink($path.$old_picture);
-    //     //     }
-    //     //     $user->where('id',$user_info->id)
-    //     //          ->set(['picture'=>$new_filename])
-    //     //          ->update();
-
-    //     //          echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
-    //     // }else{
-    //     //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
-    //     // }
-
-    // } 
+    } 
     public function changePassword()
     {
         $request = \Config\Services::request();
