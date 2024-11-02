@@ -150,14 +150,14 @@ class AdminController extends BaseController
                     unlink($path . $old_picture);
                 }
                 $update = $user->where('id', $user_info->id)
-               ->set(['picture' => $new_filename])
-               ->update();
+                               ->set(['picture' => $new_filename])
+                               ->update();
     
-                     if ($update) {
-                        echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_filename' => $new_filename]);
-                    } else {
-                        echo json_encode(['status' => 0, 'msg' => 'Database update failed.']);
-                    }
+                if ($update) {
+                    echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_filename' => $new_filename]);
+                } else {
+                    echo json_encode(['status' => 0, 'msg' => 'Database update failed.']);
+                }
             } else {
                 log_message('error', 'File move failed: ' . $file->getErrorString());
                 echo json_encode(['status' => 0, 'msg' => 'Something went wrong.']);
@@ -166,6 +166,7 @@ class AdminController extends BaseController
             echo json_encode(['status' => 0, 'msg' => 'Invalid file upload.']);
         }
     }
+    
     
 
     //  public function updatePersonalPictures(){
