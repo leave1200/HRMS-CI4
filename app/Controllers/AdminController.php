@@ -148,7 +148,7 @@ class AdminController extends BaseController
             }
             $user->where('id',$user_info->id)
                  ->set(['picture'=>$new_filename])
-                 ->insert();
+                 ->update();
 
                  echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
         }else{
