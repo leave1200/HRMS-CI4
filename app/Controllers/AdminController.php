@@ -137,23 +137,34 @@ class AdminController extends BaseController
         $user = new User();
         $user_info = $user->asObject()->where('id',$user_id)->first();
 
-        $path ='./public/images/users/';
-        $file = $request->getFile('user_profile_file');
-        $old_picture = $user_info->picture;
-        $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
 
-        if( $file->move($path,$new_filename) ){
-            if( $old_picture != null && file_exists($path.$old_picture) ){
-                unlink($path.$old_picture);
-            }
-            $user->where('id',$user_info->id)
-                 ->set(['picture'=>$new_filename])
-                 ->update();
+        $path = 'images/users/';
+        $file = $this->request->getFile('user_profile_file');
+        $new_image_name = 'UIMG'.date('Ymd').uniqid().'.jpg';
 
-                 echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+        if($file->move($path, $image_name)){
+            echo json_encode(['status'=>1, 'msg'=>'success', 'name'=>$new_image_name]); 
         }else{
-            echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+            echo json_encode(['status'=>0, 'msg'=>'failed']);
         }
+
+        // $path ='./public/images/users/';
+        // $file = $request->getFile('user_profile_file');
+        // $old_picture = $user_info->picture;
+        // $new_filename = 'UIMG_'.$user_id.$file->getRandomName();
+
+        // if( $file->move($path,$new_filename) ){
+        //     if( $old_picture != null && file_exists($path.$old_picture) ){
+        //         unlink($path.$old_picture);
+        //     }
+        //     $user->where('id',$user_info->id)
+        //          ->set(['picture'=>$new_filename])
+        //          ->update();
+
+        //          echo json_encode(['status'=>1,'msg'=>'Done!, Your profile picture has been successfully updated.']);
+        // }else{
+        //     echo json_encode(['status'=>0,'msg'=>'Something went wrong.']);
+        // }
 
     } 
     public function changePassword()
