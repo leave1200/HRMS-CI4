@@ -36,6 +36,9 @@ class UserController extends Controller
     public function userlist()
     {
         $userStatus = session()->get('userStatus');
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
         $userModel = new User();
         $users = $userModel->findAll();
     
