@@ -27,13 +27,19 @@
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                 <div class="profile-photo">
-                        <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
-                    </div>
+                    <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                    <button id="crop_button" type="button">Crop</button> <!-- Add a button for cropping -->
+                </div>
 
+                    <!-- <div class="profile-photo">
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                    </div> -->
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -198,27 +204,47 @@
             });
         });
 
-
         $('#user_profile_file').ijaboCropTool({
-            preview: '.ci-avatar-photo',
-            setRatio: 1,
-            allowedExtensions: ['jpg', 'jpeg', 'png'],
-            processUrl: '<?= route_to('update-profile-picture') ?>',
-            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-            onSuccess: function(responseText, element, status) {
-                if (responseText.status == 1) { // Change this to check the actual response
-                    toastr.success(responseText.msg);
-                    // Optionally, update the image preview
-                    $('.ci-avatar-photo').attr('src', '<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>');
-                } else {
-                    toastr.error(responseText.msg);
-                }
-            },
-            onError: function(message, element, status) {
-                alert(message);
-            }
-        });
+    preview: '.ci-avatar-photo',
+    setRatio: 1,
+    allowedExtensions: ['jpg', 'jpeg', 'png'],
+    processUrl: '<?= route_to('update-profile-picture') ?>',
+    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    onSuccess: function(responseText, element, status) {
+        if (responseText.status == 1) {
+            toastr.success(responseText.msg);
+            // Update the preview with the new image if necessary
+            $('.ci-avatar-photo').attr('src', 'images/users/' + responseText.new_picture);
+        } else {
+            toastr.error(responseText.msg);
+        }
+    },
+    onError: function(message, element, status) {
+        alert(message);
+    }
+});
+$('#crop_button').click(function() {
+    $('#user_profile_file').ijaboCropTool('crop'); // Call the cropping function
+});
 
+
+    // $('#user_profile_file').ijaboCropTool({
+    //     preview: '.ci-avatar-photo',
+    //     setRatio: 1,
+    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
+    //     processUrl:'<?= route_to('update-profile-picture') ?>',
+    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    //     onSuccess:function(responseText, element, status) {
+    //         if( status == 1 ) {
+    //             toastr.success('message');
+    //         } else {
+    //             toastr.error('message');
+    //         }
+    //     },
+    //     onError: function(message, element, status) {
+    //         alert(message);
+    //     }
+    // });
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
