@@ -196,25 +196,23 @@
         });
 
 
-        $('#user_profile_file').ijaboCropTool({
-            preview: '.ci-avatar-photo',
-            setRatio: 1,
-            allowedExtensions: ['jpg', 'jpeg', 'png'],
-            processUrl: '<?= route_to('update-profile-picture') ?>',
-            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-            onSuccess: function(responseText, element, status) {
-                const response = JSON.parse(responseText); // Parse JSON response
-                if (response.status == 1) {
-                    toastr.success(response.msg);
-                } else {
-                    toastr.error(response.msg);
-                }
-            },
-            onError: function(message, element, status) {
-                alert(message);
-            }
-        });
-
+    $('#user_profile_file').ijaboCropTool({
+    preview: '.ci-avatar-photo',
+    setRatio: 1,
+    allowedExtensions: ['jpg', 'jpeg', 'png'],
+    processUrl: '<?= route_to('update-profile-picture') ?>',
+    withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    onSuccess:function(responseText, element, status) {
+        if( status == 1 ) {
+            toastr.success('message');
+        } else {
+            toastr.error('message');
+        }
+    },
+    onError: function(message, element, status) {
+        alert(message);
+    }
+});
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
