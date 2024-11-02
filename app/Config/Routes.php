@@ -108,6 +108,23 @@ $routes->group('', static function($routes){
 
         //$routes->view('example-page','example-page');
         $routes->get('home', 'AdminController::index', ['as' => 'admin.home']);
+        $routes->get('employee/print/(:num)', 'AdminController::printEmployee/$1', ['as' => 'employee_print']);
+        $routes->post('user/store', 'UserController::store',['as' => 'user.store']);
+        $routes->get('user/add', 'UserController::add', ['as' => 'user.add']);
+        $routes->get('userlist', 'UserController::userlist', ['as' => 'user.list']);
+        $routes->post('update-user-picture', 'UserController::update_profile_picture');
+        $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
+        $routes->post('upload-file', 'UserController::uploadFile', ['as' => 'uploadFile']);
+        $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
+        $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
+        // Ensure that deleteFile route is also defined
+        $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
+        
+
+        $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);
+        $routes->post('mark-notifications-read', 'AdminController::markNotificationsRead');
+        $routes->post('users/fetch', 'UserController::fetchUsers');
+        $routes->get('admin/pending-results', 'AdminController::fetchPendingResults', ['as' => 'admin.pending_results']);
 });
 
 
