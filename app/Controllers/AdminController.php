@@ -175,10 +175,10 @@ class AdminController extends BaseController
                 ]
             ],
             'new_password' => [
-                'rules' => 'required|min_length[5]|max_length[20]|is_password_strong[new_password]',
+                'rules' => 'required|min_length[8]|max_length[20]|is_password_strong[new_password]',
                 'errors' => [
                     'required' => 'New password is required',
-                    'min_length' => 'New password must have at least 5 characters',
+                    'min_length' => 'New password must have at least 8 characters',
                     'max_length' => 'New password must not exceed 20 characters',
                     'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
                 ]
