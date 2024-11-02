@@ -37,7 +37,7 @@ $routes->group('', static function($routes){
     $routes->group('Employee-page', ['filter'=>'cifilter:auth'], static function($routes){
 
                 //////employeeee
-                $routes->get('employee','AdminController::employee',['as'=>'admin.employee']);
+                $routes->get('Add','AdminController::employee',['as'=>'admin.employee']);
                 $routes->post('employee_save', 'AdminController::saveEmployee',['as' => 'employee_save']);
                 $routes->get('employeelist','AdminController::employeelist',['as'=>'admin.employeelist']);
                 $routes->post('delete_employee', 'AdminController::deleteEmployee', ['as' => 'delete_employee']);
@@ -89,7 +89,7 @@ $routes->group('', static function($routes){
         $routes->post('user_delete', 'AdminController::deleteuser', ['as' => 'admin.deleteuser']);
         $routes->get('employee/print/(:num)', 'AdminController::printEmployee/$1', ['as' => 'employee_print']);
         $routes->post('user/store', 'UserController::store',['as' => 'user.store']);
-        $routes->get('user/add', 'UserController::add', ['as' => 'user.add']);
+        $routes->get('add', 'UserController::add', ['as' => 'user.add']);
         $routes->get('userlist', 'UserController::userlist', ['as' => 'user.list']);
         $routes->post('update-user-picture', 'UserController::update_profile_picture');
         $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
