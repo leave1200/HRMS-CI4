@@ -220,6 +220,9 @@ class AdminController extends BaseController
         $designationModel = new Designation();
         $designations = $designationModel->findAll(); // Retrieve all designations from the database
         $userStatus = session()->get('userStatus');
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
 
         $data = [
             'pageTitle' => 'Designation',
