@@ -94,38 +94,38 @@ class UserController extends Controller
         return $this->response->setJSON(['status' => 'success', 'redirect' => redirect()->back()]);
     }
     
-    public function update_profile_picture()
-    {
-        $id = $this->request->getPost('id');
-        $userModel = new User();
+    // public function update_profile_picture()
+    // {
+    //     $id = $this->request->getPost('id');
+    //     $userModel = new User();
     
-        if ($imagefile = $this->request->getFile('profile_picture')) {
-            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
-                $newName = $imagefile->getRandomName();
-                $imagefile->move(ROOTPATH . 'public/images/users', $newName);
+    //     if ($imagefile = $this->request->getFile('profile_picture')) {
+    //         if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+    //             $newName = $imagefile->getRandomName();
+    //             $imagefile->move(ROOTPATH . 'public/images/users', $newName);
     
-                $data = ['picture' => $newName];
+    //             $data = ['picture' => $newName];
     
-                if ($userModel->update($id, $data)) {
-                    return $this->response->setJSON([
-                        'success' => true,
-                        'message' => 'Profile picture updated successfully',
-                        'new_picture_url' => base_url('/images/users/' . $newName)
-                    ]);
-                } else {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Failed to update profile picture'
-                    ]);
-                }
-            }
-        }
+    //             if ($userModel->update($id, $data)) {
+    //                 return $this->response->setJSON([
+    //                     'success' => true,
+    //                     'message' => 'Profile picture updated successfully',
+    //                     'new_picture_url' => base_url('/images/users/' . $newName)
+    //                 ]);
+    //             } else {
+    //                 return $this->response->setJSON([
+    //                     'success' => false,
+    //                     'message' => 'Failed to update profile picture'
+    //                 ]);
+    //             }
+    //         }
+    //     }
     
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Invalid image file'
-        ]);
-    }
+    //     return $this->response->setJSON([
+    //         'success' => false,
+    //         'message' => 'Invalid image file'
+    //     ]);
+    // }
     
     public function upload()
     {
