@@ -207,6 +207,7 @@
         onSuccess:function(responseText, element, status) {
             if( status == 1 ) {
                 toastr.success('message');
+                $('.ci-avatar-photo').attr('src', 'public/images/users/' + message.new_filename);
             } else {
                 toastr.error('message');
             }

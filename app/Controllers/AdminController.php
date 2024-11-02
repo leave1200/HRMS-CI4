@@ -153,7 +153,11 @@ class AdminController extends BaseController
                      ->set(['picture' => $new_filename])
                      ->update();
     
-                echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.']);
+                     if ($update) {
+                        echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_filename' => $new_filename]);
+                    } else {
+                        echo json_encode(['status' => 0, 'msg' => 'Database update failed.']);
+                    }
             } else {
                 log_message('error', 'File move failed: ' . $file->getErrorString());
                 echo json_encode(['status' => 0, 'msg' => 'Something went wrong.']);
