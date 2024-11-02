@@ -9,8 +9,8 @@ class User extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
 
-    protected $returnType = 'array'; // Return results as an array
-    protected $useSoftDeletes = false; // Enable if using soft deletes
+    // protected $returnType = 'array'; // Return results as an array
+    // protected $useSoftDeletes = false; // Enable if using soft deletes
 
     protected $allowedFields = [
         'name', 
