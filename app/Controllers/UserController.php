@@ -99,7 +99,7 @@ class UserController extends Controller
         if ($imagefile = $this->request->getFile('profile_picture')) {
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
                 $newName = $imagefile->getRandomName();
-                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName);
+                $imagefile->move(ROOTPATH . 'public/images/users', $newName);
     
                 $data = ['picture' => $newName];
     
@@ -107,7 +107,7 @@ class UserController extends Controller
                     return $this->response->setJSON([
                         'success' => true,
                         'message' => 'Profile picture updated successfully',
-                        'new_picture_url' => base_url('backend/images/users/' . $newName)
+                        'new_picture_url' => base_url('/images/users/' . $newName)
                     ]);
                 } else {
                     return $this->response->setJSON([
