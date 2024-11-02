@@ -41,7 +41,7 @@ class CIFilter implements FilterInterface
         }
 
         // Prevent access for EMPLOYEE and STAFF roles
-        if ($arguments[0] == 'admin') {
+        if ($arguments[0] == 'ADMIN') {
             $userStatus = session()->get('userStatus'); // Assuming you store user status in session
 
             // Allow access only if the user is an ADMIN
