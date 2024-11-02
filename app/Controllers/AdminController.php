@@ -132,6 +132,44 @@ class AdminController extends BaseController
 
 
      public function updatePersonalPictures(){
+        $request = \Config\Services::request();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+        // Define path and file
+        $path = FCPATH . 'images/users/';
+        $file = $request->getFile('user_profile_file');
+        $old_picture = $user_info->picture;
+        $new_filename = 'UIMG_' . $user_id . $file->getRandomName();
+    
+        // Check if file is valid and try to move it
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            if ($file->move($path, $new_filename)) {
+                log_message('info', 'File moved successfully to ' . $path . $new_filename);
+    
+                // Delete old picture if exists
+                if ($old_picture != null && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture);
+                    log_message('info', 'Old picture deleted: ' . $old_picture);
+                }
+    
+                // Attempt to update the picture in the database
+                if ($user->updatePictureDirect($user_info->id, $new_filename)) {
+                    log_message('info', 'Database updated successfully with new picture for user ID: ' . $user_info->id);
+                    return $this->response->setJSON(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
+                } else {
+                    log_message('error', 'Database update failed for new picture.');
+                    return $this->response->setJSON(['status' => 0, 'msg' => 'Database update failed.']);
+                }
+            } else {
+                log_message('error', 'File could not be moved. Error: ' . $file->getErrorString());
+                return $this->response->setJSON(['status' => 0, 'msg' => 'File upload failed.']);
+            }
+        } else {
+            log_message('error', 'Invalid file upload or file already moved. Error: ' . $file->getErrorString());
+            return $this->response->setJSON(['status' => 0, 'msg' => 'Something went wrong with file upload.']);
+        }
         // $request = \Config\Services::request();
         // $user_id = CIAuth::id();
         // $user = new User();
