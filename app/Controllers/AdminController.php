@@ -301,6 +301,9 @@ public function updateDesignation()
         $positionModel = new Position();
         $positions = $positionModel->findAll();
         $userStatus = session()->get('userStatus');
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
         $data = [
             'pageTitle' => 'Position',
             'positions' => $positions,
@@ -379,6 +382,9 @@ public function updateDesignation()
     {
         $employeeModel = new EmployeeModel();
         $employees = $employeeModel->findAll();
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
     
     
         $userStatus = session()->get('userStatus');
@@ -584,6 +590,9 @@ public function updateDesignation()
        $employeeModel = new EmployeeModel();
        $employee = $employeeModel->findAll();
        $userStatus = session()->get('userStatus');
+       if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
 
        $data = [
            'pageTitle' => 'Employee List',
@@ -703,6 +712,9 @@ public function updateDesignation()
    {
        $employeeModel = new EmployeeModel();
        $employee = $employeeModel->findAll();
+       if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
        $userStatus = session()->get('userStatus');
 
        $data = [
@@ -713,20 +725,6 @@ public function updateDesignation()
        return view('backend/pages/pendingemployee',$data);
    }
    
-
-   
-   
-   
-   
-   
-   
-   
-   
-
-
-   
-
-    
     
     /////&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
@@ -1111,6 +1109,9 @@ public function pmSave()
     public function leave_type()
     {
         $userStatus = session()->get('userStatus');
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
         $data = [
             'pageTitle' => 'Leave Type',
             'leaveTypes' => $this->leaveTypeModel->findAll(), // Load leave types from the model
@@ -1256,6 +1257,9 @@ public function pmSave()
             $holidayModel = new \App\Models\HolidayModel();
             $holidays = $holidayModel->findAll(); // Fetch all holidays
             $userStatus = session()->get('userStatus');
+            if ($userStatus !== 'ADMIN') {
+                return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+            }
             
             // Include holidays in the data array
             $data = array(
@@ -1383,6 +1387,9 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
+    if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
     
 
     // Fetch leave applications with details
@@ -1508,6 +1515,9 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function setting(){
         $userStatus = session()->get('userStatus');
+        if ($userStatus !== 'ADMIN') {
+            return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+        }
 
         $data = array(
         'pageTitle'=>'Setting',
