@@ -200,8 +200,6 @@
         preview: '.ci-avatar-photo',
         setRatio: 1,
         allowedExtensions: ['jpg', 'jpeg', 'png'],
-        buttonsText: ['CROP', 'QUIT'],
-        buttonsColor: ['#30bf7d', '#ee5155', -15],
         processUrl:'<?= route_to('update-profile-picture') ?>',
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
         onSuccess:function(responseText, element, status) {
