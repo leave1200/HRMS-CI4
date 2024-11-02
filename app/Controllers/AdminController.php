@@ -996,6 +996,9 @@ public function pmSave()
                 // Load the AttendanceModel
                 $attendanceModel = new \App\Models\AttendanceModel();
                 $userStatus = session()->get('userStatus');
+                if ($userStatus !== 'ADMIN') {
+                    return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+                }
             
                 // Number of records per page
                 $perPage = 10;
