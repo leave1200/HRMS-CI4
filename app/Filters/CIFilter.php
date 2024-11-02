@@ -26,15 +26,27 @@ class CIFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if( $arguments[0] == 'guest' ){
-            if( CIAuth::check() ){
+        // Check for guest access
+        if ($arguments[0] == 'guest') {
+            if (CIAuth::check()) {
                 return redirect()->route('admin.home');
             }
         }
 
-        if( $arguments[0] == 'auth' ){
-            if( !CIAuth::check() ){
-                return redirect()->route('admin.login.form')->with('fail','You must be logged in first');
+        // Check for authentication
+        if ($arguments[0] == 'auth') {
+            if (!CIAuth::check()) {
+                return redirect()->route('admin.login.form')->with('fail', 'You must be logged in first');
+            }
+        }
+
+        // Prevent access for EMPLOYEE and STAFF roles
+        if ($arguments[0] == 'admin') {
+            $userStatus = session()->get('userStatus'); // Assuming you store user status in session
+
+            // Allow access only if the user is an ADMIN
+            if ($userStatus !== 'ADMIN') {
+                return redirect()->route('admin.home')->with('fail', 'Access denied. Admins only.');
             }
         }
     }
