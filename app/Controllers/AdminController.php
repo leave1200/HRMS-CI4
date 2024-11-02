@@ -174,6 +174,7 @@ class AdminController extends BaseController
         }
     }
     
+    
     //  public function updatePersonalPictures(){
     //     $request = \Config\Services::request();
     //     $user_id = CIAuth::id();
