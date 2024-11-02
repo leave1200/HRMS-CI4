@@ -149,9 +149,9 @@ class AdminController extends BaseController
                 if ($old_picture != null && file_exists($path . $old_picture)) {
                     unlink($path . $old_picture);
                 }
-                $user->where('id', $user_info->id)
-                     ->set(['picture' => $new_filename])
-                     ->update();
+                $update = $user->where('id', $user_info->id)
+               ->set(['picture' => $new_filename])
+               ->update();
     
                      if ($update) {
                         echo json_encode(['status' => 1, 'msg' => 'Done! Your profile picture has been successfully updated.', 'new_filename' => $new_filename]);
