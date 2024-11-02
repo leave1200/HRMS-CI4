@@ -76,10 +76,10 @@
 		<script src="/backend/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
 		<!-- <script src="/backend/vendors/scripts/dashboard3.js"></script> -->
 		<script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
-		<script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
-		<script src="/backend/src/plugins/sweetalert2/sweet-alert.init.js"></script>
-		<script src="/backend/sweetalert.min.js"></script>
-		<script src="/backend/sweetalert2@11.js"></script>
+		<!-- <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
+		<script src="/backend/src/plugins/sweetalert2/sweet-alert.init.js"></script> -->
+		<!-- <script src="/backend/sweetalert.min.js"></script>
+		<script src="/backend/sweetalert2@11.js"></script> -->
 		<script src="/backend/bootstrap.min.js"></script>
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
