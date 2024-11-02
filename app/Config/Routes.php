@@ -14,7 +14,7 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
 });
 
 
-$routes->group('admin', static function($routes){
+$routes->group('', static function($routes){
 
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
         //$routes->view('example-page','example-page');
