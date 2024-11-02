@@ -106,6 +106,12 @@ $routes->group('', static function($routes){
                 $routes->post('update-profile-picture','AdminController::updatePersonalPictures',['as'=>'update-profile-picture']);  
                 $routes->post('change-password','AdminController::changePassword',['as'=>'change-password']);
     });
+    $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
+
+        //$routes->view('example-page','example-page');
+        $routes->get('home', 'AdminController::index', ['as' => 'admin.home']);
+});
+
 
     $routes->group('', ['filter'=>'cifilter:guest'], static function($routes){
        // $routes->view('example-auth','example-auth');
