@@ -203,13 +203,15 @@
         allowedExtensions: ['jpg', 'jpeg', 'png'],
         processUrl:'<?= route_to('update-profile-picture') ?>',
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess: function(responseText, element, status) {
-            const response = JSON.parse(responseText); // Parse the JSON response
-            if (response.status === 1) {
-                toastr.success(response.msg); // Use response message
+        onSuccess:function(responseText, element, status) {
+            if( status == 1 ) {
+                toastr.success('message');
             } else {
-                toastr.error(response.msg); // Use response message
+                toastr.error('message');
             }
+        },
+        onError: function(message, element, status) {
+            alert(message);
         }
     });
 
