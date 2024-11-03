@@ -168,9 +168,9 @@
     const formData = new FormData();
 
     if (file) {
-        formData.append('<?= route_to('update-profile-picture') ?>', file);
+        formData.append('user_profile_file', file);
         
-        fetch('/profile/uploadPicture', {
+        fetch('<?=  route_to('update-profile-picture') ?>', {
             method: 'POST',
             body: formData,
         })
