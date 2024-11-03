@@ -168,6 +168,7 @@ function uploadProfilePicture() {
     const formData = new FormData();
 
     if (file) {
+        console.log('File to upload:', file); // Debugging log
         formData.append('user_profile_file', file);
         
         fetch('<?= route_to('update-profile-picture') ?>', {
@@ -175,6 +176,7 @@ function uploadProfilePicture() {
             body: formData,
         })
         .then(response => {
+            console.log('Response status:', response.status); // Debugging log
             // Check if the response is OK
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -182,6 +184,7 @@ function uploadProfilePicture() {
             return response.json();
         })
         .then(data => {
+            console.log('Response data:', data); // Debugging log
             if (data.success) {
                 document.querySelector('.avatar-photo').src = data.newImagePath; // Update the image source
             } else {
@@ -197,6 +200,7 @@ function uploadProfilePicture() {
     }
 }
 </script>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
