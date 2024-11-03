@@ -131,63 +131,39 @@ class AdminController extends BaseController
         }
     }
 
-    public function updatePersonalPictures()
+    public function update_profile_picture()
     {
-        $response = ['success' => false];
+        $id = $this->request->getPost('id');
+        $employeeModel = new EmployeeModel();
     
-        try {
-            // Retrieve the request and user ID
-            $request = \Config\Services::request();
-            $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
-            $user = new \App\Models\User();
-            $user_info = $user->asObject()->where('id', $user_id)->first();
+        if ($imagefile = $this->request->getFile('profile_picture')) {
+            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+                $newName = $imagefile->getRandomName();
+                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName);
     
-            // Debug: Check if user_info is retrieved
-            if (!$user_info) {
-                throw new \Exception('User not found.');
-            }
+                $data = ['picture' => $newName];
     
-            $file = $this->request->getFile('user_profile_file');
-    
-            if ($file && $file->isValid() && !$file->hasMoved()) {
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    
-                if (in_array($file->getClientMimeType(), $allowedTypes)) {
-                    $newName = uniqid() . '-' . $file->getName();
-                    $path = WRITEPATH . 'uploads/users/';
-    
-                    if ($file->move($path, $newName)) {
-                        // Use the retrieved user ID to update the picture
-                        if ($user->updatePictureDirect($user_id, $newName)) {
-                            $response['success'] = true;
-                            $response['newImagePath'] = '/uploads/users/' . $newName;
-                        } else {
-                            $errors = $user->errors();
-                            log_message('error', 'Failed to update user picture for user ID: ' . $user_id . '. Errors: ' . print_r($errors, true));
-                            
-                            $errorMessage = 'Failed to update the database. Errors: ';
-                            foreach ($errors as $field => $messages) {
-                                $errorMessage .= $field . ': ' . implode(', ', $messages) . ' ';
-                            }
-                            
-                            $response['message'] = trim($errorMessage);
-                        }
-                    } else {
-                        $response['message'] = 'Failed to move uploaded file.';
-                    }
+                if ($employeeModel->update($id, $data)) {
+                    return $this->response->setJSON([
+                        'success' => true,
+                        'message' => 'Profile picture updated successfully',
+                        'new_picture_url' => base_url('backend/images/users/' . $newName)
+                    ]);
                 } else {
-                    $response['message'] = 'Invalid file type.';
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Failed to update profile picture'
+                    ]);
                 }
-            } else {
-                $response['message'] = 'No file uploaded or file is invalid.';
             }
-        } catch (\Exception $e) {
-            log_message('error', 'Error in updatePersonalPictures: ' . $e->getMessage());
-            $response['message'] = 'An error occurred: ' . $e->getMessage();
         }
     
-        return $this->response->setJSON($response);
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Invalid image file'
+        ]);
     }
+    
     
     
     
