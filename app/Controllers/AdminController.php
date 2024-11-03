@@ -182,6 +182,7 @@ class AdminController extends BaseController
                 $response['message'] = 'No file uploaded or file is invalid.';
             }
         } catch (\Exception $e) {
+            log_message('error', 'Error in updatePersonalPictures: ' . $e->getMessage());
             $response['message'] = 'An error occurred: ' . $e->getMessage();
         }
     
