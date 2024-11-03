@@ -24,6 +24,7 @@ class AdminController extends BaseController
     {
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
+        $this->session = \Config\Services::session();
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
@@ -130,23 +131,24 @@ class AdminController extends BaseController
         }
     }
 
-    public function updatePersonalPictures() {
+    public function updatePersonalPictures()
+    {
         $response = ['success' => false];
-    
+
         try {
             $file = $this->request->getFile('user_profile_file');
-    
+
             if ($file && $file->isValid() && !$file->hasMoved()) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    
+
                 if (in_array($file->getClientMimeType(), $allowedTypes)) {
                     $newName = uniqid() . '-' . $file->getName();
                     $path = WRITEPATH . 'uploads/users/';
-    
+
                     if ($file->move($path, $newName)) {
                         $userModel = new \App\Models\User();
                         $userId = $this->session->get('user_id');
-    
+
                         if ($userModel->updatePictureDirect($userId, $newName)) {
                             $response['success'] = true;
                             $response['newImagePath'] = '/uploads/users/' . $newName;
@@ -165,9 +167,10 @@ class AdminController extends BaseController
         } catch (\Exception $e) {
             $response['message'] = 'An error occurred: ' . $e->getMessage();
         }
-    
+
         return $this->response->setJSON($response);
     }
+}
     
     
     //  public function updatePersonalPictures(){
