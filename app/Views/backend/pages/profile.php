@@ -1,6 +1,15 @@
 
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<!-- jQuery (required by Toastr) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
 <div class="pd-ltr-20 xs-pd-20-10">
     <div class="min-height-200px">
