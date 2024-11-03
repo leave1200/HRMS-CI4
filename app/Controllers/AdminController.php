@@ -131,10 +131,22 @@ class AdminController extends BaseController
         }
     }
 
-    public function updatePersonalPictures() {
+    public function updatePersonalPictures()
+    {
         $response = ['success' => false];
     
         try {
+            // Retrieve the request and user ID
+            $request = \Config\Services::request();
+            $user_id = CIAuth::id(); // Assuming CIAuth is your authentication library
+            $user = new \App\Models\User();
+            $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+            // Debug: Check if user_info is retrieved
+            if (!$user_info) {
+                throw new \Exception('User not found.');
+            }
+    
             $file = $this->request->getFile('user_profile_file');
     
             if ($file && $file->isValid() && !$file->hasMoved()) {
@@ -145,16 +157,21 @@ class AdminController extends BaseController
                     $path = WRITEPATH . 'uploads/users/';
     
                     if ($file->move($path, $newName)) {
-                        $userModel = new \App\Models\User();
-                        $userId = $this->session->get('user_id');
-    
-                        if ($userModel->updatePictureDirect($userId, $newName)) {
+                        // Use the retrieved user ID to update the picture
+                        if ($user->updatePictureDirect($user_id, $newName)) {
                             $response['success'] = true;
                             $response['newImagePath'] = '/uploads/users/' . $newName;
                         } else {
-                            log_message('error', 'Failed to update user picture for user ID: ' . $userId);
-                            $response['message'] = 'Failed to update the database. ' . $userModel->errors();
-                        }                       
+                            $errors = $user->errors();
+                            log_message('error', 'Failed to update user picture for user ID: ' . $user_id . '. Errors: ' . print_r($errors, true));
+                            
+                            $errorMessage = 'Failed to update the database. Errors: ';
+                            foreach ($errors as $field => $messages) {
+                                $errorMessage .= $field . ': ' . implode(', ', $messages) . ' ';
+                            }
+                            
+                            $response['message'] = trim($errorMessage);
+                        }
                     } else {
                         $response['message'] = 'Failed to move uploaded file.';
                     }
@@ -170,6 +187,7 @@ class AdminController extends BaseController
     
         return $this->response->setJSON($response);
     }
+    
     
     
     //  public function updatePersonalPictures(){
