@@ -161,6 +161,34 @@
                 </div>
             </div>
         </div>
+        <script>
+            function uploadProfilePicture() {
+    const fileInput = document.getElementById('user_profile_file');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+
+    if (file) {
+        formData.append('<?= route_to('update-profile-picture') ?>', file);
+        
+        fetch('/profile/uploadPicture', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('.avatar-photo').src = data.newImagePath; // Update the image source
+            } else {
+                alert('Error uploading image: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+
+        </script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
