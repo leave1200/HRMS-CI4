@@ -28,7 +28,9 @@
                 <div class="pd-20 card-box height-100-p">
                 <div class="profile-photo">
                     <a href="javascript:;" class="edit-avatar edit-profile-picture-btn" data-id="<?= get_user()->id; ?>">
+                    <a href="javascript:;" class="edit-avatar edit-personal-picture-btn">
                         <i class="fa fa-pencil"></i>
+                    </a>
                     </a>
                     <input type="file" name="profile_picture" id="profile_picture" class="d-none" accept="image/*">
                     <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo" id="image">
