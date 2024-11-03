@@ -88,9 +88,6 @@
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<!-- <script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script> -->
-		 <!-- jQuery (required by Toastr) -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 		<!-- Toastr JS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
