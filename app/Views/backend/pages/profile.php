@@ -131,7 +131,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="password">Current Password</label>
+                                                    <label for="">Current Password</label>
                                                     <input type="password" class="form-control" placeholder="Enter current password" name="current_password" value="<?= old('current_password') ?>">
                                                     <span class="text-danger error-text current_password_error"></span>
                                                 </div>
@@ -145,7 +145,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="confirm_new_password">Confirm new Password</label>
+                                                    <label for="">Confirm new Password</label>
                                                     <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                     <span class="text-danger error-text confirm_new_password_error"></span>
                                                 </div>
