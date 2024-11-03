@@ -28,9 +28,15 @@
                 <div class="pd-20 card-box height-100-p">
                     <div class="profile-photo">
                         <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;" accept="image/*" onchange="uploadProfilePicture()">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
+
+                    <!-- <div class="profile-photo">
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                    </div> -->
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -196,23 +202,23 @@
         });
 
 
-    $('#user_profile_file').ijaboCropTool({
-        preview: '.ci-avatar-photo',
-        setRatio: 1,
-        allowedExtensions: ['jpg', 'jpeg', 'png'],
-        processUrl:'<?= route_to('update-profile-picture') ?>',
-        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess:function(responseText, element, status) {
-            if( status == 1 ) {
-                toastr.success('message');
-            } else {
-                toastr.error('message');
-            }
-        },
-        onError: function(message, element, status) {
-            alert(message);
-        }
-    });
+    // $('#user_profile_file').ijaboCropTool({
+    //     preview: '.ci-avatar-photo',
+    //     setRatio: 1,
+    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
+    //     processUrl:'<?= route_to('update-profile-picture') ?>',
+    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    //     onSuccess:function(responseText, element, status) {
+    //         if( status == 1 ) {
+    //             toastr.success('message');
+    //         } else {
+    //             toastr.error('message');
+    //         }
+    //     },
+    //     onError: function(message, element, status) {
+    //         alert(message);
+    //     }
+    // });
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
