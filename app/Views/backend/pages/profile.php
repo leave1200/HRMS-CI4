@@ -213,7 +213,7 @@
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
         onSuccess:function(responseText, element, status) {
             if( status == 1 ) {
-                toastr.success('message');
+                toastr.success('Upload Successfully');
             } else {
                 toastr.error('message');
             }
