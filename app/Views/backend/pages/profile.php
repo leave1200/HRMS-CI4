@@ -26,21 +26,11 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                <div class="profile-photo">
-                    <a href="javascript:;" class="edit-avatar edit-profile-picture-btn" data-id="<?= get_user()->id; ?>">
-                    <a href="javascript:;" class="edit-avatar edit-personal-picture-btn">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    </a>
-                    <input type="file" name="profile_picture" id="profile_picture" class="d-none" accept="image/*">
-                    <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo" id="image">
-                </div>
-
-                    <!-- <div class="profile-photo">
+                    <div class="profile-photo">
                         <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
                         <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
-                    </div> -->
+                    </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
                 </div>
@@ -165,129 +155,6 @@
                 </div>
             </div>
         </div>
-
-<!-- Modal for Editing Personal Picture -->
-<div class="modal fade" id="editPersonalPictureModal" tabindex="-1" aria-labelledby="editPersonalPictureModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editPersonalPictureModalLabel">Edit Personal Picture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- File input for uploading the image -->
-                <input type="file" name="user_profile_file" id="user_profile_file" accept="image/*" style="display: block;">
-                <!-- Preview of the selected image -->
-                <img id="personal-image-preview" src="" style="max-width: 100%; display: none;">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="savePersonalPicture">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-        <script>
-$(document).ready(function() {
-    var cropper;
-    var $image = $('#image');
-    var $preview = $('#preview');
-
-    // Handle edit button clicks for profile picture
-    $('.edit-profile-picture-btn').on('click', function() {
-        var id = $(this).data('id');
-        $('#update_employee_id_picture').val(id);
-        $('#editProfilePictureModal').modal('show');
-    });
-
-    // Handle file input change
-    $('#profile_picture').on('change', function(event) {
-        var files = event.target.files;
-        var done = function(url) {
-            $image.attr('src', url).show();
-            $preview.show();
-            cropper = new Cropper($image[0], {
-                aspectRatio: 1,
-                viewMode: 1,
-                preview: '.preview'
-            });
-        };
-        var reader;
-        var file;
-
-        if (files && files.length > 0) {
-            file = files[0];
-
-            if (URL) {
-                done(URL.createObjectURL(file));
-            } else if (FileReader) {
-                reader = new FileReader();
-                reader.onload = function() {
-                    done(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    // Handle form submission
-    $('#editProfilePictureForm').on('submit', function(e) {
-        e.preventDefault();
-
-        var canvas;
-        var croppedImage;
-
-        if (cropper) {
-            canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500,
-            });
-
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('profile_picture', blob);
-                formData.append('id', $('#update_employee_id_picture').val());
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('update-profile-picture') ?>', // Ensure this URL matches your route
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                            }).then(() => {
-                                location.reload(); // Reload page or update table
-                            });
-                            $('#editProfilePictureModal').modal('hide');
-                            $('.avatar-photo').attr('src', response.new_picture_url);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred',
-                        });
-                    }
-                });
-            }, 'image/png');
-        }
-    });
-});
-</script>
-
-
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
@@ -329,23 +196,23 @@ $(document).ready(function() {
         });
 
 
-    // $('#user_profile_file').ijaboCropTool({
-    //     preview: '.ci-avatar-photo',
-    //     setRatio: 1,
-    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
-    //     processUrl:'<?= route_to('update-profile-picture') ?>',
-    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    //     onSuccess:function(responseText, element, status) {
-    //         if( status == 1 ) {
-    //             toastr.success('message');
-    //         } else {
-    //             toastr.error('message');
-    //         }
-    //     },
-    //     onError: function(message, element, status) {
-    //         alert(message);
-    //     }
-    // });
+    $('#user_profile_file').ijaboCropTool({
+        preview: '.ci-avatar-photo',
+        setRatio: 1,
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+        processUrl:'<?= route_to('update-profile-picture') ?>',
+        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+        onSuccess:function(responseText, element, status) {
+            if( status == 1 ) {
+                toastr.success('message');
+            } else {
+                toastr.error('message');
+            }
+        },
+        onError: function(message, element, status) {
+            alert(message);
+        }
+    });
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
