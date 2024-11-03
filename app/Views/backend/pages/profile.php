@@ -145,7 +145,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="">Confirm new Password</label>
+                                                    <label for="confirm_new_password">Confirm new Password</label>
                                                     <input type="password" class="form-control" placeholder="Retype new password" name="confirm_new_password" value="<?= old('confirm_new_password') ?>">
                                                     <span class="text-danger error-text confirm_new_password_error"></span>
                                                 </div>
