@@ -164,25 +164,23 @@
             </div>
         </div>
 
-        <!-- Modal for Editing Profile Picture -->
-<div class="modal fade" id="editProfilePictureModal" tabindex="-1" aria-labelledby="editProfilePictureModalLabel" aria-hidden="true">
+<!-- Modal for Editing Personal Picture -->
+<div class="modal fade" id="editPersonalPictureModal" tabindex="-1" aria-labelledby="editPersonalPictureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editProfilePictureModalLabel">Edit Profile Picture</h5>
+                <h5 class="modal-title" id="editPersonalPictureModalLabel">Edit Personal Picture</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>
-                    <img id="image" src="" style="max-width: 100%; display: none;">
-                </div>
-                <div class="preview" style="width: 100%; height: 150px; overflow: hidden;">
-                    <img id="preview" src="" style="max-width: 100%;">
-                </div>
+                <!-- File input for uploading the image -->
+                <input type="file" name="user_profile_file" id="user_profile_file" accept="image/*" style="display: block;">
+                <!-- Preview of the selected image -->
+                <img id="personal-image-preview" src="" style="max-width: 100%; display: none;">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveProfilePicture">Save changes</button>
+                <button type="button" class="btn btn-primary" id="savePersonalPicture">Save changes</button>
             </div>
         </div>
     </div>
