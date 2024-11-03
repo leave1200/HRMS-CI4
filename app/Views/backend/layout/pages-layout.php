@@ -42,6 +42,10 @@
 		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-knob@1.2.13/dist/jquery.knob.min.css"> -->
 		<link rel="stylesheet" href="/backend/src/plugins/timedropper/timedropper.css">
 		<link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
+		<!-- Toastr CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+		
 		<?= $this->renderSection('stylesheets') ?>
 	</head>
 	<body>
@@ -84,6 +88,11 @@
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<!-- <script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script> -->
+		 <!-- jQuery (required by Toastr) -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+		<!-- Toastr JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 		<?= $this->renderSection('scripts') ?>
 	</body>
