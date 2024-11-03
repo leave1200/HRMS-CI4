@@ -68,7 +68,6 @@ class User extends Model
 
     public function updatePictureDirect($userId, $newFilename)
     {
-        // Update the user's picture field in the database
         return $this->update($userId, ['picture' => $newFilename]);
     }
     
