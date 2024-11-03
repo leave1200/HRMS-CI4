@@ -162,7 +162,7 @@
             </div>
         </div>
         <script>
-            function uploadProfilePicture() {
+function uploadProfilePicture() {
     const fileInput = document.getElementById('user_profile_file');
     const file = fileInput.files[0];
     const formData = new FormData();
@@ -170,25 +170,33 @@
     if (file) {
         formData.append('user_profile_file', file);
         
-        fetch('<?=  route_to('update-profile-picture') ?>', {
+        fetch('<?= route_to('update-profile-picture') ?>', {
             method: 'POST',
             body: formData,
         })
-        .then(response => response.json())
+        .then(response => {
+            // Check if the response is OK
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 document.querySelector('.avatar-photo').src = data.newImagePath; // Update the image source
             } else {
-                alert('Error uploading image: ' + data.message);
+                alert('Error uploading image: ' + (data.message || 'Unknown error'));
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Fetch error:', error);
+            alert('An error occurred: ' + error.message);
         });
+    } else {
+        alert('Please select a file to upload.');
     }
 }
-
-        </script>
+</script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>

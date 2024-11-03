@@ -133,44 +133,42 @@ class AdminController extends BaseController
     public function updatePersonalPictures() {
         $response = ['success' => false];
     
-        // Validate file input
-        $file = $this->request->getFile('user_profile_file');
+        try {
+            $file = $this->request->getFile('user_profile_file');
     
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Define the allowed file types
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     
-            // Check file type
-            if (in_array($file->getClientMimeType(), $allowedTypes)) {
-                // Create a unique filename
-                $newName = uniqid() . '-' . $file->getName();
-                $path = WRITEPATH . 'uploads/users/'; // Set your upload directory
+                if (in_array($file->getClientMimeType(), $allowedTypes)) {
+                    $newName = uniqid() . '-' . $file->getName();
+                    $path = WRITEPATH . 'uploads/users/';
     
-                // Move the uploaded file
-                if ($file->move($path, $newName)) {
-                    // Load the User model
-                    $userModel = new \App\Models\User();
-                    $userId = $this->session->get('user_id');
+                    if ($file->move($path, $newName)) {
+                        $userModel = new \App\Models\User();
+                        $userId = $this->session->get('user_id');
     
-                    // Update the user's profile picture in the database
-                    if ($userModel->updatePictureDirect($userId, $newName)) {
-                        $response['success'] = true;
-                        $response['newImagePath'] = '/uploads/users/' . $newName; // Return the new image path
+                        if ($userModel->updatePictureDirect($userId, $newName)) {
+                            $response['success'] = true;
+                            $response['newImagePath'] = '/uploads/users/' . $newName;
+                        } else {
+                            $response['message'] = 'Failed to update the database.';
+                        }
                     } else {
-                        $response['message'] = 'Failed to update the database.';
+                        $response['message'] = 'Failed to move uploaded file.';
                     }
                 } else {
-                    $response['message'] = 'Failed to move uploaded file.';
+                    $response['message'] = 'Invalid file type.';
                 }
             } else {
-                $response['message'] = 'Invalid file type.';
+                $response['message'] = 'No file uploaded or file is invalid.';
             }
-        } else {
-            $response['message'] = 'No file uploaded or file is invalid.';
+        } catch (\Exception $e) {
+            $response['message'] = 'An error occurred: ' . $e->getMessage();
         }
     
         return $this->response->setJSON($response);
     }
+    
     
     //  public function updatePersonalPictures(){
     //     $request = \Config\Services::request();
