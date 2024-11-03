@@ -131,38 +131,30 @@ class AdminController extends BaseController
         }
     }
 
-    public function update_profile_picture()
+    public function updatePersonalPictures()
     {
-        $id = $this->request->getPost('id');
-        $employeeModel = new EmployeeModel();
+        $response = ['success' => false];
     
-        if ($imagefile = $this->request->getFile('profile_picture')) {
+        if ($imagefile = $this->request->getFile('user_profile_file')) {
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
                 $newName = $imagefile->getRandomName();
-                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName);
+                $imagefile->move(ROOTPATH . 'public/images/users', $newName);
     
-                $data = ['picture' => $newName];
+                // Update the user's picture path in the database
+                $userModel = new \App\Models\User();
+                $userModel->update(get_user()->id, ['picture' => $newName]);
     
-                if ($employeeModel->update($id, $data)) {
-                    return $this->response->setJSON([
-                        'success' => true,
-                        'message' => 'Profile picture updated successfully',
-                        'new_picture_url' => base_url('backend/images/users/' . $newName)
-                    ]);
-                } else {
-                    return $this->response->setJSON([
-                        'success' => false,
-                        'message' => 'Failed to update profile picture'
-                    ]);
-                }
+                $response['success'] = true;
+                $response['message'] = 'Personal picture updated successfully';
+                $response['new_picture_url'] = base_url('images/users/' . $newName);
+            } else {
+                $response['message'] = 'Invalid image file';
             }
         }
     
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Invalid image file'
-        ]);
+        return $this->response->setJSON($response);
     }
+    
     
     
     
