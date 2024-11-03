@@ -152,8 +152,9 @@ class AdminController extends BaseController
                             $response['success'] = true;
                             $response['newImagePath'] = '/uploads/users/' . $newName;
                         } else {
-                            $response['message'] = 'Failed to update the database.';
-                        }
+                            log_message('error', 'Failed to update user picture for user ID: ' . $userId);
+                            $response['message'] = 'Failed to update the database. ' . $userModel->errors();
+                        }                       
                     } else {
                         $response['message'] = 'Failed to move uploaded file.';
                     }
