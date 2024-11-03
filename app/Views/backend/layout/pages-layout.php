@@ -40,7 +40,7 @@
 		<!-- <link rel="stylesheet" type="text/css" href="/backend/vendors/styles/style.css" />
 		<link rel="stylesheet" type="text/css" href="/backend/src/plugins/datatables/css/dataTables.bootstrap4.min.css"/>
 		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-knob@1.2.13/dist/jquery.knob.min.css"> -->
-		<link rel="stylesheet" href="/backend/src/plugins/timedropper/timedropper.css"> -->
+		<!-- <link rel="stylesheet" href="/backend/src/plugins/timedropper/timedropper.css"> --> -->
 		<link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
 		<!-- Toastr CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
