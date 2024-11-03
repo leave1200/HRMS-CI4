@@ -130,31 +130,35 @@ class AdminController extends BaseController
         }
     }
 
-    public function updatePersonalPictures(){
+    public function updatePersonalPictures() {
         $response = ['success' => false];
-
+    
         // Validate file input
         $file = $this->request->getFile('user_profile_file');
-        
+    
         if ($file && $file->isValid() && !$file->hasMoved()) {
             // Define the allowed file types
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
+    
             // Check file type
             if (in_array($file->getClientMimeType(), $allowedTypes)) {
                 // Create a unique filename
                 $newName = uniqid() . '-' . $file->getName();
                 $path = WRITEPATH . 'uploads/users/'; // Set your upload directory
-
+    
                 // Move the uploaded file
                 if ($file->move($path, $newName)) {
-                    // Here you can update the user's profile picture path in the database
-                    // Assuming the user ID is stored in the session
+                    // Load the User model
                     $userModel = new \App\Models\User();
-                    $userModel->update($this->session->get('user_id'), ['picture' => $newName]);
-
-                    $response['success'] = true;
-                    $response['newImagePath'] = '/uploads/users/' . $newName; // Return the new image path
+                    $userId = $this->session->get('user_id');
+    
+                    // Update the user's profile picture in the database
+                    if ($userModel->updatePictureDirect($userId, $newName)) {
+                        $response['success'] = true;
+                        $response['newImagePath'] = '/uploads/users/' . $newName; // Return the new image path
+                    } else {
+                        $response['message'] = 'Failed to update the database.';
+                    }
                 } else {
                     $response['message'] = 'Failed to move uploaded file.';
                 }
@@ -164,10 +168,10 @@ class AdminController extends BaseController
         } else {
             $response['message'] = 'No file uploaded or file is invalid.';
         }
-
+    
         return $this->response->setJSON($response);
     }
-    }
+    
     //  public function updatePersonalPictures(){
     //     $request = \Config\Services::request();
     //     $user_id = CIAuth::id();
