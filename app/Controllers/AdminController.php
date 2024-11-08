@@ -155,21 +155,27 @@ class AdminController extends BaseController
         $path = 'public/images/users/';
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_' . $user_id . $file->getRandomName();
-    
         if ($file->move($path, $new_filename)) {
             // Remove old picture if it exists
             if ($old_picture != null && file_exists($path . $old_picture)) {
                 unlink($path . $old_picture);
             }
+        
             // Update database
             $user->where('id', $user_info->id)
                  ->set(['picture' => $new_filename])
                  ->update();
-    
-            echo json_encode(['status' => 1, 'msg' => 'Done!, Your profile picture has been successfully updated.']);
+        
+            // Send the response with the new picture filename and a success message
+            echo json_encode([
+                'status' => 1,
+                'msg' => 'Profile picture updated successfully!',
+                'new_picture' => $new_filename  // Send the new filename to the frontend
+            ]);
         } else {
             echo json_encode(['status' => 0, 'msg' => 'File move failed.']);
         }
+        
     }
     
     //  public function updatePersonalPictures(){
