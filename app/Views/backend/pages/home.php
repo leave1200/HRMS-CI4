@@ -79,6 +79,7 @@
 							</div>
 						</div>
 					</div>
+					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?> 
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#660099" >
 							<div class="progress-box text-center">
@@ -112,6 +113,7 @@
 							</div>
 						</div>
 					</div>
+					<?php endif; ?>
 				</div>
 				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?> 
 				<div class="card-box pb-8">
