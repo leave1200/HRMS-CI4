@@ -111,7 +111,7 @@
 						</div>
 					</div>
 				</div>
-				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
+				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?> 
 				<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
 						<div class="card-box height-100-p pd-20">
