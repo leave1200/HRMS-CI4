@@ -30,16 +30,16 @@ class User extends Model
     // protected $updatedField  = 'updated_at';
 
     // Validation rules for creating/updating users
-    // protected $validationRules = [
-    //     'name'              => 'required|string|max_length[255]',
-    //     'username'          => 'required|string|max_length[255]',
-    //     'email'             => 'required|valid_email',
-    //     'password'          => 'required|min_length[8]',
-    //     'confirm_password'  => 'matches[password]',
-    //     // 'picture'           => 'mime_in[picture,image/jpg,image/jpeg,image/png]|max_size[picture,2048]',
-    //     'bio'               => 'permit_empty|string',
-    //     'status'            => 'required|string|max_length[255]'
-    // ];
+    protected $validationRules = [
+        'name'              => 'required|string|max_length[255]',
+        'username'          => 'required|string|max_length[255]',
+        'email'             => 'required|valid_email',
+        'password'          => 'required|min_length[8]',
+        'confirm_password'  => 'matches[password]',
+        'picture'           => 'mime_in[picture,image/jpg,image/jpeg,image/png]|max_size[picture,2048]',
+        'bio'               => 'permit_empty|string',
+        'status'            => 'required|string|max_length[255]'
+    ];
 
     protected $validationMessages = [
         'password' => [
