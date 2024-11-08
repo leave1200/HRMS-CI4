@@ -421,6 +421,7 @@ public function updateDesignation()
 
     public function employee()
     {
+        $userStatus = session()->get('userStatus');
         $employeeModel = new EmployeeModel();
         $employees = $employeeModel->findAll();
         if ($userStatus !== 'ADMIN') {
@@ -1431,6 +1432,7 @@ public function leave_application()
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
+    $userStatus = session()->get('userStatus');
     if ($userStatus !== 'ADMIN') {
         return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
     }
