@@ -27,10 +27,17 @@
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
-                    <div class="profile-photo">
+                    <!-- <div class="profile-photo">
                         <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
                         <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                    </div> -->
+                    <div class="profile-photo">
+                        <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img id="profile_image" src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -156,6 +163,84 @@
                 </div>
             </div>
         </div>
+        <!-- Modal to display cropper -->
+<div class="modal" id="cropperModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="image_cropper" src="" alt="Image to Crop" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="save_cropped_image" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <script>
+            let cropper;
+let selectedImage = null;
+
+document.getElementById('user_profile_file').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            // Show modal and initialize cropper
+            document.getElementById('image_cropper').src = e.target.result;
+            $('#cropperModal').modal('show');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+$('#cropperModal').on('shown.bs.modal', function () {
+    // Initialize the cropper when modal is shown
+    const image = document.getElementById('image_cropper');
+    cropper = new Cropper(image, {
+        aspectRatio: 1, // Maintain square aspect ratio
+        viewMode: 1, // Restrict image to canvas
+        preview: '.preview', // Optionally show preview of cropped area
+        autoCropArea: 0.65, // Set initial crop area size
+        responsive: true
+    });
+});
+
+$('#cropperModal').on('hidden.bs.modal', function () {
+    cropper.destroy();
+});
+
+document.getElementById('save_cropped_image').addEventListener('click', function () {
+    const canvas = cropper.getCroppedCanvas();
+    canvas.toBlob(function (blob) {
+        const formData = new FormData();
+        formData.append('cropped_image', blob);
+        formData.append('user_id', '<?= CIAuth::id() ?>'); // Pass user ID to backend
+
+        // Send the cropped image to the server
+        fetch('/profile/update-avatar', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the image preview on the page
+                document.getElementById('profile_image').src = data.imageUrl;
+                alert('Profile picture updated successfully!');
+            } else {
+                alert('Error uploading profile picture.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }, 'image/jpeg');
+});
+
+        </script>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
@@ -197,23 +282,23 @@
         });
 
 
-    $('#user_profile_file').ijaboCropTool({
-        preview: '.avatar-photo',
-        setRatio: 1,
-        allowedExtensions: ['jpg', 'jpeg', 'png'],
-        processUrl:'<?= route_to('update-profile-picture') ?>',
-        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess:function(responseText, element, status) {
-            if( status == 1 ) {
-                toastr.success('message');
-            } else {
-                toastr.error('message');
-            }
-        },
-        onError: function(message, element, status) {
-            alert(message);
-        }
-    });
+    // $('#user_profile_file').ijaboCropTool({
+    //     preview: '.avatar-photo',
+    //     setRatio: 1,
+    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
+    //     processUrl:'<?= route_to('update-profile-picture') ?>',
+    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    //     onSuccess:function(responseText, element, status) {
+    //         if( status == 1 ) {
+    //             toastr.success('message');
+    //         } else {
+    //             toastr.error('message');
+    //         }
+    //     },
+    //     onError: function(message, element, status) {
+    //         alert(message);
+    //     }
+    // });
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
