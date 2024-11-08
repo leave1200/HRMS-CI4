@@ -115,7 +115,6 @@
 					</div>
 					<?php endif; ?>
 				</div>
-				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?> 
 				<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
 						<div class="card-box height-100-p pd-20">
@@ -126,7 +125,6 @@
 						</div>
 					</div>
 				</div>
-				<?php endif; ?>
 				<!-- <div class="card-box pb-10">
 					<div class="h5 pd-20 mb-0">Employee</div>
 						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
