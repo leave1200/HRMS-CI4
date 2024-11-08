@@ -160,39 +160,41 @@
 
 <?= $this->section('scripts') ?>
 <script>
-           $('#personal_details_form').on('submit', function(e) {
-                e.preventDefault();
-                var form = this;
-                var formdata = new FormData(form);
+           $('#personal_details_from').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var formdata = new FormData(form);
 
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: $(form).attr('method'),
-                    data: formdata,
-                    processData: false,
-                    dataType: 'json',  // Ensure the response is JSON
-                    contentType: false,
-                    beforeSend: function() {
-                        toastr.remove();  // Remove any previous messages
-                        $(form).find('span.error-text').text('');  // Clear any error messages
-                    },
-                    success: function(response) {
-                        if (response.status == 1) {
-                            toastr.success(response.msg);  // Display success message
-                            if (response.new_picture) {
-                                $('.avatar-photo').attr('src', '/images/users/' + response.new_picture);  // Update profile picture
-                            }
-                        } else {
-                            toastr.error(response.msg);  // Display error message
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        toastr.error('An error occurred. Please try again.');
-                        console.error('Error:', error);
+            // Perform validation if needed
+           $ajax({
+                url:$(form).attr('action'),
+                method:$(form).attr('method'),
+                data:formdatata,
+                processData:false,
+                dataType:'json',
+                ontentType:false,
+                beforeSend:function(){
+                    toastr.remove();
+                    $(form).find('span.error-text').text('');
+                },
+                success:function(response){
+                    if( $.isEmptyObject(response.error) ){
+                        if( response.status == 1 ){
+                            $('.ci-user-name').each(function(){
+                                $(this).html(response.user_info.name);
+                            });
+                            toastr.success(response.msg);
+                    }else{
+                        toastr.error(response.msg);
                     }
-                });
+                    }else{
+                        $.each(response.error, function(prefix, val){
+                            $(form).find('span.'+prefix+'_error').text(val);
+                        });
+                    }
+                }
             });
-
+        });
 
 
         $('#user_profile_file').ijaboCropTool({
