@@ -197,27 +197,23 @@
         });
 
 
-        $('#user_profile_file').ijaboCropTool({
-            preview: '.avatar-photo',
-            setRatio: 1,
-            allowedExtensions: ['jpg', 'jpeg', 'png'],
-            processUrl: '<?= route_to('update-profile-picture') ?>',
-            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-            onSuccess: function(responseText, element, status) {
-                if (status == 1) {
-                    // Assuming responseText is a JSON with status and message
-                    toastr.success(responseText.msg);  // Show success message
-                    // Update the image on the front-end after success
-                    $('.avatar-photo').attr('src', '/images/users/' + responseText.new_picture);
-                } else {
-                    toastr.error(responseText.msg);  // Show error message
-                }
-            },
-            onError: function(message, element, status) {
-                toastr.error(message);  // Show error if there's a problem with the crop tool
+    $('#user_profile_file').ijaboCropTool({
+        preview: '.avatar-photo',
+        setRatio: 1,
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+        processUrl:'<?= route_to('update-profile-picture') ?>',
+        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+        onSuccess:function(responseText, element, status) {
+            if( status == 1 ) {
+                toastr.success('message');
+            } else {
+                toastr.error('message');
             }
-        });
-
+        },
+        onError: function(message, element, status) {
+            alert(message);
+        }
+    });
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
