@@ -130,58 +130,64 @@ class AdminController extends BaseController
         }
     }
     public function updateAvatar()
-    {
-        // Load request service
-        $request = \Config\Services::request();
-        
-        // Ensure the user is logged in (check auth or session here)
-        $user_id = CIAuth::id();
-        if (!$user_id) {
-            return $this->response->setJSON(['success' => false, 'message' => 'User not logged in']);
-        }
-    
-        // Fetch the user from the database
-        $user = new User();
-        $user_info = $user->asObject()->where('id', $user_id)->first();
-    
-        // Ensure the user exists
-        if (!$user_info) {
-            return $this->response->setJSON(['success' => false, 'message' => 'User not found']);
-        }
-    
-        // Get the cropped image from the request
-        $cropped_image = $request->getFile('cropped_image');
-        
-        // Ensure the image is valid
-        if ($cropped_image->isValid() && !$cropped_image->hasMoved()) {
-            // Create a unique name for the image file
-            $newImageName = 'profile_' . time() . '.jpg';
-    
-            // Define the path where the image will be saved
-            $uploadPath = WRITEPATH . 'uploads/users/';
-    
-            // Move the uploaded image to the desired folder
-            if ($cropped_image->move($uploadPath, $newImageName)) {
-                // Check if the user already has a profile picture and delete it
-                if ($user_info->picture != null && file_exists($uploadPath . $user_info->picture)) {
-                    unlink($uploadPath . $user_info->picture);
-                }
-    
-                // Update the user's profile image in the database
-                $user->where('id', $user_id)->set(['picture' => $newImageName])->update();
-    
-                // Return the new image URL to be displayed
-                return $this->response->setJSON([
-                    'success' => true,
-                    'imageUrl' => '/uploads/users/' . $newImageName
-                ]);
-            } else {
-                return $this->response->setJSON(['success' => false, 'message' => 'File move failed']);
-            }
-        }
-    
-        return $this->response->setJSON(['success' => false, 'message' => 'Invalid image file']);
+{
+    // Load request service
+    $request = \Config\Services::request();
+
+    // Ensure the user is logged in (check auth or session here)
+    $user_id = CIAuth::id();
+    if (!$user_id) {
+        return $this->response->setJSON(['success' => false, 'message' => 'User not logged in']);
     }
+
+    // Fetch the user from the database
+    $user = new User();
+    $user_info = $user->find($user_id);  // Using 'find' method to directly fetch the user by ID
+
+    // Ensure the user exists
+    if (!$user_info) {
+        return $this->response->setJSON(['success' => false, 'message' => 'User not found']);
+    }
+
+    // Get the cropped image from the request
+    $cropped_image = $request->getFile('cropped_image');
+
+    // Validate the uploaded file (using the model's validation rules for picture)
+    if ($cropped_image->isValid() && !$cropped_image->hasMoved()) {
+        // Validate file type and size using the model's validation rules (if needed)
+        if (!$cropped_image->isValid() || !$cropped_image->getExtension() || !in_array($cropped_image->getMimeType(), ['image/jpeg', 'image/png'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid file type or size']);
+        }
+
+        // Create a unique name for the image file
+        $newImageName = 'profile_' . time() . '.' . $cropped_image->getExtension();
+
+        // Define the path where the image will be saved
+        $uploadPath = WRITEPATH . 'uploads/users/';
+
+        // Move the uploaded image to the desired folder
+        if ($cropped_image->move($uploadPath, $newImageName)) {
+            // Check if the user already has a profile picture and delete it
+            if ($user_info->picture != null && file_exists($uploadPath . $user_info->picture)) {
+                unlink($uploadPath . $user_info->picture);  // Remove old picture
+            }
+
+            // Update the user's profile picture in the database using the model method
+            $user->updatePictureDirect($user_id, $newImageName);
+
+            // Return the new image URL to be displayed
+            return $this->response->setJSON([
+                'success' => true,
+                'imageUrl' => '/uploads/users/' . $newImageName
+            ]);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'File upload failed']);
+        }
+    } else {
+        return $this->response->setJSON(['success' => false, 'message' => 'Invalid or missing file']);
+    }
+}
+
     
     // public function updatePersonalPictures() {
     //     $request = \Config\Services::request();
