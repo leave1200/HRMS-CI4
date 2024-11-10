@@ -197,23 +197,25 @@
         });
 
 
-    $('#user_profile_file').ijaboCropTool({
-        preview: '.avatar-photo',
-        setRatio: 1,
-        allowedExtensions: ['jpg', 'jpeg', 'png'],
-        processUrl:'<?= route_to('update-profile-picture') ?>',
-        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess:function(responseText, element, status) {
-            if( status == 1 ) {
-                toastr.success('message');
-            } else {
-                toastr.error('message');
+        $('#user_profile_file').ijaboCropTool({
+            preview: '.avatar-photo',
+            setRatio: 1,
+            allowedExtensions: ['jpg', 'jpeg', 'png'],
+            processUrl: '<?= route_to('update-profile-picture') ?>',
+            withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+            onSuccess: function(response, element, status) {
+                if (response.status === 1) {
+                    toastr.success(response.msg);
+                    $('.avatar-photo').attr('src', response.new_picture_url); // Update the image preview if necessary
+                } else {
+                    toastr.error(response.msg);
+                }
+            },
+            onError: function(message, element, status) {
+                alert(message);
             }
-        },
-        onError: function(message, element, status) {
-            alert(message);
-        }
-    });
+        });
+
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
