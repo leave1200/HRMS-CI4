@@ -231,6 +231,23 @@ class AuthController extends BaseController
         }
     }
     public function resetPassword($token){
-        echo $token;
+        $passwordResetPassword = new PassResetToken();
+        $check_token = $passwordResetPassword->asObject()->where('token',$token)->first();
+
+        if( !$check_token){
+            return redirect()->route('admin.forgot.form')->with('fal','Invalid token. Request another reset password link.');
+        }else{
+            $diffMins = Carbon::createFromFormat("Y-m-d H:i:s", $check_token->created_at)->diffInMinutes(Carbon::now());
+
+            if( diffInMinutes > 5){
+                return redirect()->route('admin.forgot.form')->with('fal','Invalid token. Request another reset password link.');
+            }else{
+                return view('backend/pages/auth/reset', [
+                    'pagesTitle' => 'Reset Password',
+                    'validation' => null,
+                    'token' => $token
+                ]);
+            }
+        }
     }
 }
