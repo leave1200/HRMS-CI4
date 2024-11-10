@@ -143,6 +143,7 @@ class AdminController extends BaseController
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
     
+        // Check if the file is valid and has not been moved yet
         if ($file && $file->isValid() && !$file->hasMoved()) {
             if ($file->move($path, $new_filename)) {
                 // Delete old picture if it exists
@@ -150,18 +151,13 @@ class AdminController extends BaseController
                     unlink($path . $old_picture);
                 }
                 
-                // Attempt to update the user record
-                $updateSuccess = $user->where('id', $user_info->id)
-                                       ->set(['picture' => $new_filename])
-                                       ->update();
-    
-                                       $userModel = new User();
-                                       if ($userModel->updatePictureDirect($user_id, $new_filename)) {
-                                           echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'picture' => $new_filename]);
-                                       } else {
-                                           echo json_encode(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
-                                       }
-                                       
+                // Use the updatePictureDirect method to update the database
+                $userModel = new User();
+                if ($userModel->updatePictureDirect($user_id, $new_filename)) {
+                    echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'picture' => $new_filename]);
+                } else {
+                    echo json_encode(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
+                }
             } else {
                 echo json_encode(['status' => 0, 'msg' => 'Failed to upload new picture.']);
             }
@@ -169,6 +165,7 @@ class AdminController extends BaseController
             echo json_encode(['status' => 0, 'msg' => 'No valid file uploaded.']);
         }
     }
+    
     
 
     
