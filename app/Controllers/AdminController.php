@@ -132,37 +132,44 @@ class AdminController extends BaseController
 
 
     public function updatePersonalPictures()
-{
-    $request = \Config\Services::request();
-    $user_id = CIAuth::id();
-    $user = new User();
-    $user_info = $user->asObject()->where('id', $user_id)->first();
-
-    $path = WRITEPATH . 'uploads/images/users/'; // Ensure this path is writable
-    $file = $request->getFile('user_profile_file'); 
-    $old_picture = $user_info->picture;
-    $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-
-    if ($file && $file->isValid() && !$file->hasMoved()) {
-        if ($file->move($path, $new_filename)) {
-            // Delete old picture if it exists
-            if ($old_picture && file_exists($path . $old_picture)) {
-                unlink($path . $old_picture);
+    {
+        $request = \Config\Services::request();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+        $path = WRITEPATH . 'uploads/images/users/';
+        $file = $request->getFile('user_profile_file'); 
+        $old_picture = $user_info->picture;
+        $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
+    
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            if ($file->move($path, $new_filename)) {
+                // Delete old picture if it exists
+                if ($old_picture && file_exists($path . $old_picture)) {
+                    unlink($path . $old_picture);
+                }
+                
+                // Attempt to update the user record
+                $updateSuccess = $user->where('id', $user_info->id)
+                                       ->set(['picture' => $new_filename])
+                                       ->update();
+    
+                if ($updateSuccess) {
+                    echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'picture' => $new_filename]);
+                } else {
+                    // Log or display an error if the database update fails
+                    log_message('error', 'Database update failed for user ID: ' . $user_info->id);
+                    echo json_encode(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
+                }
+            } else {
+                echo json_encode(['status' => 0, 'msg' => 'Failed to upload new picture.']);
             }
-            
-            // Update user record with new picture name
-            $user->where('id', $user_info->id)
-                 ->set(['picture' => $new_filename])
-                 ->update();
-
-            echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.']);
         } else {
-            echo json_encode(['status' => 0, 'msg' => 'Failed to upload new picture.']);
+            echo json_encode(['status' => 0, 'msg' => 'No valid file uploaded.']);
         }
-    } else {
-        echo json_encode(['status' => 0, 'msg' => 'No valid file uploaded.']);
     }
-}
+    
 
     
     //  public function updatePersonalPictures(){
