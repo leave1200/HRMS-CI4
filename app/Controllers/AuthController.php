@@ -251,7 +251,7 @@ class AuthController extends BaseController
         }
     }
 
-    public function resetPasswordHandler(){
+    public function resetPasswordHandler($token){
         echo $token;
     }
 }
