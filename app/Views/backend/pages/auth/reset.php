@@ -8,7 +8,7 @@
 							</div>
 							<h6 class="mb-20">Enter your new password, confirm and submit</h6>
                             <?php $validation = \Config\Services::validation(); ?>
-							<form action="" method="POST">
+							<form action="<?= route_to('reset-password-handler'), $token ?>" method="POST">
                                 <?= csrf_field(); ?>
 
                                 <?php if(!empty(session()->getFlashdata('success'))) : ?>
