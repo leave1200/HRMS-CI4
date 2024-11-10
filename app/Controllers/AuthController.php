@@ -239,7 +239,7 @@ class AuthController extends BaseController
         }else{
             $diffMins = Carbon::createFromFormat("Y-m-d H:i:s", $check_token->created_at)->diffInMinutes(Carbon::now());
 
-            if( $diffMins > 500){
+            if( $diffMins > 10){
                 return redirect()->route('admin.forgot.form')->with('fal','Invalid token. Request another reset password link.');
             }else{
                 return view('backend/pages/auth/reset', [
@@ -287,6 +287,36 @@ class AuthController extends BaseController
             $user_info = $user->asObject()->where('email', $get_token->email)->first();
             if(!$get_token ){
                 return redirect()->back()->with('fail','Invalid Token!')->withInput();
+            }else{
+                $user->where('emai;,$user_info->email')
+                ->set(['password'=>Hash::make($this->request->getVar('new_password'))])
+                ->update();
+                ///send email
+                $mail_data = array(
+                    'user'=>$user_info,
+                    'new_password'=>$this->request->getVar('new_password')
+                );
+
+                $view = \Config\Services::renderer();
+                $mail_body = $view->setVar('mail_data', $mail_data)->reder('email-templates/password-changed-email-template');
+
+                $mailConfig = array(
+                    'mail_from_email'=>env('EMAIL_FROM_ADDRESS'),
+                    'mail_from_name'=>env('EMAIL_FROM_NAME'),
+                    'mail_recipient_email'=>$user_info->email,
+                    'mail_recipient_name'=>$user_info->name,
+                    'mail_subject'=>'Reset Password',
+                    'mail_body'=>$mail_body
+        
+                );
+                if( sendEmail(mailConfig) ){
+                    //delete token
+                    $passwordResetPassword->where('email',$user_info->email)->delete();
+
+                    return redirect()->route('admin.login.form')->with('success','Done!, Your Password has been changed. Use new password to login into the system');
+                }else{
+                    return redirect()->back->with('fai','Somethig went wrong')->withInput();
+                }
             }
         }
     }
