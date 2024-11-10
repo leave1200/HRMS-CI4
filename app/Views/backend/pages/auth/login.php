@@ -44,7 +44,7 @@
         <?php endif; ?>
 
         <!-- reCAPTCHA v2 widget (above email input) -->
-        <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
+        <div class="g-recaptcha" data-sitekey="6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
