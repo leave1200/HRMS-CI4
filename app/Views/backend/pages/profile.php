@@ -206,8 +206,10 @@
         onSuccess:function(responseText, element, status) {
             if( status == 1 ) {
                 toastr.success('Successfully updated picture!');
+                location.reload();
             } else {
                 toastr.error('Error, Please try again!');
+                location.reload();
             }
         },
         onError: function(message, element, status) {
