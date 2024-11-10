@@ -87,8 +87,10 @@
             </div>
         </div>
 
-        <!-- Google reCAPTCHA v3 Hidden Token Field -->
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+        <!-- Google reCAPTCHA v2 Widget -->
+        <div class="form-group">
+            <div class="g-recaptcha" data-sitekey="6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></div>
+        </div>
 
         <div class="row">
             <div class="col-sm-12">
@@ -100,12 +102,5 @@
         </div>
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></script>
-<script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW', {action: 'login'}).then(function(token) {
-            document.getElementById('recaptcha_token').value = token;
-        });
-    });
-</script>
+<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" async defer></script>
 <?= $this->endSection() ?>
