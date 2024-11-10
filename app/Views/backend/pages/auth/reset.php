@@ -7,7 +7,26 @@
 								<h2 class="text-center text-primary">Reset Password</h2>
 							</div>
 							<h6 class="mb-20">Enter your new password, confirm and submit</h6>
-							<form>
+                            <?php $validation = \Config\Services::validation(); ?>
+							<form action="" method="POST">
+                                <?= csrf_field(); ?>
+
+                                <?php if(!empty(session()->getFlashdata('success'))) : ?>
+                                        <div class="alert alert-success">
+                                            <?= session()->getFlashdata('success') ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if(!empty(session()->getFlashdata('fail'))) : ?>
+                                        <div class="alert alert-danger">
+                                            <?= session()->getFlashdata('fail') ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
 								<div class="input-group custom">
 									<input type="text" class="form-control form-control-lg" placeholder="New Password">
 									<div class="input-group-append custom">
