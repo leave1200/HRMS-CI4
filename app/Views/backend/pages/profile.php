@@ -159,6 +159,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
            $('#personal_details_from').on('submit', function(e) {
             e.preventDefault();
