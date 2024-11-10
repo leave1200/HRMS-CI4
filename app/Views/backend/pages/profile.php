@@ -211,10 +211,20 @@
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
         onSuccess:function(responseText, element, status) {
             if( status == 1 ) {
-                toastr.success('Successfully updated picture!');
+                Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Successfully updated picture!',
+                confirmButtonText: 'Okay'
+            });
                 location.reload();
             } else {
-                toastr.error('Error, Please try again!');
+                Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Failed to update picture.',
+                confirmButtonText: 'Okay'
+            });
                 location.reload();
             }
         },
