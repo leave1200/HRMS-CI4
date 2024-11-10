@@ -15,7 +15,8 @@
     RewriteCond %{HTTP_USER_AGENT} Wapiti [NC]
     RewriteRule ^ - [F,L]
 
-    # Block other known scanners (example: python, curl, etc.)
+    # Block other known scanners but allow safe ones (e.g., Googlebot)
+    RewriteCond %{HTTP_USER_AGENT} !(Googlebot|Bingbot) [NC]
     RewriteCond %{HTTP_USER_AGENT} (python|curl|nmap|libwww-perl|nutch|Wget) [NC]
     RewriteRule ^ - [F,L]
 </IfModule>
