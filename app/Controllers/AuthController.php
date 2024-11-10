@@ -142,90 +142,62 @@ class AuthController extends BaseController
         return view('backend/pages/auth/forgot', $data);
     }
     
-    public function sendPasswordResetLink(){
-        $isValid = $this->validate([
-            'email'=>[
-                'rules'=>'required|valid_email|is_not_unique[users.email]',
-                'errors'=>[
-                    'required'=>'Email required',
-                    'valid_email'=>'Please check email field. It does not appears to be Valid.',
-                    'is_not_unique'=>'Email not Exist in System',
-                ],
+    public function sendPasswordResetLink() {
+        $validation = $this->validate([
+            'email' => [
+                'rules' => 'required|valid_email|is_not_unique[users.email]',
+                'errors' => [
+                    'required' => 'Email is required.',
+                    'valid_email' => 'Please check email field. It does not appear to be valid.',
+                    'is_not_unique' => 'Email does not exist in our system.'
+                ]
             ]
         ]);
-
-        if( !$isValid ){
-            return view('backend/pages/auth/forgot',[
-                'pageTitle'=>'Forgot password',
-                'validation'=>$this->validator,
-            ]);
-        }else{
-           
-            $user = new User();
-            $user_info = $user->asObject()->where('email',$this->request->getVar('email'))->first();
-
-            //gerate token
-            $token = bin2hex(openssl_random_pseudo_bytes(65));
-
-           //get reset token
-           $password_reset_token = new PasswordResetToken();
-           $isOldTokenExists = $password_reset_token->asObject()->where('email',$user_info->email)->first();
-
-            if($isOldTokenExists){
-                // update existing token
-                $password_reset_token->where('email', $user_info->email)
-                                     ->set(['token'=>$token,'created_at'=>Carbon::now()])
-                                     ->update();
-            }
-            $password_reset_token->insert([
-                'email'=>$user_info->email,
-                'token'=>$token,
-                'created_at'=>Carbon::now()
+    
+        if (!$validation) {
+            return view('backend/pages/auth/forgot', [
+                'pageTitle' => 'Forgot Password',
+                'validation' => $this->validator
             ]);
         }
-
-        // create action link
-        $actionLink = route_to('admin.reset-password', $token);
-
-        $mail_data = array(
-            'actionLink'=> $actionLink,
-            'user'=>$user_info,
-        );
-
-        $view = \Config\Services::renderer();
-        $mail_body = $view->setVar('mail_data', $mail_data)->render('email-templates/forgot-email-template');
-
-        $mailConfig = array(
-            'mail_from_email'=>env('EMAIL_FROM_ADDRESS'),
-            'mail_from_name'=>env('EMAIL_FROM_NAME'),
-            'mail_recipient_email'=>$user_info->email,
-            'mail_recipient_name'=>$user_info->name,
-            'mail_subject'=>'Reset Password',
-            'mail_body'=>$mail_body
-
-        );
-
-        // send email
-
-        if(sendEmail($mailConfig) ){
-            return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
-        }else{
-            return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
-        }
-        
-    }
-
-    /// user info
-    public function getName($id)
-    {
+    
+        // Get the user details from the email
         $userModel = new User();
-        $user = $userModel->find($id);
-
-        if ($user) {
-            $name = $user['name'];
-            return $this->response->setJSON(['name' => $name]);
+        $user = $userModel->where('email', $this->request->getVar('email'))->first();
+    
+        // Generate reset token
+        $token = bin2hex(openssl_random_pseudo_bytes(32));  // Generate a 32-byte token
+    
+        // Store token in the database (PasswordResetToken model)
+        $passwordResetTokenModel = new PasswordResetToken();
+        $passwordResetTokenModel->save([
+            'email' => $user['email'],
+            'token' => $token,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    
+        // Generate the reset link
+        $resetLink = base_url('auth/resetPassword/' . $token);
+    
+        // Prepare email content
+        $emailContent = view('email-templates/forgot-password-email', [
+            'user' => $user,
+            'resetLink' => $resetLink
+        ]);
+    
+        // Send the email using Gmail SMTP
+        $email = \Config\Services::email();
+        $email->setFrom('your-email@gmail.com', 'Your App Name');
+        $email->setTo($user['email']);
+        $email->setSubject('Password Reset Request');
+        $email->setMessage($emailContent);
+    
+        // Send email and handle success/failure
+        if ($email->send()) {
+            return redirect()->to('/login')->with('success', 'We have emailed your password reset link!');
         } else {
-            return $this->response->setJSON(['error' => 'User not found'], 404);
+            return redirect()->to('/forgot-password')->with('fail', 'There was an error sending the reset link.');
         }
     }
+
 }
