@@ -126,6 +126,18 @@
         }
     });
 </script>
+<script>
+    // Disable right-click context menu
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable specific keyboard shortcuts for opening developer tools
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+            event.preventDefault();
+        }
+    });
+
+</script>
 
 
 <?= $this->endSection() ?>
