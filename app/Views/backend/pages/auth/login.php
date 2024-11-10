@@ -42,8 +42,7 @@
                 });
             </script>
         <?php endif; ?>
-   <!-- reCAPTCHA v2 widget (above email input) -->
-   <div class="g-recaptcha" data-sitekey="6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
+
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -101,8 +100,8 @@
         </div>
     </form>
 </div>
-<!-- Include reCAPTCHA API -->
-<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></script>
+<!-- Include reCAPTCHA API
+<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
     grecaptcha.ready(function() {
         grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
@@ -120,6 +119,6 @@
         });
     }
 </script>
-<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script> -->
 
 <?= $this->endSection() ?>
