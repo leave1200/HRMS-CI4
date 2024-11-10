@@ -218,11 +218,12 @@
     $('#user_profile_file').on('change', function () {
     const formData = new FormData();
     formData.append('user_profile_file', this.files[0]);
-    
+
     // Get the user ID from the hidden input field
     const userId = $('#user_id').val();
     formData.append('user_id', userId); // Add the user ID to the FormData
 
+    console.log('User ID:', userId); // Log user ID to verify it's correct
     console.log('Sending file:', this.files[0]);
 
     $.ajax({
@@ -238,8 +239,7 @@
             console.log('Server response:', response);
             const res = JSON.parse(response);
             if (res.status === 1) {
-                // Assuming `res.picture` is the filename stored in the database
-                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);  // Ensure this path is correct for your setup
+                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
                 toastr.success(res.msg);
             } else {
                 toastr.error(res.msg);
@@ -251,6 +251,7 @@
         }
     });
 });
+
 
 
 

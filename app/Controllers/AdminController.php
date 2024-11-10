@@ -132,10 +132,11 @@ class AdminController extends BaseController
     public function updatePersonalPicture()
     {
         // Get the user ID from the request
-        $userId = $this->request->getPost('user_id');  // Retrieve the user ID from POST data
+        $userId = $this->request->getPost('user_id');
+        log_message('debug', 'Received user_id: ' . $userId); // Log the user_id for debugging
+    
         $user = CIAuth::user();  // Get the logged-in user
     
-        // Make sure the user ID matches the logged-in user or is an admin
         if ($userId != $user->id) {
             return $this->response->setJSON([
                 'status' => 0,
@@ -164,9 +165,7 @@ class AdminController extends BaseController
     
             // Generate a unique file name
             $fileName = $file->getRandomName();
-    
-            // Save the file to the server (make sure you set the correct path)
-            $file->move(WRITEPATH . 'uploads/', $fileName);
+            $file->move(WRITEPATH . 'uploads/', $fileName); // Move file to the server
     
             // Update the user's picture in the database
             $userModel = new User();
@@ -175,11 +174,10 @@ class AdminController extends BaseController
                 $userdata = CIAuth::user();
                 CIAuth::setCIAuth($userdata);
     
-                // Return success response with the new picture URL or file name
                 return $this->response->setJSON([
                     'status' => 1,
                     'msg' => 'Profile picture updated successfully.',
-                    'picture' => $fileName  // Return the file name reference
+                    'picture' => $fileName
                 ]);
             } else {
                 return $this->response->setJSON([
@@ -194,6 +192,7 @@ class AdminController extends BaseController
             'msg' => 'No valid file selected or file is too large.'
         ]);
     }
+    
     
     
     
