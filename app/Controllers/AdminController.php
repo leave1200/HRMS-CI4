@@ -135,7 +135,7 @@ class AdminController extends BaseController
         $file = $this->request->getFile('user_profile_file');
         
         if ($file && $file->isValid()) {
-            // Check for file type and size constraints
+            // Check for file type constraints
             if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                 return json_encode([
                     'status' => 0,
@@ -151,33 +151,30 @@ class AdminController extends BaseController
                 ]);
             }
     
-            // Define the file path where the image will be saved
-            $path = WRITEPATH . 'uploads/users/';
-            $fileName = $file->getRandomName();  // Generate a unique file name
+            // Generate a unique file name
+            $fileName = $file->getRandomName();  
     
-            // Move the file to the server directory
-            if ($file->move($path, $fileName)) {
-                // Update the user's picture in the database
-                $userModel = new User();
-                $userModel->update($user->id, ['picture' => $fileName]);
+            // Store only the file name or a reference to the image (e.g., base64 data or URL)
+            // This does not save the file on the server, but can be used for later file handling
+            // In this example, we store the file name as a reference to the image
+            
+            // If you wanted to store the image as a base64 string instead, you can do it like this:
+            // $base64Image = base64_encode(file_get_contents($file->getTempName()));
     
-                // Update the session user data to reflect the changes
-                $userdata = CIAuth::user();
-                CIAuth::setCIAuth($userdata);
+            // Update the user's picture in the database (store only the file reference, not the actual file)
+            $userModel = new User();
+            $userModel->update($user->id, ['picture' => $fileName]);
     
-                // Respond back with success
-                return json_encode([
-                    'status' => 1,
-                    'msg' => 'Profile picture updated successfully.',
-                    'picture' => $fileName
-                ]);
-            } else {
-                // If the file couldn't be moved
-                return json_encode([
-                    'status' => 0,
-                    'msg' => 'Failed to upload the image. Please try again.'
-                ]);
-            }
+            // Update the session user data to reflect the changes
+            $userdata = CIAuth::user();
+            CIAuth::setCIAuth($userdata);
+    
+            // Respond back with success
+            return json_encode([
+                'status' => 1,
+                'msg' => 'Profile picture updated successfully.',
+                'picture' => $fileName  // Return the file name reference
+            ]);
         } else {
             // If the file is invalid
             return json_encode([
@@ -186,6 +183,7 @@ class AdminController extends BaseController
             ]);
         }
     }
+    
     
 
     
