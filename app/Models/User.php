@@ -24,10 +24,10 @@ class User extends Model
         'policy'
     ];
 
-    // // // Automatically handle created_at and updated_at fields
-    // // protected $useTimestamps = true;
-    // // protected $createdField  = 'created_at';
-    // // protected $updatedField  = 'updated_at';
+    // Automatically handle created_at and updated_at fields
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
 
     // // Validation rules for creating/updating users
     // protected $validationRules = [
