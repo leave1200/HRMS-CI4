@@ -227,7 +227,7 @@
     console.log('Sending file:', this.files[0]);
 
     $.ajax({
-        url: '<?= route_to('update-profile-picture') ?>',
+        url: '<?= route_to('update-profile-pictures') ?>',
         method: 'POST',
         data: formData,
         processData: false,
