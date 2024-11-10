@@ -100,7 +100,7 @@
         </div>
     </form>
 </div>
-Include reCAPTCHA API
+<!-- Include reCAPTCHA API -->
 <script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
     grecaptcha.ready(function() {
