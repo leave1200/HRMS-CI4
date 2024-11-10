@@ -42,8 +42,6 @@
                 });
             </script>
         <?php endif; ?>
-        <!-- reCAPTCHA v2 widget (above email input) -->
-        <div class="g-recaptcha" data-sitekey="6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
@@ -89,7 +87,6 @@
             </div>
         </div>
 
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
@@ -100,15 +97,4 @@
         </div>
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" async defer></script>
-<script>
-    // reCAPTCHA callback function to enable the form fields
-    function enableFormFields() {
-        document.querySelector('input[name="login_id"]').disabled = false;
-        document.querySelector('input[name="password"]').disabled = false;
-        document.querySelector('input[name="remember"]').disabled = false;
-        document.querySelector('a[href="<?= esc(route_to('admin.forget.form'), 'attr') ?>"]').disabled = false;
-        document.querySelector('input[type="submit"]').disabled = false;
-    }
-</script>
 <?= $this->endSection() ?>

@@ -48,32 +48,6 @@ class AuthController extends BaseController
             return false; // Connection failed
         }
     }
-
-    private function verifyRecaptcha($recaptchaResponse)
-    {
-        $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt'; // Replace with your actual reCAPTCHA secret key
-        $remoteIp = $this->request->getIPAddress(); // Capture the user's IP address
-    
-        // Send a POST request to Google’s reCAPTCHA verification API
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-        $data = [
-            'secret' => $secretKey,
-            'response' => $recaptchaResponse,
-            'remoteip' => $remoteIp,
-        ];
-    
-        // Use cURL to send the POST request
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-    
-        // Decode the response and check if the verification was successful
-        $responseKeys = json_decode($response, true);
-        return isset($responseKeys['success']) && $responseKeys['success'] === true;
-    }
     
 
     public function loginHandler()
