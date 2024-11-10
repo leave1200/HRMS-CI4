@@ -32,6 +32,22 @@ class AuthController extends BaseController
             'validation' => null,
         ]);
     }
+    private function isSystemAccessible()
+    {
+        // Load the database connection service
+        $db = \Config\Database::connect();
+
+        // Check if the connection is successful
+        try {
+            // Perform a simple query to check the connection
+            $db->query("SELECT 1");
+            return true; // Connection is successful
+        } catch (\Exception $e) {
+            // Log the error or handle it as needed
+            log_message('error', 'Database connection failed: ' . $e->getMessage());
+            return false; // Connection failed
+        }
+    }
     public function loginHandler()
     {
         // Check if the user is currently in a waiting state
@@ -43,51 +59,6 @@ class AuthController extends BaseController
                 'validation' => null,
                 'waiting' => true,
                 'remainingTime' => ceil($remainingTime)
-            ]);
-        }
-    
-        // Get reCAPTCHA token from the form
-        $recaptchaToken = $this->request->getVar('recaptcha_token');
-        if (!$recaptchaToken) {
-            // If no reCAPTCHA token is provided, return with an error message
-            return view('backend/pages/auth/login', [
-                'pageTitle' => 'Login',
-                'validation' => null,
-                'fail' => 'Please complete the reCAPTCHA to proceed.'
-            ]);
-        }
-    
-        // Your reCAPTCHA secret key
-        $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt';  // Replace with your actual secret key
-    
-        // Prepare the request to verify the reCAPTCHA token
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [
-            'secret' => $secretKey,
-            'response' => $recaptchaToken
-        ];
-    
-        // cURL to send request to reCAPTCHA server
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    
-        // Execute cURL and get the response
-        $response = curl_exec($ch);
-        curl_close($ch);
-    
-        // Decode the JSON response
-        $responseKeys = json_decode($response, true);
-    
-        // Check if reCAPTCHA was successful (success will be true)
-        if (intval($responseKeys["success"]) !== 1) {
-            // If reCAPTCHA verification fails, return with an error message
-            return view('backend/pages/auth/login', [
-                'pageTitle' => 'Login',
-                'validation' => null,
-                'fail' => 'reCAPTCHA verification failed. Please try again.'
             ]);
         }
     
@@ -160,8 +131,6 @@ class AuthController extends BaseController
         // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
-    
-    
     
     
     
