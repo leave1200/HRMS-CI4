@@ -28,6 +28,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                     <div class="profile-photo">
+                    <input type="hidden" id="user_id" value="<?= get_user()->id ?>">
                         <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
                         <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
                         <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/uploads/users/' . get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
@@ -217,6 +218,10 @@
     $('#user_profile_file').on('change', function () {
     const formData = new FormData();
     formData.append('user_profile_file', this.files[0]);
+    
+    // Get the user ID from the hidden input field
+    const userId = $('#user_id').val();
+    formData.append('user_id', userId); // Add the user ID to the FormData
 
     console.log('Sending file:', this.files[0]);
 
@@ -246,6 +251,7 @@
         }
     });
 });
+
 
 
 
