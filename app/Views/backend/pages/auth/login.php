@@ -75,7 +75,14 @@
                 <?= esc($validation->getError('password')) ?>
             </div>
         <?php endif; ?>
-
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group mb-0">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                </div>
+            </div>
+        </div>
         <div class="row pb-30">
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
@@ -85,20 +92,12 @@
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>">Forgot Password</a>
                 </div>
             </div>
         </div>
 
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="input-group mb-0">
-                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
-                </div>
-            </div>
-        </div>
     </form>
 </div>
 <script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
