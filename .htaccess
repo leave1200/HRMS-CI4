@@ -21,22 +21,6 @@
     RewriteRule ^ - [F,L]
 </IfModule>
 
-<IfModule mod_security.c>
-    # Block Wapiti and other scanners with mod_security rules
-    SecRule REQUEST_HEADERS:User-Agent "Wapiti" "id:1000001,deny,status:403"
-    SecRule REQUEST_HEADERS:User-Agent "(python|curl|nmap|libwww-perl|nutch|Wget)" "id:1000002,deny,status:403"
-</IfModule>
-
-# Limit number of requests per IP (rate-limiting)
-<IfModule mod_evasive20.c>
-    DOSHashTableSize 3097
-    DOSPageCount 2
-    DOSSiteCount 50
-    DOSPageInterval 1
-    DOSSiteInterval 1
-    DOSBlockingPeriod 10
-</IfModule>
-
 # Block certain file access patterns
 <FilesMatch "\.(php|html|htaccess|env|ini|bak|log)$">
     Order Deny,Allow
