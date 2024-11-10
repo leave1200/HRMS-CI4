@@ -5,6 +5,7 @@
    Your password has been successfully changed. Here are your new login Credentials:
    <br><br>
    <b>Login ID: </b> <?= $mail_data['user']->username ?>
+   <br>
    <b>Password:</b> <?= $mail_data['new_password'] ?>
 </p> 
 <br><br>
