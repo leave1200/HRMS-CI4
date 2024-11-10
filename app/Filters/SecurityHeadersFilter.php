@@ -22,6 +22,6 @@ class SecurityHeadersFilter implements FilterInterface
 
         // Set Strict-Transport-Security header (HSTS)
         $response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-        $response->setHeader('X-Frame-Options', 'DENY');
+    
     }
 }
