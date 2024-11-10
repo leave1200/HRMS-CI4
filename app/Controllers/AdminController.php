@@ -130,28 +130,35 @@ class AdminController extends BaseController
         }
     }
 
-
     public function updatePersonalPictures()
     {
         $request = \Config\Services::request();
         $user_id = CIAuth::id();
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
+        
+        // Check if user exists
+        if (!$user_info) {
+            echo json_encode(['status' => 0, 'msg' => 'User not found.']);
+            return;
+        }
     
         $path = WRITEPATH . 'uploads/images/users/';
         $file = $request->getFile('user_profile_file'); 
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-    
+        
+        // Check if file is valid and move it
         if ($file && $file->isValid() && !$file->hasMoved()) {
             if ($file->move($path, $new_filename)) {
                 // Delete old picture if it exists
                 if ($old_picture && file_exists($path . $old_picture)) {
                     unlink($path . $old_picture);
                 }
-                
-                // Directly use update() here
-                if ($user->update($user_id, ['picture' => $new_filename])) {
+    
+                // Using set() and update() method for more control
+                $updateData = ['picture' => $new_filename];
+                if ($user->set($updateData)->update($user_id)) {
                     echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'picture' => $new_filename]);
                 } else {
                     echo json_encode(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
