@@ -144,7 +144,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Change password</button>
+                                            <button type="submit1" class="btn btn-primary">Change password</button>
                                         </div>
                                     </form>
 
@@ -238,7 +238,7 @@
         },
     });
 
-$('#change_password_form').on('submit', function(e){
+$('#change_password_form').on('submit1', function(e){
     e.preventDefault();
     // CSRF hash
     var csrfName = $('.ci_csrf_data').attr('name');
