@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="row pb-30">
+        <div class="row pb-40">
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
                     <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
