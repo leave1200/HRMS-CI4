@@ -86,6 +86,8 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+
 
         <div class="row">
             <div class="col-sm-12">
@@ -97,4 +99,13 @@
         </div>
     </form>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
+            document.getElementById('recaptcha_token').value = token;
+        });
+    });
+</script>
+
 <?= $this->endSection() ?>
