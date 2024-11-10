@@ -100,4 +100,12 @@
         </div>
     </form>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW', {action: 'login'}).then(function(token) {
+            document.getElementById('recaptcha_token').value = token;
+        });
+    });
+</script>
 <?= $this->endSection() ?>
