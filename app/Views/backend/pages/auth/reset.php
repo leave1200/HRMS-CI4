@@ -28,25 +28,35 @@
                                         </div>
                                     <?php endif; ?>
 								<div class="input-group custom">
-									<input type="text" class="form-control form-control-lg" placeholder="New Password">
+									<input type="text" class="form-control form-control-lg" placeholder="New Password" name="new_password" value="<?= set_value('new_password') ?>">
 									<div class="input-group-append custom">
 										<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 									</div>
 								</div>
+                                <?php if($validation->getError('new_password')): ?>
+                                    <div class="d-block text-danger" style="margin-top: -25px;margin-bottom:15px;">
+                                        <?= $validation->getError('new_password') ?>
+                                    </div>
+                                    <?php endif; ?>
 								<div class="input-group custom">
-									<input type="text" class="form-control form-control-lg" placeholder="Confirm New Password">
+									<input type="text" class="form-control form-control-lg" placeholder="Confirm New Password" name="confirm_new_password" value="<?= set_value('confirm_new_password') ?>">
 									<div class="input-group-append custom">
 										<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 									</div>
 								</div>
+                                <?php if($validation->getError('confirm_new_password')): ?>
+                                    <div class="d-block text-danger" style="margin-top: -25px;margin-bottom:15px;">
+                                        <?= $validation->getError('confirm_new_password') ?>
+                                    </div>
+                                    <?php endif; ?>
 								<div class="row align-items-center">
 									<div class="col-5">
 										<div class="input-group mb-0">
-											<!--
-											use code for form submit
+											
+											<!-- use code for form submit -->
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
-										-->
-											<a class="btn btn-primary btn-lg btn-block" href="index.html">Submit</a>
+										
+											<!-- <a class="btn btn-primary btn-lg btn-block" href="index.html">Submit</a> -->
 										</div>
 									</div>
 								</div>
