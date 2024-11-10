@@ -73,7 +73,7 @@
             </div>
         <?php endif; ?>
 
-        <div class="row pb-30">
+        <div class="row">
             <div class="col-6">
                 <div class="forgot-password">
                     <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
