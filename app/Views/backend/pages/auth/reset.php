@@ -1,6 +1,6 @@
-<?= $this->extend('backend/layout/pages-layout') ?>
+<?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
 
--------PAge content here---------
+-------auth content here---------
 
 <?= $this->endSection()?>
