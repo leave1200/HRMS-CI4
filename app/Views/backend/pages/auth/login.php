@@ -9,7 +9,7 @@
     <?php $validation = \Config\Services::validation(); ?>
 
     <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" id="loginForm">
-        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+        <?= csrf_field() ?> <!-- CSRF Protection -->
 
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
@@ -43,17 +43,17 @@
             </script>
         <?php endif; ?>
 
-        <!-- reCAPTCHA v3 widget (above email input) -->
-        <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key" data-callback="enableFormFields" data-size="compact"></div>
+        <!-- reCAPTCHA v2 widget (above email input) -->
+        <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" id="login_id">
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" id="login_id" disabled>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
         </div>
-
+        
         <!-- Validation Error for login_id -->
         <?php if ($validation->getError('login_id')): ?>
             <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
@@ -63,7 +63,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" id="password">
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" id="password" disabled>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -79,19 +79,16 @@
         <div class="row pb-30">
             <div class="col-6">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember" disabled>
                     <label class="custom-control-label" for="customCheck1">Remember</label>
                 </div>
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forgt.form'), 'attr') ?>">Forgot Password</a>
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>" id="forgot-password-link" disabled>Forgot Password</a>
                 </div>
             </div>
         </div>
-
-        <!-- Google reCAPTCHA v3 Hidden Token Field -->
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
         <div class="row">
             <div class="col-sm-12">
@@ -103,18 +100,18 @@
     </form>
 </div>
 
-<!-- Include reCAPTCHA API (v3) -->
-<script src="https://www.google.com/recaptcha/api.js?render=6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt"></script>
+<!-- Include reCAPTCHA API -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
-    // reCAPTCHA v3 verification
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt', { action: 'login' }).then(function(token) {
-            document.getElementById('recaptcha_token').value = token;
-            // Enable the submit button once the reCAPTCHA token is generated
-            document.getElementById('submit-btn').disabled = false;
-        });
-    });
+    // Function to enable form fields once reCAPTCHA is verified
+    function enableFormFields() {
+        document.getElementById('login_id').disabled = false;
+        document.getElementById('password').disabled = false;
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('forgot-password-link').disabled = false;
+        document.getElementById('customCheck1').disabled = false;  // Enable the 'remember me' checkbox
+    }
 </script>
 
 <?= $this->endSection() ?>
