@@ -226,22 +226,6 @@
                 confirmButtonText: 'Okay'
             });
         },
-        onFileSelect: function(file) {
-        // Validate the file type before processing it
-        var allowedExtensions = ['jpg', 'jpeg', 'png'];
-        var fileExtension = file.name.split('.').pop().toLowerCase();
-        
-        if (!allowedExtensions.includes(fileExtension)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid File Type',
-                text: 'Please select an image file (jpg, jpeg, png).',
-                confirmButtonText: 'Okay'
-            });
-            return false;
-        }
-        return true;
-    }
     });
 
 $('#change_password_form').on('submit', function(e){
