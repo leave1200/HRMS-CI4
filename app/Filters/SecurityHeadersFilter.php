@@ -10,20 +10,19 @@ class SecurityHeadersFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         service('response')
-        // Default sources for all content types
-        ->setHeader('Content-Security-Policy', "
-            default-src 'self'; 
-            script-src 'self' 'unsafe-inline' 'unsafe-eval' *.yourdomain.com; 
-            object-src 'none'; 
-            base-uri 'self'; 
-            style-src 'self' 'unsafe-inline'; 
-            img-src 'self' data:; 
-            font-src 'self'; 
-            connect-src 'self'; 
-            form-action 'self'; 
-            frame-ancestors 'none'; 
-            upgrade-insecure-requests;
-        ");
+            ->setHeader('Content-Security-Policy', "
+                default-src 'self'; 
+                script-src 'self' 'unsafe-inline' 'unsafe-eval' *.hrmo-lawis.com; 
+                object-src 'none'; 
+                base-uri 'self'; 
+                style-src 'self' 'unsafe-inline'; 
+                img-src 'self' data:; 
+                font-src 'self'; 
+                connect-src 'self'; 
+                form-action 'self'; 
+                frame-ancestors 'none'; 
+                upgrade-insecure-requests;
+            ");
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
