@@ -112,15 +112,15 @@
 </script>
 
 <script>
-    // Optional: If you want to ensure reCAPTCHA token is submitted properly, enable this to submit form manually
-    // function submitForm() {
-    //     grecaptcha.ready(function() {
-    //         grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
-    //             document.getElementById('recaptcha_token').value = token;
-    //             document.getElementById('loginForm').submit(); // Submit the form after setting the token
-    //         });
-    //     });
-    // }
+    Optional: If you want to ensure reCAPTCHA token is submitted properly, enable this to submit form manually
+    function submitForm() {
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+                document.getElementById('recaptcha_token').value = token;
+                document.getElementById('loginForm').submit(); // Submit the form after setting the token
+            });
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>
