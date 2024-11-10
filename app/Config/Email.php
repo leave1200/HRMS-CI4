@@ -12,7 +12,6 @@ class Email extends BaseConfig
     public $fromEmail = 'markbarsaga121@gmail.com';
     public $fromName = 'Madridejos-HR';
     public $recipients = '';  // Leave this empty if you are setting this dynamically
-    public $SMTPHost = 'smtp.gmail.com';
     public $SMTPUser = 'markbarsaga121@gmail.com';
     public $SMTPPass = 'rjruibhpbthpqdqb'; // Use App Password if 2FA is enabled
     public $SMTPPort = 465;
