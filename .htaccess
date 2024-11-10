@@ -9,16 +9,12 @@
     RewriteRule ^$ public/index.php [L]
     RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
 
-    # Block scanning tools like Wapiti based on User-Agent string
-    RewriteCond %{HTTP_USER_AGENT} Wapiti [NC]
-    RewriteRule ^ - [F,L]
+    # Allow access from Googlebot and other legitimate search engines
+    RewriteCond %{HTTP_USER_AGENT} (Googlebot|Bingbot|Yandex|DuckDuckBot) [NC]
+    RewriteRule ^ - [L]
 
-    # Block common malicious bots (python, curl, nmap, wget, etc.)
-    RewriteCond %{HTTP_USER_AGENT} (python|curl|nmap|libwww-perl|nutch|Wget) [NC]
-    RewriteRule ^ - [F,L]
-
-    # Allow common bots (Googlebot, Bingbot) while blocking others
-    RewriteCond %{HTTP_USER_AGENT} !(Googlebot|Bingbot) [NC]
+    # Block specific User-Agents used by scanners
+    RewriteCond %{HTTP_USER_AGENT} (python|curl|nmap|libwww-perl|nutch|Wget|Wapiti) [NC]
     RewriteRule ^ - [F,L]
 </IfModule>
 
@@ -28,5 +24,5 @@
     Deny from all
 </FilesMatch>
 
-# Disable directory listing (security measure)
+# Disable directory listing
 Options -Indexes
