@@ -309,7 +309,7 @@ class AuthController extends BaseController
                     'mail_body'=>$mail_body
         
                 );
-                if( sendEmail(mailConfig) ){
+                if( sendEmail($mailConfig) ){
                     //delete token
                     $passwordResetPassword->where('email',$user_info->email)->delete();
 
