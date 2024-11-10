@@ -1,4 +1,4 @@
-<IfModule mod_rewrite.c>
+<ifModule mod_rewrite.c>
     RewriteEngine On
 
     # Force HTTPS
@@ -8,24 +8,4 @@
     RewriteBase /
     RewriteRule ^$ public/index.php [L]
     RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
-</IfModule>
-
-<IfModule mod_rewrite.c>
-    # Block Wapiti scanner based on User-Agent string
-    RewriteCond %{HTTP_USER_AGENT} Wapiti [NC]
-    RewriteRule ^ - [F,L]
-
-    # Allow common bots (Google, Bing) while blocking scanners
-    RewriteCond %{HTTP_USER_AGENT} !(Googlebot|Bingbot) [NC]
-    RewriteCond %{HTTP_USER_AGENT} (python|curl|nmap|libwww-perl|nutch|Wget) [NC]
-    RewriteRule ^ - [F,L]
-</IfModule>
-
-# Block access to certain sensitive files
-<FilesMatch "\.(php|html|htaccess|env|ini|bak|log)$">
-    Order Deny,Allow
-    Deny from all
-</FilesMatch>
-
-# Disable directory listing (security measure)
-Options -Indexes
+</ifModule>
