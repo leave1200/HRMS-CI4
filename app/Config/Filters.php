@@ -36,6 +36,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'cifilter'      => CIFilter::class,
+        'securityheaders' => \App\Filters\SecurityHeadersFilter::class,
     ];
 
     /**
@@ -69,13 +70,16 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
      */
-    public $globals = [
+    public array $globals = [
         'before' => [
-            // Add other global before filters, like CSRF
+            // 'honeypot',
+            // 'csrf',
+            // 'invalidchars',
         ],
         'after' => [
-            'securityheaders' => \App\Filters\SecurityHeadersFilter::class,
-            // Other after filters if any
+            // 'honeypot',
+            // 'secureheaders',
+            'securityheaders',
         ],
     ];
 
