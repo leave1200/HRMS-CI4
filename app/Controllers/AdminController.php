@@ -134,11 +134,6 @@ class AdminController extends BaseController
         $user = CIAuth::user();  // Get the logged-in user
         $file = $this->request->getFile('user_profile_file');
     
-        // Debugging the file upload
-        if ($file) {
-            log_message('info', 'File received: ' . $file->getClientName() . ', size: ' . $file->getSize());
-        }
-    
         if ($file && $file->isValid()) {
             // Check for file type constraints
             if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
@@ -148,7 +143,7 @@ class AdminController extends BaseController
                 ]);
             }
     
-            // File size limit (example: 2MB)
+            // Set file size limit (example: 2MB)
             if ($file->getSize() > 2 * 1024 * 1024) {
                 return json_encode([
                     'status' => 0,
@@ -156,25 +151,26 @@ class AdminController extends BaseController
                 ]);
             }
     
-            // Generate a unique file name
+            // Generate a unique file name (optional: you can just store the file name or use any method to generate the file name)
             $fileName = $file->getRandomName();  
     
-            // Skip saving the file to the server, just update database
+            // You can now store the file name in the database without actually saving the file to the server
+            // For this example, the file is just referenced by the name in the database
             $userModel = new User();
             $userModel->update($user->id, ['picture' => $fileName]);
     
-            // Update the session user data
+            // Update the session user data to reflect the changes
             $userdata = CIAuth::user();
             CIAuth::setCIAuth($userdata);
     
-            // Respond with success
+            // Respond with success, returning the file name for reference
             return json_encode([
                 'status' => 1,
                 'msg' => 'Profile picture updated successfully.',
-                'picture' => $fileName
+                'picture' => $fileName  // Return the file name reference
             ]);
         } else {
-            // If the file is invalid
+            // If the file is invalid or not provided
             return json_encode([
                 'status' => 0,
                 'msg' => 'No valid file selected or file is too large.'
@@ -182,10 +178,6 @@ class AdminController extends BaseController
         }
     }
     
-
-    
-    
-
     
     //  public function updatePersonalPictures(){
     //     $request = \Config\Services::request();

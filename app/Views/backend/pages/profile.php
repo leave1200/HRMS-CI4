@@ -233,7 +233,8 @@
             console.log('Server response:', response);
             const res = JSON.parse(response);
             if (res.status === 1) {
-                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
+                // Assuming `res.picture` is the filename stored in the database
+                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);  // Ensure this path is correct for your setup
                 toastr.success(res.msg);
             } else {
                 toastr.error(res.msg);
