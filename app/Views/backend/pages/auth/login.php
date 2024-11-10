@@ -42,7 +42,8 @@
                 });
             </script>
         <?php endif; ?>
-
+   <!-- reCAPTCHA v2 widget (above email input) -->
+   <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
