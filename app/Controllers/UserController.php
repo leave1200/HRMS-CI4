@@ -168,6 +168,60 @@ class UserController extends Controller
             'msg' => 'Invalid image file.'
         ]);
     }
+
+    public function changePassword()
+    {
+        $request = \Config\Services::request();
+        $validation = \Config\Services::validation();
+        $user_id = CIAuth::id();
+        $user = new User();
+        $user_info = $user->asObject()->where('id', $user_id)->first();
+    
+        // Validate the form
+        $validation->setRules([
+            'current_password' => [
+                'rules' => 'required|min_length[5]|check_current_password[current_password]',
+                'errors' => [
+                    'required' => 'Enter the current password',
+                    'min_length' => 'Password must have at least 5 characters',
+                    'check_current_password' => 'The current password is incorrect'
+                ]
+            ],
+            'new_password' => [
+                'rules' => 'required|min_length[8]|max_length[20]|is_password_strong[new_password]',
+                'errors' => [
+                    'required' => 'New password is required',
+                    'min_length' => 'New password must have at least 8 characters',
+                    'max_length' => 'New password must not exceed 20 characters',
+                    'is_password_strong' => 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'
+                ]
+            ],
+            'confirm_new_password' => [
+                'rules' => 'required|matches[new_password]',
+                'errors' => [
+                    'required' => 'Confirm new password',
+                    'matches' => 'Password mismatch.'
+                ]
+            ]
+        ]);
+    
+        if (!$validation->withRequest($request)->run()) {
+            // Validation failed
+            $errors = $validation->getErrors();
+            return redirect()->back()->withInput()->with('errors', $errors);
+        } else {
+            // Validation passed, update the password
+            $new_password = $request->getPost('new_password');
+    
+            // Hash the new password using bcrypt
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+    
+            // Update the user password in the database
+            $user->update($user_id, ['password' => $hashed_password]);
+    
+            return redirect()->back()->with('success', 'Password has been changed successfully.');
+        }
+    }
     public function upload()
     {
         $userModel = new \App\Models\User();

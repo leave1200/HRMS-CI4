@@ -120,7 +120,7 @@ $routes->group('', static function($routes){
                 $routes->get('profile','AdminController::profile',['as'=>'admin.profile']);
                 $routes->post('update-personal-details','AdminController::updatePersonalDetails',['as'=>'update-personal-details']);
                 $routes->post('update-profile-picture','UserController::updatePersonalPictures',['as'=>'update-profile-picture']);  
-                $routes->post('change-password','AdminController::changePassword',['as'=>'change-password']);
+                $routes->post('change-password','UserController::changePassword',['as'=>'change-password']);
     });
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 
