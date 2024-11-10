@@ -56,6 +56,7 @@ public function initController(RequestInterface $request, ResponseInterface $res
     $this->response->setHeader('X-XSS-Protection', '1; mode=block');
     $this->response->setHeader('X-Content-Type-Options', 'nosniff');
     $this->response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    $this->response->setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self'; base-uri 'self'; frame-ancestors 'none';");
 }
 
 }
