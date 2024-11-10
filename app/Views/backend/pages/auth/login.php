@@ -75,6 +75,22 @@
                 <?= esc($validation->getError('password')) ?>
             </div>
         <?php endif; ?>
+
+        <div class="row pb-30">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <label class="custom-control-label" for="customCheck1">Remember</label> -->
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
+                </div>
+            </div>
+        </div>
+
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
@@ -83,21 +99,6 @@
                 </div>
             </div>
         </div>
-        <div class="row pb-30">
-            <div class="col-8">
-                <div class="custom-control custom-checkbox">
-                    <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
-                    <label class="custom-control-label" for="customCheck1">Remember</label> -->
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
-                </div>
-            </div>
-        </div>
-
-
     </form>
 </div>
 <script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
