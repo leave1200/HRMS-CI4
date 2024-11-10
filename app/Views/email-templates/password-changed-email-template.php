@@ -4,7 +4,7 @@
 <p>
    Your password has been successfully changed. Here are your new login Credentials:
    <br><br>
-   <b>Login ID: </b> <?= $mail_data['user']->username ?> or <?= $mail_data['user']->email ?>
+   <b>Login ID: </b> <?= $mail_data['user']->username ?>
 </p> 
 <br><br>
 Please, keep your credentials confidentials. Your username and password are your own credentials and you should never share it with anybody else.
