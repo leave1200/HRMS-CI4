@@ -199,4 +199,10 @@ class App extends BaseConfig
      * @see http://www.w3.org/TR/CSP/
      */
     public bool $CSPEnabled = false;
+    public $cookieSecure = true;
+    public $sessionExpiration = 1300;
+    public $cookieHTTPOnly = true;  // Prevents JavaScript from accessing cookies
+    public $cookieSameSite = 'Lax'; // or 'Strict' for tighter control
+
+
 }
