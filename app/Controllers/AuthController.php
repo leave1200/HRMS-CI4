@@ -215,7 +215,79 @@ class AuthController extends BaseController
             }
         }
     }
-
+    public function resetPassword($token) {
+        // Step 1: Validate the token
+        $passwordResetToken = new PasswordResetToken();
+        $resetRequest = $passwordResetToken->asObject()->where('token', $token)->first();
+    
+        // Step 2: Check if the token is valid and exists
+        if (!$resetRequest) {
+            return redirect()->route('admin.forgot.form')->with('fail', 'Invalid or expired token.');
+        }
+    
+        // Step 3: Check if the token has expired (for example, expiration time can be 1 hour)
+        $tokenCreatedAt = $resetRequest->created_at;
+        $expirationTime = Carbon::parse($tokenCreatedAt)->addHour(); // Token expires in 1 hour
+        if (Carbon::now()->greaterThan($expirationTime)) {
+            // Delete expired token from the table
+            $passwordResetToken->where('token', $token)->delete();
+            return redirect()->route('admin.forgot.form')->with('fail', 'Token has expired. Please request a new password reset link.');
+        }
+    
+        // Step 4: Fetch user associated with the token
+        $user = new User();
+        $userInfo = $user->asObject()->where('email', $resetRequest->email)->first();
+    
+        // Step 5: Display the password reset form (view)
+        $data = [
+            'pageTitle' => 'Reset Password',
+            'validation' => null,
+            'token' => $token, // Pass the token to the form to include in the request
+        ];
+    
+        return view('backend/pages/auth/reset-password', $data);
+    }
+    
+    public function updatePassword() {
+        // Step 6: Handle the form submission for updating the password
+        $token = $this->request->getVar('token'); // Token sent from the form
+        $password = $this->request->getVar('password'); // New password
+        $confirmPassword = $this->request->getVar('confirm_password'); // Confirm password
+    
+        // Step 7: Validate the password and confirm password fields
+        if ($password !== $confirmPassword) {
+            return redirect()->back()->with('fail', 'Passwords do not match.')->withInput();
+        }
+    
+        // Password validation rule
+        if (strlen($password) < 8) {
+            return redirect()->back()->with('fail', 'Password must be at least 8 characters.')->withInput();
+        }
+    
+        // Step 8: Get user by token and update the password
+        $passwordResetToken = new PasswordResetToken();
+        $resetRequest = $passwordResetToken->asObject()->where('token', $token)->first();
+    
+        if (!$resetRequest) {
+            return redirect()->route('admin.forgot.form')->with('fail', 'Invalid or expired token.');
+        }
+    
+        // Hash the new password
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    
+        // Update the user's password
+        $user = new User();
+        $user->where('email', $resetRequest->email)
+             ->set(['password' => $hashedPassword])
+             ->update();
+    
+        // Step 9: Delete the token after use
+        $passwordResetToken->where('token', $token)->delete();
+    
+        // Step 10: Redirect the user to login page
+        return redirect()->route('admin.login.form')->with('success', 'Your password has been successfully updated.');
+    }
+    
 
     /// user info
     public function getName($id)
