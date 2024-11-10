@@ -134,95 +134,98 @@ class AuthController extends BaseController
     
     
     
-    public function forgotForms()
-    {
-        return view('backend/pages/auth/forgot', [
-            'pageTitle' => 'Forgot Password',
-            'validation' => null
-        ]);
+    public function forgotForms(){
+        $data = array(
+            'pageTitle'=>'Forgot password',
+            'validation'=>null
+        );
+        return view('backend/pages/auth/forgot', $data);
     }
-
-    public function sendPasswordResetLink()
-    {
-        // Validate the email input
+    
+    public function sendPasswordResetLink(){
         $isValid = $this->validate([
-            'email' => [
-                'rules' => 'required|valid_email|is_not_unique[users.email]',
-                'errors' => [
-                    'required' => 'Email is required.',
-                    'valid_email' => 'Please check the email field. It does not appear to be valid.',
-                    'is_not_unique' => 'This email does not exist in our system.',
+            'email'=>[
+                'rules'=>'required|valid_email|is_not_unique[users.email]',
+                'errors'=>[
+                    'required'=>'Email required',
+                    'valid_email'=>'Please check email field. It does not appears to be Valid.',
+                    'is_not_unique'=>'Email not Exist in System',
                 ],
             ]
         ]);
 
-        // If validation fails, re-render the form with error messages
-        if (!$isValid) {
-            return view('backend/pages/auth/forgot', [
-                'pageTitle' => 'Forgot Password',
-                'validation' => $this->validator,
+        if( !$isValid ){
+            return view('backend/pages/auth/forgot',[
+                'pageTitle'=>'Forgot password',
+                'validation'=>$this->validator,
             ]);
-        } else {
-            // Retrieve the user by email
-            $user = $this->userModel->asObject()->where('email', $this->request->getVar('email'))->first();
+        }else{
+           
+            $user = new User();
+            $user_info = $user->asObject()->where('email',$this->request->getVar('email'))->first();
 
-            if (!$user) {
-                // In case the email is not found in the database
-                return redirect()->route('admin.forgot.form')->with('fail', 'Email not found in the system.');
-            }
-
-            // Generate a unique token for password reset
+            //gerate token
             $token = bin2hex(openssl_random_pseudo_bytes(65));
 
-            // Check if there is an existing token for this email, and update it if exists
-            $passwordResetTokenModel = new PasswordResetToken();
-            $existingToken = $passwordResetTokenModel->asObject()->where('email', $user->email)->first();
+           //get reset token
+           $password_reset_token = new PasswordResetToken();
+           $isOldTokenExists = $password_reset_token->asObject()->where('email',$user_info->email)->first();
 
-            if ($existingToken) {
-                // Update the existing token
-                $passwordResetTokenModel->where('email', $user->email)
-                    ->set(['token' => $token, 'created_at' => Carbon::now()])
-                    ->update();
-            } else {
-                // Insert a new token if it doesn't exist
-                $passwordResetTokenModel->insert([
-                    'email' => $user->email,
-                    'token' => $token,
-                    'created_at' => Carbon::now(),
-                ]);
+            if($isOldTokenExists){
+                // update existing token
+                $password_reset_token->where('email', $user_info->email)
+                                     ->set(['token'=>$token,'created_at'=>Carbon::now()])
+                                     ->update();
             }
+            $password_reset_token->insert([
+                'email'=>$user_info->email,
+                'token'=>$token,
+                'created_at'=>Carbon::now()
+            ]);
+        }
 
-            // Generate the reset link
-            $actionLink = route_to('admin.reset-password', $token);
+        // create action link
+        $actionLink = route_to('admin.reset-password', $token);
 
-            // Prepare email data
-            $mailData = [
-                'actionLink' => $actionLink,
-                'user' => $user,
-            ];
+        $mail_data = array(
+            'actionLink'=> $actionLink,
+            'user'=>$user_info,
+        );
 
-            // Prepare the email body using a view
-            $view = \Config\Services::renderer();
-            $mailBody = $view->setVar('mail_data', $mailData)->render('email-templates/forgot-email-template');
+        $view = \Config\Services::renderer();
+        $mail_body = $view->setVar('mail_data', $mail_data)->render('email-templates/forgot-email-template');
 
-            // Email configuration
-            $mailConfig = [
-                'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
-                'mail_from_name' => env('EMAIL_FROM_NAME'),
-                'mail_recipient_email' => $user->email,
-                'mail_recipient_name' => $user->name,
-                'mail_subject' => 'Password Reset Request',
-                'mail_body' => $mailBody
-            ];
+        $mailConfig = array(
+            'mail_from_email'=>env('EMAIL_FROM_ADDRESS'),
+            'mail_from_name'=>env('EMAIL_FROM_NAME'),
+            'mail_recipient_email'=>$user_info->email,
+            'mail_recipient_name'=>$user_info->name,
+            'mail_subject'=>'Reset Password',
+            'mail_body'=>$mail_body
 
-            // Send the email
-            if (sendEmail($mailConfig)) {
-                // Redirect to the forgot password form with a success message
-                return redirect()->route('admin.forgot.form')->with('success', 'We have emailed you the password reset link.');
-            } else {
-                // Handle error if email fails to send
-                return redirect()->route('admin.forgot.form')->with('fail', 'Something went wrong while sending the email.');
-            }
+        );
+
+        // send email
+
+        if(sendEmail($mailConfig) ){
+            return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
+        }else{
+            return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
+        }
+        
+    }
+
+    /// user info
+    public function getName($id)
+    {
+        $userModel = new User();
+        $user = $userModel->find($id);
+
+        if ($user) {
+            $name = $user['name'];
+            return $this->response->setJSON(['name' => $name]);
+        } else {
+            return $this->response->setJSON(['error' => 'User not found'], 404);
         }
     }
 }
