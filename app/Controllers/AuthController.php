@@ -158,7 +158,7 @@ class AuthController extends BaseController
             return view('backend/pages/auth/forgot',[
                 'pageTitle'=>'Forgot password',
                 'validation'=>$this->validator,
-            ]);
+            ]);}
         // }else{
            
         //     $user = new User();
