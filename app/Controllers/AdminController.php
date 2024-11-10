@@ -132,8 +132,10 @@ class AdminController extends BaseController
     public function updatePersonalPicture()
     {
         $user = CIAuth::user();  // Get the logged-in user
+        $userId = $user->id;  // User ID from the logged-in user session
+        
         $file = $this->request->getFile('user_profile_file');
-    
+        
         if ($file && $file->isValid()) {
             // Check for file type and size constraints
             if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
@@ -151,12 +153,12 @@ class AdminController extends BaseController
                 ]);
             }
     
-            // Generate a unique file name (but not saving the file)
+            // Generate a unique file name
             $fileName = $file->getRandomName(); 
     
             // Update the user's picture in the database
             $userModel = new User();
-            if ($userModel->update($user->id, ['picture' => $fileName])) {
+            if ($userModel->update($userId, ['picture' => $fileName])) {
                 // Update the session user data to reflect the changes
                 $userdata = CIAuth::user();
                 CIAuth::setCIAuth($userdata);
@@ -180,6 +182,7 @@ class AdminController extends BaseController
             'msg' => 'No valid file selected or file is too large.'
         ]);
     }
+    
     
     
     
