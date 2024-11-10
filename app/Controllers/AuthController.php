@@ -49,23 +49,36 @@ class AuthController extends BaseController
         }
     }
 
-    private function verifyRecaptcha($token)
-{
-    $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt'; // Replace with your secret key
-    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$token}");
-    $responseKeys = json_decode($response, true);
+    private function verifyRecaptcha($recaptchaResponse)
+    {
+        $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt'; // Replace with your actual reCAPTCHA secret key
+        $remoteIp = $this->request->getIPAddress(); // Capture the user's IP address
     
-    // Return true if reCAPTCHA verification is successful
-    return isset($responseKeys['success']) && $responseKeys['success'] == true;
-}
+        // Send a POST request to Google’s reCAPTCHA verification API
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = [
+            'secret' => $secretKey,
+            'response' => $recaptchaResponse,
+            'remoteip' => $remoteIp,
+        ];
+    
+        // Use cURL to send the POST request
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        // Decode the response and check if the verification was successful
+        $responseKeys = json_decode($response, true);
+        return isset($responseKeys['success']) && $responseKeys['success'] === true;
+    }
+    
 
     public function loginHandler()
     {
-    // Get reCAPTCHA response from the form
-    $recaptchaResponse = $this->request->getVar('g-recaptcha-response');
-    if (!$this->verifyRecaptcha($recaptchaResponse)) {
-        return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
-    }
+        $recaptchaResponse = $this->request->getVar('g-recaptcha-response');
         // Check if the user is currently in a waiting state
         if (session()->get('wait_time') && session()->get('wait_time') > time()) {
             // Calculate remaining wait time
