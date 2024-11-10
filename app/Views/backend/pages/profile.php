@@ -219,7 +219,12 @@
             }
         },
         onError: function(message, element, status) {
-            alert(message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid File Type',
+                text: 'Please select an image file (jpg, jpeg, png).',
+                confirmButtonText: 'Okay'
+            });
         },
         onFileSelect: function(file) {
         // Validate the file type before processing it
