@@ -124,7 +124,7 @@ $routes->group('', static function($routes){
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 
         //$routes->view('example-page','example-page');
-        $routes->get('home', 'AdminController::index', ['as' => 'admin.home']);
+        $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
         
 });
 
