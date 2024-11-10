@@ -215,32 +215,37 @@
     //     }
     // });
     $('#user_profile_file').on('change', function () {
-        const formData = new FormData();
-        formData.append('user_profile_file', this.files[0]);
+    const formData = new FormData();
+    formData.append('user_profile_file', this.files[0]);
 
-        $.ajax({
-            url: '<?= route_to('update-profile-picture') ?>',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function () {
-                toastr.info('Uploading...');
-            },
-            success: function (response) {
-                const res = JSON.parse(response);
-                if (res.status === 1) {
-                    $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
-                    toastr.success(res.msg);
-                } else {
-                    toastr.error(res.msg);
-                }
-            },
-            error: function () {
-                toastr.error('Failed to update profile picture. Please try again.');
+    console.log('Sending file:', this.files[0]);
+
+    $.ajax({
+        url: '<?= route_to('update-profile-picture') ?>',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            toastr.info('Uploading...');
+        },
+        success: function (response) {
+            console.log('Server response:', response);
+            const res = JSON.parse(response);
+            if (res.status === 1) {
+                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
+                toastr.success(res.msg);
+            } else {
+                toastr.error(res.msg);
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            toastr.error('Failed to update profile picture. Please try again.');
+        }
     });
+});
+
 
 
 $('#change_password_form').on('submit', function(e){

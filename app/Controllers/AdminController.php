@@ -133,7 +133,12 @@ class AdminController extends BaseController
     {
         $user = CIAuth::user();  // Get the logged-in user
         $file = $this->request->getFile('user_profile_file');
-        
+    
+        // Debugging the file upload
+        if ($file) {
+            log_message('info', 'File received: ' . $file->getClientName() . ', size: ' . $file->getSize());
+        }
+    
         if ($file && $file->isValid()) {
             // Check for file type constraints
             if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
@@ -143,7 +148,7 @@ class AdminController extends BaseController
                 ]);
             }
     
-            // Set file size limit (example: 2MB)
+            // File size limit (example: 2MB)
             if ($file->getSize() > 2 * 1024 * 1024) {
                 return json_encode([
                     'status' => 0,
@@ -154,26 +159,19 @@ class AdminController extends BaseController
             // Generate a unique file name
             $fileName = $file->getRandomName();  
     
-            // Store only the file name or a reference to the image (e.g., base64 data or URL)
-            // This does not save the file on the server, but can be used for later file handling
-            // In this example, we store the file name as a reference to the image
-            
-            // If you wanted to store the image as a base64 string instead, you can do it like this:
-            // $base64Image = base64_encode(file_get_contents($file->getTempName()));
-    
-            // Update the user's picture in the database (store only the file reference, not the actual file)
+            // Skip saving the file to the server, just update database
             $userModel = new User();
             $userModel->update($user->id, ['picture' => $fileName]);
     
-            // Update the session user data to reflect the changes
+            // Update the session user data
             $userdata = CIAuth::user();
             CIAuth::setCIAuth($userdata);
     
-            // Respond back with success
+            // Respond with success
             return json_encode([
                 'status' => 1,
                 'msg' => 'Profile picture updated successfully.',
-                'picture' => $fileName  // Return the file name reference
+                'picture' => $fileName
             ]);
         } else {
             // If the file is invalid
@@ -183,6 +181,8 @@ class AdminController extends BaseController
             ]);
         }
     }
+    
+
     
     
 
