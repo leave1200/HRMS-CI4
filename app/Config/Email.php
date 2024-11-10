@@ -6,9 +6,20 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'markbarsaga121@gmail.com'; // Your Gmail address
-    public string $fromName   = 'Your Name'; // Your preferred name
-    public string $recipients = '';
+    // public string $fromEmail  = 'markbarsaga121@gmail.com'; // Your Gmail address
+    // public string $fromName   = 'Your Name'; // Your preferred name
+    // public string $recipients = '';
+    public $fromEmail = 'markbarsaga121@gmail.com';
+    public $fromName = 'Madridejos-HR';
+    public $recipients = '';  // Leave this empty if you are setting this dynamically
+    public $SMTPHost = 'smtp.gmail.com';
+    public $SMTPUser = 'markbarsaga121@gmail.com';
+    public $SMTPPass = 'rjruibhpbthpqdqb'; // Use App Password if 2FA is enabled
+    public $SMTPPort = 465;
+    public $SMTPTimeout = 60;
+    public $SMTPCrypto = 'ssl';
+    public $mailType = 'html';
+    public $charset = 'utf-8';
 
     /**
      * The "user agent"
