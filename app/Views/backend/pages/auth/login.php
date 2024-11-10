@@ -60,11 +60,14 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
+            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
             <div class="input-group-append custom">
-                <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+                <span class="input-group-text" id="togglePassword">
+                    <i class="dw dw-padlock1"></i>
+                </span>
             </div>
         </div>
+
 
         <!-- Validation Error for password -->
         <?php if ($validation->getError('password')): ?>
