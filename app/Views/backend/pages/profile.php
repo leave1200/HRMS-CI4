@@ -25,13 +25,12 @@
             </div>
         </div>
         <div class="row">
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                     <div class="profile-photo">
-                    <input type="hidden" id="user_id" value="<?= get_user()->id ?>">
-                        <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/uploads/users/' . get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -161,99 +160,60 @@
 
 <?= $this->section('scripts') ?>
 <script>
-    //        $('#personal_details_from').on('submit', function(e) {
-    //         e.preventDefault();
-    //         var form = this;
-    //         var formdata = new FormData(form);
+           $('#personal_details_from').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var formdata = new FormData(form);
 
-    //         // Perform validation if needed
-    //        $ajax({
-    //             url:$(form).attr('action'),
-    //             method:$(form).attr('method'),
-    //             data:formdatata,
-    //             processData:false,
-    //             dataType:'json',
-    //             ontentType:false,
-    //             beforeSend:function(){
-    //                 toastr.remove();
-    //                 $(form).find('span.error-text').text('');
-    //             },
-    //             success:function(response){
-    //                 if( $.isEmptyObject(response.error) ){
-    //                     if( response.status == 1 ){
-    //                         $('.ci-user-name').each(function(){
-    //                             $(this).html(response.user_info.name);
-    //                         });
-    //                         toastr.success(response.msg);
-    //                 }else{
-    //                     toastr.error(response.msg);
-    //                 }
-    //                 }else{
-    //                     $.each(response.error, function(prefix, val){
-    //                         $(form).find('span.'+prefix+'_error').text(val);
-    //                     });
-    //                 }
-    //             }
-    //         });
-    //     });
+            // Perform validation if needed
+           $ajax({
+                url:$(form).attr('action'),
+                method:$(form).attr('method'),
+                data:formdatata,
+                processData:false,
+                dataType:'json',
+                ontentType:false,
+                beforeSend:function(){
+                    toastr.remove();
+                    $(form).find('span.error-text').text('');
+                },
+                success:function(response){
+                    if( $.isEmptyObject(response.error) ){
+                        if( response.status == 1 ){
+                            $('.ci-user-name').each(function(){
+                                $(this).html(response.user_info.name);
+                            });
+                            toastr.success(response.msg);
+                    }else{
+                        toastr.error(response.msg);
+                    }
+                    }else{
+                        $.each(response.error, function(prefix, val){
+                            $(form).find('span.'+prefix+'_error').text(val);
+                        });
+                    }
+                }
+            });
+        });
 
 
-    // $('#user_profile_file').ijaboCropTool({
-    //     preview: '.avatar-photo',
-    //     setRatio: 1,
-    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
-    //     processUrl:'<?= route_to('update-profile-picture') ?>',
-    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-    //     onSuccess:function(responseText, element, status) {
-    //         if( status == 1 ) {
-    //             toastr.success('message');
-    //         } else {
-    //             toastr.error('message');
-    //         }
-    //     },
-    //     onError: function(message, element, status) {
-    //         alert(message);
-    //     }
-    // });
-    $('#user_profile_file').on('change', function () {
-    const formData = new FormData();
-    formData.append('user_profile_file', this.files[0]);
-    
-    // Get the user ID from the hidden input field
-    const userId = $('#user_id').val();
-    formData.append('user_id', userId); // Add the user ID to the FormData
-
-    console.log('Sending file:', this.files[0]);
-
-    $.ajax({
-        url: '<?= route_to('update-profile-picture') ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        beforeSend: function () {
-            toastr.info('Uploading...');
-        },
-        success: function (response) {
-            console.log('Server response:', response);
-            const res = JSON.parse(response);
-            if (res.status === 1) {
-                // Assuming `res.picture` is the filename stored in the database
-                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);  // Ensure this path is correct for your setup
-                toastr.success(res.msg);
+    $('#user_profile_file').ijaboCropTool({
+        preview: '.avatar-photo',
+        setRatio: 1,
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+        processUrl:'<?= route_to('update-profile-picture') ?>',
+        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+        onSuccess:function(responseText, element, status) {
+            if( status == 1 ) {
+                toastr.success('message');
             } else {
-                toastr.error(res.msg);
+                toastr.error('message');
             }
         },
-        error: function (xhr, status, error) {
-            console.error('AJAX error:', error);
-            toastr.error('Failed to update profile picture. Please try again.');
+        onError: function(message, element, status) {
+            alert(message);
         }
     });
-});
-
-
-
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();

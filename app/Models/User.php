@@ -24,10 +24,10 @@ class User extends Model
         'policy'
     ];
 
-    // Automatically handle created_at and updated_at fields
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    // // // Automatically handle created_at and updated_at fields
+    // // protected $useTimestamps = true;
+    // // protected $createdField  = 'created_at';
+    // // protected $updatedField  = 'updated_at';
 
     // // Validation rules for creating/updating users
     // protected $validationRules = [
@@ -54,7 +54,7 @@ class User extends Model
     //     ]
     // ];
 
-    // // Methods for hashing passwords
+    // Methods for hashing passwords
     public function hashPassword($password)
     {
         return password_hash($password, PASSWORD_BCRYPT);
@@ -66,9 +66,9 @@ class User extends Model
         return password_verify($password, $hashedPassword);
     }
 
-    public function updatePictureDirect($userId, $newFilename)
-    {
-        return $this->update($userId, ['picture' => $newFilename]);
-    }
+    // public function updatePictureDirect($userId, $newFilename)
+    // {
+    //     return $this->update($userId, ['picture' => $newFilename]);
+    // }
     
 }
