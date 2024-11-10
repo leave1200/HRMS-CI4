@@ -48,6 +48,17 @@ class AuthController extends BaseController
             return false; // Connection failed
         }
     }
+
+    private function verifyRecaptcha($token)
+{
+    $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt'; // Replace with your secret key
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$token}");
+    $responseKeys = json_decode($response, true);
+    
+    // Return true if reCAPTCHA verification is successful
+    return isset($responseKeys['success']) && $responseKeys['success'] == true;
+}
+
     public function loginHandler()
     {
             // Check if reCAPTCHA token is valid
