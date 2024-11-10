@@ -278,7 +278,16 @@ class AuthController extends BaseController
                 'token'=>$token,
             ]);
         }else{
-            echo 'Form Validated';
+            //get token
+            $passwordResetPassword = new PasswordResetToken();
+            $get_token = $passwordResetPassword->asObject()->where('token', $token)->first();
+
+            //get user data
+            $user = new User();
+            $user_info = $user->asObject()->where('email', $get_token->email)->first();
+            if(!$get_token ){
+                return redirect()->back()->with('fail','Invalid Token!')->withInput();
+            }
         }
     }
 }
