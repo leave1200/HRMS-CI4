@@ -158,8 +158,8 @@ class AuthController extends BaseController
             return view('backend/pages/auth/forgot',[
                 'pageTitle'=>'Forgot password',
                 'validation'=>$this->validator,
-            ]);}
-        // }else{
+            ]);
+        }else{
            
         //     $user = new User();
         //     $user_info = $user->asObject()->where('email',$this->request->getVar('email'))->first();
@@ -211,7 +211,8 @@ class AuthController extends BaseController
         //     return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
         // }else{
         //     return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
-        // }
+        echo 'form validated';
+        }
         
     }
 
