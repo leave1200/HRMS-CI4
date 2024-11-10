@@ -79,6 +79,11 @@
                     <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
                     <label class="custom-control-label" for="customCheck1">Remember</label>
                 </div> -->
+                <div class="input-group mb-0">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                </div>
+                
             </div>
             <div class="col-6">
                 <div class="forgot-password">
@@ -92,7 +97,7 @@
             <div class="col-sm-12">
                 <div class="input-group mb-0">
                 <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
                 </div>
             </div>
         </div>
