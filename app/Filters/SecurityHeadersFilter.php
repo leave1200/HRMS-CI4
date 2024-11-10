@@ -9,20 +9,7 @@ class SecurityHeadersFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        service('response')
-            ->setHeader('Content-Security-Policy', "
-                default-src 'self'; 
-                script-src 'self' 'unsafe-inline' 'unsafe-eval' *.hrmo-lawis.com; 
-                object-src 'none'; 
-                base-uri 'self'; 
-                style-src 'self' 'unsafe-inline'; 
-                img-src 'self' data:; 
-                font-src 'self'; 
-                connect-src 'self'; 
-                form-action 'self'; 
-                frame-ancestors 'none'; 
-                upgrade-insecure-requests;
-            ");
+        // No action before request
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
@@ -36,6 +23,5 @@ class SecurityHeadersFilter implements FilterInterface
         // Set Strict-Transport-Security header (HSTS)
         $response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         $response->setHeader('X-Frame-Options', 'DENY');
-        $this->response->setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self';");
     }
 }
