@@ -36,7 +36,6 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'cifilter'      => CIFilter::class,
-        'securityheaders' => \App\Filters\SecurityHeadersFilter::class,
     ];
 
     /**
@@ -79,7 +78,6 @@ class Filters extends BaseFilters
         'after' => [
             // 'honeypot',
             // 'secureheaders',
-            'securityheaders',
         ],
     ];
 
