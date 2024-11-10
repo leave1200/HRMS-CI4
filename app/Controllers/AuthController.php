@@ -183,9 +183,7 @@ class AuthController extends BaseController
                     'created_at'=>Carbon::now()
                 ]);
             }
-        }
-
-        // create action link
+              // create action link
         $actionLink = route_to('admin.reset-password', $token);
 
         $mail_data = array(
@@ -212,6 +210,7 @@ class AuthController extends BaseController
             return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
         }else{
             return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
+        }
         }
         
     }
