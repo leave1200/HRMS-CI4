@@ -204,13 +204,14 @@ class AuthController extends BaseController
 
         );
 
-        // send email
+            // send email
 
-        if(sendEmail($mailConfig) ){
-            return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
-        }else{
-            return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
-        }
+            if(sendEmail($mailConfig) ){
+                return redirect()->route('admin.forgot.form')->with('success','We have emailed your password reset link.');
+            }else{
+                return redirect()->route('admin.forgot.form')->with('fail','Something went wrong');
+            }
+        
         }
         
     }
