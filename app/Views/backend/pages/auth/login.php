@@ -86,7 +86,7 @@
                 
             </div>
             <div class="col-6">
-                <div class="forgot-password">
+                <div class="btn-primary forgot-password">
                     <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
                 </div>
             </div>
