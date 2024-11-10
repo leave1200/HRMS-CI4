@@ -8,8 +8,8 @@
 
     <?php $validation = \Config\Services::validation(); ?>
 
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
-        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST" id="loginForm">
+        <?= csrf_field() ?> <!-- CSRF Protection -->
 
         <!-- Success flash message -->
         <?php if (!empty(session()->getFlashdata('success'))) : ?>
@@ -45,7 +45,7 @@
 
         <!-- Input for Username or Email -->
         <div class="input-group custom">
-            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" required>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
@@ -60,7 +60,7 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
+            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>" required>
             <div class="input-group-append custom">
                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
             </div>
@@ -93,32 +93,34 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
                 </div>
             </div>
         </div>
     </form>
 </div>
-<!-- Include reCAPTCHA API
+
+<!-- Include reCAPTCHA API -->
 <script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
+    // reCAPTCHA v3 for login action
     grecaptcha.ready(function() {
         grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
 </script>
+
 <script>
-    function submitForm() {
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
-                document.getElementById('recaptcha_token').value = token;
-                document.getElementById('loginForm').submit(); // Submit the form after setting the token
-            });
-        });
-    }
+    // Optional: If you want to ensure reCAPTCHA token is submitted properly, enable this to submit form manually
+    // function submitForm() {
+    //     grecaptcha.ready(function() {
+    //         grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+    //             document.getElementById('recaptcha_token').value = token;
+    //             document.getElementById('loginForm').submit(); // Submit the form after setting the token
+    //         });
+    //     });
+    // }
 </script>
-<script src="https://www.google.com/recaptcha/api.js"></script> -->
 
 <?= $this->endSection() ?>
