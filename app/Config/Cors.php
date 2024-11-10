@@ -25,7 +25,7 @@ class Cors extends BaseConfig
      *  }
      */
     public array $default = [
-        'allowedOrigins' => ['https://frontend.example.com'],  // Replace with your frontend domain
+        'allowedOrigins' => ['https://hrmo-lawis.com'],  // Replace with your frontend domain
         'allowedOriginsPatterns' => [],
         'supportsCredentials' => true,  // Allow credentials if needed
         'allowedHeaders' => ['Content-Type', 'Authorization'],  // Allow specific headers
