@@ -74,7 +74,7 @@ class AuthController extends BaseController
         }
     
         // Your reCAPTCHA secret key
-        $secretKey = '6Lcmo3oqAAAAAMwM-y9WJ_BPxc3lA6e2uLW0t7tv';  // Replace with your actual secret key
+        $secretKey = '6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt';  // Replace with your actual secret key
     
         // Prepare the request to verify the reCAPTCHA token
         $url = 'https://www.google.com/recaptcha/api/siteverify';
