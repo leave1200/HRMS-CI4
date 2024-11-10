@@ -171,20 +171,17 @@ class AuthController extends BaseController
            $password_reset_token = new PasswordResetToken();
            $isOldTokenExists = $password_reset_token->asObject()->where('email',$user_info->email)->first();
 
-           if ($isOldTokenExists) {
-            // Update existing token
-            $password_reset_token->where('email', $user_info->email)
-                                 ->set(['token' => $token, 'created_at' => Carbon::now()])
-                                 ->update();
-        } else {
-            // Insert new token if no old token exists
+            if($isOldTokenExists){
+                // update existing token
+                $password_reset_token->where('email', $user_info->email)
+                                     ->set(['token'=>$token,'created_at'=>Carbon::now()])
+                                     ->update();
+            }
             $password_reset_token->insert([
-                'email' => $user_info->email,
-                'token' => $token,
-                'created_at' => Carbon::now()
+                'email'=>$user_info->email,
+                'token'=>$token,
+                'created_at'=>Carbon::now()
             ]);
-        }
-        
         }
 
         // create action link
