@@ -62,6 +62,51 @@ class AuthController extends BaseController
             ]);
         }
     
+        // Get reCAPTCHA token from the form
+        $recaptchaToken = $this->request->getVar('recaptcha_token');
+        if (!$recaptchaToken) {
+            // If no reCAPTCHA token is provided, return with an error message
+            return view('backend/pages/auth/login', [
+                'pageTitle' => 'Login',
+                'validation' => null,
+                'fail' => 'Please complete the reCAPTCHA to proceed.'
+            ]);
+        }
+    
+        // Your reCAPTCHA secret key
+        $secretKey = '6Lcmo3oqAAAAAMwM-y9WJ_BPxc3lA6e2uLW0t7tv';  // Replace with your actual secret key
+    
+        // Prepare the request to verify the reCAPTCHA token
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = [
+            'secret' => $secretKey,
+            'response' => $recaptchaToken
+        ];
+    
+        // cURL to send request to reCAPTCHA server
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        // Execute cURL and get the response
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        // Decode the JSON response
+        $responseKeys = json_decode($response, true);
+    
+        // Check if reCAPTCHA was successful (success will be true)
+        if (intval($responseKeys["success"]) !== 1) {
+            // If reCAPTCHA verification fails, return with an error message
+            return view('backend/pages/auth/login', [
+                'pageTitle' => 'Login',
+                'validation' => null,
+                'fail' => 'reCAPTCHA verification failed. Please try again.'
+            ]);
+        }
+    
         // Determine the field type (email or username)
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -131,6 +176,7 @@ class AuthController extends BaseController
         // Redirect to the admin dashboard or home page
         return redirect()->route('admin.home');
     }
+    
     
     
     
