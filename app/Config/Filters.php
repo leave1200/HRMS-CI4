@@ -69,15 +69,13 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
      */
-    public array $globals = [
+    public $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            // Add other global before filters, like CSRF
         ],
         'after' => [
-            // 'honeypot',
-            // 'secureheaders',
+            'securityheaders' => \App\Filters\SecurityHeadersFilter::class,
+            // Other after filters if any
         ],
     ];
 
@@ -106,4 +104,5 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [];
+    
 }
