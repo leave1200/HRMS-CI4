@@ -202,7 +202,7 @@ class App extends BaseConfig
     public $cookieSecure = true;
     public $sessionExpiration = 1300;
     public $cookieHTTPOnly = true;  // Prevents JavaScript from accessing cookies
-    public $cookieSameSite = 'None'; // or 'Strict' for tighter control
+    public $cookieSameSite = 'Lax'; // or 'Strict' for tighter control
 
 
 }
