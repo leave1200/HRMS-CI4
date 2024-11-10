@@ -105,7 +105,7 @@
 <script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
@@ -113,7 +113,7 @@
 <script>
     function submitForm() {
         grecaptcha.ready(function() {
-            grecaptcha.execute('6Lf4pHoqAAAAAKv-04mqxDttzt3-uwRxzVnKPxKt', { action: 'login' }).then(function(token) {
+            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
                 document.getElementById('recaptcha_token').value = token;
                 document.getElementById('loginForm').submit(); // Submit the form after setting the token
             });
