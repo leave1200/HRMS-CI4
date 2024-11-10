@@ -42,7 +42,7 @@
                 });
             </script>
         <?php endif; ?>
-
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -86,7 +86,6 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
 
         <div class="row">
