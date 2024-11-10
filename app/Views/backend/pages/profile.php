@@ -214,7 +214,17 @@
         },
         onError: function(message, element, status) {
             alert(message);
+        },
+        onFileSelect: function(file) {
+        // Validate the file type before processing it
+        var allowedExtensions = ['jpg', 'jpeg', 'png'];
+        var fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            alert("Invalid file type. Please select an image file (jpg, jpeg, png).");
+            return false;
         }
+        return true;
+    }
     });
 
 $('#change_password_form').on('submit', function(e){
