@@ -61,11 +61,10 @@ class AuthController extends BaseController
 
     public function loginHandler()
     {
-            // Check if reCAPTCHA token is valid
-    $recaptchaToken = $this->request->getVar('recaptcha_token');
-    
-    if (!$this->verifyRecaptcha($recaptchaToken)) {
-        return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed, please try again.')->withInput();
+    // Get reCAPTCHA response from the form
+    $recaptchaResponse = $this->request->getVar('g-recaptcha-response');
+    if (!$this->verifyRecaptcha($recaptchaResponse)) {
+        return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
     }
         // Check if the user is currently in a waiting state
         if (session()->get('wait_time') && session()->get('wait_time') > time()) {
