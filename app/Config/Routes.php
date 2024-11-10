@@ -8,12 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->get('/', 'AuthController::loginForm', ['as' => 'admin.login.form']); // Set the main route to guest login
     $routes->post('login', 'AuthController::loginHandler', ['as' => 'admin.login.handler']);
-    // $routes->get('forget-password', 'AuthController::forgotForms', ['as' => 'admin.forget.forms']);
-    // $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' => 'send_password_reset_link']);
-    // $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
-    $routes->match(['get', 'post'], 'password/request', 'PasswordController::requestReset');
-    $routes->match(['get', 'post'], 'password/reset/(:any)', 'PasswordController::reset/$1');
-
+    $routes->get('forget-password', 'AuthController::forgotForms', ['as' => 'admin.forget.forms']);
+    $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' => 'send_password_reset_link']);
+    $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
 });
 
 
