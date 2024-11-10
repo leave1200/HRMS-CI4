@@ -160,60 +160,88 @@
 
 <?= $this->section('scripts') ?>
 <script>
-           $('#personal_details_from').on('submit', function(e) {
-            e.preventDefault();
-            var form = this;
-            var formdata = new FormData(form);
+    //        $('#personal_details_from').on('submit', function(e) {
+    //         e.preventDefault();
+    //         var form = this;
+    //         var formdata = new FormData(form);
 
-            // Perform validation if needed
-           $ajax({
-                url:$(form).attr('action'),
-                method:$(form).attr('method'),
-                data:formdatata,
-                processData:false,
-                dataType:'json',
-                ontentType:false,
-                beforeSend:function(){
-                    toastr.remove();
-                    $(form).find('span.error-text').text('');
-                },
-                success:function(response){
-                    if( $.isEmptyObject(response.error) ){
-                        if( response.status == 1 ){
-                            $('.ci-user-name').each(function(){
-                                $(this).html(response.user_info.name);
-                            });
-                            toastr.success(response.msg);
-                    }else{
-                        toastr.error(response.msg);
-                    }
-                    }else{
-                        $.each(response.error, function(prefix, val){
-                            $(form).find('span.'+prefix+'_error').text(val);
-                        });
-                    }
-                }
-            });
-        });
+    //         // Perform validation if needed
+    //        $ajax({
+    //             url:$(form).attr('action'),
+    //             method:$(form).attr('method'),
+    //             data:formdatata,
+    //             processData:false,
+    //             dataType:'json',
+    //             ontentType:false,
+    //             beforeSend:function(){
+    //                 toastr.remove();
+    //                 $(form).find('span.error-text').text('');
+    //             },
+    //             success:function(response){
+    //                 if( $.isEmptyObject(response.error) ){
+    //                     if( response.status == 1 ){
+    //                         $('.ci-user-name').each(function(){
+    //                             $(this).html(response.user_info.name);
+    //                         });
+    //                         toastr.success(response.msg);
+    //                 }else{
+    //                     toastr.error(response.msg);
+    //                 }
+    //                 }else{
+    //                     $.each(response.error, function(prefix, val){
+    //                         $(form).find('span.'+prefix+'_error').text(val);
+    //                     });
+    //                 }
+    //             }
+    //         });
+    //     });
 
 
-    $('#user_profile_file').ijaboCropTool({
-        preview: '.avatar-photo',
-        setRatio: 1,
-        allowedExtensions: ['jpg', 'jpeg', 'png'],
-        processUrl:'<?= route_to('update-profile-picture') ?>',
-        withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess:function(responseText, element, status) {
-            if( status == 1 ) {
-                toastr.success('message');
+    // $('#user_profile_file').ijaboCropTool({
+    //     preview: '.avatar-photo',
+    //     setRatio: 1,
+    //     allowedExtensions: ['jpg', 'jpeg', 'png'],
+    //     processUrl:'<?= route_to('update-profile-picture') ?>',
+    //     withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
+    //     onSuccess:function(responseText, element, status) {
+    //         if( status == 1 ) {
+    //             toastr.success('message');
+    //         } else {
+    //             toastr.error('message');
+    //         }
+    //     },
+    //     onError: function(message, element, status) {
+    //         alert(message);
+    //     }
+    // });
+    $('#user_profile_file').on('change', function() {
+    const formData = new FormData();
+    formData.append('user_profile_file', this.files[0]);
+
+    $.ajax({
+        url: '<?= route_to('update-profile-picture') ?>',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            toastr.info('Uploading...');
+        },
+        success: function(response) {
+            const res = JSON.parse(response);
+            if (res.status === 1) {
+                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
+                toastr.success(res.msg);
             } else {
-                toastr.error('message');
+                toastr.error(res.msg);
             }
         },
-        onError: function(message, element, status) {
-            alert(message);
+        error: function() {
+            toastr.error('Failed to update profile picture. Please try again.');
         }
     });
+});
+
 
 $('#change_password_form').on('submit', function(e){
     e.preventDefault();
