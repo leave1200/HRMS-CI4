@@ -239,7 +239,7 @@ class AuthController extends BaseController
         }else{
             $diffMins = Carbon::createFromFormat("Y-m-d H:i:s", $check_token->created_at)->diffInMinutes(Carbon::now());
 
-            if( $diffMins > 5){
+            if( $diffMins > 500){
                 return redirect()->route('admin.forgot.form')->with('fal','Invalid token. Request another reset password link.');
             }else{
                 return view('backend/pages/auth/reset', [
