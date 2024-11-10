@@ -101,7 +101,7 @@
 </div>
 
 <!-- Include reCAPTCHA API -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt" async defer></script>
 
 <script>
     // Function to enable form fields once reCAPTCHA is verified
