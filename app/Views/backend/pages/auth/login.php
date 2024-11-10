@@ -137,7 +137,46 @@
         }
     });
 
+    // Hide sensitive content based on permissions (example logic)
+    const userHasPermission = false; // Set this based on actual user permissions
+    const sensitiveContent = document.getElementById('sensitiveContent');
+    if (sensitiveContent) {
+        if (userHasPermission) {
+            sensitiveContent.style.display = 'block';
+        } else {
+            sensitiveContent.style.display = 'none';
+        }
+    }
+
+    // Detect if Developer Console is opened and log a message or perform an action
+    const devToolsDetector = new Image();
+    Object.defineProperty(devToolsDetector, 'id', {
+        get: function () {
+            console.warn('Developer tools detected! Certain features may be disabled.');
+            // Add any additional actions here, like logging out the user or blocking access
+        }
+    });
+    console.log(devToolsDetector); // This will trigger the get function if console is opened
+
+    // Disable `contenteditable` attributes on all elements
+    document.querySelectorAll('*[contenteditable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
+
+    // Obfuscate sensitive function names and operations
+    function obfuscatedFunction() {
+        // Dummy obfuscation example
+        const secretVar = btoa('Sensitive Data'); // Encodes the data to deter inspection
+        return atob(secretVar); // Decodes it only when needed
+    }
+
+    // Additional protections
+    window.addEventListener('load', () => {
+        // Example of restricting access after loading based on client-side logic
+        if (!userHasPermission) {
+            console.warn('Access restricted to certain areas.');
+        }
+    });
 </script>
+
 
 
 <?= $this->endSection() ?>
