@@ -231,7 +231,7 @@ class AuthController extends BaseController
         }
     }
     public function resetPassword($token){
-        $passwordResetPassword = new PassResetToken();
+        $passwordResetPassword = new PasswordResetToken();
         $check_token = $passwordResetPassword->asObject()->where('token',$token)->first();
 
         if( !$check_token){
