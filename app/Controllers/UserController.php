@@ -126,7 +126,48 @@ class UserController extends Controller
     //         'message' => 'Invalid image file'
     //     ]);
     // }
+    public function updatePersonalPictures() {
+        $userModel = new User();
+        $user_id = CIAuth::id(); // Adjust this according to your authentication setup to get the current user's ID
     
+        if ($imagefile = $this->request->getFile('user_profile_file')) {
+            if ($imagefile->isValid() && !$imagefile->hasMoved()) {
+                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
+                $path = ROOTPATH . 'public/images/users';
+    
+                // Move the uploaded file
+                if ($imagefile->move($path, $newName)) {
+                    // Retrieve the user's old picture
+                    $user_info = $userModel->asObject()->find($user_id);
+                    $old_picture = $user_info->picture;
+    
+                    // Delete the old picture if it exists
+                    if ($old_picture && file_exists($path . '/' . $old_picture)) {
+                        unlink($path . '/' . $old_picture);
+                    }
+    
+                    // Update the user's profile picture in the database
+                    $userModel->update($user_id, ['picture' => $newName]);
+    
+                    return $this->response->setJSON([
+                        'status' => 1,
+                        'msg' => 'Done! Your profile picture has been successfully updated.',
+                        'new_picture_url' => base_url('/images/users/' . $newName)
+                    ]);
+                } else {
+                    return $this->response->setJSON([
+                        'status' => 0,
+                        'msg' => 'Failed to move the uploaded file.'
+                    ]);
+                }
+            }
+        }
+    
+        return $this->response->setJSON([
+            'status' => 0,
+            'msg' => 'Invalid image file.'
+        ]);
+    }
     public function upload()
     {
         $userModel = new \App\Models\User();

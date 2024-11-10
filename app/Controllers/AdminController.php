@@ -130,60 +130,60 @@ class AdminController extends BaseController
         }
     }
 
-    public function updatePersonalPictures()
-    {
-        $request = \Config\Services::request();
-        $user_id = CIAuth::id();  // Get the logged-in user ID
-        $user = new User();
+    // public function updatePersonalPictures()
+    // {
+    //     $request = \Config\Services::request();
+    //     $user_id = CIAuth::id();  // Get the logged-in user ID
+    //     $user = new User();
         
-        // Get user information from the database
-        $user_info = $user->asObject()->where('id', $user_id)->first();
+    //     // Get user information from the database
+    //     $user_info = $user->asObject()->where('id', $user_id)->first();
     
-        // Define the upload path for the images
-        $path = 'public/images/users/';
-        $file = $request->getFile('user_profile_file');
+    //     // Define the upload path for the images
+    //     $path = 'public/images/users/';
+    //     $file = $request->getFile('user_profile_file');
         
-        if ($file && $file->isValid()) {
-            $old_picture = $user_info->picture;  // Get the old profile picture
-            $new_filename = 'UIMG_' . $user_id . $file->getRandomName();  // Generate new file name
+    //     if ($file && $file->isValid()) {
+    //         $old_picture = $user_info->picture;  // Get the old profile picture
+    //         $new_filename = 'UIMG_' . $user_id . $file->getRandomName();  // Generate new file name
     
-            // Move the file to the specified path
-            if ($file->move($path, $new_filename)) {
-                // Delete the old picture if it exists
-                if ($old_picture && file_exists($path . $old_picture)) {
-                    unlink($path . $old_picture);
-                }
+    //         // Move the file to the specified path
+    //         if ($file->move($path, $new_filename)) {
+    //             // Delete the old picture if it exists
+    //             if ($old_picture && file_exists($path . $old_picture)) {
+    //                 unlink($path . $old_picture);
+    //             }
     
-                // Update the database with the new profile picture filename
-                if ($user->updatePicture($user_id, $new_filename)) {
-                    // Return success response with new picture filename
-                    echo json_encode([
-                        'status' => 1,
-                        'msg' => 'Done! Your profile picture has been successfully updated.',
-                        'picture' => $new_filename  // Return the new file name for the frontend to use
-                    ]);
-                } else {
-                    // Return failure response if the update fails
-                    echo json_encode([
-                        'status' => 0,
-                        'msg' => 'Failed to update profile picture in the database.'
-                    ]);
-                }
-            } else {
-                // Return failure response if file upload fails
-                echo json_encode([
-                    'status' => 0,
-                    'msg' => 'Failed to upload the file. Please try again.'
-                ]);
-            }
-        } else {
-            // Return failure response if no valid file was uploaded
-            echo json_encode([
-                'status' => 0,
-                'msg' => 'No valid file selected or file is too large.'
-            ]);
-        }
-    }
+    //             // Update the database with the new profile picture filename
+    //             if ($user->updatePicture($user_id, $new_filename)) {
+    //                 // Return success response with new picture filename
+    //                 echo json_encode([
+    //                     'status' => 1,
+    //                     'msg' => 'Done! Your profile picture has been successfully updated.',
+    //                     'picture' => $new_filename  // Return the new file name for the frontend to use
+    //                 ]);
+    //             } else {
+    //                 // Return failure response if the update fails
+    //                 echo json_encode([
+    //                     'status' => 0,
+    //                     'msg' => 'Failed to update profile picture in the database.'
+    //                 ]);
+    //             }
+    //         } else {
+    //             // Return failure response if file upload fails
+    //             echo json_encode([
+    //                 'status' => 0,
+    //                 'msg' => 'Failed to upload the file. Please try again.'
+    //             ]);
+    //         }
+    //     } else {
+    //         // Return failure response if no valid file was uploaded
+    //         echo json_encode([
+    //             'status' => 0,
+    //             'msg' => 'No valid file selected or file is too large.'
+    //         ]);
+    //     }
+    // }
     
     
     //  public function updatePersonalPictures(){
