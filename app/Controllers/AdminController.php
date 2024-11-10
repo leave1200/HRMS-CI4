@@ -135,6 +135,22 @@ class AdminController extends BaseController
         $file = $this->request->getFile('user_profile_file');
         
         if ($file && $file->isValid()) {
+            // Check for file type and size constraints
+            if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+                return json_encode([
+                    'status' => 0,
+                    'msg' => 'Invalid file type. Only JPEG, PNG, and GIF are allowed.'
+                ]);
+            }
+    
+            // Set file size limit (example: 2MB)
+            if ($file->getSize() > 2 * 1024 * 1024) {
+                return json_encode([
+                    'status' => 0,
+                    'msg' => 'File size exceeds 2MB limit.'
+                ]);
+            }
+    
             // Define the file path where the image will be saved
             $path = WRITEPATH . 'uploads/users/';
             $fileName = $file->getRandomName();  // Generate a unique file name
@@ -159,21 +175,17 @@ class AdminController extends BaseController
                 // If the file couldn't be moved
                 return json_encode([
                     'status' => 0,
-                    'msg' => 'Failed to upload the image.'
+                    'msg' => 'Failed to upload the image. Please try again.'
                 ]);
             }
         } else {
             // If the file is invalid
             return json_encode([
                 'status' => 0,
-                'msg' => 'No valid file selected.'
+                'msg' => 'No valid file selected or file is too large.'
             ]);
         }
     }
-    
-    
-    
-    
     
 
     
