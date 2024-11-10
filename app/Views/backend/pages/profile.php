@@ -205,9 +205,9 @@
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
         onSuccess:function(responseText, element, status) {
             if( status == 1 ) {
-                toastr.success(response.msg);
+                toastr.success('Successfully updated picture!');
             } else {
-                toastr.error(response.msg);
+                toastr.error('Error, Please try again!');
             }
         },
         onError: function(message, element, status) {
