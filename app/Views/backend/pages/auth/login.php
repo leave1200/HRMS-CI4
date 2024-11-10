@@ -31,9 +31,19 @@
             </div>
         <?php endif; ?>
 
-        <!-- reCAPTCHA v2 widget -->
-        <div class="g-recaptcha" data-sitekey="6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" data-callback="enableFormFields" data-size="compact"></div>
-
+        <!-- System Inaccessible Alert -->
+        <?php if (session()->get('system_accessible') === false): ?>
+            <script>
+                swal({
+                    title: "System Unavailable!",
+                    text: "The system is currently inaccessible. Please try again later.",
+                    icon: "warning",
+                    button: "OK"
+                });
+            </script>
+        <?php endif; ?>
+   <!-- reCAPTCHA v2 widget (above email input) -->
+   <div class="g-recaptcha" data-sitekey="6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -66,19 +76,50 @@
 
         <div class="row pb-30">
             <div class="col-6">
-                <a href="<?= esc(route_to('admin.forgot.password')) ?>" class="btn btn-link">Forgot Password?</a>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <label class="custom-control-label" for="customCheck1">Remember</label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('admin.forget.form'), 'attr') ?>">Forgot Password</a>
+                </div>
             </div>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-
+        <!-- Google reCAPTCHA v3 Hidden Token Field -->
         <input type="hidden" name="recaptcha_token" id="recaptcha_token">
-    </form>
 
-    <div class="login-footer">
-        <p>Don't have an account? <a href="<?= esc(route_to('admin.register')) ?>" class="btn-link">Register here</a></p>
-    </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group mb-0">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+<!-- Include reCAPTCHA API -->
+<script src="https://www.google.com/recaptcha/api.js?render=6Lf4pHoqAAAAAKuj76IglBt4h6q4swf-0sDhYVeW"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+            document.getElementById('recaptcha_token').value = token;
+        });
+    });
+</script>
+<script>
+    function submitForm() {
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+                document.getElementById('recaptcha_token').value = token;
+                document.getElementById('loginForm').submit(); // Submit the form after setting the token
+            });
+        });
+    }
+</script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
 <?= $this->endSection() ?>
