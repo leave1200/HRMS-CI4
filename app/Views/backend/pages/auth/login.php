@@ -87,7 +87,7 @@
             </div> -->
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="<?= esc(route_to('password/request'), 'attr') ?>">Forgot Password</a>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Reset Password">
                 </div>
             </div>
         </div>
