@@ -184,7 +184,8 @@ class AuthController extends BaseController
                 ]);
             }
               // create action link
-        $actionLink = route_to('admin.reset-password', $token);
+        // $actionLink = route_to('admin.reset-password', $token);
+        $actionLink = base_url(route_to('admin.reset-password', $token));
 
         $mail_data = array(
             'actionLink'=> $actionLink,
