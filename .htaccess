@@ -1,11 +1,13 @@
-<ifModule mod_rewrite.c>
-    RewriteEngine On
+<IfModule mod_rewrite.c>
+    # Allow Googlebot (ensure it’s allowed)
+    RewriteCond %{HTTP_USER_AGENT} Googlebot [NC]
+    RewriteRule ^ - [L]
 
-    # Force HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Block Wapiti scanner based on User-Agent string
+    RewriteCond %{HTTP_USER_AGENT} Wapiti [NC]
+    RewriteRule ^ - [F,L]
 
-    RewriteBase /
-    RewriteRule ^$ public/index.php [L]
-    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
-</ifModule>
+    # Block known malicious bots (python, curl, wget, etc.)
+    RewriteCond %{HTTP_USER_AGENT} (python|curl|nmap|libwww-perl|nutch|Wget) [NC]
+    RewriteRule ^ - [F,L]
+</IfModule>
