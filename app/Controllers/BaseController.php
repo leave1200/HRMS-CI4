@@ -46,13 +46,16 @@ abstract class BaseController extends Controller
     /**
      * @return void
      */
-    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
-    {
-        // Do Not Edit This Line
-        parent::initController($request, $response, $logger);
+// app/Controllers/BaseController.php
 
-        // Preload any models, libraries, etc, here.
+public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+{
+    parent::initController($request, $response, $logger);
 
-        // E.g.: $this->session = \Config\Services::session();
-    }
+    // Set security headers
+    $this->response->setHeader('X-XSS-Protection', '1; mode=block');
+    $this->response->setHeader('X-Content-Type-Options', 'nosniff');
+    $this->response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+}
+
 }
