@@ -133,22 +133,15 @@ class AdminController extends BaseController
     public function updatePersonalPictures()
     {
         $request = \Config\Services::request();
-        $user_id = CIAuth::id();
+        $user_id = CIAuth::id(); // Ensure you have this function to get the logged-in user's ID
         $user = new User();
         $user_info = $user->asObject()->where('id', $user_id)->first();
-        
-        // Check if user exists
-        if (!$user_info) {
-            echo json_encode(['status' => 0, 'msg' => 'User not found.']);
-            return;
-        }
     
-        $path = WRITEPATH . 'uploads/images/users/';
+        $path = WRITEPATH . 'uploads/images/users/'; // Set the correct upload path
         $file = $request->getFile('user_profile_file'); 
         $old_picture = $user_info->picture;
         $new_filename = 'UIMG_' . $user_id . '_' . $file->getRandomName();
-        
-        // Check if file is valid and move it
+    
         if ($file && $file->isValid() && !$file->hasMoved()) {
             if ($file->move($path, $new_filename)) {
                 // Delete old picture if it exists
@@ -156,10 +149,15 @@ class AdminController extends BaseController
                     unlink($path . $old_picture);
                 }
     
-                // Using set() and update() method for more control
-                $updateData = ['picture' => $new_filename];
-                if ($user->set($updateData)->update($user_id)) {
-                    echo json_encode(['status' => 1, 'msg' => 'Profile picture updated successfully.', 'picture' => $new_filename]);
+                // Directly use update() here
+                $update_data = ['picture' => $new_filename];
+                if ($user->update($user_id, $update_data)) {
+                    // Return response with the new picture
+                    echo json_encode([
+                        'status' => 1,
+                        'msg' => 'Profile picture updated successfully.',
+                        'picture' => $new_filename
+                    ]);
                 } else {
                     echo json_encode(['status' => 0, 'msg' => 'Failed to update profile picture in the database.']);
                 }
@@ -170,6 +168,7 @@ class AdminController extends BaseController
             echo json_encode(['status' => 0, 'msg' => 'No valid file uploaded.']);
         }
     }
+    
     
     
     

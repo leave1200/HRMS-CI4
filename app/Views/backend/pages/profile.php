@@ -25,12 +25,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
                 <div class="pd-20 card-box height-100-p">
                     <div class="profile-photo">
-                        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
-                        <input type="file"  name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
-                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
+                        <a href="javascript:;" onclick="event.preventDefault(); document.getElementById('user_profile_file').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                        <input type="file" name="user_profile_file" id="user_profile_file" class="d-none" style="opacity: 0;">
+                        <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/' . get_user()->picture ?>" alt="" class="avatar-photo ci-avatar-photo">
                     </div>
                     <h5 class="text-center h5 mb-0 ci-user-name"><?= get_user()->name ?></h5>
                     <p class="text-center text-muted font-14 ci-user-email"><?= get_user()->email ?></p>
@@ -214,33 +214,33 @@
     //         alert(message);
     //     }
     // });
-    $('#user_profile_file').on('change', function() {
-    const formData = new FormData();
-    formData.append('user_profile_file', this.files[0]);
+    $('#user_profile_file').on('change', function () {
+        const formData = new FormData();
+        formData.append('user_profile_file', this.files[0]);
 
-    $.ajax({
-        url: '<?= route_to('update-profile-picture') ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        beforeSend: function() {
-            toastr.info('Uploading...');
-        },
-        success: function(response) {
-            const res = JSON.parse(response);
-            if (res.status === 1) {
-                $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
-                toastr.success(res.msg);
-            } else {
-                toastr.error(res.msg);
+        $.ajax({
+            url: '<?= route_to('update-profile-picture') ?>',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                toastr.info('Uploading...');
+            },
+            success: function (response) {
+                const res = JSON.parse(response);
+                if (res.status === 1) {
+                    $('.avatar-photo').attr('src', `/images/users/${res.picture}`);
+                    toastr.success(res.msg);
+                } else {
+                    toastr.error(res.msg);
+                }
+            },
+            error: function () {
+                toastr.error('Failed to update profile picture. Please try again.');
             }
-        },
-        error: function() {
-            toastr.error('Failed to update profile picture. Please try again.');
-        }
+        });
     });
-});
 
 
 $('#change_password_form').on('submit', function(e){
