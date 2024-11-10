@@ -104,12 +104,12 @@
 </div>
 
 <!-- Include reCAPTCHA API (v3) -->
-<script src="https://www.google.com/recaptcha/api.js?render=your-recaptcha-site-key"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt"></script>
 
 <script>
     // reCAPTCHA v3 verification
     grecaptcha.ready(function() {
-        grecaptcha.execute('your-recaptcha-site-key', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6Lcmo3oqAAAAAFqJs_b1FqTpWL_sjT2dTSffP1Gt', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
             // Enable the submit button once the reCAPTCHA token is generated
             document.getElementById('submit-btn').disabled = false;
