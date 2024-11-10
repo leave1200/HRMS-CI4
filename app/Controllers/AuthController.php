@@ -230,4 +230,7 @@ class AuthController extends BaseController
             return $this->response->setJSON(['error' => 'User not found'], 404);
         }
     }
+    public function resetPassword($token){
+        echo $token;
+    }
 }
