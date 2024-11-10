@@ -219,8 +219,14 @@
         // Validate the file type before processing it
         var allowedExtensions = ['jpg', 'jpeg', 'png'];
         var fileExtension = file.name.split('.').pop().toLowerCase();
+        
         if (!allowedExtensions.includes(fileExtension)) {
-            alert("Invalid file type. Please select an image file (jpg, jpeg, png).");
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid File Type',
+                text: 'Please select an image file (jpg, jpeg, png).',
+                confirmButtonText: 'Okay'
+            });
             return false;
         }
         return true;
