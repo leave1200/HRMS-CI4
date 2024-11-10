@@ -43,6 +43,9 @@
             </script>
         <?php endif; ?>
 
+        <!-- reCAPTCHA v2 widget (above email input) -->
+        <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key" id="recaptcha-widget" data-callback="enableFormFields" data-size="compact"></div>
+
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>" id="login_id" disabled>
@@ -87,9 +90,6 @@
             </div>
         </div>
 
-        <!-- Google reCAPTCHA v3 Hidden Token Field -->
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
@@ -101,20 +101,17 @@
 </div>
 
 <!-- Include reCAPTCHA API -->
-<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <script>
-    // reCAPTCHA v3 for login action
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
-            document.getElementById('recaptcha_token').value = token;
-            // Enable form fields once reCAPTCHA is completed
-            document.getElementById('login_id').disabled = false;
-            document.getElementById('password').disabled = false;
-            document.getElementById('submit-btn').disabled = false;
-            document.getElementById('forgot-password-link').disabled = false;
-            document.getElementById('customCheck1').disabled = false;  // Enable the 'remember me' checkbox
-        });
-    });
+    // Function to enable form fields once reCAPTCHA is verified
+    function enableFormFields() {
+        document.getElementById('login_id').disabled = false;
+        document.getElementById('password').disabled = false;
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('forgot-password-link').disabled = false;
+        document.getElementById('customCheck1').disabled = false;  // Enable the 'remember me' checkbox
+    }
 </script>
 
 <?= $this->endSection() ?>
