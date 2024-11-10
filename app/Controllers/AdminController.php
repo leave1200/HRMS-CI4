@@ -135,9 +135,9 @@ class AdminController extends BaseController
         $file = $this->request->getFile('user_profile_file');
     
         if ($file && $file->isValid()) {
-            // Check for file type constraints
+            // Check for file type and size constraints
             if (!in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
-                return json_encode([
+                return $this->response->setJSON([
                     'status' => 0,
                     'msg' => 'Invalid file type. Only JPEG, PNG, and GIF are allowed.'
                 ]);
@@ -145,38 +145,42 @@ class AdminController extends BaseController
     
             // Set file size limit (example: 2MB)
             if ($file->getSize() > 2 * 1024 * 1024) {
-                return json_encode([
+                return $this->response->setJSON([
                     'status' => 0,
                     'msg' => 'File size exceeds 2MB limit.'
                 ]);
             }
     
-            // Generate a unique file name (optional: you can just store the file name or use any method to generate the file name)
-            $fileName = $file->getRandomName();  
+            // Generate a unique file name (but not saving the file)
+            $fileName = $file->getRandomName(); 
     
-            // You can now store the file name in the database without actually saving the file to the server
-            // For this example, the file is just referenced by the name in the database
+            // Update the user's picture in the database
             $userModel = new User();
-            $userModel->update($user->id, ['picture' => $fileName]);
+            if ($userModel->update($user->id, ['picture' => $fileName])) {
+                // Update the session user data to reflect the changes
+                $userdata = CIAuth::user();
+                CIAuth::setCIAuth($userdata);
     
-            // Update the session user data to reflect the changes
-            $userdata = CIAuth::user();
-            CIAuth::setCIAuth($userdata);
-    
-            // Respond with success, returning the file name for reference
-            return json_encode([
-                'status' => 1,
-                'msg' => 'Profile picture updated successfully.',
-                'picture' => $fileName  // Return the file name reference
-            ]);
-        } else {
-            // If the file is invalid or not provided
-            return json_encode([
-                'status' => 0,
-                'msg' => 'No valid file selected or file is too large.'
-            ]);
+                // Return success response with the new picture URL or file name
+                return $this->response->setJSON([
+                    'status' => 1,
+                    'msg' => 'Profile picture updated successfully.',
+                    'picture' => $fileName  // Return the file name reference
+                ]);
+            } else {
+                return $this->response->setJSON([
+                    'status' => 0,
+                    'msg' => 'Failed to update profile picture.'
+                ]);
+            }
         }
+    
+        return $this->response->setJSON([
+            'status' => 0,
+            'msg' => 'No valid file selected or file is too large.'
+        ]);
     }
+    
     
     
     //  public function updatePersonalPictures(){
