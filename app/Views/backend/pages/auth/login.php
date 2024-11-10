@@ -80,9 +80,14 @@
                     <label class="custom-control-label" for="customCheck1">Remember</label>
                 </div>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
                 <div class="forgot-password">
                     <a href="<?= esc(route_to('admin.forget.forms'), 'attr') ?>">Forgot Password</a>
+                </div>
+            </div> -->
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('password/request'), 'attr') ?>">Forgot Password</a>
                 </div>
             </div>
         </div>
