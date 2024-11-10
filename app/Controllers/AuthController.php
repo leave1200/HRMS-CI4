@@ -288,7 +288,7 @@ class AuthController extends BaseController
             if(!$get_token ){
                 return redirect()->back()->with('fail','Invalid Token!')->withInput();
             }else{
-                $user->where('emai;,$user_info->email')
+                $user->where('email',$user_info->email)
                 ->set(['password'=>Hash::make($this->request->getVar('new_password'))])
                 ->update();
                 ///send email
