@@ -121,6 +121,8 @@ $routes->group('', static function($routes){
                 $routes->post('update-personal-details','AdminController::updatePersonalDetails',['as'=>'update-personal-details']);
                 $routes->post('update-profile-picture','UserController::updatePersonalPictures',['as'=>'update-profile-picture']);  
                 $routes->post('change-password','UserController::changePassword',['as'=>'change-password']);
+                $routes->post('accept-terms', 'UserController::acceptTerms');
+
     });
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 

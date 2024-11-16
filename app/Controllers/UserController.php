@@ -222,6 +222,25 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'Password has been changed successfully.');
         }
     }
+    public function acceptTerms()
+    {
+        $userId = $this->request->getPost('user_id'); // Get user ID from the request
+        $userModel = new UserModel();
+
+        if ($userId) {
+            $data = [
+                'terms' => 1, // Set terms as accepted
+            ];
+
+            if ($userModel->update($userId, $data)) {
+                return $this->response->setJSON(['status' => 'success', 'message' => 'Terms accepted successfully.']);
+            } else {
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to update terms.']);
+            }
+        }
+
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid request.']);
+    }
     public function upload()
     {
         $userModel = new \App\Models\User();

@@ -66,6 +66,8 @@ class AdminController extends BaseController
         return view('backend/pages/home', $data);
     }
 
+
+
     public function logoutHandler(){
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
