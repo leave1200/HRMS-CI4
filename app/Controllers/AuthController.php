@@ -162,7 +162,7 @@ class AuthController extends BaseController
     public function termsForm()
     {
         // Display the terms and conditions agreement page
-        return view('backend/pages/pagea/terms', [
+        return view('backend/pages/page/terms', [
             'pageTitle' => 'Terms and Conditions'
         ]);
     }
