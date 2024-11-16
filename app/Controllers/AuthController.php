@@ -54,14 +54,15 @@ class AuthController extends BaseController
     {
         // Get the reCAPTCHA token from the form
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
-    
+        
         // Verify the reCAPTCHA token with Google's API
-        $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
+        $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key
         $remoteIp = $this->request->getServer('REMOTE_ADDR');
         $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
     
-        // Send the POST request to Google's API for verification
-        $response = \Config\Services::curlrequest()->post($verificationUrl, [
+        // Send POST request to Google's API for verification
+        $client = \Config\Services::curlrequest();
+        $response = $client->post($verificationUrl, [
             'form_params' => [
                 'secret' => $secretKey,
                 'response' => $recaptchaResponse,
@@ -72,36 +73,45 @@ class AuthController extends BaseController
         // Decode the response
         $recaptchaData = json_decode($response->getBody(), true);
     
-        // If reCAPTCHA verification fails
+        // Handle reCAPTCHA failure
         if (!$recaptchaData['success']) {
-            return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
+            return redirect()->route('admin.login.form')
+                ->with('fail', 'reCAPTCHA verification failed. Please try again.')
+                ->withInput();
         }
     
-        // Continue with the rest of the login logic if reCAPTCHA is successful
+        // Check if the terms and conditions checkbox is checked
+        if (!$this->request->getVar('terms')) {
+            return redirect()->route('admin.login.form')
+                ->with('fail', 'You must agree to the terms and conditions to proceed.')
+                ->withInput();
+        }
+    
+        // Extract login credentials
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
     
-        // Validation rules for login_id and password
+        // Validation rules
         $rules = [
             'login_id' => [
                 'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
                 'errors' => [
                     'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
-                    'valid_email' => 'Please, check the email field. It does not appear to be valid.',
-                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
+                    'valid_email' => 'Please provide a valid email address.',
+                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist.' : 'Username does not exist.'
                 ]
             ],
             'password' => [
                 'rules' => 'required|min_length[5]|max_length[25]',
                 'errors' => [
-                    'required' => 'Password is required',
-                    'min_length' => 'Password must have at least 5 characters in length.',
-                    'max_length' => 'Password must not have more than 25 characters in length.'
+                    'required' => 'Password is required.',
+                    'min_length' => 'Password must be at least 5 characters.',
+                    'max_length' => 'Password cannot exceed 25 characters.'
                 ]
             ]
         ];
     
-        // Validate input
+        // Validate form inputs
         if (!$this->validate($rules)) {
             return view('backend/pages/auth/login', [
                 'pageTitle' => 'Login',
@@ -109,28 +119,32 @@ class AuthController extends BaseController
             ]);
         }
     
-        // Check user credentials
+        // Fetch user information
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
     
-        // Verify user password
+        // Verify password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
     
             if ($attempts >= 3) {
-                session()->set('wait_time', time() + 30); // Wait for 30 seconds
-                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
+                session()->set('wait_time', time() + 30); // 30-second lockout
+                return redirect()->route('admin.login.form')
+                    ->with('fail', 'Too many incorrect attempts. Please wait 30 seconds.')
+                    ->withInput();
             }
     
-            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
+            return redirect()->route('admin.login.form')
+                ->with('fail', 'Invalid credentials. Please try again.')
+                ->withInput();
         }
     
-        // Reset failed login attempts
+        // Reset failed attempts on successful login
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
-        // Set user session and authenticate
+        // Authenticate user and set session
         CIAuth::setCIAuth($userInfo);
     
         session()->set([
@@ -140,8 +154,10 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
     
+        // Redirect to admin home
         return redirect()->route('admin.home');
     }
+    
     
     
     
