@@ -449,13 +449,4 @@ class UserController extends Controller
             'pageTitle' => 'Your Uploaded Files',
         ]);
     }
-    public function terms(){
-
-        $data = array(
-        'pageTitle'=>'Terms and Condition',
-        );
-        return view('backend/pages/terms', $data);
-    }
-
-
 }

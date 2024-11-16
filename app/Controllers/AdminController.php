@@ -1602,6 +1602,17 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
                 return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized access'])->setStatusCode(401);
             }
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        public function terms(){
+
+            $data = array(
+            'pageTitle'=>'Terms and Condition',
+            );
+            return view('backend/pages/terms', $data);
+        }
         
 
 }
