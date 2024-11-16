@@ -1,4 +1,4 @@
-<?= $this->extend('backend/layouts/auth') ?>
+<?= $this->extend('backend/layouts/pages') ?>
 
 <?= $this->section('content') ?>
 
