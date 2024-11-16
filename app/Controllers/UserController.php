@@ -20,6 +20,18 @@ class UserController extends Controller
         $this->session = session();    // Initialize session
     }
 
+    public function agreeTerms()
+    {
+        $userModel = new User();
+        $session = session();
+
+        // Update terms field to 'agree' for the logged-in user
+        $userModel->update($session->get('user_id'), ['terms' => 'agree']);
+        $session->set('terms', 'agree');
+
+        return redirect()->route('admin.home');
+    }
+    
     public function add()
     {
         $employeeModel = new EmployeeModel();
