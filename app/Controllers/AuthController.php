@@ -80,13 +80,6 @@ class AuthController extends BaseController
                 ->withInput();
         }
     
-        // Check if the terms and conditions checkbox is checked
-        if (!$this->request->getVar('terms')) {
-            return redirect()->route('admin.login.form')
-                ->with('fail', 'You must agree to the terms and conditions to proceed.')
-                ->withInput();
-        }
-    
         // Extract login credentials
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -137,6 +130,13 @@ class AuthController extends BaseController
     
             return redirect()->route('admin.login.form')
                 ->with('fail', 'Invalid credentials. Please try again.')
+                ->withInput();
+        }
+    
+        // Check if user has accepted terms and conditions
+        if (empty($userInfo['terms']) || $userInfo['terms'] !== 'agreed') {
+            return redirect()->route('terms.form')
+                ->with('fail', 'You must agree to the terms and conditions to proceed.')
                 ->withInput();
         }
     
