@@ -130,8 +130,8 @@ class AuthController extends BaseController
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
-        // Check if user has accepted terms and conditions
-        if (!$userInfo['terms']) {
+        // Check if user has accepted terms and conditions (terms field is 'accepted' in the database)
+        if ($userInfo['terms'] !== 'accepted') {
             // If terms are not accepted, redirect to terms page
             session()->set('user_id', $userInfo['id']);
             return redirect()->route('admin.terms');
@@ -149,6 +149,7 @@ class AuthController extends BaseController
     
         return redirect()->route('admin.home');
     }
+    
     
     
     
