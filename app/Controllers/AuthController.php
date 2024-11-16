@@ -56,7 +56,7 @@ class AuthController extends BaseController
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
         
         // Verify the reCAPTCHA token with Google's API
-        $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key
+        $secretKey = 'your-secret-key'; // Replace with your secret key
         $remoteIp = $this->request->getServer('REMOTE_ADDR');
         $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
     
@@ -69,17 +69,17 @@ class AuthController extends BaseController
                 'remoteip' => $remoteIp
             ]
         ]);
-    
+        
         // Decode the response
         $recaptchaData = json_decode($response->getBody(), true);
-    
+        
         // Handle reCAPTCHA failure
         if (!$recaptchaData['success']) {
             return redirect()->route('admin.login.form')
                 ->with('fail', 'reCAPTCHA verification failed. Please try again.')
                 ->withInput();
         }
-    
+        
         // Extract login credentials
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -103,7 +103,7 @@ class AuthController extends BaseController
                 ]
             ]
         ];
-    
+        
         // Validate form inputs
         if (!$this->validate($rules)) {
             return view('backend/pages/auth/login', [
@@ -111,23 +111,23 @@ class AuthController extends BaseController
                 'validation' => $this->validator
             ]);
         }
-    
+        
         // Fetch user information
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
-    
+        
         // Verify password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
-    
+        
             if ($attempts >= 3) {
                 session()->set('wait_time', time() + 30); // 30-second lockout
                 return redirect()->route('admin.login.form')
                     ->with('fail', 'Too many incorrect attempts. Please wait 30 seconds.')
                     ->withInput();
             }
-    
+        
             return redirect()->route('admin.login.form')
                 ->with('fail', 'Invalid credentials. Please try again.')
                 ->withInput();
@@ -143,26 +143,27 @@ class AuthController extends BaseController
         // Reset failed attempts on successful login
         session()->remove('login_attempts');
         session()->remove('wait_time');
-    
+        
         // Authenticate user and set session
         CIAuth::setCIAuth($userInfo);
-    
+        
         session()->set([
             'user_id' => $userInfo['id'],
             'username' => $userInfo['username'],
             'userStatus' => $userInfo['status'],
             'isLoggedIn' => true
         ]);
-    
+        
         // Redirect to admin home
         return redirect()->route('admin.home');
     }
     
     
+    
     public function termsForm()
     {
         // Display the terms and conditions agreement page
-        return view('backend/pages/page/terms', [
+        return view('backend/pages/pages/terms', [
             'pageTitle' => 'Terms and Conditions'
         ]);
     }
@@ -170,16 +171,17 @@ class AuthController extends BaseController
     public function agreeTerms()
     {
         $userId = session('user_id');
-
+    
         if (!$userId) {
             return redirect()->route('admin.login.form')->with('fail', 'Please log in to continue.');
         }
-
+    
         // Update the terms field in the database
         $this->userModel->update($userId, ['terms' => 'agreed']);
-
+    
         return redirect()->route('admin.home')->with('success', 'You have successfully agreed to the terms and conditions.');
     }
+    
 
     
     
