@@ -159,7 +159,16 @@ class AuthController extends BaseController
     }
     
     
-    
+    public function agreeTerms()
+{
+    $userId = $this->request->getPost('user_id');
+
+    // Update the terms field in the database
+    $this->userModel->update($userId, ['terms' => 'agreed']);
+
+    return redirect()->route('admin.home')->with('success', 'You have agreed to the terms and conditions.');
+}
+
     
     
     
