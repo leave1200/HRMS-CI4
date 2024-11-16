@@ -130,6 +130,13 @@ class AuthController extends BaseController
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
+        // Check if user has accepted terms and conditions
+        if (!$userInfo['terms']) {
+            // If terms are not accepted, redirect to terms page
+            session()->set('user_id', $userInfo['id']);
+            return redirect()->route('admin.terms');
+        }
+    
         // Set user session and authenticate
         CIAuth::setCIAuth($userInfo);
     
