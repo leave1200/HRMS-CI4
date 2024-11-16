@@ -54,135 +54,96 @@ class AuthController extends BaseController
     {
         // Get the reCAPTCHA token from the form
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
-        
+    
         // Verify the reCAPTCHA token with Google's API
-        $secretKey = 'your-secret-key'; // Replace with your secret key
+        $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
         $remoteIp = $this->request->getServer('REMOTE_ADDR');
         $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
     
-        // Send POST request to Google's API for verification
-        $client = \Config\Services::curlrequest();
-        $response = $client->post($verificationUrl, [
+        // Send the POST request to Google's API for verification
+        $response = \Config\Services::curlrequest()->post($verificationUrl, [
             'form_params' => [
                 'secret' => $secretKey,
                 'response' => $recaptchaResponse,
                 'remoteip' => $remoteIp
             ]
         ]);
-        
+    
         // Decode the response
         $recaptchaData = json_decode($response->getBody(), true);
-        
-        // Handle reCAPTCHA failure
+    
+        // If reCAPTCHA verification fails
         if (!$recaptchaData['success']) {
-            return redirect()->route('admin.login.form')
-                ->with('fail', 'reCAPTCHA verification failed. Please try again.')
-                ->withInput();
+            return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
         }
-        
-        // Extract login credentials
+    
+        // Continue with the rest of the login logic if reCAPTCHA is successful
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
     
-        // Validation rules
+        // Validation rules for login_id and password
         $rules = [
             'login_id' => [
                 'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
                 'errors' => [
                     'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
-                    'valid_email' => 'Please provide a valid email address.',
-                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist.' : 'Username does not exist.'
+                    'valid_email' => 'Please, check the email field. It does not appear to be valid.',
+                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
                 ]
             ],
             'password' => [
                 'rules' => 'required|min_length[5]|max_length[25]',
                 'errors' => [
-                    'required' => 'Password is required.',
-                    'min_length' => 'Password must be at least 5 characters.',
-                    'max_length' => 'Password cannot exceed 25 characters.'
+                    'required' => 'Password is required',
+                    'min_length' => 'Password must have at least 5 characters in length.',
+                    'max_length' => 'Password must not have more than 25 characters in length.'
                 ]
             ]
         ];
-        
-        // Validate form inputs
+    
+        // Validate input
         if (!$this->validate($rules)) {
             return view('backend/pages/auth/login', [
                 'pageTitle' => 'Login',
                 'validation' => $this->validator
             ]);
         }
-        
-        // Fetch user information
+    
+        // Check user credentials
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
-        
-        // Verify password
+    
+        // Verify user password
         if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
-        
+    
             if ($attempts >= 3) {
-                session()->set('wait_time', time() + 30); // 30-second lockout
-                return redirect()->route('admin.login.form')
-                    ->with('fail', 'Too many incorrect attempts. Please wait 30 seconds.')
-                    ->withInput();
+                session()->set('wait_time', time() + 30); // Wait for 30 seconds
+                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
             }
-        
-            return redirect()->route('admin.login.form')
-                ->with('fail', 'Invalid credentials. Please try again.')
-                ->withInput();
+    
+            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
     
-        // Check if user has accepted terms and conditions
-        if (empty($userInfo['terms']) || $userInfo['terms'] !== 'agreed') {
-            return redirect()->route('terms.form')
-                ->with('fail', 'You must agree to the terms and conditions to proceed.')
-                ->withInput();
-        }
-    
-        // Reset failed attempts on successful login
+        // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
-        
-        // Authenticate user and set session
+    
+        // Set user session and authenticate
         CIAuth::setCIAuth($userInfo);
-        
+    
         session()->set([
             'user_id' => $userInfo['id'],
             'username' => $userInfo['username'],
             'userStatus' => $userInfo['status'],
             'isLoggedIn' => true
         ]);
-        
-        // Redirect to admin home
+    
         return redirect()->route('admin.home');
     }
     
     
-    
-    public function termsForm()
-    {
-        // Display the terms and conditions agreement page
-        return view('backend/pages/pages/terms', [
-            'pageTitle' => 'Terms and Conditions'
-        ]);
-    }
-
-    public function agreeTerms()
-    {
-        $userId = session('user_id');
-    
-        if (!$userId) {
-            return redirect()->route('admin.login.form')->with('fail', 'Please log in to continue.');
-        }
-    
-        // Update the terms field in the database
-        $this->userModel->update($userId, ['terms' => 'agreed']);
-    
-        return redirect()->route('admin.home')->with('success', 'You have successfully agreed to the terms and conditions.');
-    }
-    
-
     
     
     

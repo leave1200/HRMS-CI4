@@ -164,69 +164,6 @@
 					</div>
 				</div> -->
 </div>
-<!-- Terms and Conditions Modal -->
-<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Welcome to the HRMS application. By accessing or using this system, you agree to the following terms and conditions:</p>
-                
-                <h6>1. Usage Policy</h6>
-                <p>
-                    - This system is intended for authorized users only. Unauthorized access or use is strictly prohibited and may lead to disciplinary action.<br>
-                    - Users are expected to ensure the accuracy and confidentiality of the data they enter into the system.
-                </p>
-
-                <h6>2. Data Privacy</h6>
-                <p>
-                    - All data entered into the system is owned by the organization and is subject to its data protection policies.<br>
-                    - Personal data will be collected, stored, and used in accordance with applicable laws and the organization's privacy policies.<br>
-                    - Users must not share sensitive data with unauthorized individuals.
-                </p>
-
-                <h6>3. User Responsibility</h6>
-                <p>
-                    - Users are responsible for maintaining the confidentiality of their login credentials.<br>
-                    - Any misuse or unauthorized activity under your account will be your responsibility and may lead to account suspension.
-                </p>
-
-                <h6>4. System Availability</h6>
-                <p>
-                    - The HRMS system is available during the organization’s working hours. Scheduled maintenance may cause temporary downtime.<br>
-                    - The organization is not responsible for any data loss due to technical issues, but all efforts will be made to ensure data recovery.
-                </p>
-
-                <h6>5. Prohibited Activities</h6>
-                <p>
-                    - Misuse of the HRMS system, such as entering false information, unauthorized data manipulation, or attempting to breach security protocols, is strictly forbidden.<br>
-                    - Any such activities may result in disciplinary action, including termination or legal proceedings.
-                </p>
-
-                <h6>6. Updates to Terms</h6>
-                <p>
-                    - The organization reserves the right to modify these terms and conditions at any time.<br>
-                    - Users will be notified of any significant changes and are expected to review and accept them to continue using the system.
-                </p>
-
-                <h6>7. Contact Information</h6>
-                <p>
-                    - For any questions or concerns regarding these terms, please contact the HR department at <strong>hr@yourcompany.com</strong>.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="acceptTerms">Accept</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     fetch('<?= route_to('admin.gender') ?>')
@@ -268,33 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
-<script>
-document.getElementById('acceptTerms').addEventListener('click', function () {
-    const userId = document.getElementById('userId').value; // Assuming you have the user ID available
 
-    fetch('/accept-terms', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_id: userId }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                $('#termsModal').modal('hide');
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while accepting the terms.');
-        });
-});
-
-</script>
 
 
 <?= $this->endSection()?>
