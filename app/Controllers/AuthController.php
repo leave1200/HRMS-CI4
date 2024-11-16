@@ -159,15 +159,27 @@ class AuthController extends BaseController
     }
     
     
+    public function termsForm()
+    {
+        // Display the terms and conditions agreement page
+        return view('backend/pages/pagea/terms', [
+            'pageTitle' => 'Terms and Conditions'
+        ]);
+    }
+
     public function agreeTerms()
-{
-    $userId = $this->request->getPost('user_id');
+    {
+        $userId = session('user_id');
 
-    // Update the terms field in the database
-    $this->userModel->update($userId, ['terms' => 'agreed']);
+        if (!$userId) {
+            return redirect()->route('admin.login.form')->with('fail', 'Please log in to continue.');
+        }
 
-    return redirect()->route('admin.home')->with('success', 'You have agreed to the terms and conditions.');
-}
+        // Update the terms field in the database
+        $this->userModel->update($userId, ['terms' => 'agreed']);
+
+        return redirect()->route('admin.home')->with('success', 'You have successfully agreed to the terms and conditions.');
+    }
 
     
     

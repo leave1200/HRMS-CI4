@@ -128,8 +128,9 @@ $routes->group('', static function($routes){
 
         //$routes->view('example-page','example-page');
         $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
-        $routes->get('/show-terms', 'AdminController::login');
-        $routes->post('/agree-terms', 'AdminController::agreeTerms');
+        $routes->get('terms-and-conditions', 'AuthController::termsForm', ['as' => 'terms.form']);
+        $routes->post('terms/agree', 'AuthController::agreeTerms', ['as' => 'terms.agree']);
+        
 
         
         
