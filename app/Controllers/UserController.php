@@ -453,7 +453,6 @@ class UserController extends Controller
 
         $data = array(
         'pageTitle'=>'Terms and Condition',
-        'userStatus' => $userStatus
         );
         return view('backend/pages/terms', $data);
     }
