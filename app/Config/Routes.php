@@ -128,6 +128,10 @@ $routes->group('', static function($routes){
 
         //$routes->view('example-page','example-page');
         $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
+        $routes->get('/show-terms', 'AdminController::login');
+        $routes->post('/agree-terms', 'AdminController::agreeTerms');
+
+        
         
 });
 
