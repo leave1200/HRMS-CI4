@@ -1,5 +1,4 @@
-<?= $this->extend('backend/layouts/pages') ?>
-
+<?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
 
 <div class="terms-container">
