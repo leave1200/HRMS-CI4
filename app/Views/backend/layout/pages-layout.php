@@ -50,7 +50,7 @@
 	</head>
 	<body>
 
-	<?php if (session()->get('terms') == 1): ?>
+	<?php if (session()->get('user_terms_accepted') == 1): ?>
 		<?php include('inc/header.php') ?>
 		<?php include('inc/right-sidebar.php') ?>
 		<?php include('inc/left-sidebar.php') ?>
