@@ -126,7 +126,7 @@ $routes->group('', static function($routes){
 
         //$routes->view('example-page','example-page');
         $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
-        $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance');
+        $routes->get('terms-and-condition','UserController::terms',['as'=>'admin.terms']);
         
 });
 
