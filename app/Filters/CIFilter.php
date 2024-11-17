@@ -26,7 +26,6 @@ class CIFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        
         // Check for guest access
         if ($arguments[0] == 'guest') {
             if (CIAuth::check()) {
