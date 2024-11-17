@@ -159,7 +159,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Send the acceptance status to the server
-                    fetch('/update-terms-acceptance', {
+                    fetch('admin.accepted', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
