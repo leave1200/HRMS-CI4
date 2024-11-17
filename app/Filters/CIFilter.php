@@ -26,6 +26,25 @@ class CIFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        // Check if the user is logged in
+        if (CIAuth::check()) {
+            // Check if the user has accepted the terms and conditions
+            $userStatus = session()->get('userStatus');
+            $termsAccepted = session()->get('user_terms_accepted'); // Assuming the session contains this data
+
+            // If the user is logged in but has not accepted the terms
+            if ($userStatus && $termsAccepted !== 1) {
+                // Log the user out
+                session()->remove('user_id');
+                session()->remove('username');
+                session()->remove('userStatus');
+                session()->remove('isLoggedIn');
+                session()->remove('user_terms_accepted'); // Remove terms acceptance status too
+
+                // Redirect to the terms page
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
+        }
         // Check for guest access
         if ($arguments[0] == 'guest') {
             if (CIAuth::check()) {
@@ -47,23 +66,6 @@ class CIFilter implements FilterInterface
             // Allow access only if the user is an ADMIN
             if ($userStatus !== 'ADMIN') {
                 return redirect()->route('admin.home')->with('fail', 'Access denied. Admins only.');
-            }
-        }
-        if (CIAuth::check()) {
-            $userStatus = session()->get('userStatus');
-            $termsAccepted = session()->get('user_terms_accepted'); // Assuming you store the terms status in session
-
-            // If the user is logged in but has not accepted the terms
-            if ($userStatus && $termsAccepted !== 1) {
-                // Log the user out
-                session()->remove('user_id');
-                session()->remove('username');
-                session()->remove('userStatus');
-                session()->remove('isLoggedIn');
-                session()->remove('user_terms_accepted'); // Remove the terms acceptance status as well
-
-                // Redirect to the terms page
-                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
             }
         }
     }
