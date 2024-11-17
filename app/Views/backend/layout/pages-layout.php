@@ -49,10 +49,11 @@
 		<?= $this->renderSection('stylesheets') ?>
 	</head>
 	<body>
-	<?php include('inc/left-sidebar.php') ?>
+
 
 	<?php if (session()->get('user_terms_accepted') == 1): ?>
 		<?php include('inc/right-sidebar.php') ?>
+		<?php include('inc/left-sidebar.php') ?>
 		<?php include('inc/header.php') ?>
 	<?php endif; ?>
 <div class="mobile-menu-overlay">
