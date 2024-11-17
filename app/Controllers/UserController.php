@@ -450,7 +450,10 @@ class UserController extends Controller
         ]);
     }
     public function updateTermsAcceptance() {
-        // Get user ID and terms acceptance status from the request
+     
+        try {
+            // Your existing code
+               // Get user ID and terms acceptance status from the request
         $userId = $this->request->getPost('userId');
         $termsAccepted = $this->request->getPost('termsAccepted');
     
@@ -477,6 +480,13 @@ class UserController extends Controller
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Failed to update terms acceptance. Please try again.'
+            ]);
+        }
+        } catch (Exception $e) {
+            log_message('error', 'Error updating terms acceptance: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'An unexpected error occurred. Please try again.'
             ]);
         }
     }
