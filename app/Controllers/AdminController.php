@@ -1608,6 +1608,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         public function terms(){
             // Get the logged-in user's ID from the session
+            $userStatus = session()->get('userStatus');
             $userId = session()->get('user_id'); // Replace 'user_id' with the actual session variable you're using
         
             // Pass the user ID to the view
