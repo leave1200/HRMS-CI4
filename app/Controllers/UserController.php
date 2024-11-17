@@ -449,4 +449,36 @@ class UserController extends Controller
             'pageTitle' => 'Your Uploaded Files',
         ]);
     }
+    public function updateTermsAcceptance() {
+        // Get user ID and terms acceptance status from the request
+        $userId = $this->request->getPost('userId');
+        $termsAccepted = $this->request->getPost('termsAccepted');
+    
+        // Validate input
+        if (empty($userId) || !isset($termsAccepted)) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid input data. Please provide valid data.'
+            ]);
+        }
+    
+        // Update terms acceptance in the database
+        $userModel = new \App\Models\UserModel();  // Assuming the user model is UserModel
+        $data = [
+            'terms' => $termsAccepted ? 1 : 0,  // Store 1 for accepted, 0 for not accepted
+        ];
+    
+        if ($userModel->update($userId, $data)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'Terms acceptance updated successfully.'
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to update terms acceptance. Please try again.'
+            ]);
+        }
+    }
+    
 }

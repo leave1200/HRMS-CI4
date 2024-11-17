@@ -145,40 +145,53 @@
         }
     });
 
-    // Get the user ID from PHP and store it in JavaScript
-    const userId = <?php echo json_encode($userId); ?>;  // Passing the user ID from PHP to JavaScript
+    // Get the user ID dynamically from the PHP controller
+    const userId = <?php echo json_encode($userId); ?>;  // Assuming $userId is available in the view
 
     // Handle the button click
     acceptButton.addEventListener('click', function() {
         if (acceptCheckbox.checked) {
             // Send request to server to update the terms acceptance status
-            fetch('admin.accepted', {
+            $.ajax({
+                url: '<?= route_to('admin.updateTermsAcceptance') ?>',  // Your route to update terms
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+                data: {
+                    userId: userId,
+                    termsAccepted: true  // Terms accepted
                 },
-                body: JSON.stringify({
-                    termsAccepted: true,
-                    userId: userId  // Use the user ID dynamically passed from the controller
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Success message
-                    Swal.fire('Success!', 'You have accepted the terms and conditions.', 'success');
-                } else {
-                    // Error message
-                    Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        }).then(() => {
+                            // Optionally hide the modal or reload page
+                            location.reload();  // Reload to reflect changes
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error processing your request: ' + error,
+                    });
                 }
-            })
-            .catch(error => {
-                // Handle network or server errors
-                Swal.fire('Error!', 'Network or server error occurred.', 'error');
-                console.error('Error:', error);
             });
         } else {
-            Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'You must accept the terms and conditions first.',
+            });
         }
     });
 </script>
