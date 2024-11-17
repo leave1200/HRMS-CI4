@@ -168,7 +168,8 @@
                             text: response.message,
                         }).then(() => {
                             // Optionally hide the modal or reload page
-                            location.reload();  // Reload to reflect changes
+                            // location.reload();  // Reload to reflect changes
+                            window.location.href = '/Dashboard';
                         });
                     } else {
                         Swal.fire({
