@@ -106,11 +106,11 @@
         <p>If you have any questions, concerns, or require further clarification regarding these Terms and Conditions, or if you need assistance with any aspect of the HRMS platform, please do not hesitate to contact the HR Department at Lawis-HRMO. Our team is available to assist you with any inquiries related to your use of the platform, your account, or any issues related to compliance with these terms.
 
         You can reach the HR Department through the following methods:
-        <br>
+        <br><br><br>
         Email: [HR Department Email Address] – For general inquiries, technical support, or if you need assistance understanding any part of the Terms and Conditions.
         <br>
         Phone: [HR Department Phone Number] – For immediate or urgent matters, or if you prefer to speak with someone directly regarding your queries.
-        <br>
+        <br><br><br>
         In-person: [HR Department Office Location] – If you prefer face-to-face communication, you can visit the HR Department during working hours. Our team is happy to provide assistance and answer any questions in person.
         If you encounter any technical difficulties or require support with accessing or using the HRMS platform, including issues related to login credentials, personal data, or account management, our support team is ready to help resolve any issues you may be experiencing.
 
