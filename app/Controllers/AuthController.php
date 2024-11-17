@@ -140,9 +140,19 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
             // Check if the user has accepted the terms and conditions
+    // Check if the user has accepted the terms and conditions
     if ($userInfo['terms'] != 1) {
-        // If the user has not accepted the terms, redirect them to the terms acceptance page
-        return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+        // If the user has not accepted the terms, log them out and redirect to login page
+        session()->remove('user_id');
+        session()->remove('username');
+        session()->remove('userStatus');
+        session()->remove('isLoggedIn');
+
+        // Optionally, you can clear other session variables related to user
+        // session()->destroy();
+
+        // Redirect to login page with a failure message
+        return redirect()->route('admin.login.form')->with('fail', 'You must accept the terms and conditions to proceed.');
     }
         return redirect()->route('admin.terms');
     }
