@@ -55,7 +55,7 @@
 		<?php include('inc/right-sidebar.php') ?>
 		<?php include('inc/left-sidebar.php') ?>
 	<?php else: ?>
-		<?php return redirect()->route('admin.login.form')->with('fail', 'You must accept the terms and conditions to proceed.'); ?>
+		<?php return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.'); ?>
 	<?php endif; ?>
 <div class="mobile-menu-overlay">
 </div>
