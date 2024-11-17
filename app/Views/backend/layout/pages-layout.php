@@ -50,11 +50,9 @@
 	</head>
 	<body>
 
-	<?php include('inc/header.php') ?>
-	<?php if (session()->get('user_terms_accepted') == 1): ?>
-		<?php include('inc/right-sidebar.php') ?>
-		<?php include('inc/left-sidebar.php') ?>
-	<?php endif; ?>
+<?php include('inc/header.php') ?>
+<?php include('inc/right-sidebar.php') ?>
+<?php include('inc/left-sidebar.php') ?>
 <div class="mobile-menu-overlay">
 </div>
 <div class="main-container">
