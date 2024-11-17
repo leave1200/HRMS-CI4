@@ -128,14 +128,14 @@
         </div>
 
         <div class="action-buttons">
-        <button id="acceptButton">Accept</button>
+        <button id="acceptButton" class="btn btn-primary" disabled>Accept</button>
         </div>
     </div>
 </div>
 <script>
     // Enable or disable the accept button based on the checkbox
     const acceptCheckbox = document.getElementById('accept-terms');
-    const acceptButton = document.getElementById('accept-button');
+    const acceptButton = document.getElementById('acceptButton');
 
     acceptCheckbox.addEventListener('change', function() {
         if (this.checked) {
@@ -145,11 +145,12 @@
         }
     });
 
-</script>
+    // Get the user ID from PHP and store it in JavaScript
+    const userId = <?php echo json_encode($userId); ?>;  // Passing the user ID from PHP to JavaScript
 
-<script>
-    document.getElementById('acceptButton').addEventListener('click', function() {
-        if (document.getElementById('termsCheckbox').checked) {
+    // Handle the button click
+    acceptButton.addEventListener('click', function() {
+        if (acceptCheckbox.checked) {
             // Send request to server to update the terms acceptance status
             fetch('/update-terms-acceptance', {
                 method: 'POST',
@@ -180,8 +181,5 @@
             Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
         }
     });
-</script>
-<script>
-    const userId = <?php echo json_encode($userId); ?>;  // Passing the user ID from PHP to JavaScript
 </script>
 <?= $this->endSection() ?>
