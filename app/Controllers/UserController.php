@@ -467,7 +467,7 @@ class UserController extends Controller
                 ]);
             }
     
-            $userModel = new \App\Models\UserModel();
+            $userModel = new \App\Models\User();
             
             // Update the terms acceptance in the database
             $data = ['terms' => 1];
