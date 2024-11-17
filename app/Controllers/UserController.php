@@ -451,7 +451,6 @@ class UserController extends Controller
     }
     public function updateTermsAcceptance()
     {
-        try {
             // Ensure the 'userId' and 'termsAccepted' data are received correctly
             $userId = $this->request->getPost('userId');
             $termsAccepted = $this->request->getPost('termsAccepted');
@@ -483,13 +482,6 @@ class UserController extends Controller
                     'message' => 'Failed to update your terms acceptance. Please try again.'
                 ]);
             }
-        } catch (\Exception $e) {
-            log_message('error', 'Error in updateTermsAcceptance: ' . $e->getMessage());
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'An unexpected error occurred. Please try again.'
-            ]);
-        }
     }
     
     
