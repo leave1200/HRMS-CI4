@@ -128,7 +128,7 @@
         </div>
 
         <div class="action-buttons">
-        <button id="acceptButton" data-user-id="<?= session()->get('user_id') ?>">Accept</button>
+        <button id="acceptButton">Accept</button>
         </div>
     </div>
 </div>
