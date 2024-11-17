@@ -26,25 +26,7 @@ class CIFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        // Check if the user is logged in
-        if (CIAuth::check()) {
-            // Check if the user has accepted the terms and conditions
-            $userStatus = session()->get('userStatus');
-            $termsAccepted = session()->get('user_terms_accepted'); // Assuming the session contains this data
-
-            // If the user is logged in but has not accepted the terms
-            if ($userStatus && $termsAccepted !== 1) {
-                // Log the user out
-                session()->remove('user_id');
-                session()->remove('username');
-                session()->remove('userStatus');
-                session()->remove('isLoggedIn');
-                session()->remove('user_terms_accepted'); // Remove terms acceptance status too
-
-                // Redirect to the terms page
-                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-            }
-        }
+        
         // Check for guest access
         if ($arguments[0] == 'guest') {
             if (CIAuth::check()) {
