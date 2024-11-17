@@ -50,9 +50,13 @@
 	</head>
 	<body>
 
-<?php include('inc/header.php') ?>
-<?php include('inc/right-sidebar.php') ?>
-<?php include('inc/left-sidebar.php') ?>
+	<?php if (session()->get('terms') == 1): ?>
+		<?php include('inc/header.php') ?>
+		<?php include('inc/right-sidebar.php') ?>
+		<?php include('inc/left-sidebar.php') ?>
+	<?php else: ?>
+		<?php return redirect()->route('admin.login.form')->with('fail', 'You must accept the terms and conditions to proceed.'); ?>
+	<?php endif; ?>
 <div class="mobile-menu-overlay">
 </div>
 <div class="main-container">
