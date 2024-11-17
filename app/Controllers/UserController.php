@@ -449,4 +449,26 @@ class UserController extends Controller
             'pageTitle' => 'Your Uploaded Files',
         ]);
     }
+    public function updateTermsAcceptance()
+    {
+        // Retrieve the incoming JSON data
+        $input = $this->request->getJSON();
+        
+        // Ensure termsAccepted is true
+        if (isset($input->termsAccepted) && $input->termsAccepted === true) {
+            // Example: Update the terms field in the user's record
+            $userId = $input->userId;
+
+            // Find the user and update the terms field
+            $user = $this->userModel->find($userId);
+            if ($user) {
+                $this->userModel->update($userId, ['terms' => 1]);  // Update terms as accepted (1)
+                return $this->respond(['success' => true]);
+            } else {
+                return $this->failNotFound('User not found');
+            }
+        } else {
+            return $this->failValidationError('Terms not accepted');
+        }
+    }
 }

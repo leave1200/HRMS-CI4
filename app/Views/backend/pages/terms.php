@@ -148,12 +148,43 @@
     // Handle the button click event
     acceptButton.addEventListener('click', function() {
         if (acceptCheckbox.checked) {
-            // Proceed with your form submission or logic after acceptance
-            alert("You have accepted the terms and conditions.");
-            // Example: Submit a form or update the user's status
-            // document.getElementById('your-form').submit();
+            // SweetAlert for confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You have accepted the terms and conditions!",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, I accept!',
+                cancelButtonText: 'No, I don\'t'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send the acceptance status to the server
+                    fetch('/update-terms-acceptance', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            termsAccepted: true,
+                            userId: 1 // Replace with dynamic user ID if needed
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Success!', 'You have successfully accepted the terms.', 'success');
+                        } else {
+                            Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error!', 'An error occurred while processing your request.', 'error');
+                    });
+                }
+            });
         } else {
-            alert("You must accept the terms and conditions first.");
+            Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
         }
     });
 </script>
