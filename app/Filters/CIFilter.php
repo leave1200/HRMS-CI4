@@ -49,6 +49,23 @@ class CIFilter implements FilterInterface
                 return redirect()->route('admin.home')->with('fail', 'Access denied. Admins only.');
             }
         }
+        if (CIAuth::check()) {
+            $userStatus = session()->get('userStatus');
+            $termsAccepted = session()->get('user_terms_accepted'); // Assuming you store the terms status in session
+
+            // If the user is logged in but has not accepted the terms
+            if ($userStatus && $termsAccepted !== 1) {
+                // Log the user out
+                session()->remove('user_id');
+                session()->remove('username');
+                session()->remove('userStatus');
+                session()->remove('isLoggedIn');
+                session()->remove('user_terms_accepted'); // Remove the terms acceptance status as well
+
+                // Redirect to the terms page
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
+        }
     }
 
     /**
