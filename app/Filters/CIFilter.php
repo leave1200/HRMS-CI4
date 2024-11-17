@@ -35,17 +35,26 @@ class CIFilter implements FilterInterface
 
         // Check for authentication
         if ($arguments[0] == 'auth') {
+
+                // If logged in, check if the user has accepted the terms
+            $userStatus = session()->get('userStatus');
+            $userTermsAccepted = session()->get('user_terms_accepted');
+
+            // If the user is logged in but has not accepted the terms, redirect them to the terms page
+            if ($userStatus && !$userTermsAccepted) {
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
+
+            // Check for guest access (if user is not logged in)
+            if ($arguments[0] == 'guest') {
+                if (CIAuth::check()) {
+                    return redirect()->route('admin.home');
+                }
+            }
             if (!CIAuth::check()) {
                 return redirect()->route('admin.login.form')->with('fail', 'You must be logged in first');
             }
-            // Check if the user has accepted the terms
-        $userStatus = session()->get('userStatus');
-        $userTermsAccepted = session()->get('user_terms_accepted');
-        
-        if ($userStatus && !$userTermsAccepted) {
-            // Redirect the user to the terms page if they haven't accepted the terms
-            return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-        }
+            
         }
 
         // Prevent access for EMPLOYEE and STAFF roles
