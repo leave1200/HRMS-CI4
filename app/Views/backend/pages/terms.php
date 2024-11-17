@@ -152,7 +152,7 @@
     acceptButton.addEventListener('click', function() {
         if (acceptCheckbox.checked) {
             // Send request to server to update the terms acceptance status
-            fetch('/update-terms-acceptance', {
+            fetch('admin.accepted', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
