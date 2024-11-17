@@ -452,7 +452,7 @@ class UserController extends Controller
     public function updateTermsAcceptance()
     {
             $userId = $this->request->getPost('userId');
-            $termsAccepted = $this->request->getPost('termsAccepted');
+            $termsAccepted = $this->request->getPost('terms');
         
             if (!$userId || !$termsAccepted) {
                 return $this->response->setJSON([
