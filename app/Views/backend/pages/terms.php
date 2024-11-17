@@ -145,41 +145,43 @@
         }
     });
 
-    // Handle the button click event
+</script>
+
+<script>
     document.getElementById('acceptButton').addEventListener('click', function() {
-    const userId = this.getAttribute('data-user-id');  // Get the user ID from the data attribute
-
-    if (document.getElementById('termsCheckbox').checked) {
-        // Send request to server to update the terms acceptance status
-        fetch('admin.accepted', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                termsAccepted: true,
-                userId: userId  // Use the user ID dynamically
+        if (document.getElementById('termsCheckbox').checked) {
+            // Send request to server to update the terms acceptance status
+            fetch('/update-terms-acceptance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    termsAccepted: true,
+                    userId: userId  // Use the user ID dynamically passed from the controller
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Success message
-                Swal.fire('Success!', 'You have accepted the terms and conditions.', 'success');
-            } else {
-                // Error message
-                Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
-            }
-        })
-        .catch(error => {
-            // Handle network or server errors
-            Swal.fire('Error!', 'Network or server error occurred.', 'error');
-            console.error('Error:', error);
-        });
-    } else {
-        Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
-    }
-});
-
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success message
+                    Swal.fire('Success!', 'You have accepted the terms and conditions.', 'success');
+                } else {
+                    // Error message
+                    Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
+                }
+            })
+            .catch(error => {
+                // Handle network or server errors
+                Swal.fire('Error!', 'Network or server error occurred.', 'error');
+                console.error('Error:', error);
+            });
+        } else {
+            Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
+        }
+    });
+</script>
+<script>
+    const userId = <?php echo json_encode($userId); ?>;  // Passing the user ID from PHP to JavaScript
 </script>
 <?= $this->endSection() ?>
