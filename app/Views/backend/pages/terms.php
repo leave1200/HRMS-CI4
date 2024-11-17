@@ -150,51 +150,34 @@
     // Get the user ID dynamically from the PHP controller
     const userId = <?php echo json_encode($userId); ?>;  // Assuming $userId is available in the view
 
-    // Handle the button click
-    acceptButton.addEventListener('click', function() {
-        if (acceptCheckbox.checked) {
-            // Send request to server to update the terms acceptance status
-            $.ajax({
-                url: '<?= route_to('admin.updateTermsAcceptance') ?>',  // Your route to update terms
-                method: 'POST',
-                data: {
-                    userId: userId,
-                    termsAccepted: true  // Terms accepted
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                        }).then(() => {
-                            // Optionally hide the modal or reload page
-                            location.reload();  // Reload to reflect changes
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error processing your request: ' + error,
-                    });
-                }
-            });
+    document.getElementById('acceptButton').addEventListener('click', function() {
+    const userId = <?php echo json_encode($userId); ?>;  // Get user ID from PHP
+    const termsAccepted = document.getElementById('accept-terms').checked;  // Get checkbox status
+
+    // Send request to server to update terms acceptance status
+    fetch('/update-terms-acceptance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            terms: termsAccepted ? 1 : 0,  // Send 1 for accepted, 0 for not accepted
+            userId: userId  // Use the user ID dynamically passed from the controller
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire('Success!', data.message, 'success');
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'You must accept the terms and conditions first.',
-            });
+            Swal.fire('Error!', data.message, 'error');
         }
+    })
+    .catch(error => {
+        Swal.fire('Error!', 'There was an error processing your request.', 'error');
+        console.error(error);
     });
+});
+
 </script>
 <?= $this->endSection() ?>

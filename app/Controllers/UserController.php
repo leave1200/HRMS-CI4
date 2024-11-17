@@ -451,31 +451,35 @@ class UserController extends Controller
     }
     public function updateTermsAcceptance()
     {
-            $userId = $this->request->getPost('userId');
-            $termsAccepted = $this->request->getPost('terms');
+        $userId = $this->request->getPost('userId');
+        $termsAccepted = $this->request->getPost('terms');
         
-            if (!$userId || !$termsAccepted) {
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Invalid input data.'
-                ]);
-            }
-            $userModel = new \App\Models\User();
-            
-            // Update the terms acceptance in the database
-            $data = ['terms' => 1];
-            if ($userModel->update($userId, $data)) {
-                return $this->response->setJSON([
-                    'status' => 'success',
-                    'message' => 'Terms acceptance updated successfully.'
-                ]);
-            } else {
-                log_message('error', 'Failed to update terms acceptance for user ' . $userId);
-                return $this->response->setJSON([
-                    'status' => 'error',
-                    'message' => 'Failed to update your terms acceptance. Please try again.'
-                ]);
-            }
+        log_message('debug', 'Received userId: ' . $userId . ', termsAccepted: ' . $termsAccepted);
+        
+        if (!$userId || !$termsAccepted) {
+            log_message('error', 'Invalid input data. userId or terms not set.');
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid input data.'
+            ]);
+        }
+        
+        $userModel = new \App\Models\User();
+        
+        // Update the terms acceptance in the database
+        $data = ['terms' => 1];
+        if ($userModel->update($userId, $data)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'Terms acceptance updated successfully.'
+            ]);
+        } else {
+            log_message('error', 'Failed to update terms acceptance for user ' . $userId);
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to update your terms acceptance. Please try again.'
+            ]);
+        }
     }
     
     
