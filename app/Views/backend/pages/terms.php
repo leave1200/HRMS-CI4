@@ -119,7 +119,42 @@
         Additionally, if you feel that any aspect of the Terms and Conditions is unclear, or if you need to request an update or modification to your personal data or account settings, please contact us so we can assist you in a timely manner.
 
         At Lawis-HRMO, we are committed to providing a smooth and transparent user experience, and we encourage you to reach out with any questions to ensure your continued satisfaction and compliance with the platform's policies</p>
+
+        <!-- Accept Terms -->
+        <div class="terms-accept">
+            <label>
+                <input type="checkbox" id="accept-terms" /> I agree to the <a href="#">Terms and Conditions</a>
+            </label>
+        </div>
+
+        <div class="action-buttons">
+            <button type="button" id="accept-button" class="btn btn-primary" disabled>Accept</button>
+        </div>
     </div>
 </div>
+<script>
+    // Enable or disable the accept button based on the checkbox
+    const acceptCheckbox = document.getElementById('accept-terms');
+    const acceptButton = document.getElementById('accept-button');
 
+    acceptCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            acceptButton.disabled = false;  // Enable the Accept button
+        } else {
+            acceptButton.disabled = true;  // Disable the Accept button
+        }
+    });
+
+    // Handle the button click event
+    acceptButton.addEventListener('click', function() {
+        if (acceptCheckbox.checked) {
+            // Proceed with your form submission or logic after acceptance
+            alert("You have accepted the terms and conditions.");
+            // Example: Submit a form or update the user's status
+            // document.getElementById('your-form').submit();
+        } else {
+            alert("You must accept the terms and conditions first.");
+        }
+    });
+</script>
 <?= $this->endSection() ?>
