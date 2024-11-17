@@ -140,7 +140,7 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
     
-        return redirect()->route('admin.home');
+        return redirect()->route('admin.terms');
     }
     
     
