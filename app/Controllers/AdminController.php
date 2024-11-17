@@ -1609,11 +1609,13 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         public function terms(){
             // Get the logged-in user's ID from the session
             $userId = session()->get('user_id'); // Replace 'user_id' with the actual session variable you're using
+            $userStatus = session()->get('userStatus');
         
             // Pass the user ID to the view
             $data = array(
                 'pageTitle' => 'Terms and Condition',
                 'userId' => $userId, // Add the user ID to the data array
+                'userStatus' => $userStatus
             );
             
             return view('backend/pages/terms', $data);
