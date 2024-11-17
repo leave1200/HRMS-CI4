@@ -103,7 +103,20 @@
         By continuing to use the HRMS platform, you affirm your understanding that any legal issues, including any dispute arising from the platform’s terms of use or data handling, will be subject to the laws and courts of [Jurisdiction]. This ensures that both you as a user and Lawis-HRMO have a clear legal framework for addressing any matters that may arise during your use of the system..</p>
 
         <h3>14. Contact Information</h3>
-        <p>If you have any questions about these Terms and Conditions, please contact [HR Department] at [contact details].</p>
+        <p>If you have any questions, concerns, or require further clarification regarding these Terms and Conditions, or if you need assistance with any aspect of the HRMS platform, please do not hesitate to contact the HR Department at Lawis-HRMO. Our team is available to assist you with any inquiries related to your use of the platform, your account, or any issues related to compliance with these terms.
+
+        You can reach the HR Department through the following methods:
+
+        Email: [HR Department Email Address] – For general inquiries, technical support, or if you need assistance understanding any part of the Terms and Conditions.
+        Phone: [HR Department Phone Number] – For immediate or urgent matters, or if you prefer to speak with someone directly regarding your queries.
+        In-person: [HR Department Office Location] – If you prefer face-to-face communication, you can visit the HR Department during working hours. Our team is happy to provide assistance and answer any questions in person.
+        If you encounter any technical difficulties or require support with accessing or using the HRMS platform, including issues related to login credentials, personal data, or account management, our support team is ready to help resolve any issues you may be experiencing.
+
+        Please ensure that you review these Terms and Conditions thoroughly, as they are essential for your continued use of the HRMS platform. If you require any further explanation or have concerns about specific clauses, the HR Department is available to guide you and ensure that you fully understand your rights and responsibilities under these terms.
+
+        Additionally, if you feel that any aspect of the Terms and Conditions is unclear, or if you need to request an update or modification to your personal data or account settings, please contact us so we can assist you in a timely manner.
+
+        At Lawis-HRMO, we are committed to providing a smooth and transparent user experience, and we encourage you to reach out with any questions to ensure your continued satisfaction and compliance with the platform's policies</p>
     </div>
 </div>
 
