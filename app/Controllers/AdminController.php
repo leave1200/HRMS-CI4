@@ -1615,6 +1615,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             $data = array(
                 'pageTitle' => 'Terms and Condition',
                 'userId' => $userId, // Add the user ID to the data array
+                'userStatus' => $userStatus
             );
             
             return view('backend/pages/terms', $data);
