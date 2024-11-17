@@ -1613,6 +1613,32 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             );
             return view('backend/pages/terms', $data);
         }
-        
+        public function updateTermsAcceptance()
+        {
+            // Get the incoming JSON data
+            $input = $this->request->getJSON();
+            
+            if (isset($input->termsAccepted) && $input->termsAccepted === true && isset($input->userId)) {
+                // Validate user ID exists
+                $userId = $input->userId;
+                $user = $this->userModel->find($userId);
+    
+                if ($user) {
+                    // Update the terms field to 'accepted'
+                    $this->userModel->update($userId, ['terms' => 'accepted']);
+    
+                    // Return a success response
+                    return $this->respond(['success' => true]);
+                } else {
+                    // User not found
+                    log_message('error', 'User not found with ID: ' . $userId);
+                    return $this->failNotFound('User not found');
+                }
+            } else {
+                // Invalid request (missing termsAccepted or userId)
+                log_message('error', 'Invalid data received: ' . json_encode($input));
+                return $this->failValidationError('Terms not accepted or missing data');
+            }
+        }
 
 }
