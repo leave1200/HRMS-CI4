@@ -1,6 +1,7 @@
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
 
+<div class="pd-20 card-box mb-30">
 <div class="terms-container">
     <h2>HRMS Terms and Conditions</h2>
     <p>Please read and agree to the following terms and conditions before using our HRMS platform:</p>
@@ -131,6 +132,7 @@
         <button id="acceptButton" class="btn btn-primary" disabled>Accept</button>
         </div>
     </div>
+</div>
 </div>
 <script>
     // Enable or disable the accept button based on the checkbox
