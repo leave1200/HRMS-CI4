@@ -451,22 +451,15 @@ class UserController extends Controller
     }
     public function updateTermsAcceptance()
     {
-        try {
-            // Ensure the 'userId' and 'termsAccepted' data are received correctly
             $userId = $this->request->getPost('userId');
             $termsAccepted = $this->request->getPost('termsAccepted');
-            
-            // Log incoming data for debugging
-            log_message('debug', 'Received data: userId=' . $userId . ', termsAccepted=' . $termsAccepted);
-    
-            if (empty($userId) || !isset($termsAccepted)) {
-                log_message('error', 'Invalid input: ' . json_encode($this->request->getPost()));
+        
+            if (!$userId || !$termsAccepted) {
                 return $this->response->setJSON([
                     'status' => 'error',
-                    'message' => 'Invalid input data. Please fill out all fields.'
+                    'message' => 'Invalid input data.'
                 ]);
             }
-    
             $userModel = new \App\Models\User();
             
             // Update the terms acceptance in the database
@@ -483,13 +476,6 @@ class UserController extends Controller
                     'message' => 'Failed to update your terms acceptance. Please try again.'
                 ]);
             }
-        } catch (\Exception $e) {
-            log_message('error', 'Error in updateTermsAcceptance: ' . $e->getMessage());
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'An unexpected error occurred. Please try again.'
-            ]);
-        }
     }
     
     
