@@ -49,11 +49,13 @@
 		<?= $this->renderSection('stylesheets') ?>
 	</head>
 	<body>
+	<?php include('inc/left-sidebar.php') ?>
 
+	<?php include('inc/header.php') ?>
 	<?php if (session()->get('user_terms_accepted') == 1): ?>
-		<?php include('inc/header.php') ?>
+		
 		<?php include('inc/right-sidebar.php') ?>
-		<?php include('inc/left-sidebar.php') ?>
+
 	<?php else: ?>
 		<?php return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.'); ?>
 	<?php endif; ?>
