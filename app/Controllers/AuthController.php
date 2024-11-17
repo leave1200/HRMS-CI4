@@ -125,16 +125,21 @@ class AuthController extends BaseController
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-            // Check if the user has accepted the terms
-            if ($userInfo['terms'] != 1) {
-                // If the user has not accepted the terms, redirect them to the terms acceptance page
-                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-            }
+    
         // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
-        // Set user session and authenticate
+        // Check if the user has accepted the terms
+        if ($userInfo['terms'] != 1) {
+            // If the user has not accepted the terms, redirect them to the terms acceptance page
+            session()->set('user_id', $userInfo['id']);
+            session()->set('username', $userInfo['username']);
+            session()->set('userStatus', $userInfo['status']);
+            return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+        }
+    
+        // Set user session and authenticate if terms are accepted or already accepted
         CIAuth::setCIAuth($userInfo);
     
         session()->set([
@@ -144,8 +149,10 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
     
+        // If the user has accepted the terms, redirect to the dashboard
         return redirect()->route('admin.home');
     }
+    
     
     
     
