@@ -128,7 +128,7 @@
         </div>
 
         <div class="action-buttons">
-            <button type="button" id="accept-button" class="btn btn-primary" disabled>Accept</button>
+        <button id="acceptButton" data-user-id="<?= session()->get('user_id') ?>">Accept</button>
         </div>
     </div>
 </div>
@@ -146,46 +146,40 @@
     });
 
     // Handle the button click event
-    acceptButton.addEventListener('click', function() {
-        if (acceptCheckbox.checked) {
-            // SweetAlert for confirmation
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You have accepted the terms and conditions!",
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, I accept!',
-                cancelButtonText: 'No, I don\'t'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Send the acceptance status to the server
-                    fetch('admin.accepted', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify({
-                            termsAccepted: true,
-                            userId: 1 // Replace with dynamic user ID if needed
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire('Success!', 'You have successfully accepted the terms.', 'success');
-                        } else {
-                            Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire('Error!', 'An error occurred while processing your request.', 'error');
-                    });
-                }
-            });
-        } else {
-            Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
-        }
-    });
+    document.getElementById('acceptButton').addEventListener('click', function() {
+    const userId = this.getAttribute('data-user-id');  // Get the user ID from the data attribute
+
+    if (document.getElementById('termsCheckbox').checked) {
+        // Send request to server to update the terms acceptance status
+        fetch('admin.accepted', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                termsAccepted: true,
+                userId: userId  // Use the user ID dynamically
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Success message
+                Swal.fire('Success!', 'You have accepted the terms and conditions.', 'success');
+            } else {
+                // Error message
+                Swal.fire('Error!', 'There was a problem updating your acceptance status.', 'error');
+            }
+        })
+        .catch(error => {
+            // Handle network or server errors
+            Swal.fire('Error!', 'Network or server error occurred.', 'error');
+            console.error('Error:', error);
+        });
+    } else {
+        Swal.fire('Error!', 'You must accept the terms and conditions first.', 'error');
+    }
+});
+
 </script>
 <?= $this->endSection() ?>
