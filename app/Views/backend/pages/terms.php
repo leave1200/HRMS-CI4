@@ -120,16 +120,18 @@
 
         At Lawis-HRMO, we are committed to providing a smooth and transparent user experience, and we encourage you to reach out with any questions to ensure your continued satisfaction and compliance with the platform's policies</p>
 
-        <!-- Accept Terms -->
-        <div class="terms-accept">
-            <label>
-                <input type="checkbox" id="accept-terms" /> I agree to the <a href="#">Terms and Conditions</a>
-            </label>
-        </div>
+        <?php if (!$termsAccepted): ?>
+            <div class="terms-accept">
+                <label>
+                    <input type="checkbox" id="accept-terms" /> I agree to the <a href="#">Terms and Conditions</a>
+                </label>
+            </div>
 
-        <div class="action-buttons">
-        <button id="acceptButton" class="btn btn-primary" disabled>Accept</button>
-        </div>
+            <div class="action-buttons">
+                <button id="acceptButton" class="btn btn-primary" disabled>Accept</button>
+            </div>
+        <?php endif; ?>
+
     </div>
 </div>
 <script>
