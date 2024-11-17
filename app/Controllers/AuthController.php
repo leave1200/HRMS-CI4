@@ -49,6 +49,7 @@ class AuthController extends BaseController
         }
     }
     
+
     public function loginHandler()
     {
         // Get the reCAPTCHA token from the form
@@ -124,13 +125,11 @@ class AuthController extends BaseController
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-    
-        // Check if the user has accepted the terms
-        if ($userInfo['terms'] != 1) {
-            // If the user has not accepted the terms, redirect them to the terms acceptance page
-            return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-        }
-    
+            // Check if the user has accepted the terms
+            if ($userInfo['terms'] != 1) {
+                // If the user has not accepted the terms, redirect them to the terms acceptance page
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
         // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
@@ -147,7 +146,6 @@ class AuthController extends BaseController
     
         return redirect()->route('admin.home');
     }
-    
     
     
     
