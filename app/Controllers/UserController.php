@@ -449,46 +449,48 @@ class UserController extends Controller
             'pageTitle' => 'Your Uploaded Files',
         ]);
     }
-    public function updateTermsAcceptance() {
-     
+    public function updateTermsAcceptance()
+    {
         try {
-            // Your existing code
-               // Get user ID and terms acceptance status from the request
-        $userId = $this->request->getPost('userId');
-        $termsAccepted = $this->request->getPost('termsAccepted');
+            // Ensure the 'userId' and 'termsAccepted' data are received correctly
+            $userId = $this->request->getPost('userId');
+            $termsAccepted = $this->request->getPost('termsAccepted');
+            
+            // Log incoming data for debugging
+            log_message('debug', 'Received data: userId=' . $userId . ', termsAccepted=' . $termsAccepted);
     
-        // Validate input
-        if (empty($userId) || !isset($termsAccepted)) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Invalid input data. Please provide valid data.'
-            ]);
-        }
+            if (empty($userId) || !isset($termsAccepted)) {
+                log_message('error', 'Invalid input: ' . json_encode($this->request->getPost()));
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'Invalid input data. Please fill out all fields.'
+                ]);
+            }
     
-        // Update terms acceptance in the database
-        $userModel = new \App\Models\UserModel();  // Assuming the user model is UserModel
-        $data = [
-            'terms' => $termsAccepted ? 1 : 0,  // Store 1 for accepted, 0 for not accepted
-        ];
-    
-        if ($userModel->update($userId, $data)) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'Terms acceptance updated successfully.'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Failed to update terms acceptance. Please try again.'
-            ]);
-        }
-        } catch (Exception $e) {
-            log_message('error', 'Error updating terms acceptance: ' . $e->getMessage());
+            $userModel = new \App\Models\UserModel();
+            
+            // Update the terms acceptance in the database
+            $data = ['terms' => 1];
+            if ($userModel->update($userId, $data)) {
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'Terms acceptance updated successfully.'
+                ]);
+            } else {
+                log_message('error', 'Failed to update terms acceptance for user ' . $userId);
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'Failed to update your terms acceptance. Please try again.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error in updateTermsAcceptance: ' . $e->getMessage());
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'An unexpected error occurred. Please try again.'
             ]);
         }
     }
+    
     
 }
