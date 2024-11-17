@@ -144,7 +144,7 @@ class AuthController extends BaseController
         // If the user has not accepted the terms, redirect them to the terms acceptance page
         return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
     }
-        return redirect()->route('admin.terms');
+        return redirect()->route('admin.home');
     }
     
     
