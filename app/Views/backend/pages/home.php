@@ -29,7 +29,7 @@
 							</div>
 						</div>
 					</div>
-					
+					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30" >
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#0079FA">
 							<div class="progress-box text-center">
@@ -54,8 +54,7 @@
 								</h5>
 							</div>
 						</div>
-					</div>
-					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?> 
+					</div> 
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#F15A9A" >
 							<div class="progress-box text-center">
@@ -67,7 +66,7 @@
 							</div>
 						</div>
 					</div>
-					<?php endif; ?>
+					
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#ff6347" >
 							<div class="progress-box text-center">
@@ -125,6 +124,7 @@
 						</div>
 					</div>
 				</div>
+				<?php endif; ?>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
