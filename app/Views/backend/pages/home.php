@@ -17,6 +17,7 @@
 						</div>
 					</div>
 				</div>
+				<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
 				<div class="row clearfix progress-box">
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#F19EF7">
@@ -40,7 +41,6 @@
 							</div>
 						</div>
 					</div>
-					<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
 					<div class="col-lg-3 col-md-6 col-sm-12 mb-30" >
 						<div class="card-box pd-30 height-100-p" data-bgcolor="#0079FA">
 							<div class="progress-box text-center">
@@ -128,7 +128,7 @@
 			</div>
 				<?php endif; ?>
 				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
-					<div class="card-box pb-10">
+					<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
 						<div class="card-box height-100-p pd-20">
 							<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
