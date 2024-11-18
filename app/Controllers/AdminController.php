@@ -720,7 +720,6 @@ public function updateDesignation()
        if ($userStatus !== 'ADMIN') {
         return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
     }
-       $userStatus = session()->get('userStatus');
 
        $data = [
            'pageTitle' => 'Employee List',
