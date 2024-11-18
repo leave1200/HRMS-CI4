@@ -126,6 +126,9 @@
 					</div>
 				</div>
 				<?php endif; ?>
+				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+					<div id="fileUploadsChart" style="width:100%; height:400px;"></div>
+					<?php endif; ?>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
