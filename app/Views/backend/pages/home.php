@@ -126,6 +126,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- this area is for the dashboard of employee not available for admin  -->
 				<?php endif; ?>
 				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
 					<div class="card-box pb-8">
@@ -174,6 +175,54 @@
 								});
 							})
 							.catch(error => console.error('Error fetching file upload data:', error));
+					});
+					</script>
+					<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+					<div class="card-box pb-8">
+					<div class="col-md-15 mb-20">
+						<div class="card-box height-100-p pd-20">
+							<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
+								<div class="h5 mb-md-0"><?= get_user()->name ?></div>
+							</div>
+							<div id="leaveApplicationsChart" style="width:100%; height:400px;"></div>
+						</div>
+					</div>
+				</div>
+					<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						fetch('/dashboard/getUserLeaveApplications') // Update this route to match your backend setup
+							.then(response => response.json())
+							.then(data => {
+								// Extract data for Highcharts
+								const categories = data.map(item => item.status); // X-axis (statuses)
+								const seriesData = data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
+
+								// Render the chart
+								Highcharts.chart('leaveApplicationsChart', {
+									chart: {
+										type: 'bar'
+									},
+									title: {
+										text: 'Your Leave Applications'
+									},
+									xAxis: {
+										categories: categories,
+										title: {
+											text: 'Leave Status'
+										}
+									},
+									yAxis: {
+										title: {
+											text: 'Number of Leave Applications'
+										}
+									},
+									series: [{
+										name: 'Leaves',
+										data: seriesData
+									}]
+								});
+							})
+							.catch(error => console.error('Error fetching leave application data:', error));
 					});
 					</script>
 					<?php endif; ?>

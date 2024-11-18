@@ -79,6 +79,19 @@ class AdminController extends BaseController
 
     return $this->response->setJSON($fileData);
 }
+public function getUserLeaveApplications()
+{
+    $userId = session()->get('user_id'); // Assuming the logged-in user's ID is stored in the session
+    $leaveModel = new \App\Models\LeaveModel(); // Replace with your actual Leave model
+
+    // Query to group leave applications by status or type
+    $leaveData = $leaveModel->select("status, COUNT(*) as leave_count")
+                            ->where('user_id', $userId)
+                            ->groupBy('status')
+                            ->findAll();
+
+    return $this->response->setJSON($leaveData);
+}
 
 
     public function logoutHandler(){
