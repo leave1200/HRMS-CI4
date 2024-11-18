@@ -1238,9 +1238,6 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
     $userStatus = session()->get('userStatus');
-    if ($userStatus !== 'ADMIN') {
-        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
-    }
     
 
     // Fetch leave applications with details
