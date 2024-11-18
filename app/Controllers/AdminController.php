@@ -715,6 +715,7 @@ public function updateDesignation()
   public function pendingemployeelist()
    {
        $employeeModel = new EmployeeModel();
+       $userStatus = session()->get('userStatus');
        $employee = $employeeModel->findAll();
        if ($userStatus !== 'ADMIN') {
         return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
