@@ -190,7 +190,7 @@
 				</div>
 					<script>
 					document.addEventListener('DOMContentLoaded', function () {
-						fetch('/dashboard/getUserLeaveApplications') // Update this route to match your backend setup
+						fetch('/getUserLeaveApplications') // Update this route to match your backend setup
 							.then(response => response.json())
 							.then(data => {
 								// Extract data for Highcharts
