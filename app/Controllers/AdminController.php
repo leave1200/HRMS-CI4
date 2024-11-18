@@ -79,15 +79,17 @@ class AdminController extends BaseController
 
     return $this->response->setJSON($fileData);
 }
-public function getUserLeaveApplications()
+public function getApprovedLeaves()
 {
-    $userId = session()->get('user_id'); // Assuming the logged-in user's ID is stored in the session
+    $userId = session()->get('user_id'); // Get logged-in user's ID from the session
     $leaveModel = new \App\Models\LeaveModel(); // Replace with your actual Leave model
 
-    // Query to group leave applications by status or type
-    $leaveData = $leaveModel->select("status, COUNT(*) as leave_count")
+    // Query to count approved leave applications by date
+    $leaveData = $leaveModel->select("DATE(start_date) as leave_date, COUNT(*) as leave_count")
                             ->where('user_id', $userId)
-                            ->groupBy('status')
+                            ->where('status', 'Approved') // Filter only approved leaves
+                            ->groupBy('leave_date')
+                            ->orderBy('leave_date', 'ASC')
                             ->findAll();
 
     return $this->response->setJSON($leaveData);

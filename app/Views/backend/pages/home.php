@@ -187,43 +187,45 @@
 						</div>
 					</div>
 				</div>
-					<script>
-					document.addEventListener('DOMContentLoaded', function () {
-						fetch('/getUserLeaveApplications') // Update this route to match your backend setup
-							.then(response => response.json())
-							.then(data => {
-								// Extract data for Highcharts
-								const categories = data.map(item => item.status); // X-axis (statuses)
-								const seriesData = data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
+				<script>
+				document.addEventListener('DOMContentLoaded', function () {
+					fetch('getApprovedLeaves') // Update this route to match your backend setup
+						.then(response => response.json())
+						.then(data => {
+							// Extract data for Highcharts
+							const categories = data.map(item => item.leave_date); // X-axis (leave dates)
+							const seriesData = data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
 
-								// Render the chart
-								Highcharts.chart('leaveApplicationsChart', {
-									chart: {
-										type: 'bar'
-									},
+							// Render the chart
+							Highcharts.chart('approvedLeavesChart', {
+								chart: {
+									type: 'column'
+								},
+								title: {
+									text: 'Approved Leave Applications'
+								},
+								xAxis: {
+									categories: categories,
 									title: {
-										text: 'Your Leave Applications'
-									},
-									xAxis: {
-										categories: categories,
-										title: {
-											text: 'Leave Status'
-										}
-									},
-									yAxis: {
-										title: {
-											text: 'Number of Leave Applications'
-										}
-									},
-									series: [{
-										name: 'Leaves',
-										data: seriesData
-									}]
-								});
-							})
-							.catch(error => console.error('Error fetching leave application data:', error));
-					});
-					</script>
+										text: 'Leave Dates'
+									}
+								},
+								yAxis: {
+									title: {
+										text: 'Number of Approved Leaves'
+									}
+								},
+								series: [{
+									name: 'Approved Leaves',
+									data: seriesData,
+									color: '#28a745' // Optional: Set a green color for approved leaves
+								}]
+							});
+						})
+						.catch(error => console.error('Error fetching approved leave data:', error));
+				});
+				</script>
+
 					<?php endif; ?>
 
 <script>
