@@ -100,7 +100,7 @@
                     <?php foreach ($leaveApplications as $application): ?>
                         <tr>
                             <td><?= esc($application['la_id']) ?></td>
-                            <td><?= esc($application['employee_name']) ?></td>
+                            <td><?= esc($userName) ?></td> <!-- Display logged-in user's name -->
                             <td><?= esc($application['leave_type_name']) ?></td>
                             <td><?= esc($application['la_start']) ?></td>
                             <td><?= esc($application['la_end']) ?></td>
