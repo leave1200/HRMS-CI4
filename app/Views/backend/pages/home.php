@@ -189,7 +189,7 @@
 				</div>
 				<script>
 				document.addEventListener('DOMContentLoaded', function () {
-					fetch('getApprovedLeaves') // Update this route to match your backend setup
+					fetch('/getApprovedLeaves') // Update this route to match your backend setup
 						.then(response => response.json())
 						.then(data => {
 							// Extract data for Highcharts
