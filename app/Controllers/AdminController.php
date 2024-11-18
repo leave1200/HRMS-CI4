@@ -1231,39 +1231,67 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+// public function leave_application()
+// {
+//     // Load the models
+//     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+//     $leaveApplicationModel = new LeaveApplicationModel();
+//     $employeeModel = new EmployeeModel();
+//     $userStatus = session()->get('userStatus');
+    
+
+//     // Fetch leave applications with details
+//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    
+//     // Retrieve all leave types
+//     $leaveTypes = $leaveTypeModel->findAll();
+
+//     // Fetch employee names
+//     $employees = $employeeModel->getEmployeeNames();
+
+//     // Get user status from session
+//     $userStatus = session()->get('userStatus');
+
+//     // Prepare data for the view
+//     $data = [
+//         'pageTitle' => 'Leave Application',
+//         'leaveTypes' => $leaveTypes,
+//         'employees' => $employees,
+//         'userStatus' => $userStatus,
+//         'leaveApplications' => $leaveApplications // Pass leave applications with details
+//     ];
+
+//     // Load the view with data
+//     return view('backend/pages/leave_application', $data);
+// }
 public function leave_application()
 {
-    // Load the models
-    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+    $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
-    $employeeModel = new EmployeeModel();
-    $userStatus = session()->get('userStatus');
-    
 
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
-    
+    // Get user ID and details from session
+    $userId = session()->get('user_id');
+    $userName = session()->get('name'); // Assuming 'username' is stored in the session
+
+    // Fetch leave applications specific to the logged-in user
+    $leaveApplications = $leaveApplicationModel
+        ->where('user_id', $userId)
+        ->findAll();
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
-
-    // Fetch employee names
-    $employees = $employeeModel->getEmployeeNames();
-
-    // Get user status from session
-    $userStatus = session()->get('userStatus');
 
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
-        'employees' => $employees,
-        'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
+        'userName' => $userName, // Pass the logged-in user's name
+        'leaveApplications' => $leaveApplications,
     ];
 
-    // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
 {
