@@ -128,6 +128,8 @@ $routes->group('', static function($routes){
         $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
         $routes->get('terms-and-condition','AdminController::terms',['as'=>'admin.terms']);
         $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
+        $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
+
 
         
 });

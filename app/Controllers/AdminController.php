@@ -65,6 +65,21 @@ class AdminController extends BaseController
         ];
         return view('backend/pages/home', $data);
     }
+    public function getUserFileUploads()
+{
+    $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
+    $fileModel = new \App\Models\FileModel();
+
+    // Query to get file upload counts grouped by date
+    $fileData = $fileModel->select("DATE(uploaded_at) as upload_date, COUNT(*) as file_count")
+                          ->where('user_id', $userId)
+                          ->groupBy('upload_date')
+                          ->orderBy('upload_date', 'ASC')
+                          ->findAll();
+
+    return $this->response->setJSON($fileData);
+}
+
 
     public function logoutHandler(){
         CIAuth::forget();

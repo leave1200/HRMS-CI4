@@ -127,7 +127,44 @@
 				</div>
 				<?php endif; ?>
 				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
-					<div id="chart" style="width:100%; height:400px;"></div>
+					<div id="fileUploadsChart" style="width:100%; height:400px;"></div>
+					<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						fetch('/getUserFileUploads') // Update this route to match your backend setup
+							.then(response => response.json())
+							.then(data => {
+								// Extract data for Highcharts
+								const categories = data.map(item => item.upload_date); // X-axis (dates)
+								const seriesData = data.map(item => parseInt(item.file_count)); // Y-axis (file counts)
+
+								// Render the chart
+								Highcharts.chart('fileUploadsChart', {
+									chart: {
+										type: 'column'
+									},
+									title: {
+										text: 'Your File Upload Activity'
+									},
+									xAxis: {
+										categories: categories,
+										title: {
+											text: 'Upload Dates'
+										}
+									},
+									yAxis: {
+										title: {
+											text: 'Number of Files Uploaded'
+										}
+									},
+									series: [{
+										name: 'Files Uploaded',
+										data: seriesData
+									}]
+								});
+							})
+							.catch(error => console.error('Error fetching file upload data:', error));
+					});
+					</script>
 					<?php endif; ?>
 </div>
 <script>
