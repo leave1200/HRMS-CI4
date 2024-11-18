@@ -125,6 +125,7 @@
 						</div>
 					</div>
 				</div>
+				</div>
 				<?php endif; ?>
 				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
 					<div id="fileUploadsChart" style="width:100%; height:400px;"></div>
@@ -166,7 +167,7 @@
 					});
 					</script>
 					<?php endif; ?>
-</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     fetch('<?= route_to('admin.gender') ?>')
