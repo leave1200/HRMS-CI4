@@ -126,8 +126,8 @@
 					</div>
 				</div>
 			</div>
-			<!-- this area is for the dashboard of employee not available for admin  -->
 				<?php endif; ?>
+				<!-- this area is for the dashboard of employee not available for admin  -->
 				<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
 					<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
@@ -177,7 +177,6 @@
 							.catch(error => console.error('Error fetching file upload data:', error));
 					});
 					</script>
-					<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
 					<div class="card-box pb-8">
 					<div class="col-md-15 mb-20">
 						<div class="card-box height-100-p pd-20">
