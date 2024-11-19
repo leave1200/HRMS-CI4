@@ -107,7 +107,7 @@
 <!-- DataTable to display leave applications -->
 
 <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
-    <!-- <div class="page-header">
+    <div class="page-header">
     <div class="row">
         <div class="col-md-12">
             <h4>Your Leave Applications</h4>
@@ -149,7 +149,7 @@
             </table>
         </div>
     </div>
-</div> -->
+</div>
 
     <?php endif; ?>
 
