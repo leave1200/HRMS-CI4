@@ -1271,12 +1271,12 @@ public function leave_application()
     $userId = session()->get('userId'); // Get logged-in user's ID
 
     // Fetch leave applications with details
-    if ($userStatus === 'ADMIN') {
+    if ($userStatus !== 'ADMIN') {
+         // Fetch only the leave applications for the logged-in user
+         $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
+    } else {
         // Fetch all leave applications for admins
         $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
-    } else {
-        // Fetch only the leave applications for the logged-in user
-        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
     }
 
     // Retrieve all leave types
