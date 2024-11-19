@@ -1264,40 +1264,30 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+    $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User(); // Load the User model
+    $userModel = new User();
     $userStatus = session()->get('userStatus');
-    $userId = session()->get('userId'); // Get logged-in user's ID
+    $userId = session()->get('userId'); // Logged-in user's ID
 
     // Fetch leave applications with details
     if ($userStatus === 'ADMIN') {
-        // Fetch all leave applications if the user is an admin
         $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
     } else {
-        // Fetch only the leave applications of the logged-in user
+        // Filter for non-admin users by their ID
         $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
     }
-
-    // Retrieve all leave types
-    $leaveTypes = $leaveTypeModel->findAll();
-
-    // Fetch user names
-    $users = $userModel->select('id, name')->findAll();
 
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypes,
-        'users' => $users, // Pass users to the view
+        'leaveApplications' => $leaveApplications,
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
-    // Load the view with data
+    // Load the view
     return view('backend/pages/leave_application', $data);
 }
-
 
 
 
