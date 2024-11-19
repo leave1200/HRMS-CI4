@@ -1271,14 +1271,19 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
-    
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
-    
+    $userId = session()->get('userId'); // Assuming the user ID is stored in session after login
+
+    // Fetch leave applications with details, filtered by logged-in user ID
+    if ($userStatus === 'EMPLOYEE') {
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
+    } else {
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    }
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
-    // Fetch user names
+    // Fetch user names for selection in the form (if applicable)
     $users = $userModel->select('id, name')->findAll();
 
     // Prepare data for the view
