@@ -105,15 +105,15 @@
             </thead>
             <tbody>
                 <?php
-                // Assuming session stores the logged-in user's username
-                $loggedInUserName = session()->get('name'); // Get logged-in user's username
+                // Assuming session stores the logged-in user's ID
+                $loggedInUserId = session()->get('userId'); // Get logged-in user's ID
                 foreach ($leaveApplications as $application): 
-                    // Filter the leave applications for the logged-in user
-                    if ($loggedInUserName !== $application['la_name']): 
+                    // Display only leave applications for the logged-in user
+                    if ($loggedInUserId == $application['la_name']):
                 ?>
                     <tr>
                         <td><?= esc($application['la_id']) ?></td>
-                        <td><?= esc($application['la_name']) ?></td>
+                        <td><?= esc($application['user_name']) ?></td>
                         <td><?= esc($application['leave_type_name']) ?></td>
                         <td><?= esc($application['la_start']) ?></td>
                         <td><?= esc($application['la_end']) ?></td>
@@ -129,8 +129,8 @@
                 <?php endif; endforeach; ?>
             </tbody>
         </table>
+<?php endif; ?>
 
-    <?php endif; ?>
 
 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
     <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
