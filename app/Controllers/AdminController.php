@@ -1297,8 +1297,6 @@ public function leave_application()
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
-urn view('backend/pages/leave_application', $data);
-}
 
 
 
