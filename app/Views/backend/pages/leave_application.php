@@ -49,7 +49,7 @@
                     <div class="col-sm-12 col-md-10">
                         <select name="la_name" class="form-control" required>
                             <option value="" disabled selected>Select Person</option>
-                            <?php if (!empty($employees) && is_array($employees)): ?>
+                            <!-- <?php if (!empty($employees) && is_array($employees)): ?>
                                 <optgroup label="Employees">
                                     <?php foreach ($employees as $employee): ?>
                                         <option value="<?= esc($employee['id']) ?>">
@@ -57,7 +57,7 @@
                                         </option>
                                     <?php endforeach; ?>
                                 </optgroup>
-                            <?php endif; ?>
+                            <?php endif; ?> -->
 
                             <?php if (!empty($users) && is_array($users)): ?>
                                 <optgroup label="Users">
