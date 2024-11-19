@@ -90,7 +90,7 @@
 
 <!-- DataTable to display leave applications -->
 
-<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+<!-- <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
     <div class="page-header">
     <div class="row">
         <div class="col-md-12">
@@ -134,7 +134,7 @@
         </div>
     </div>
 </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
     <div class="page-header">
