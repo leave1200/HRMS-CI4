@@ -1236,27 +1236,23 @@ public function cancelHolidays()
 //     // Load the models
 //     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
 //     $leaveApplicationModel = new LeaveApplicationModel();
-//     $employeeModel = new EmployeeModel();
+//     $userModel = new User(); // Load the User model
 //     $userStatus = session()->get('userStatus');
     
-
 //     // Fetch leave applications with details
-//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
     
 //     // Retrieve all leave types
 //     $leaveTypes = $leaveTypeModel->findAll();
 
-//     // Fetch employee names
-//     $employees = $employeeModel->getEmployeeNames();
-
-//     // Get user status from session
-//     $userStatus = session()->get('userStatus');
+//     // Fetch user names
+//     $users = $userModel->select('id, name')->findAll();
 
 //     // Prepare data for the view
 //     $data = [
 //         'pageTitle' => 'Leave Application',
 //         'leaveTypes' => $leaveTypes,
-//         'employees' => $employees,
+//         'users' => $users, // Pass users to the view
 //         'userStatus' => $userStatus,
 //         'leaveApplications' => $leaveApplications // Pass leave applications with details
 //     ];
@@ -1271,10 +1267,18 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
+    $loggedInUserId = session()->get('user_id'); // Adjust to get the logged-in user's ID
     
     // Fetch leave applications with details
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
-    
+
+    // If the user is not an admin, filter applications for the logged-in user
+    if ($userStatus !== 'ADMIN') {
+        $leaveApplications = array_filter($leaveApplications, function($application) use ($loggedInUserId) {
+            return $application['user_id'] == $loggedInUserId;
+        });
+    }
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
@@ -1287,12 +1291,13 @@ public function leave_application()
         'leaveTypes' => $leaveTypes,
         'users' => $users, // Pass users to the view
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
+        'leaveApplications' => $leaveApplications // Pass filtered leave applications
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////
