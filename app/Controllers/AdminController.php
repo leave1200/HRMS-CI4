@@ -1240,7 +1240,9 @@ public function leave_application()
     $userStatus = session()->get('userStatus');
     
     // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    $loggedInUserId = session()->get('user_id'); // Get the logged-in user's ID from session
+    $leaveApplications = $leaveModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId);
+    
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
