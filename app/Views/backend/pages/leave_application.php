@@ -109,11 +109,11 @@
                 $loggedInUserName = session()->get('name'); // Get logged-in user's username
                 foreach ($leaveApplications as $application): 
                     // Filter the leave applications for the logged-in user
-                    if ($loggedInUserName !== $application['user_name']): 
+                    if ($loggedInUserName !== $application['la_name']): 
                 ?>
                     <tr>
                         <td><?= esc($application['la_id']) ?></td>
-                        <td><?= esc($application['user_name']) ?></td>
+                        <td><?= esc($application['la_name']) ?></td>
                         <td><?= esc($application['leave_type_name']) ?></td>
                         <td><?= esc($application['la_start']) ?></td>
                         <td><?= esc($application['la_end']) ?></td>
