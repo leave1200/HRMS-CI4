@@ -1267,17 +1267,16 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+    $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
-    $userModel = new User(); // Load the User model
-    $userStatus = session()->get('userStatus');
-    $userId = session()->get('id'); // Retrieve logged-in user's ID
+    $userModel = new User();
 
-    // Fetch leave applications for the logged-in user with details
-    $leaveApplications = $leaveApplicationModel
-        ->where('user_id', $userId) // Ensure 'user_id' matches the actual column name in your table
-        ->findAll();
+    // Retrieve logged-in user's ID
+    $userId = session()->get('id');
+
+    // Fetch leave applications with details for the logged-in user
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel, $userId);
 
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
@@ -1293,14 +1292,14 @@ public function leave_application()
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
         'employees' => $employees,
-        'users' => $users, // Pass users to the view
-        'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications for the logged-in user
+        'users' => $users,
+        'leaveApplications' => $leaveApplications
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////
