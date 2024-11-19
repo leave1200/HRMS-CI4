@@ -1267,27 +1267,32 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new leave_typeModel();
+    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $employeeModel = new EmployeeModel();
+    $userModel = new User(); // Load the User model
+    $userStatus = session()->get('userStatus');
     
-    // Get the current logged-in user's ID
-    $userId = session()->get('userId'); // Ensure session contains the user's ID
-
-    // Fetch leave applications for the logged-in user
-    $leaveApplications = $leaveApplicationModel
-        ->where('user_id', $userId) // Filter by logged-in user ID
-        ->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
-
-    // Retrieve all leave types for form submission
+    // Fetch leave applications with details
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    
+    // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
+
+    // Fetch employee names
+    $employees = $employeeModel->getEmployeeNames();
+
+    // Fetch user names
+    $users = $userModel->select('id, name')->findAll();
 
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
-        'leaveApplications' => $leaveApplications, // Pass filtered applications
-        'userId' => $userId,
+        'employees' => $employees,
+        'users' => $users, // Pass users to the view
+        'userStatus' => $userStatus,
+        'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
     // Load the view with data
