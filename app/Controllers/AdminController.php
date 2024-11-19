@@ -1268,7 +1268,7 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
-    $loggedInUserId = session()->get('userId'); // Get logged-in user's ID
+    $loggedInUserId = session()->get('id'); // Get logged-in user's ID
 
     // Fetch leave applications with details, passing the logged-in user's ID for filtering
     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId);
