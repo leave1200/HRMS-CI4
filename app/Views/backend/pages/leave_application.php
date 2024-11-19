@@ -105,7 +105,56 @@
 </div>
 
 <!-- DataTable to display leave applications -->
-<div class="page-header">
+
+<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+    <div class="page-header">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Your Leave Applications</h4>
+            <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($leaveApplications)): ?>
+                        <?php foreach ($leaveApplications as $application): ?>
+                            <tr>
+                                <td><?= esc($application['la_id']) ?></td>
+                                <td><?= esc($application['leave_type_name']) ?></td>
+                                <td><?= esc($application['la_start']) ?></td>
+                                <td><?= esc($application['la_end']) ?></td>
+                                <td><?= esc($application['status']) ?></td>
+                                <td>
+                                    <?php if ($application['status'] === 'Pending'): ?>
+                                        <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
+                                    <?php else: ?>
+                                        <span>N/A</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center">No leave applications found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <?php endif; ?>
+
+<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
+    <div class="page-header">
     <div class="row">
         <div class="col-md-12">
             <h4>Submitted Leave Applications</h4>
@@ -140,41 +189,8 @@
         </div>
     </div>
 </div>
-<div class="page-header">
-    <div class="row">
-        <div class="col-md-12">
-            <h4>Submitted Leave Applications</h4>
-            <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Employee Name</th>
-                        <th>Leave Type</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Status</th>
-                        <th>Action</th> <!-- New Action Column -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($leaveApplications as $application): ?>
-                        <tr>
-                            <td><?= esc($application['la_id']) ?></td>
-                            <td><?= esc($application['employee_name']) ?></td>
-                            <td><?= esc($application['leave_type_name']) ?></td>
-                            <td><?= esc($application['la_start']) ?></td>
-                            <td><?= esc($application['la_end']) ?></td>
-                            <td><?= esc($application['status']) ?></td>
-                            <td>
-                                <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+
+    <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
