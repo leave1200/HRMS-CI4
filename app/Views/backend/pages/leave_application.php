@@ -103,7 +103,7 @@
     </thead>
     <tbody>
     <?php 
-    $loggedInUserId = session()->get_user()->id; // Get logged-in user's ID
+    $loggedInUserId = session()->get_user()->name; // Get logged-in user's ID
     foreach ($leaveApplications as $application): 
         // Ensure only logged-in user's data is displayed for non-admin users
         if ($userStatus !== 'ADMIN' && $application['la_name'] === $loggedInUserId) {
