@@ -1231,60 +1231,22 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-// public function leave_application()
-// {
-//     $leaveTypeModel = new leave_typeModel();
-//     $leaveApplicationModel = new LeaveApplicationModel();
-//     $userModel = new User();
-
-//     $data = [
-//         'pageTitle' => 'Leave Application',
-//         'leaveTypes' => $leaveTypeModel->findAll(),
-//         'users' => $userModel->select('id, name')->findAll(),
-//         'userStatus' => session()->get('userStatus'),
-//         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
-//     ];
-
-//     return view('backend/pages/leave_application', $data);
-// }
-
-
 public function leave_application()
 {
     $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
-    // Get user status and user ID from session
-    $userStatus = session()->get('userStatus');
-    $userId = session()->get('userId');
-
-    // Ensure the session data exists
-    if (!$userStatus || !$userId) {
-        return redirect()->to('/login');  // Redirect if session is missing
-    }
-
-    // Fetch leave applications based on user status
-    $leaveApplications = ($userStatus !== 'ADMIN')
-        ? $leaveApplicationModel->getLeaveApplicationsWithDetails($userId)  // Non-admin: show only their own
-        : $leaveApplicationModel->getLeaveApplicationsWithDetails();  // Admin: show all
-
-    // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications,
+        'userStatus' => session()->get('userStatus'),
+        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
     ];
 
-    // Return the view with data
     return view('backend/pages/leave_application', $data);
 }
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
