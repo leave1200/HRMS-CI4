@@ -1257,16 +1257,17 @@ public function leave_application()
 
     // Get user status and user ID from session
     $userStatus = session()->get('userStatus');
-    $userId = session()->get('userId'); // Assuming the user's ID is saved in the session
+    $userId = session()->get('userId');
+
+    // Ensure the session data exists
+    if (!$userStatus || !$userId) {
+        return redirect()->to('/login');  // Redirect if session is missing
+    }
 
     // Fetch leave applications based on user status
-    if ($userStatus !== 'ADMIN') {
-        // For non-ADMIN users, filter leave applications by user ID
-        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($userId);
-    } else {
-        // For ADMIN users, fetch all pending leave applications
-        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails();
-    }
+    $leaveApplications = ($userStatus !== 'ADMIN')
+        ? $leaveApplicationModel->getLeaveApplicationsWithDetails($userId)  // Non-admin: show only their own
+        : $leaveApplicationModel->getLeaveApplicationsWithDetails();  // Admin: show all
 
     // Prepare data for the view
     $data = [
@@ -1274,12 +1275,13 @@ public function leave_application()
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications, // Filtered leave applications
+        'leaveApplications' => $leaveApplications,
     ];
 
-    // Load the view with data
+    // Return the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 
