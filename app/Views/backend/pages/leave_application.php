@@ -109,7 +109,7 @@
                 $loggedInUserName = session()->get('name'); // Get logged-in user's username
                 foreach ($leaveApplications as $application): 
                     // Filter the leave applications for the logged-in user
-                    if ($application['user_name'] == $loggedInUserName): 
+                    if ($application['user_name'] !== $loggedInUserName): 
                 ?>
                     <tr>
                         <td><?= esc($application['la_id']) ?></td>
