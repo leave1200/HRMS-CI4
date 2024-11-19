@@ -104,7 +104,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($filteredApplications as $application): ?>
+        <?php foreach ($leaveApplications as $application): ?>
             <tr>
                 <td><?= esc($application['la_id']) ?></td>
                 <td><?= esc($application['user_name']) ?></td>
@@ -123,7 +123,6 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
     <?php endif; ?>
 
 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
