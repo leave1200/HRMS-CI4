@@ -1231,17 +1231,54 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+// public function leave_application()
+// {
+//     // Load the models
+//     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+//     $leaveApplicationModel = new LeaveApplicationModel();
+//     $userModel = new User(); // Load the User model
+//     $userStatus = session()->get('userStatus');
+    
+//     // Fetch leave applications with details
+//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    
+//     // Retrieve all leave types
+//     $leaveTypes = $leaveTypeModel->findAll();
+
+//     // Fetch user names
+//     $users = $userModel->select('id, name')->findAll();
+
+//     // Prepare data for the view
+//     $data = [
+//         'pageTitle' => 'Leave Application',
+//         'leaveTypes' => $leaveTypes,
+//         'users' => $users, // Pass users to the view
+//         'userStatus' => $userStatus,
+//         'leaveApplications' => $leaveApplications // Pass leave applications with details
+//     ];
+
+//     // Load the view with data
+//     return view('backend/pages/leave_application', $data);
+// }
+
 public function leave_application()
 {
     // Load the models
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
-    $userStatus = session()->get('userStatus');
-    
+    $userStatus = session()->get('userStatus'); // Get the user status
+    $userId = session()->get('userId'); // Get the logged-in user's ID
+
     // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
-    
+    if ($userStatus === 'ADMIN') {
+        // Fetch all leave applications for admins
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    } else {
+        // Fetch only the leave applications for the logged-in user
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
+    }
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
@@ -1252,14 +1289,15 @@ public function leave_application()
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
-        'users' => $users, // Pass users to the view
+        'users' => $users,
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
+        'leaveApplications' => $leaveApplications
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()

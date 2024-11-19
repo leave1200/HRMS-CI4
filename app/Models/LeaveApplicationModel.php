@@ -31,30 +31,57 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
-    {
-        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
+    // public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
+    // {
+    //     $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
 
-        // Prepare an array to hold the applications with names
-        $applicationsWithDetails = [];
+    //     // Prepare an array to hold the applications with names
+    //     $applicationsWithDetails = [];
 
-        foreach ($leaveApplications as $application) {
-            // Fetch leave type name
-            $leaveType = $leaveTypeModel->find($application['la_type']);
-            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+    //     foreach ($leaveApplications as $application) {
+    //         // Fetch leave type name
+    //         $leaveType = $leaveTypeModel->find($application['la_type']);
+    //         $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
 
-            // Fetch user name
-            $user = $userModel->find($application['la_name']);
-            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+    //         // Fetch user name
+    //         $user = $userModel->find($application['la_name']);
+    //         $application['user_name'] = $user ? $user['name'] : 'Unknown User';
 
-            // Add the application details to the array
-            $applicationsWithDetails[] = $application;
-        }
+    //         // Add the application details to the array
+    //         $applicationsWithDetails[] = $application;
+    //     }
 
-        return $applicationsWithDetails;
+    //     return $applicationsWithDetails;
+    // }
+
+    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId = null)
+{
+    // Start building the query
+    $query = $this->where('status', 'Pending');
+
+    // Apply user ID filter for non-admin users
+    if (!is_null($userId)) {
+        $query->where('la_name', $userId);
     }
 
-    
+    // Fetch filtered leave applications
+    $leaveApplications = $query->findAll();
+
+    // Add leave type and user details to each application
+    $applicationsWithDetails = [];
+    foreach ($leaveApplications as $application) {
+        $leaveType = $leaveTypeModel->find($application['la_type']);
+        $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+
+        $user = $userModel->find($application['la_name']);
+        $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+
+        $applicationsWithDetails[] = $application;
+    }
+
+    return $applicationsWithDetails;
+}
+
 
 
     public function countApprovedLeaves()
