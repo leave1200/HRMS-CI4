@@ -60,27 +60,37 @@ class LeaveApplicationModel extends Model
         $query = $this->where('status', 'Pending');
     
         // Apply user ID filter for non-admin users
-        if ($userId !== null) {
+        if (!is_null($userId)) {
             $query->where('la_name', $userId); // Filter by logged-in user's ID
         }
     
         // Fetch filtered leave applications
         $leaveApplications = $query->findAll();
     
-        // Add leave type and user details to each application
+        // Prepare an array to hold applications with details
         $applicationsWithDetails = [];
+    
         foreach ($leaveApplications as $application) {
+            // Fetch leave type details
             $leaveType = $leaveTypeModel->find($application['la_type']);
             $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
     
-            $user = $userModel->find($application['la_name']);
-            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+            // Ensure the user being fetched matches the filter if applied
+            if (is_null($userId) || $application['la_name'] == $userId) {
+                $user = $userModel->find($application['la_name']);
+                $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+            } else {
+                // Skip adding details if the application doesn't belong to the logged-in user
+                continue;
+            }
     
+            // Add the application to the detailed list
             $applicationsWithDetails[] = $application;
         }
     
         return $applicationsWithDetails;
     }
+    
     
 
 
