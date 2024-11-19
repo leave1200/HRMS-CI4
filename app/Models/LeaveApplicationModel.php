@@ -34,10 +34,14 @@ class LeaveApplicationModel extends Model
     
     public function getLeaveApplicationsWithDetails(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel, $userId)
     {
-        // Fetch leave applications for the logged-in user with 'Pending' status
+        // Fetch leave applications for the logged-in user
         $leaveApplications = $this->where('status', 'Pending')
-                                   ->where('user_id', $userId) // Filter by user ID
+                                   ->where('user_id', $userId)
                                    ->findAll();
+    
+        if (empty($leaveApplications)) {
+            die('No leave applications found for the logged-in user.');
+        }
     
         // Prepare an array to hold the applications with names
         $applicationsWithDetails = [];
@@ -57,6 +61,7 @@ class LeaveApplicationModel extends Model
     
         return $applicationsWithDetails;
     }
+    
     
     public function countApprovedLeaves()
     {
