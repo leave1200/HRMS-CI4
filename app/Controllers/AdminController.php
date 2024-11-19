@@ -1272,20 +1272,23 @@ public function leave_application()
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
     
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    // Get the logged-in user's ID from the session
+    $userId = session()->get('user_id'); // Ensure the correct session key for user ID
+
+    // Fetch leave applications with details, filtered by the logged-in user's ID
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetailsByUser($leaveTypeModel, $userModel, $userId);
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
-    // Fetch user names
+    // Fetch user names (optional for the view if needed)
     $users = $userModel->select('id, name')->findAll();
 
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
-        'users' => $users, // Pass users to the view
+        'users' => $users, // Pass users to the view (if needed)
         'userStatus' => $userStatus,
         'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
@@ -1293,6 +1296,7 @@ public function leave_application()
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////
