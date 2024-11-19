@@ -32,9 +32,12 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplicationsWithDetails(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel)
+    public function getLeaveApplicationsWithDetails(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel, $userId)
     {
-        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
+        // Fetch leave applications for the logged-in user with 'Pending' status
+        $leaveApplications = $this->where('status', 'Pending')
+                                   ->where('user_id', $userId) // Filter by user ID
+                                   ->findAll();
     
         // Prepare an array to hold the applications with names
         $applicationsWithDetails = [];
@@ -54,6 +57,7 @@ class LeaveApplicationModel extends Model
     
         return $applicationsWithDetails;
     }
+    
     public function countApprovedLeaves()
     {
         return $this->where('status', 'Approved')->countAllResults();
@@ -62,6 +66,7 @@ class LeaveApplicationModel extends Model
     {
         return $this->where('status', 'Pending')->countAllResults();
     }
+
     
     
 }
