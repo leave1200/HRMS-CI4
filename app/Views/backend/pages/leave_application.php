@@ -102,31 +102,25 @@
         </tr>
     </thead>
     <tbody>
-    <?php 
-    $loggedInUserId = session()->get('userId'); // Get logged-in user's ID
-    foreach ($leaveApplications as $application): 
-        // Ensure only logged-in user's data is displayed for non-admin users
-        if ($userStatus !== 'ADMIN' && $application['la_name'] === $loggedInUserId) {
-            continue;
-        }
-    ?>
-        <tr>
-            <td><?= esc($application['la_id']) ?></td>
-            <td><?= esc($application['user_name']) ?></td>
-            <td><?= esc($application['leave_type_name']) ?></td>
-            <td><?= esc($application['la_start']) ?></td>
-            <td><?= esc($application['la_end']) ?></td>
-            <td><?= esc($application['status']) ?></td>
-            <td>
-                <?php if ($application['status'] === 'Pending'): ?>
-                    <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                <?php else: ?>
-                    <span>N/A</span>
-                <?php endif; ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
+        <?php foreach ($leaveApplications as $application): ?>
+            <tr>
+                <td><?= esc($application['la_id']) ?></td>
+                <td><?= esc($application['user_name']) ?></td>
+                <td><?= esc($application['leave_type_name']) ?></td>
+                <td><?= esc($application['la_start']) ?></td>
+                <td><?= esc($application['la_end']) ?></td>
+                <td><?= esc($application['status']) ?></td>
+                <td>
+                    <?php if ($application['status'] === 'Pending'): ?>
+                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                    <?php else: ?>
+                        <span>N/A</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
