@@ -1268,10 +1268,16 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
-    $loggedInUserId = session()->get('userId'); // Get logged-in user's ID
+    $userId = session()->get('userId'); // Get logged-in user's ID
 
-    // Fetch leave applications with details, passing the logged-in user's ID for filtering
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId);
+    // Fetch leave applications with details
+    if ($userStatus === 'ADMIN') {
+        // Fetch all leave applications if the user is an admin
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    } else {
+        // Fetch only the leave applications of the logged-in user
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
+    }
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
@@ -1290,6 +1296,8 @@ public function leave_application()
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
+}
+urn view('backend/pages/leave_application', $data);
 }
 
 
