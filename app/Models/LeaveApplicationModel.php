@@ -38,18 +38,18 @@ class LeaveApplicationModel extends Model
         // Prepare an array to hold the applications with names
         $applicationsWithDetails = [];
 
-        foreach ($leaveApplications as $application) {
-            // Fetch leave type name
-            $leaveType = $leaveTypeModel->find($application['la_type']);
-            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+        // foreach ($leaveApplications as $application) {
+        //     // Fetch leave type name
+        //     $leaveType = $leaveTypeModel->find($application['la_type']);
+        //     $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
 
-            // Fetch user name
-            $user = $userModel->find($application['la_name']);
-            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+        //     // Fetch user name
+        //     $user = $userModel->find($application['la_name']);
+        //     $application['user_name'] = $user ? $user['name'] : 'Unknown User';
 
-            // Add the application details to the array
-            $applicationsWithDetails[] = $application;
-        }
+        //     // Add the application details to the array
+        //     $applicationsWithDetails[] = $application;
+        // }
 
         return $applicationsWithDetails;
     }
