@@ -1261,27 +1261,27 @@ public function cancelHolidays()
 //     return view('backend/pages/leave_application', $data);
 // }
 
-public function leave_application()
-{
-    $leaveTypeModel = new leave_typeModel();
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User();
+// public function leave_application()
+// {
+//     $leaveTypeModel = new leave_typeModel();
+//     $leaveApplicationModel = new LeaveApplicationModel();
+//     $userModel = new User();
 
-    // Determine which leave applications to fetch based on user status
-    $userId = session()->get('userStatus') !== 'ADMIN' ? session()->get('userId') : null;
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
+//     // Determine which leave applications to fetch based on user status
+//     $userId = session()->get('userStatus') !== 'ADMIN' ? session()->get('userId') : null;
+//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
 
-    // Prepare data for the view
-    $data = [
-        'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'leaveApplications' => $leaveApplications,
-    ];
+//     // Prepare data for the view
+//     $data = [
+//         'pageTitle' => 'Leave Application',
+//         'leaveTypes' => $leaveTypeModel->findAll(),
+//         'users' => $userModel->select('id, name')->findAll(),
+//         'userStatus' => session()->get('userStatus'),
+//         'leaveApplications' => $leaveApplications,
+//     ];
 
-    return view('backend/pages/leave_application', $data);
-}
+//     return view('backend/pages/leave_application', $data);
+// }
 
 
 
