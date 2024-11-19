@@ -106,9 +106,15 @@
         $userStatus = session()->get('userStatus');
         $userId = session()->get('userId'); // Get the logged-in user's ID
 
+        // Check if userStatus and userId are set correctly
+        echo '<!-- Debug userStatus: '.esc($userStatus).', userId: '.esc($userId).' -->'; // Debugging
+
         foreach ($leaveApplications as $application):
+            // Check if la_name and userId are being compared correctly
+            echo '<!-- Debug la_name: '.esc($application['la_name']).' -->'; // Debugging
+
             // If the user is not an admin, only show their own data
-            if ($userStatus !== 'ADMIN' && $application['la_name'] !== $userId) {
+            if ($userStatus !== 'ADMIN' && $application['la_name'] != $userId) {
                 continue; // Skip this application if it's not for the logged-in user
             }
         ?>
@@ -130,6 +136,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
 
 
 
