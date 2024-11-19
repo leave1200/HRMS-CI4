@@ -1267,21 +1267,15 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new \App\Models\LeaveTypeModel();
-    $leaveApplicationModel = new \App\Models\LeaveApplicationModel();
-    $employeeModel = new \App\Models\EmployeeModel();
-    $userModel = new \App\Models\User();
-
-    // Retrieve logged-in user's ID
-    $userId = session()->get('id');
-
-    if (!$userId) {
-        return redirect()->route('login')->with('error', 'Please log in first.');
-    }
-
-    // Fetch leave applications with details for the logged-in user
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($userId);
-
+    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $employeeModel = new EmployeeModel();
+    $userModel = new User(); // Load the User model
+    $userStatus = session()->get('userStatus');
+    
+    // Fetch leave applications with details
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
@@ -1296,16 +1290,14 @@ public function leave_application()
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
         'employees' => $employees,
-        'users' => $users,
-        'leaveApplications' => $leaveApplications
+        'users' => $users, // Pass users to the view
+        'userStatus' => $userStatus,
+        'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
-
-
-
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()

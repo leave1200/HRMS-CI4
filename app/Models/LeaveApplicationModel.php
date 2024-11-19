@@ -32,21 +32,28 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplicationsWithDetails($userId)
+    public function getLeaveApplicationsWithDetails(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel)
     {
-        return $this->select('leave_applications.*, leave_types.name as leave_type, employees.firstname, employees.lastname')
-            ->join('leave_types', 'leave_types.id = leave_applications.leave_type_id')
-            ->join('employees', 'employees.id = leave_applications.employee_id')
-            ->where('leave_applications.user_id', $userId)
-            ->findAll();
+        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
+    
+        // Prepare an array to hold the applications with names
+        $applicationsWithDetails = [];
+    
+        foreach ($leaveApplications as $application) {
+            // Fetch leave type name
+            $leaveType = $leaveTypeModel->find($application['la_type']);
+            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+    
+            // Fetch employee name
+            $employee = $employeeModel->find($application['la_name']);
+            $application['employee_name'] = $employee ? $employee['firstname'] . ' ' . $employee['lastname'] : 'Unknown Employee';
+    
+            // Add the application details to the array
+            $applicationsWithDetails[] = $application;
+        }
+    
+        return $applicationsWithDetails;
     }
-    
-    public function getEmployeeNames()
-{
-    return $this->select('id, CONCAT(firstname, " ", lastname) as full_name')->findAll();
-}
-
-    
     public function countApprovedLeaves()
     {
         return $this->where('status', 'Approved')->countAllResults();
@@ -55,7 +62,7 @@ class LeaveApplicationModel extends Model
     {
         return $this->where('status', 'Pending')->countAllResults();
     }
-
+    
     
     
 }
