@@ -1272,10 +1272,13 @@ public function leave_application()
     $employeeModel = new EmployeeModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
-    
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
-    
+    $userId = session()->get('id'); // Retrieve logged-in user's ID
+
+    // Fetch leave applications for the logged-in user with details
+    $leaveApplications = $leaveApplicationModel
+        ->where('user_id', $userId) // Ensure 'user_id' matches the actual column name in your table
+        ->findAll();
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
@@ -1292,12 +1295,13 @@ public function leave_application()
         'employees' => $employees,
         'users' => $users, // Pass users to the view
         'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
+        'leaveApplications' => $leaveApplications // Pass leave applications for the logged-in user
     ];
 
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
