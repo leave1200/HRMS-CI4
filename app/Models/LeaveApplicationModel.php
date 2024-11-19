@@ -55,33 +55,33 @@ class LeaveApplicationModel extends Model
     // }
 
     public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId = null)
-{
-    // Start building the query
-    $query = $this->where('status', 'Pending');
-
-    // Apply user ID filter for non-admin users
-    if (!is_null($userId)) {
-        $query->where('la_name', $userId);
+    {
+        // Start building the query
+        $query = $this->where('status', 'Pending');
+    
+        // Apply user ID filter for non-admin users
+        if ($userId !== null) {
+            $query->where('la_name', $userId); // Filter by logged-in user's ID
+        }
+    
+        // Fetch filtered leave applications
+        $leaveApplications = $query->findAll();
+    
+        // Add leave type and user details to each application
+        $applicationsWithDetails = [];
+        foreach ($leaveApplications as $application) {
+            $leaveType = $leaveTypeModel->find($application['la_type']);
+            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+    
+            $user = $userModel->find($application['la_name']);
+            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+    
+            $applicationsWithDetails[] = $application;
+        }
+    
+        return $applicationsWithDetails;
     }
-
-    // Fetch filtered leave applications
-    $leaveApplications = $query->findAll();
-
-    // Add leave type and user details to each application
-    $applicationsWithDetails = [];
-    foreach ($leaveApplications as $application) {
-        $leaveType = $leaveTypeModel->find($application['la_type']);
-        $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
-
-        $user = $userModel->find($application['la_name']);
-        $application['user_name'] = $user ? $user['name'] : 'Unknown User';
-
-        $applicationsWithDetails[] = $application;
-    }
-
-    return $applicationsWithDetails;
-}
-
+    
 
 
     public function countApprovedLeaves()

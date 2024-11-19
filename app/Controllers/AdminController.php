@@ -1264,11 +1264,11 @@ public function cancelHolidays()
 public function leave_application()
 {
     // Load the models
-    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+    $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User(); // Load the User model
-    $userStatus = session()->get('userStatus'); // Get the user status
-    $userId = session()->get('userId'); // Get the logged-in user's ID
+    $userModel = new User();
+    $userStatus = session()->get('userStatus');
+    $userId = session()->get('userId'); // Get logged-in user's ID
 
     // Fetch leave applications with details
     if ($userStatus === 'ADMIN') {
