@@ -102,7 +102,16 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($leaveApplications as $application): ?>
+        <?php
+        $userStatus = session()->get('userStatus');
+        $userId = session()->get('userId'); // Get the logged-in user's ID
+
+        foreach ($leaveApplications as $application):
+            // If the user is not an admin, only show their own data
+            if ($userStatus !== 'ADMIN' && $application['la_name'] !== $userId) {
+                continue; // Skip this application if it's not for the logged-in user
+            }
+        ?>
             <tr>
                 <td><?= esc($application['la_id']) ?></td>
                 <td><?= esc($application['user_name']) ?></td>
@@ -121,6 +130,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
 
 
 
