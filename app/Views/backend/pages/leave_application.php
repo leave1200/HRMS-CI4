@@ -27,7 +27,7 @@
                 <?= csrf_field() ?>
                 
                 <!-- Form fields -->
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
                         <select name="la_name" class="form-control" required>
@@ -43,7 +43,35 @@
                             <?php endif; ?>
                         </select>
                     </div>
+                </div> -->
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Name</label>
+                    <div class="col-sm-12 col-md-10">
+                        <select name="la_name" class="form-control" required>
+                            <option value="" disabled selected>Select Person</option>
+                            <?php if (!empty($employees) && is_array($employees)): ?>
+                                <optgroup label="Employees">
+                                    <?php foreach ($employees as $employee): ?>
+                                        <option value="<?= esc($employee['id']) ?>">
+                                            <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endif; ?>
+
+                            <?php if (!empty($users) && is_array($users)): ?>
+                                <optgroup label="Users">
+                                    <?php foreach ($users as $user): ?>
+                                        <option value="<?= esc($user['id']) ?>">
+                                            <?= esc($user['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endif; ?>
+                        </select>
+                    </div>
                 </div>
+
 
 
                 <div class="form-group row">
