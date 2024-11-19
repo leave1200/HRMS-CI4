@@ -106,7 +106,7 @@
             <tbody>
                 <?php
                 // Assuming session stores the logged-in user's username
-                $loggedInUserName = session()->get('username'); // Get logged-in user's username
+                $loggedInUserName = session()->get('name'); // Get logged-in user's username
                 foreach ($leaveApplications as $application): 
                     // Filter the leave applications for the logged-in user
                     if ($application['user_name'] !== $loggedInUserName): 
