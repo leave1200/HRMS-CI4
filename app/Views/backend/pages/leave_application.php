@@ -89,53 +89,52 @@
 </div>
 
 <!-- DataTable to display leave applications -->
-<!-- 
+
 <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
     <div class="page-header">
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Your Leave Applications</h4>
-                <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Leave Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($leaveApplications)): ?>
-                            <?php foreach ($leaveApplications as $application): ?>
-                                <tr>
-                                    <td><?= esc($application['la_id']) ?></td>
-                                    <td><?= esc($application['leave_type_name']) ?></td>
-                                    <td><?= esc($application['la_start']) ?></td>
-                                    <td><?= esc($application['la_end']) ?></td>
-                                    <td><?= esc($application['status']) ?></td>
-                                    <td>
-                                        <?php if ($application['status'] === 'Pending'): ?>
-                                            <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
-                                        <?php else: ?>
-                                            <span>N/A</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Your Leave Applications</h4>
+            <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($leaveApplications)): ?>
+                        <?php foreach ($leaveApplications as $application): ?>
                             <tr>
-                                <td colspan="6" class="text-center">No leave applications found.</td>
+                                <td><?= esc($application['la_id']) ?></td>
+                                <td><?= esc($application['leave_type_name']) ?></td>
+                                <td><?= esc($application['la_start']) ?></td>
+                                <td><?= esc($application['la_end']) ?></td>
+                                <td><?= esc($application['status']) ?></td>
+                                <td>
+                                    <?php if ($application['status'] === 'Pending'): ?>
+                                        <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
+                                    <?php else: ?>
+                                        <span>N/A</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center">No leave applications found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
-<?php endif; ?>
-
+</div>
+    <?php endif; ?>
 
 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE'): ?>
     <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
@@ -171,81 +170,7 @@
     </tbody>
 </table>
 
-    <?php endif; ?> -->
-    <div class="page-header">
-    <div class="row">
-        <div class="col-md-12">
-            <?php if ($userStatus === 'EMPLOYEE'): ?>
-                <h4>Your Leave Applications</h4>
-                <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Leave Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($leaveApplications)): ?>
-                            <?php foreach ($leaveApplications as $application): ?>
-                                <tr>
-                                    <td><?= esc($application['leave_type_name']) ?></td>
-                                    <td><?= esc($application['la_start']) ?></td>
-                                    <td><?= esc($application['la_end']) ?></td>
-                                    <td><?= esc($application['status']) ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="4" class="text-center">No leave applications found.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <h4>All Leave Applications</h4>
-                <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Leave Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($leaveApplications)): ?>
-                            <?php foreach ($leaveApplications as $application): ?>
-                                <tr>
-                                    <td><?= esc($application['la_id']) ?></td>
-                                    <td><?= esc($application['leave_type_name']) ?></td>
-                                    <td><?= esc($application['la_start']) ?></td>
-                                    <td><?= esc($application['la_end']) ?></td>
-                                    <td><?= esc($application['status']) ?></td>
-                                    <td>
-                                        <?php if ($application['status'] === 'Pending'): ?>
-                                            <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
-                                        <?php else: ?>
-                                            <span>N/A</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center">No leave applications found.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-
+    <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>

@@ -31,23 +31,28 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId = null) {
-        $builder = $this->db->table('leave_applications');
-        
-        // If the user is an employee, filter by userId
-        if ($userId) {
-            $builder->where('user_id', $userId); // Assuming `user_id` exists in leave_applications table
+    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
+    {
+        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
+
+        // Prepare an array to hold the applications with names
+        $applicationsWithDetails = [];
+
+        foreach ($leaveApplications as $application) {
+            // Fetch leave type name
+            $leaveType = $leaveTypeModel->find($application['la_type']);
+            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
+
+            // Fetch user name
+            $user = $userModel->find($application['la_name']);
+            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
+
+            // Add the application details to the array
+            $applicationsWithDetails[] = $application;
         }
-        
-        // Join leave types and user details
-        $builder->join('leave_types', 'leave_types.id = leave_applications.leave_type_id', 'left');
-        $builder->join('users', 'users.id = leave_applications.user_id', 'left');
-        
-        // Fetch leave applications with details
-        return $builder->get()->getResultArray();
+
+        return $applicationsWithDetails;
     }
-    
-    
 
     public function countApprovedLeaves()
     {
