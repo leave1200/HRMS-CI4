@@ -1278,7 +1278,7 @@ public function leave_application()
         // Fetch only the leave applications of the logged-in user
         $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
     }
-    
+
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
@@ -1297,6 +1297,7 @@ public function leave_application()
     // Load the view with data
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 
