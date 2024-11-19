@@ -1231,45 +1231,57 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-public function leave_application()
-{
-    $leaveTypeModel = new leave_typeModel();
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User();
-
-    $data = [
-        'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
-    ];
-
-    return view('backend/pages/leave_application', $data);
-}
-
-
 // public function leave_application()
 // {
 //     $leaveTypeModel = new leave_typeModel();
 //     $leaveApplicationModel = new LeaveApplicationModel();
 //     $userModel = new User();
 
-//     // Determine which leave applications to fetch based on user status
-//     $userId = session()->get('userStatus') !== 'ADMIN' ? session()->get('userId') : null;
-//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
-
-//     // Prepare data for the view
 //     $data = [
 //         'pageTitle' => 'Leave Application',
 //         'leaveTypes' => $leaveTypeModel->findAll(),
 //         'users' => $userModel->select('id, name')->findAll(),
 //         'userStatus' => session()->get('userStatus'),
-//         'leaveApplications' => $leaveApplications,
+//         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
 //     ];
 
 //     return view('backend/pages/leave_application', $data);
 // }
+
+
+public function leave_application()
+{
+    $leaveTypeModel = new leave_typeModel();
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $userModel = new User();
+
+    // Get user status and user ID from session
+    $userStatus = session()->get('userStatus');
+    $userId = session()->get('userId'); // Assuming the user's ID is saved in the session
+
+    // Fetch leave applications based on user status
+    if ($userStatus !== 'ADMIN') {
+        // For non-ADMIN users, filter leave applications by user ID
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($userId);
+    } else {
+        // For ADMIN users, fetch all pending leave applications
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails();
+    }
+
+    // Prepare data for the view
+    $data = [
+        'pageTitle' => 'Leave Application',
+        'leaveTypes' => $leaveTypeModel->findAll(),
+        'users' => $userModel->select('id, name')->findAll(),
+        'userStatus' => $userStatus,
+        'leaveApplications' => $leaveApplications, // Filtered leave applications
+    ];
+
+    // Load the view with data
+    return view('backend/pages/leave_application', $data);
+}
+
+
 
 
 
