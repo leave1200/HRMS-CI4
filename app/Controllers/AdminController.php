@@ -1273,8 +1273,10 @@ public function leave_application()
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
     
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    // Fetch leave applications for the logged-in user
+    $leaveApplications = $leaveApplicationModel
+        ->where('user_id', $userId) // Filter by logged-in user ID
+        ->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
