@@ -188,25 +188,97 @@
 					</div>
 				</div>
 				<script>
+						// document.addEventListener('DOMContentLoaded', function () {
+						// 	fetch('/getApprovedLeaves')
+						// 		.then(response => response.json())
+						// 		.then(data => {
+						// 			if (!data.success || !data.data || data.data.length === 0) {
+						// 				console.warn(data.message || 'No data returned from API.');
+						// 				Highcharts.chart('leaveApplicationsChart', {
+						// 					chart: { type: 'column' },
+						// 					title: { text: 'No Approved Leaves Data Available' },
+						// 					xAxis: { categories: [] },
+						// 					yAxis: { title: { text: 'Number of Approved Leaves' } },
+						// 					series: [{ name: 'Approved Leaves', data: [], color: '#28a745' }]
+						// 				});
+						// 				return;
+						// 			}
+
+						// 			// Extract data for Highcharts
+						// 			const categories = data.data.map(item => item.leave_date); // X-axis (leave dates)
+						// 			const seriesData = data.data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
+
+						// 			// Render the chart
+						// 			Highcharts.chart('leaveApplicationsChart', {
+						// 				chart: {
+						// 					type: 'column'
+						// 				},
+						// 				title: {
+						// 					text: 'Approved Leave Applications'
+						// 				},
+						// 				xAxis: {
+						// 					categories: categories,
+						// 					title: {
+						// 						text: 'Leave Dates'
+						// 					}
+						// 				},
+						// 				yAxis: {
+						// 					title: {
+						// 						text: 'Number of Approved Leaves'
+						// 					}
+						// 				},
+						// 				series: [{
+						// 					name: 'Approved Leaves',
+						// 					data: seriesData,
+						// 					color: '#28a745'
+						// 				}]
+						// 			});
+						// 		})
+						// 		.catch(error => {
+						// 			console.error('Error fetching approved leave data:', error);
+						// 			Highcharts.chart('leaveApplicationsChart', {
+						// 				chart: { type: 'column' },
+						// 				title: { text: 'Error Loading Data' },
+						// 				xAxis: { categories: [] },
+						// 				yAxis: { title: { text: 'Number of Approved Leaves' } },
+						// 				series: []
+						// 			});
+						// 		});
+						// });
 						document.addEventListener('DOMContentLoaded', function () {
-							fetch('/getApprovedLeaves')
+							fetch('/getUserLeaveApplications') // Update this route to match your setup
 								.then(response => response.json())
-								.then(data => {
-									if (!data.success || !data.data || data.data.length === 0) {
-										console.warn(data.message || 'No data returned from API.');
+								.then(response => {
+									if (!response.success || !response.data || response.data.length === 0) {
+										console.warn(response.message || 'No data returned from API.');
 										Highcharts.chart('leaveApplicationsChart', {
 											chart: { type: 'column' },
-											title: { text: 'No Approved Leaves Data Available' },
+											title: { text: 'No Leave Applications Data Available' },
 											xAxis: { categories: [] },
-											yAxis: { title: { text: 'Number of Approved Leaves' } },
-											series: [{ name: 'Approved Leaves', data: [], color: '#28a745' }]
+											yAxis: { title: { text: 'Number of Leave Applications' } },
+											series: []
 										});
 										return;
 									}
 
-									// Extract data for Highcharts
-									const categories = data.data.map(item => item.leave_date); // X-axis (leave dates)
-									const seriesData = data.data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
+									const data = response.data;
+
+									// Prepare unique dates and statuses
+									const dates = [...new Set(data.map(item => item.leave_date))];
+									const statuses = [...new Set(data.map(item => item.status))];
+
+									// Prepare series data for each status
+									const series = statuses.map(status => {
+										const statusData = dates.map(date => {
+											const entry = data.find(item => item.leave_date === date && item.status === status);
+											return entry ? parseInt(entry.leave_count) : 0; // Fill missing data with 0
+										});
+
+										return {
+											name: status,
+											data: statusData
+										};
+									});
 
 									// Render the chart
 									Highcharts.chart('leaveApplicationsChart', {
@@ -214,37 +286,35 @@
 											type: 'column'
 										},
 										title: {
-											text: 'Approved Leave Applications'
+											text: 'Your Leave Applications by Status'
 										},
 										xAxis: {
-											categories: categories,
+											categories: dates,
 											title: {
 												text: 'Leave Dates'
 											}
 										},
 										yAxis: {
+											min: 0,
 											title: {
-												text: 'Number of Approved Leaves'
+												text: 'Number of Applications'
 											}
 										},
-										series: [{
-											name: 'Approved Leaves',
-											data: seriesData,
-											color: '#28a745'
-										}]
+										series: series
 									});
 								})
 								.catch(error => {
-									console.error('Error fetching approved leave data:', error);
+									console.error('Error fetching leave application data:', error);
 									Highcharts.chart('leaveApplicationsChart', {
 										chart: { type: 'column' },
 										title: { text: 'Error Loading Data' },
 										xAxis: { categories: [] },
-										yAxis: { title: { text: 'Number of Approved Leaves' } },
+										yAxis: { title: { text: 'Number of Leave Applications' } },
 										series: []
 									});
 								});
 						});
+
 
 				</script>
 

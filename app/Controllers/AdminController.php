@@ -79,7 +79,30 @@ class AdminController extends BaseController
 
     return $this->response->setJSON($fileData);
 }
-public function getApprovedLeaves()
+// public function getApprovedLeaves()
+// {
+//     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
+//     if (!$userId) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'User not logged in.']);
+//     }
+
+//     $leaveModel = new \App\Models\LeaveApplicationModel();
+
+//     // Query to count approved leave applications by date
+//     $leaveData = $leaveModel->select("DATE(la_start) as leave_date, COUNT(*) as leave_count")
+//                             ->where('la_name', $userId) // Use la_name to filter by user ID
+//                             ->where('status', 'Approved') // Filter only approved leaves
+//                             ->groupBy('leave_date')
+//                             ->orderBy('leave_date', 'ASC')
+//                             ->findAll();
+
+//     if (empty($leaveData)) {
+//         return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No approved leaves found.']);
+//     }
+
+//     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
+// }
+public function getAllLeaves()
 {
     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
     if (!$userId) {
@@ -88,16 +111,15 @@ public function getApprovedLeaves()
 
     $leaveModel = new \App\Models\LeaveApplicationModel();
 
-    // Query to count approved leave applications by date
-    $leaveData = $leaveModel->select("DATE(la_start) as leave_date, COUNT(*) as leave_count")
-                            ->where('la_name', $userId) // Use la_name to filter by user ID
-                            ->where('status', 'Approved') // Filter only approved leaves
-                            ->groupBy('leave_date')
+    // Query to count leave applications grouped by date and status
+    $leaveData = $leaveModel->select("DATE(la_start) as leave_date, status, COUNT(*) as leave_count")
+                            ->where('la_name', $userId) // Filter by the currently logged-in user's ID
+                            ->groupBy('leave_date, status') // Group by both leave_date and status
                             ->orderBy('leave_date', 'ASC')
                             ->findAll();
 
     if (empty($leaveData)) {
-        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No approved leaves found.']);
+        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No leave data found.']);
     }
 
     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
