@@ -216,7 +216,13 @@
                 title: 'Success!',
                 text: 'Successfully updated picture!',
                 confirmButtonText: 'Okay'
-            });
+            }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                                // Optionally reload the page or perform other actions
+                                // Example: location.reload(); // Reload the page
+                            }
+                        });
             } else {
                 Swal.fire({
                 icon: 'error',
