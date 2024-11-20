@@ -121,6 +121,40 @@
         </tbody>
 
 </table>
+<!-- DataTable for All Pending Leave Applications -->
+<h4>All Pending Leave Applications</h4>
+<table id="allPendingLeaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User Name</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($allPendingLeaveApplications as $application): ?>
+            <tr>
+                <td><?= esc($application['la_id']) ?></td>
+                <td><?= esc($application['user_name']) ?></td>
+                <td><?= esc($application['leave_type_name']) ?></td>
+                <td><?= esc($application['la_start']) ?></td>
+                <td><?= esc($application['la_end']) ?></td>
+                <td><?= esc($application['status']) ?></td>
+                <td>
+                    <?php if ($application['status'] === 'Pending'): ?>
+                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                    <?php else: ?>
+                        <span>N/A</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
