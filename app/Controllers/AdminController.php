@@ -1305,7 +1305,7 @@ public function pendingleave(){
         'users' => $users, // Pass users to the view
         'userStatus' => $userStatus,
         'leaveApplications' => $leaveApplications // Pass leave applications with details
-//     ];
+    ];
 
 
 // Load the view with data
