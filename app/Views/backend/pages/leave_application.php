@@ -122,7 +122,7 @@
 
 </table>
 <!-- DataTable to display leave applications -->
-<table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+<table id="leaveApplicationsTables" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
             <th>ID</th>
@@ -162,7 +162,11 @@
 $(document).ready(function() {
     if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
         // If it is, destroy it first
-        $('#leaveApplicationsTable').DataTable().destroy();
+        $('#leaveApplicationsTables').DataTable().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#leaveApplicationsTables')) {
+        // If it is, destroy it first
+        $('#leaveApplicationsTables').DataTable().destroy();
     }
 
     $('#leaveApplicationForm').on('submit', function(e) {
@@ -231,6 +235,9 @@ function calculateEndDate() {
 <script>
 $(document).ready(function() {
     $('#leaveApplicationsTable').DataTable({
+        responsive: true,
+    });
+    $('#leaveApplicationsTables').DataTable({
         responsive: true,
     });
 
