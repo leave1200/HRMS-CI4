@@ -1231,22 +1231,22 @@ public function cancelHolidays()
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-public function pendingleave()
-{
-    $leaveTypeModel = new leave_typeModel();
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User();
+// public function leave_application()
+// {
+//     $leaveTypeModel = new leave_typeModel();
+//     $leaveApplicationModel = new LeaveApplicationModel();
+//     $userModel = new User();
 
-    $data = [
-        'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
-    ];
+//     $data = [
+//         'pageTitle' => 'Leave Application',
+//         'leaveTypes' => $leaveTypeModel->findAll(),
+//         'users' => $userModel->select('id, name')->findAll(),
+//         'userStatus' => session()->get('userStatus'),
+//         'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
+//     ];
 
-    return view('backend/pages/pendingleave', $data);
-}
+//     return view('backend/pages/leave_application', $data);
+// }
 public function leave_application()
 {
     $leaveTypeModel = new leave_typeModel();
@@ -1266,6 +1266,24 @@ public function leave_application()
     ];
 
     return view('backend/pages/leave_application', $data);
+}
+
+public function pendingleave(){
+    $leaveTypeModel = new leave_typeModel();
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $userModel = new User();
+
+    $data = [
+        'pageTitle' => 'Pending Leave Application',
+        'leaveTypes' => $leaveTypeModel->findAll(),
+        'users' => $userModel->select('id, name')->findAll(),
+        'userStatus' => session()->get('userStatus'),
+        'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
+    ];
+
+// Load the view with data
+return view('backend/pages/pendingleave', $data);
+
 }
 
 //////////////////////////////////////////////////////////////////////////
