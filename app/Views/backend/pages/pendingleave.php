@@ -58,22 +58,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
 $(document).ready(function() {
-    if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
-        // If it is, destroy it first
-        $('#leaveApplicationsTable').DataTable().destroy();
+    $(document).ready(function() {
+    if (!$.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
+        $('#leaveApplicationsTable').DataTable({
+            responsive: true,
+        });
     }
-});
-</script>
-<script>
-$(document).ready(function() {
-    $('#leaveApplicationsTable').DataTable({
-        responsive: true,
-    });
 
     // Approve button click handler
     $('.approve-btn').on('click', function() {
         var applicationId = $(this).data('id');
-        
         Swal.fire({
             title: 'Confirm Approval',
             text: 'Are you sure you want to approve this leave application?',
@@ -106,6 +100,7 @@ $(document).ready(function() {
         });
     });
 });
+
 </script>
 
 <?= $this->endSection() ?>
