@@ -121,41 +121,6 @@
     </tbody>
 
 </table>
-<!-- DataTable to display leave applications -->
-<table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>User Name</th>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($LeaveApplications as $applications): ?>
-            <tr class="<?= $applications['is_logged_in_user'] ? 'bg-light' : '' ?>"> <!-- Highlight logged-in user's applications -->
-                <td><?= esc($applications['la_id']) ?></td>
-                <td><?= esc($applications['user_name']) ?></td>
-                <td><?= esc($applications['leave_type_name']) ?></td>
-                <td><?= esc($applications['la_start']) ?></td>
-                <td><?= esc($applications['la_end']) ?></td>
-                <td><?= esc($applications['status']) ?></td>
-                <td>
-                    <?php if ($applications['status'] === 'Pending'): ?>
-                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($applications['la_id']) ?>">Approve</button>
-                    <?php else: ?>
-                        <span>N/A</span>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-</table>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>

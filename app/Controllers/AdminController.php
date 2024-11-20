@@ -1251,7 +1251,6 @@ public function leave_application()
 {
     $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
-    $LeaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
     // Get the logged-in user's ID from the session
@@ -1264,7 +1263,6 @@ public function leave_application()
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
-        'LeaveApplications' => $LeaveApplicationModel->getLeaveApplicationsWithDetailed($leaveTypeModel, $userModel),
     ];
 
     return view('backend/pages/leave_application', $data);
