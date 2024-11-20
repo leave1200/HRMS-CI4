@@ -99,6 +99,7 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,6 +111,13 @@
                         <td><?= esc($application['la_start']) ?></td>
                         <td><?= esc($application['la_end']) ?></td>
                         <td><?= esc($application['status']) ?></td>
+                        <td>
+                            <?php if ($application['status'] === 'Pending'): ?>
+                                <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
+                            <?php else: ?>
+                                <span>N/A</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -230,6 +238,46 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+<script>
+    $(document).ready(function() {
+    // Cancel button click handler
+    $('.cancel-btn').on('click', function() {
+        var applicationId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Confirm Cancellation',
+            text: 'Are you sure you want to cancel this leave application?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('admin.cancel.leave') ?>', // Your route to handle cancellation
+                    data: { la_id: applicationId, status: 'Cancelled' },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire('Cancelled!', response.message, 'success').then(() => {
+                                location.reload(); // Reload the page after confirmation
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('AJAX Error:', xhr);
+                        Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
+
 </script>
 
 <?= $this->endSection() ?>

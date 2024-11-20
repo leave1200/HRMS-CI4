@@ -1287,6 +1287,24 @@ return view('backend/pages/pendingleave', $data);
 
 }
 
+public function cancelLeave()
+{
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $laId = $this->request->getPost('la_id');
+    
+    // Update the leave application status to 'Cancelled'
+    if ($leaveApplicationModel->update($laId, ['status' => 'Cancelled'])) {
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Leave application has been successfully cancelled.'
+        ]);
+    } else {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Failed to cancel the leave application. Please try again.'
+        ]);
+    }
+}
 
 
 //////////////////////////////////////////////////////////////////////////
