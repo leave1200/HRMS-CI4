@@ -205,6 +205,7 @@ function calculateEndDate() {
 $(document).ready(function() {
     $('#leaveApplicationsTable').DataTable({
         responsive: true,
+        autoWidth: false,
     });
 
     // Approve button click handler
