@@ -1269,22 +1269,17 @@ public function leave_application()
 }
 
 public function pendingleave(){
-    $userStatus = session()->get('userStatus');
     $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
-    if ($userStatus !== 'ADMIN') {
-        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
-    }
 
-    $data = array(
-    'pageTitle'=>'Pending Leave',
-    'userStatus' => $userStatus,
-    'leaveTypes' => $leaveTypeModel->findAll(),
+    $data = [
+        'pageTitle' => 'Leave Application',
+        'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
         'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
-    );
+    ];
     return view('backend/pages/pendingleave', $data);
 }
 
