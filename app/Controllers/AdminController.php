@@ -1280,7 +1280,7 @@ public function pendingleave(){
     
 
     // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    $leaveApplications = $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $employeeModel);
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
