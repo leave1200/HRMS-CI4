@@ -162,11 +162,7 @@
 $(document).ready(function() {
     if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
         // If it is, destroy it first
-        $('#leaveApplicationsTables').DataTable().destroy();
-    }
-    if ($.fn.DataTable.isDataTable('#leaveApplicationsTables')) {
-        // If it is, destroy it first
-        $('#leaveApplicationsTables').DataTable().destroy();
+        $('#leaveApplicationsTable').DataTable().destroy();
     }
 
     $('#leaveApplicationForm').on('submit', function(e) {
@@ -235,9 +231,6 @@ function calculateEndDate() {
 <script>
 $(document).ready(function() {
     $('#leaveApplicationsTable').DataTable({
-        responsive: true,
-    });
-    $('#leaveApplicationsTables').DataTable({
         responsive: true,
     });
 
