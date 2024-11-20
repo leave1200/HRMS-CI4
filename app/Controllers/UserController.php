@@ -126,48 +126,36 @@ class UserController extends Controller
     //         'message' => 'Invalid image file'
     //     ]);
     // }
-    public function updatePersonalPictures() {
-        $userModel = new User();
-        $user_id = CIAuth::id(); // Adjust this according to your authentication setup to get the current user's ID
+    public function update_profile_picture()
+    {
+        $id = $this->request->getPost('id');
+        $userModel = new UserModel();
     
-        if ($imagefile = $this->request->getFile('user_profile_file')) {
+        if ($imagefile = $this->request->getFile('profile_picture')) {
             if ($imagefile->isValid() && !$imagefile->hasMoved()) {
-                $newName = 'UIMG_' . $user_id . '_' . $imagefile->getRandomName();
-                $path = ROOTPATH . 'public/images/users';
+                $newName = $imagefile->getRandomName();
+                $imagefile->move(ROOTPATH . 'public/backend/images/users', $newName);
     
-                // Move the uploaded file
-                if ($imagefile->move($path, $newName)) {
-                    // Retrieve the user's old picture
-                    $user_info = $userModel->asObject()->find($user_id);
-                    $old_picture = $user_info->picture;
+                $data = ['picture' => $newName];
     
-                    if ($old_picture && file_exists($path . '/' . $old_picture)) {
-                        if (!unlink($path . '/' . $old_picture)) {
-                            log_message('error', 'Failed to delete old picture: ' . $old_picture);
-                        }
-                    }
-                    
-    
-                    // Update the user's profile picture in the database
-                    $userModel->update($user_id, ['picture' => $newName]);
-    
+                if ($userModel->update($id, $data)) {
                     return $this->response->setJSON([
-                        'status' => 1,
-                        'msg' => 'Done! Your profile picture has been successfully updated.',
-                        'new_picture_url' => base_url('/images/users/' . $newName)
+                        'success' => true,
+                        'message' => 'Profile picture updated successfully',
+                        'new_picture_url' => base_url('backend/images/users/' . $newName)
                     ]);
                 } else {
                     return $this->response->setJSON([
-                        'status' => 0,
-                        'msg' => 'Failed to move the uploaded file.'
+                        'success' => false,
+                        'message' => 'Failed to update profile picture'
                     ]);
                 }
             }
         }
     
         return $this->response->setJSON([
-            'status' => 0,
-            'msg' => 'Invalid image file.'
+            'success' => false,
+            'message' => 'Invalid image file'
         ]);
     }
 
