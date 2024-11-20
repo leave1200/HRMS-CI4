@@ -135,17 +135,17 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($LeaveApplications as $application): ?>
-            <tr class="<?= $application['is_logged_in_user'] ? 'bg-light' : '' ?>"> <!-- Highlight logged-in user's applications -->
-                <td><?= esc($application['la_id']) ?></td>
-                <td><?= esc($application['user_name']) ?></td>
-                <td><?= esc($application['leave_type_name']) ?></td>
-                <td><?= esc($application['la_start']) ?></td>
-                <td><?= esc($application['la_end']) ?></td>
-                <td><?= esc($application['status']) ?></td>
+        <?php foreach ($LeaveApplications as $applications): ?>
+            <tr class="<?= $applications['is_logged_in_user'] ? 'bg-light' : '' ?>"> <!-- Highlight logged-in user's applications -->
+                <td><?= esc($applications['la_id']) ?></td>
+                <td><?= esc($applications['user_name']) ?></td>
+                <td><?= esc($applications['leave_type_name']) ?></td>
+                <td><?= esc($applications['la_start']) ?></td>
+                <td><?= esc($applications['la_end']) ?></td>
+                <td><?= esc($applications['status']) ?></td>
                 <td>
-                    <?php if ($application['status'] === 'Pending'): ?>
-                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                    <?php if ($applications['status'] === 'Pending'): ?>
+                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($applications['la_id']) ?>">Approve</button>
                     <?php else: ?>
                         <span>N/A</span>
                     <?php endif; ?>
