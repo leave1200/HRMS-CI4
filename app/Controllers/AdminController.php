@@ -1242,7 +1242,7 @@ public function cancelHolidays()
 //         'leaveTypes' => $leaveTypeModel->findAll(),
 //         'users' => $userModel->select('id, name')->findAll(),
 //         'userStatus' => session()->get('userStatus'),
-//         'LeaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetailed($leaveTypeModel, $userModel),
+//         'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
 //     ];
 
 //     return view('backend/pages/leave_application', $data);
@@ -1269,35 +1269,17 @@ public function leave_application()
 }
 
 public function pendingleave(){
-// Load the models
-$leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
-$leaveApplicationModel = new LeaveApplicationModel();
-$userModel = new User(); // Load the User model
-$userStatus = session()->get('userStatus');
-$userId = session()->get('userId'); // Get the logged-in user's ID
+    $leaveTypeModel = new leave_typeModel();
+    $leaveApplicationModel = new LeaveApplicationModel();
+    $userModel = new User();
 
-// Check if the user is an admin, redirect if not
-if ($userStatus !== 'ADMIN') {
-    return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
-}
-
-// Fetch leave applications with details, filtered for the logged-in user if not admin
-$leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
-
-// Retrieve all leave types
-$leaveTypes = $leaveTypeModel->findAll();
-
-// Fetch user names (for the current user, not employees)
-$users = $userModel->select('id, name')->findAll();
-
-// Prepare data for the view
-$data = [
-    'pageTitle' => 'Pending Leave Applications',
-    'leaveTypes' => $leaveTypes,
-    'users' => $users, // This now only contains data for users
-    'userStatus' => $userStatus,
-    'leaveApplications' => $leaveApplications // Pass leave applications with details
-];
+    $data = [
+        'pageTitle' => 'Pending Leave Application',
+        'leaveTypes' => $leaveTypeModel->findAll(),
+        'users' => $userModel->select('id, name')->findAll(),
+        'userStatus' => session()->get('userStatus'),
+        'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
+    ];
 
 // Load the view with data
 return view('backend/pages/pendingleave', $data);
