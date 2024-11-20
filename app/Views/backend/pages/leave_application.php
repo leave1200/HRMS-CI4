@@ -45,6 +45,7 @@
                     </div>
                 </div>
 
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Leave Type</label>
                     <div class="col-sm-12 col-md-10">
@@ -102,7 +103,7 @@
     </thead>
     <tbody>
         <?php foreach ($leaveApplications as $application): ?>
-            <tr class="<?= $application['is_logged_in_user'] ? 'bg-light' : '' ?>"> <!-- Highlight logged-in user's applications -->
+            <tr>
                 <td><?= esc($application['la_id']) ?></td>
                 <td><?= esc($application['user_name']) ?></td>
                 <td><?= esc($application['leave_type_name']) ?></td>
@@ -120,6 +121,8 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
