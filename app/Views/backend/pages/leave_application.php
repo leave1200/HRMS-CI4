@@ -112,12 +112,9 @@
                         <td><?= esc($application['la_end']) ?></td>
                         <td><?= esc($application['status']) ?></td>
                         <td>
-                            <?php if ($application['status'] === 'Pending'): ?>
-                                <button class="btn btn-danger btn-sm cancel-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
-                            <?php else: ?>
-                                <span>N/A</span>
-                            <?php endif; ?>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>
