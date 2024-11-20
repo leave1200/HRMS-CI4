@@ -32,11 +32,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Employee</label>
-                                <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
-                                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="employee" id="selectedEmployeeId" required>
+                                <label>User</label>
+                                <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
+                                <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="user" id="selectedUserId" required>
                             </div>
+
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
