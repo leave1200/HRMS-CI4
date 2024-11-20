@@ -89,7 +89,7 @@
 </div>
 
 <!-- DataTable to display leave applications -->
-<table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+    <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
             <th>ID</th>
@@ -121,7 +121,6 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
