@@ -1278,7 +1278,7 @@ public function pendingleave(){
     'pageTitle'=>'Pending Leave',
     'userStatus' => $userStatus
     );
-    return view('backend/pages/pendngleave', $data);
+    return view('backend/pages/pendingleave', $data);
 }
 
 //////////////////////////////////////////////////////////////////////////
