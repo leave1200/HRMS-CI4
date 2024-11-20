@@ -1291,17 +1291,17 @@ public function cancelLeave()
 {
     $leaveApplicationModel = new LeaveApplicationModel();
     $laId = $this->request->getPost('la_id');
-    
-    // Update the leave application status to 'Cancelled'
-    if ($leaveApplicationModel->update($laId, ['status' => 'Cancelled'])) {
+
+    // Attempt to delete the leave application
+    if ($leaveApplicationModel->delete($laId)) {
         return $this->response->setJSON([
             'status' => 'success',
-            'message' => 'Leave application has been successfully cancelled.'
+            'message' => 'Leave application has been successfully deleted.'
         ]);
     } else {
         return $this->response->setJSON([
             'status' => 'error',
-            'message' => 'Failed to cancel the leave application. Please try again.'
+            'message' => 'Failed to delete the leave application. Please try again.'
         ]);
     }
 }
