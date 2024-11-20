@@ -99,7 +99,6 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,13 +110,6 @@
                         <td><?= esc($application['la_start']) ?></td>
                         <td><?= esc($application['la_end']) ?></td>
                         <td><?= esc($application['status']) ?></td>
-                        <td>
-                            <?php if ($application['status'] === 'Pending'): ?>
-                                <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                            <?php else: ?>
-                                <span>N/A</span>
-                            <?php endif; ?>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
