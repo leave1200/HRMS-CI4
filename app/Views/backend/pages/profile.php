@@ -209,8 +209,8 @@
         allowedExtensions: ['jpg', 'jpeg', 'png'],
         processUrl:'<?= route_to('update-profile-picture') ?>',
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
-        onSuccess:function(responseText, element, status) {
-            if (response.status === 'success') {
+        success: function(response) {
+                    if (response.status === 'success') {
                         // Show SweetAlert for success message
                         Swal.fire({
                             icon: 'success',
@@ -224,15 +224,14 @@
                             }
                         });
                     } else {
-                Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to update picture.',
-                confirmButtonText: 'Okay'
-            });
-                location.reload();
-            }
-        },
+                        // Show SweetAlert for error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message
+                        });
+                    }
+                },
         onError: function(message, element, status) {
             Swal.fire({
                 icon: 'error',
