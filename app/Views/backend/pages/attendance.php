@@ -320,23 +320,24 @@ $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
-        const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
-        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
-        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
+        // Get user ID and name from the selected row
+        const userId = $(this).find('td:eq(0)').text(); // Assuming the first column contains user ID
+        const userName = $(this).find('td:eq(1)').text(); // Assuming the second column contains user name
+        const officeId = $(this).find('td:eq(2)').text(); // Assuming the third column contains office ID
+        const positionId = $(this).find('td:eq(3)').text(); // Assuming the fourth column contains position ID
 
         // Populate the fields in the PM Sign In form
-        $('#employeeNumberInput2').val(employeeId);
-        $('#employeeNameInput2').val(employeeName);
-        $('#selectedEmployeeId2').val(employeeId);
+        $('#employeeNumberInput2').val(userId); // Update the employee number field
+        $('#employeeNameInput2').val(userName); // Update the employee name field
+        $('#selectedUserId2').val(userId); // Set the hidden input for user ID
 
-        // Set Office and Position based on selected employee
+        // Set Office and Position based on selected user
         $('#officeSelect2').val(officeId).change(); // Set the office select value
         $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
-
 </script>
+>
 <script>
 function signInPmEmployee(attendanceId) {
     if (!attendanceId) {
