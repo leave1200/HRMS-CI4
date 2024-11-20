@@ -141,10 +141,12 @@ class UserController extends Controller
                     $user_info = $userModel->asObject()->find($user_id);
                     $old_picture = $user_info->picture;
     
-                    // Delete the old picture if it exists
                     if ($old_picture && file_exists($path . '/' . $old_picture)) {
-                        unlink($path . '/' . $old_picture);
+                        if (!unlink($path . '/' . $old_picture)) {
+                            log_message('error', 'Failed to delete old picture: ' . $old_picture);
+                        }
                     }
+                    
     
                     // Update the user's profile picture in the database
                     $userModel->update($user_id, ['picture' => $newName]);
