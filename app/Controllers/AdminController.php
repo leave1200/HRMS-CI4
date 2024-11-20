@@ -1237,16 +1237,30 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
+    // Get logged-in user details
+    $userId = session()->get('userId'); // Assuming 'userId' is stored in the session
+    $userStatus = session()->get('userStatus');
+
+    // Determine data to fetch based on user status
+    if ($userStatus === 'ADMIN') {
+        // Admin sees all leave applications
+        $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    } else {
+        // Non-admin users only see their own leave applications
+        $leaveApplications = $leaveApplicationModel->where('user_id', $userId)->findAll();
+    }
+
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
+        'userStatus' => $userStatus,
+        'leaveApplications' => $leaveApplications,
     ];
 
     return view('backend/pages/leave_application', $data);
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////
