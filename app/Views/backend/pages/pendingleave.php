@@ -130,7 +130,7 @@ $(document).ready(function() {
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            Swal.fire('Canceled!', response.message, 'success').then(() => {
+                            Swal.fire('Rejected!', response.message, 'success').then(() => {
                                 location.reload(); // Reload the page after deletion
                             });
                         } else {
