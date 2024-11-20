@@ -1268,6 +1268,19 @@ public function leave_application()
     return view('backend/pages/leave_application', $data);
 }
 
+public function pendingleave(){
+    $userStatus = session()->get('userStatus');
+    if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
+
+    $data = array(
+    'pageTitle'=>'Pending Leave',
+    'userStatus' => $userStatus
+    );
+    return view('backend/pages/pendngleave', $data);
+}
+
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
 {
