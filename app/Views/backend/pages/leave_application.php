@@ -238,5 +238,57 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+    $(document).ready(function () {
+    const loggedInUser = <?= json_encode($loggedInUser) ?>; // Pass user data from PHP to JS
+
+    $('#leaveApplicationsTable').DataTable({
+        initComplete: function () {
+            // Filter data if the user is not an admin
+            if (loggedInUser.status !== 'ADMIN') {
+                this.api()
+                    .columns(1) // Assuming column 1 is the "User Name" column
+                    .search(loggedInUser.name)
+                    .draw();
+            }
+        },
+        language: {
+            emptyTable: loggedInUser.status === 'EMPLOYEE'
+                ? "No leave applications found for your account."
+                : "No leave applications available."
+        }
+    });
+});
+
+</script>
+<script>
+    $('#leaveApplicationsTable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: '<?= route_to("admin.fetch_leave_applications") ?>',
+        type: 'POST',
+        data: {
+            user_id: loggedInUser.id,
+            user_status: loggedInUser.status
+        }
+    },
+    columns: [
+        { data: 'la_id' },
+        { data: 'user_name' },
+        { data: 'leave_type_name' },
+        { data: 'la_start' },
+        { data: 'la_end' },
+        { data: 'status' },
+        { data: 'action' }
+    ],
+    language: {
+        emptyTable: loggedInUser.status === 'EMPLOYEE'
+            ? "No leave applications found for your account."
+            : "No leave applications available."
+    }
+});
+
+</script>
 
 <?= $this->endSection() ?>
