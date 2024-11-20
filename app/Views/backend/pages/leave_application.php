@@ -102,31 +102,42 @@
         </tr>
     </thead>
     <tbody>
-        <?php if (!empty($leaveApplications)): ?>
-            <?php foreach ($leaveApplications as $application): ?>
-                <tr>
-                    <td><?= esc($application['la_id']) ?></td>
-                    <td><?= esc($application['user_name']) ?></td>
-                    <td><?= esc($application['leave_type_name']) ?></td>
-                    <td><?= esc($application['la_start']) ?></td>
-                    <td><?= esc($application['la_end']) ?></td>
-                    <td><?= esc($application['status']) ?></td>
-                    <td>
-                        <?php if ($application['status'] === 'Pending'): ?>
-                            <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                        <?php else: ?>
-                            <span>N/A</span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
+        <?php
+        $userStatus = session()->get('userStatus');
+        $userId = session()->get('userId'); // Get the logged-in user's ID
+
+        // Check if userStatus and userId are set correctly
+        echo '<!-- Debug userStatus: '.esc($userStatus).', userId: '.esc($userId).' -->'; // Debugging
+
+        foreach ($leaveApplications as $application):
+            // Check if la_name and userId are being compared correctly
+            echo '<!-- Debug la_name: '.esc($application['la_name']).' -->'; // Debugging
+
+            // If the user is not an admin, only show their own data
+            if ($userStatus !== 'ADMIN' && $application['la_name'] != $userId) {
+                continue; // Skip this application if it's not for the logged-in user
+            }
+        ?>
             <tr>
-                <td colspan="7" class="text-center">No leave applications found.</td>
+                <td><?= esc($application['la_id']) ?></td>
+                <td><?= esc($application['user_name']) ?></td>
+                <td><?= esc($application['leave_type_name']) ?></td>
+                <td><?= esc($application['la_start']) ?></td>
+                <td><?= esc($application['la_end']) ?></td>
+                <td><?= esc($application['status']) ?></td>
+                <td>
+                    <?php if ($application['status'] === 'Pending'): ?>
+                        <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                    <?php else: ?>
+                        <span>N/A</span>
+                    <?php endif; ?>
+                </td>
             </tr>
-        <?php endif; ?>
+        <?php endforeach; ?>
     </tbody>
 </table>
+
+
 
 
 
@@ -205,7 +216,6 @@ function calculateEndDate() {
 $(document).ready(function() {
     $('#leaveApplicationsTable').DataTable({
         responsive: true,
-        autoWidth: false,
     });
 
     // Approve button click handler
