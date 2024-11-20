@@ -82,6 +82,10 @@ class AdminController extends BaseController
 public function getApprovedLeaves()
 {
     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
+    if (!$userId) {
+        return $this->response->setJSON(['success' => false, 'message' => 'User not logged in.']);
+    }
+
     $leaveModel = new \App\Models\LeaveModel(); // Replace with your actual Leave model
 
     // Query to count approved leave applications by date
@@ -92,8 +96,14 @@ public function getApprovedLeaves()
                             ->orderBy('leave_date', 'ASC')
                             ->findAll();
 
-    return $this->response->setJSON($leaveData);
+    // Check if data exists
+    if (empty($leaveData)) {
+        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No approved leaves found.']);
+    }
+
+    return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
 }
+
 
 
     public function logoutHandler(){
