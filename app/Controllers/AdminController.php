@@ -1252,30 +1252,33 @@ public function fetchMyLeaveApplications()
 {
     $leaveApplicationModel = new \App\Models\LeaveApplicationModel();
     $leaveTypeModel = new \App\Models\LeaveTypeModel();
-    $loggedInUser = session()->get('logged_in_user'); // Adjust based on your session structure
+    $loggedInUser = session()->get('logged_in_user');
 
     if (!$loggedInUser) {
+        log_message('error', 'User not logged in.');
         return $this->response->setJSON([
             'data' => [],
             'error' => 'User not logged in.',
         ]);
     }
 
-    // Fetch leave applications only for the logged-in user
-    $applications = $leaveApplicationModel
-        ->where('la_name', $loggedInUser['id'])
-        ->findAll();
+    try {
+        $applications = $leaveApplicationModel
+            ->where('la_name', $loggedInUser['id'])
+            ->findAll();
 
-    // Add leave type details
-    foreach ($applications as &$application) {
-        $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
+        log_message('debug', 'Leave applications fetched for user ' . $loggedInUser['id'] . ': ' . json_encode($applications));
+
+        foreach ($applications as &$application) {
+            $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
+        }
+
+        return $this->response->setJSON(['data' => $applications]);
+    } catch (\Exception $e) {
+        log_message('error', 'Error fetching leave applications: ' . $e->getMessage());
+        return $this->response->setJSON(['data' => [], 'error' => 'An error occurred.']);
     }
-
-    return $this->response->setJSON([
-        'data' => $applications,
-    ]);
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()

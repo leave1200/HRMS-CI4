@@ -250,20 +250,25 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    $('#myLeaveApplicationsTable').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: {
-        url: '<?= route_to("employee.fetch_my_leave_applications") ?>',
-        type: 'POST',
-    },
-    columns: [
-        { data: 'la_id' },
-        { data: 'leave_type_name' },
-        { data: 'la_start' },
-        { data: 'la_end' },
-        { data: 'status' },
-    ],
+$(document).ready(function () {
+    $('#userLeaveApplicationsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '<?= route_to("employee.fetch_my_leave_applications") ?>',
+            type: 'POST',
+            error: function (xhr, error, thrown) {
+                console.error("Error in DataTable AJAX request:", xhr.responseText);
+            }
+        },
+        columns: [
+            { data: 'la_id' },
+            { data: 'leave_type_name' },
+            { data: 'la_start' },
+            { data: 'la_end' },
+            { data: 'status' }
+        ]
+    });
 });
 
 </script>
