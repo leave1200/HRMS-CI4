@@ -1269,37 +1269,39 @@ public function leave_application()
 }
 
 public function pendingleave(){
-    // Load the models
-    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $employeeModel = new EmployeeModel();
-    $userStatus = session()->get('userStatus');
-    if ($userStatus !== 'ADMIN') {
-        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
-    }
-    
+// Load the models
+$leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
+$leaveApplicationModel = new LeaveApplicationModel();
+$userModel = new User(); // Load the User model
+$userStatus = session()->get('userStatus');
+$userId = session()->get('userId'); // Get the logged-in user's ID
 
-    // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $employeeModel);
-    
-    // Retrieve all leave types
-    $leaveTypes = $leaveTypeModel->findAll();
+// Check if the user is an admin, redirect if not
+if ($userStatus !== 'ADMIN') {
+    return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+}
 
-    // Fetch employee names
-    $employees = $employeeModel->getEmployeeNames();
+// Fetch leave applications with details, filtered for the logged-in user if not admin
+$leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $userId);
 
-    // Get user status from session
-    $userStatus = session()->get('userStatus');
+// Retrieve all leave types
+$leaveTypes = $leaveTypeModel->findAll();
 
-    // Prepare data for the view
-    $data = [
-        'pageTitle' => ' Pending Leave Application',
-        'leaveTypes' => $leaveTypes,
-        'employees' => $employees,
-        'userStatus' => $userStatus,
-        'leaveApplications' => $leaveApplications // Pass leave applications with details
-    ];
-    return view('backend/pages/pendingleave', $data);
+// Fetch user names (for the current user, not employees)
+$users = $userModel->select('id, name')->findAll();
+
+// Prepare data for the view
+$data = [
+    'pageTitle' => 'Pending Leave Applications',
+    'leaveTypes' => $leaveTypes,
+    'users' => $users, // This now only contains data for users
+    'userStatus' => $userStatus,
+    'leaveApplications' => $leaveApplications // Pass leave applications with details
+];
+
+// Load the view with data
+return view('backend/pages/pendingleave', $data);
+
 }
 
 //////////////////////////////////////////////////////////////////////////
