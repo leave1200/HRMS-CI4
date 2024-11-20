@@ -217,7 +217,6 @@
                 text: 'Successfully updated picture!',
                 confirmButtonText: 'Okay'
             });
-                location.reload();
             } else {
                 Swal.fire({
                 icon: 'error',
