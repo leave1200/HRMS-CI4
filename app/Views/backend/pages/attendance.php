@@ -31,10 +31,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Employee</label>
-                                <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
-                                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="employee" id="selectedEmployeeId" required>
+                                <label>User</label>
+                                <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
+                                <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="user" id="selectedUserId" required>
                             </div>
                             <div class="form-group">
                                 <label>Office</label>
@@ -52,8 +52,7 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <!-- <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button> -->
-                            <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
+                            <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInUser()">Sign In</button>
                         </div>
                     </div>
                 </form>
@@ -69,89 +68,87 @@
     <div class="pb-20">
         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="row">
-                    <script>
+                <script>
                     function filterTable() {
                         const input = document.getElementById('searchInput');
                         const filter = input.value.toLowerCase();
                         const rows = document.querySelectorAll('#DataTables_Table_0_wrapper tbody tr');
 
                         rows.forEach(row => {
-                            const nameCell = row.cells[1]; // Assuming the Name is the third column
+                            const nameCell = row.cells[1]; // Assuming the Name is the second column
                             if (nameCell) {
                                 const txtValue = nameCell.textContent || nameCell.innerText;
                                 row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
                             }
                         });
                     }
-                    </script>
-                </div>
+                </script>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="table-responsive">
-                        <table class="data-table table table-striped table-hover dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Office</th>
-                                    <th>Position</th>
-                                    <th>AM Sign In</th>
-                                    <th>Sign Out</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($attendances)): ?>
-                                    <?php foreach ($attendances as $attendance): ?>
-                                        <tr>
-                                            <td><?= esc($attendance['id']) ?></td>
-                                            <td><?= esc($attendance['name']) ?></td>
-                                            <td><?= esc($attendance['office']) ?></td>
-                                            <td><?= esc($attendance['position']) ?></td>
-                                            
-                                            <!-- AM Sign Out status -->
-                                            <td>
-                                                <?php if (empty($attendance['sign_out'])): ?>
-                                                    <?php if (!empty($attendance['sign_in'])): ?>
-                                                        <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
-                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'am')">Sign Out (AM)</button>
-                                                    <?php else: ?>
-                                                        <span>No AM Sign In</span>
-                                                    <?php endif; ?>
-                                                <?php else: ?>
-                                                    <span class="badge bg-danger">AM Signed Out: <?= esc(date('H:i', strtotime($attendance['sign_out']))) ?></span>
-                                                <?php endif; ?>
-                                            </td>
-
-                                            <!-- PM Sign In and Out status -->
-                                            <td>
-                                                <?php if (empty($attendance['pm_sign_in'])): ?>
-                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
-                                                <?php else: ?>
-                                                    <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
-                                                    <?php if (empty($attendance['pm_sign_out'])): ?>
-                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
-                                                    <?php else: ?>
-                                                        <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
-                                                    <?php endif; ?>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="data-table table table-striped table-hover dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Office</th>
+                                <th>Position</th>
+                                <th>AM Sign In</th>
+                                <th>Sign Out</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($attendances)): ?>
+                                <?php foreach ($attendances as $attendance): ?>
                                     <tr>
-                                        <td colspan="6">No attendance records found.</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
+                                        <td><?= esc($attendance['id']) ?></td>
+                                        <td><?= esc($attendance['name']) ?></td>
+                                        <td><?= esc($attendance['office']) ?></td>
+                                        <td><?= esc($attendance['position']) ?></td>
 
-                        </table>
-                    </div>
+                                        <!-- AM Sign Out status -->
+                                        <td>
+                                            <?php if (empty($attendance['sign_out'])): ?>
+                                                <?php if (!empty($attendance['sign_in'])): ?>
+                                                    <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
+                                                    <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'am')">Sign Out (AM)</button>
+                                                <?php else: ?>
+                                                    <span>No AM Sign In</span>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="badge bg-danger">AM Signed Out: <?= esc(date('H:i', strtotime($attendance['sign_out']))) ?></span>
+                                            <?php endif; ?>
+                                        </td>
+
+                                        <!-- PM Sign In and Out status -->
+                                        <td>
+                                            <?php if (empty($attendance['pm_sign_in'])): ?>
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="signInPmUser(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
+                                            <?php else: ?>
+                                                <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
+                                                <?php if (empty($attendance['pm_sign_out'])): ?>
+                                                    <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
+                                                <?php else: ?>
+                                                    <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6">No attendance records found.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-        </div>                        
-    </div>
+    </div>                        
 </div>
 
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
