@@ -121,17 +121,6 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<table id="myLeaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-</table>
 
 
 
@@ -248,33 +237,6 @@ $(document).ready(function() {
         });
     });
 });
-</script>
-<script>
-$(document).ready(function () {
-    $('#userLeaveApplicationsTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '<?= route_to("employee.fetch_my_leave_applications") ?>',
-            type: 'POST',
-            error: function (xhr, error, thrown) {
-                console.error("Error in DataTable AJAX request:", xhr.responseText);
-            }
-        },
-        
-       "data": [
-        {
-            "la_id": "1",
-            "leave_type_name": "Vacation Leave",
-            "la_start": "2024-11-01",
-            "la_end": "2024-11-10",
-            "status": "Pending"
-        },
-        ...
-    ]
-    });
-});
-
 </script>
 
 <?= $this->endSection() ?>

@@ -1248,37 +1248,6 @@ public function leave_application()
     return view('backend/pages/leave_application', $data);
 }
 
-public function fetchMyLeaveApplications()
-{
-    $leaveApplicationModel = new \App\Models\LeaveApplicationModel();
-    $leaveTypeModel = new \App\Models\LeaveTypeModel();
-    $loggedInUser = session()->get('logged_in_user');
-
-    if (!$loggedInUser) {
-        log_message('error', 'User not logged in.');
-        return $this->response->setJSON([
-            'data' => [],
-            'error' => 'User not logged in.',
-        ]);
-    }
-
-    try {
-        $applications = $leaveApplicationModel
-            ->where('la_name', $loggedInUser['id'])
-            ->findAll();
-
-        log_message('debug', 'Leave applications fetched for user ' . $loggedInUser['id'] . ': ' . json_encode($applications));
-
-        foreach ($applications as &$application) {
-            $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
-        }
-
-        return $this->response->setJSON(['data' => $applications]);
-    } catch (\Exception $e) {
-        log_message('error', 'Error fetching leave applications: ' . $e->getMessage());
-        return $this->response->setJSON(['data' => [], 'error' => 'An error occurred.']);
-    }
-}
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
