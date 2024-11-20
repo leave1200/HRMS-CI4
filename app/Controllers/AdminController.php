@@ -1251,6 +1251,7 @@ public function leave_application()
 {
     $leaveTypeModel = new leave_typeModel();
     $leaveApplicationModel = new LeaveApplicationModel();
+    $LeaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
     // Get the logged-in user's ID from the session
