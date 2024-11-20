@@ -1242,7 +1242,7 @@ public function leave_application()
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
-        'LeaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetailed($leaveTypeModel, $userModel),
+        'LeaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
     ];
 
     return view('backend/pages/leave_application', $data);
