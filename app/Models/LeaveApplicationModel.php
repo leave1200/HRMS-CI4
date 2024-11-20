@@ -42,15 +42,15 @@ class LeaveApplicationModel extends Model
     //     }, $this->where('status', 'Pending')->findAll());
     // }
     
-    public function getPendingLeaveApplications($leaveTypeModel, $userModel)
+    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId)
     {
-        // Fetch all pending leave applications
+        // Fetch all pending leave applications for the logged-in user only
         return array_map(function ($application) use ($leaveTypeModel, $userModel) {
             // Fetch leave type and user details
             $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
             $application['user_name'] = $userModel->find($application['la_name'])['name'] ?? 'Unknown User';
             return $application;
-        }, $this->where('status', 'Pending')->findAll());
+        }, $this->where('status', 'Pending')->where('la_name', $loggedInUserId)->findAll());
     }
     
     

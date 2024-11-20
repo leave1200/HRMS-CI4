@@ -1262,15 +1262,11 @@ public function leave_application()
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
-        // Get the leave applications of the logged-in user
-        'userLeaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
-        // Get all pending leave applications for all users
-        'allPendingLeaveApplications' => $leaveApplicationModel->getPendingLeaveApplications($leaveTypeModel, $userModel),
+        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
     ];
 
     return view('backend/pages/leave_application', $data);
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
