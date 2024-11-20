@@ -135,7 +135,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($leaveApplications as $application): ?>
+        <?php foreach ($LeaveApplications as $application): ?>
             <tr class="<?= $application['is_logged_in_user'] ? 'bg-light' : '' ?>"> <!-- Highlight logged-in user's applications -->
                 <td><?= esc($application['la_id']) ?></td>
                 <td><?= esc($application['user_name']) ?></td>
