@@ -215,7 +215,6 @@
                 icon: 'success',
                 title: 'Success!',
                 text: 'Successfully updated picture!',
-                confirmButtonText: 'Okay'
             }).then((result) => {
                             if (result.isConfirmed) {
                                 location.reload();
