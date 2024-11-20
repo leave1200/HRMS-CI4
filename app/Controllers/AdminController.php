@@ -86,23 +86,23 @@ public function getApprovedLeaves()
         return $this->response->setJSON(['success' => false, 'message' => 'User not logged in.']);
     }
 
-    $leaveModel = new \App\Models\LeaveModel(); // Replace with your actual Leave model
+    $leaveModel = new \App\Models\LeaveApplicationModel();
 
     // Query to count approved leave applications by date
-    $leaveData = $leaveModel->select("DATE(start_date) as leave_date, COUNT(*) as leave_count")
-                            ->where('user_id', $userId)
+    $leaveData = $leaveModel->select("DATE(la_start) as leave_date, COUNT(*) as leave_count")
+                            ->where('la_name', $userId) // Use la_name to filter by user ID
                             ->where('status', 'Approved') // Filter only approved leaves
                             ->groupBy('leave_date')
                             ->orderBy('leave_date', 'ASC')
                             ->findAll();
 
-    // Check if data exists
     if (empty($leaveData)) {
         return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No approved leaves found.']);
     }
 
     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
 }
+
 
 
 

@@ -188,42 +188,53 @@
 					</div>
 				</div>
 				<script>
-				document.addEventListener('DOMContentLoaded', function () {
-					fetch('/getApprovedLeaves') // Update this route to match your backend setup
-						.then(response => response.json())
-						.then(data => {
-							// Extract data for Highcharts
-							const categories = data.map(item => item.leave_date); // X-axis (leave dates)
-							const seriesData = data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
+						document.addEventListener('DOMContentLoaded', function () {
+							fetch('/getApprovedLeaves')
+								.then(response => response.json())
+								.then(data => {
+									if (!data.success) {
+										console.error(data.message);
+										return;
+									}
 
-							// Render the chart
-							Highcharts.chart('approvedLeavesChart', {
-								chart: {
-									type: 'column'
-								},
-								title: {
-									text: 'Approved Leave Applications'
-								},
-								xAxis: {
-									categories: categories,
-									title: {
-										text: 'Leave Dates'
+									const leaveData = data.data;
+
+									if (leaveData.length === 0) {
+										console.warn('No approved leave data found.');
+										return;
 									}
-								},
-								yAxis: {
-									title: {
-										text: 'Number of Approved Leaves'
-									}
-								},
-								series: [{
-									name: 'Approved Leaves',
-									data: seriesData,
-									color: '#28a745' // Optional: Set a green color for approved leaves
-								}]
-							});
-						})
-						.catch(error => console.error('Error fetching approved leave data:', error));
-				});
+
+									const categories = leaveData.map(item => item.leave_date);
+									const seriesData = leaveData.map(item => parseInt(item.leave_count));
+
+									Highcharts.chart('leaveApplicationsChart', {
+										chart: {
+											type: 'column'
+										},
+										title: {
+											text: 'Approved Leave Applications'
+										},
+										xAxis: {
+											categories: categories,
+											title: {
+												text: 'Leave Dates'
+											}
+										},
+										yAxis: {
+											title: {
+												text: 'Number of Approved Leaves'
+											}
+										},
+										series: [{
+											name: 'Approved Leaves',
+											data: seriesData,
+											color: '#28a745'
+										}]
+									});
+								})
+								.catch(error => console.error('Error fetching approved leave data:', error));
+						});
+
 				</script>
 
 					<?php endif; ?>
