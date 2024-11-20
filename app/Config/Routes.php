@@ -122,6 +122,7 @@ $routes->group('', static function($routes){
                 $routes->post('update-profile-picture','UserController::updatePersonalPictures',['as'=>'update-profile-picture']);  
                 $routes->post('change-password','UserController::changePassword',['as'=>'change-password']);
 
+
     });
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 
@@ -131,6 +132,8 @@ $routes->group('', static function($routes){
         $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
         $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
         $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
+        $routes->post('admin/fetch-leave-applications', 'AdminController::fetchLeaveApplications', ['as' => 'admin.fetch_leave_applications']);
+
 
 
         
