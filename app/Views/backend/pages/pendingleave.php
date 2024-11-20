@@ -23,10 +23,10 @@
         <div class="col-md-12">
             <h4>Submitted Leave Applications</h4>
             <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
-            <thead>
+                <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Employee Name</th>
+                        <th>User Name</th> <!-- Changed from Employee Name to User Name -->
                         <th>Leave Type</th>
                         <th>Start Date</th>
                         <th>End Date</th>
@@ -38,7 +38,7 @@
                     <?php foreach ($leaveApplications as $application): ?>
                         <tr>
                             <td><?= esc($application['la_id']) ?></td>
-                            <td><?= esc($application['employee_name']) ?></td>
+                            <td><?= esc($application['user_name']) ?></td> <!-- Changed to user_name -->
                             <td><?= esc($application['leave_type_name']) ?></td>
                             <td><?= esc($application['la_start']) ?></td>
                             <td><?= esc($application['la_end']) ?></td>
@@ -53,6 +53,7 @@
         </div>
     </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
