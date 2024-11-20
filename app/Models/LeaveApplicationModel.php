@@ -31,18 +31,35 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
+    // public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
+    // {
+    //     // Fetch all pending leave applications
+    //     return array_map(function ($application) use ($leaveTypeModel, $userModel) {
+    //         // Fetch leave type and user details
+    //         $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
+    //         $application['user_name'] = $userModel->find($application['la_name'])['name'] ?? 'Unknown User';
+    //         return $application;
+    //     }, $this->where('status', 'Pending')->findAll());
+    // }
+    
+    public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId)
     {
         // Fetch all pending leave applications
-        return array_map(function ($application) use ($leaveTypeModel, $userModel) {
+        return array_map(function ($application) use ($leaveTypeModel, $userModel, $loggedInUserId) {
             // Fetch leave type and user details
             $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
             $application['user_name'] = $userModel->find($application['la_name'])['name'] ?? 'Unknown User';
+    
+            // Add logged-in user info (you can customize this logic as needed)
+            if ($application['la_name'] == $loggedInUserId) {
+                $application['is_logged_in_user'] = true; // Mark the application as belonging to the logged-in user
+            } else {
+                $application['is_logged_in_user'] = false;
+            }
+    
             return $application;
         }, $this->where('status', 'Pending')->findAll());
     }
-    
-
     
 
 
