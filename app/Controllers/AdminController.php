@@ -1321,19 +1321,38 @@ return view('backend/pages/pendingleave', $data);
 }
 public function rejectLeave()
 {
+    // $leaveApplicationModel = new LeaveApplicationModel();
+    // $laId = $this->request->getPost('la_id');
+
+    // // Attempt to delete the leave application
+    // if ($leaveApplicationModel->delete($laId)) {
+    //     return $this->response->setJSON([
+    //         'status' => 'success',
+    //         'message' => 'Leave application has been successfully Rejected.'
+    //     ]);
+    // } else {
+    //     return $this->response->setJSON([
+    //         'status' => 'error',
+    //         'message' => 'Failed to Reject the leave application. Please try again.'
+    //     ]);
+    // }
     $leaveApplicationModel = new LeaveApplicationModel();
     $laId = $this->request->getPost('la_id');
 
-    // Attempt to delete the leave application
-    if ($leaveApplicationModel->delete($laId)) {
+    // Attempt to update the leave application status to "Cancelled"
+    $updated = $leaveApplicationModel->update($laId, [
+        'status' => 'Rejected'
+    ]);
+
+    if ($updated) {
         return $this->response->setJSON([
             'status' => 'success',
-            'message' => 'Leave application has been successfully Rejected.'
+            'message' => 'Leave application has been successfully rejected.'
         ]);
     } else {
         return $this->response->setJSON([
             'status' => 'error',
-            'message' => 'Failed to Reject the leave application. Please try again.'
+            'message' => 'Failed to reject the leave application. Please try again.'
         ]);
     }
 }
