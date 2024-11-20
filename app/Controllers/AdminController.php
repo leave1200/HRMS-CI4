@@ -683,39 +683,11 @@ public function updateDesignation()
 
 
 
-// public function attendance()
-// {
-//     $employeeModel = new EmployeeModel();
-//     $employees = $employeeModel->findAll();
-    
-    
-//     $designationModel = new Designation();
-//     $designations = $designationModel->findAll();
-    
-//     $positionModel = new Position();
-//     $positions = $positionModel->findAll();
-    
-//     $attendanceModel = new AttendanceModel();
-    
-//     // Fetch attendance records including pm_sign_out
-//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-//     $userStatus = session()->get('userStatus');
-
-//     $data = [
-//         'pageTitle' => 'Attendance',
-//         'employees' => $employees,
-//         'designations' => $designations,
-//         'positions' => $positions,
-//         'attendances' => $attendances, // Include attendance records here
-//         'userStatus' => $userStatus
-//     ];
-    
-//     return view('backend/pages/attendance', $data);
-// }
 public function attendance()
 {
-    $userModel = new User(); // Use the User model instead of EmployeeModel
-    $users = $userModel->findAll(); // Fetch all users
+    $employeeModel = new EmployeeModel();
+    $employees = $employeeModel->findAll();
+    
     
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
@@ -731,7 +703,7 @@ public function attendance()
 
     $data = [
         'pageTitle' => 'Attendance',
-        'users' => $users, // Use 'users' instead of 'employees'
+        'employees' => $employees,
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include attendance records here
@@ -739,7 +711,35 @@ public function attendance()
     ];
     
     return view('backend/pages/attendance', $data);
-} 
+}
+// public function attendance()
+// {
+//     $userModel = new User(); // Use the User model instead of EmployeeModel
+//     $users = $userModel->findAll(); // Fetch all users
+    
+//     $designationModel = new Designation();
+//     $designations = $designationModel->findAll();
+    
+//     $positionModel = new Position();
+//     $positions = $positionModel->findAll();
+    
+//     $attendanceModel = new AttendanceModel();
+    
+//     // Fetch attendance records including pm_sign_out
+//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+//     $userStatus = session()->get('userStatus');
+
+//     $data = [
+//         'pageTitle' => 'Attendance',
+//         'users' => $users, // Use 'users' instead of 'employees'
+//         'designations' => $designations,
+//         'positions' => $positions,
+//         'attendances' => $attendances, // Include attendance records here
+//         'userStatus' => $userStatus
+//     ];
+    
+//     return view('backend/pages/attendance', $data);
+// } 
 
 
 
