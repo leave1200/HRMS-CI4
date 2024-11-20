@@ -240,29 +240,29 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    $(document).ready(function() {
-    // Cancel button click handler
-    $('.cancel-btn').on('click', function() {
+$(document).ready(function() {
+    // Delete button click handler
+    $('.delete-btn').on('click', function() {
         var applicationId = $(this).data('id');
 
         Swal.fire({
-            title: 'Confirm Cancellation',
-            text: 'Are you sure you want to cancel this leave application?',
+            title: 'Confirm Cancelation',
+            text: 'Are you sure you want to Cancel this leave application?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, cancel it!',
+            confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'POST',
-                    url: '<?= route_to('admin.cancel.leave') ?>', // Your route to handle cancellation
-                    data: { la_id: applicationId, status: 'Cancelled' },
+                    url: '<?= route_to('admin.cancel.leave') ?>', // Your route to handle deletion
+                    data: { la_id: applicationId },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            Swal.fire('Cancelled!', response.message, 'success').then(() => {
-                                location.reload(); // Reload the page after confirmation
+                            Swal.fire('Canceled!', response.message, 'success').then(() => {
+                                location.reload(); // Reload the page after deletion
                             });
                         } else {
                             Swal.fire('Error!', response.message, 'error');
@@ -277,6 +277,7 @@ $(document).ready(function() {
         });
     });
 });
+
 
 </script>
 

@@ -1296,12 +1296,12 @@ public function cancelLeave()
     if ($leaveApplicationModel->delete($laId)) {
         return $this->response->setJSON([
             'status' => 'success',
-            'message' => 'Leave application has been successfully deleted.'
+            'message' => 'Leave application has been successfully Canceled.'
         ]);
     } else {
         return $this->response->setJSON([
             'status' => 'error',
-            'message' => 'Failed to delete the leave application. Please try again.'
+            'message' => 'Failed to Cancel the leave application. Please try again.'
         ]);
     }
 }
