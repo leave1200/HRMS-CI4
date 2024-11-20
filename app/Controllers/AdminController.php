@@ -1290,7 +1290,7 @@ public function pendingleave(){
     $userStatus = session()->get('userStatus');
     
     // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
+    $leaveApplications = $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel);
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
