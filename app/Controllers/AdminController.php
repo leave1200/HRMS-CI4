@@ -1269,16 +1269,35 @@ public function leave_application()
 }
 
 public function pendingleave(){
-    $leaveTypeModel = new leave_typeModel();
+    // Load the models
+    $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User();
+    $employeeModel = new EmployeeModel();
+    $userStatus = session()->get('userStatus');
+    if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
+    
 
+    // Fetch leave applications with details
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
+    
+    // Retrieve all leave types
+    $leaveTypes = $leaveTypeModel->findAll();
+
+    // Fetch employee names
+    $employees = $employeeModel->getEmployeeNames();
+
+    // Get user status from session
+    $userStatus = session()->get('userStatus');
+
+    // Prepare data for the view
     $data = [
-        'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'LeaveApplications' => $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel),
+        'pageTitle' => ' Pending Leave Application',
+        'leaveTypes' => $leaveTypes,
+        'employees' => $employees,
+        'userStatus' => $userStatus,
+        'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
     return view('backend/pages/pendingleave', $data);
 }
