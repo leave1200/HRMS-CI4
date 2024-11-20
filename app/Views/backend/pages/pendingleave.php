@@ -45,7 +45,7 @@
                             <td><?= esc($application['status']) ?></td>
                             <td>
                                 <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
-                                <button class="btn btn-danger btn-sm reject-btn" data-id="<?= esc($application['la_id']) ?>">Reject</button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="<?= esc($application['la_id']) ?>">Reject</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
