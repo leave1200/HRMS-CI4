@@ -37,12 +37,12 @@
                 <tbody>
                     <?php foreach ($leaveApplications as $application): ?>
                         <tr>
-                            <td><?= esc($application['la_id']) ?></td>
-                            <td><?= esc($application['employee_name']) ?></td>
-                            <td><?= esc($application['leave_type_name']) ?></td>
-                            <td><?= esc($application['la_start']) ?></td>
-                            <td><?= esc($application['la_end']) ?></td>
-                            <td><?= esc($application['status']) ?></td>
+                        <td><?= esc($application['la_id']) ?></td>
+                        <td><?= esc($application['user_name']) ?></td>
+                        <td><?= esc($application['leave_type_name']) ?></td>
+                        <td><?= esc($application['la_start']) ?></td>
+                        <td><?= esc($application['la_end']) ?></td>
+                        <td><?= esc($application['status']) ?></td>
                             <td>
                                 <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
                             </td>
