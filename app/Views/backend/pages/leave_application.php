@@ -229,10 +229,14 @@ function calculateEndDate() {
 </script>
 <script>
 $(document).ready(function() {
-    $('#leaveApplicationsTable').DataTable({
-        responsive: true,
+    // Initialize both DataTables
+    $('#userLeaveApplicationsTable').DataTable({
+        responsive: true
     });
 
+    $('#allPendingLeaveApplicationsTable').DataTable({
+        responsive: true
+    });
     // Approve button click handler
     $('.approve-btn').on('click', function() {
         var applicationId = $(this).data('id');
