@@ -1230,36 +1230,7 @@ public function cancelHolidays()
 
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// public function leave_application()
-// {
-//     // Load the models
-//     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
-//     $leaveApplicationModel = new LeaveApplicationModel();
-//     $userModel = new User(); // Load the User model
-//     $userStatus = session()->get('userStatus');
-    
-//     // Fetch leave applications with details
-//     $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel);
-    
-//     // Retrieve all leave types
-//     $leaveTypes = $leaveTypeModel->findAll();
-
-//     // Fetch user names
-//     $users = $userModel->select('id, name')->findAll();
-
-//     // Prepare data for the view
-//     $data = [
-//         'pageTitle' => 'Leave Application',
-//         'leaveTypes' => $leaveTypes,
-//         'users' => $users, // Pass users to the view
-//         'userStatus' => $userStatus,
-//         'leaveApplications' => $leaveApplications // Pass leave applications with details
-//     ];
-
-//     // Load the view with data
-//     return view('backend/pages/leave_application', $data);
-// }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 public function leave_application()
 {
@@ -1288,6 +1259,9 @@ public function pendingleave(){
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User(); // Load the User model
     $userStatus = session()->get('userStatus');
+    if ($userStatus !== 'ADMIN') {
+        return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
+    }
     
     // Fetch leave applications with details
     $leaveApplications = $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel);
