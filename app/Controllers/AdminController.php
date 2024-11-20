@@ -1248,6 +1248,34 @@ public function leave_application()
     return view('backend/pages/leave_application', $data);
 }
 
+public function fetchMyLeaveApplications()
+{
+    $leaveApplicationModel = new \App\Models\LeaveApplicationModel();
+    $leaveTypeModel = new \App\Models\LeaveTypeModel();
+    $loggedInUser = session()->get('logged_in_user'); // Adjust based on your session structure
+
+    if (!$loggedInUser) {
+        return $this->response->setJSON([
+            'data' => [],
+            'error' => 'User not logged in.',
+        ]);
+    }
+
+    // Fetch leave applications only for the logged-in user
+    $applications = $leaveApplicationModel
+        ->where('la_name', $loggedInUser['id'])
+        ->findAll();
+
+    // Add leave type details
+    foreach ($applications as &$application) {
+        $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
+    }
+
+    return $this->response->setJSON([
+        'data' => $applications,
+    ]);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()

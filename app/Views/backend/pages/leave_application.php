@@ -121,6 +121,18 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<table id="myLeaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -236,6 +248,24 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+<script>
+    $('#myLeaveApplicationsTable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: '<?= route_to("employee.fetch_my_leave_applications") ?>',
+        type: 'POST',
+    },
+    columns: [
+        { data: 'la_id' },
+        { data: 'leave_type_name' },
+        { data: 'la_start' },
+        { data: 'la_end' },
+        { data: 'status' },
+    ],
+});
+
 </script>
 
 <?= $this->endSection() ?>
