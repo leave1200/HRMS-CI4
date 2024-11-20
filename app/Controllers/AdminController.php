@@ -752,6 +752,17 @@ public function attendance()
 
     return view('backend/pages/attendance', $data);
 }
+public function getUserSuggestions()
+{
+    $userName = $this->request->getGet('name'); // Get the search term
+    $userModel = new UserModel();
+
+    // Fetch users whose name matches the search term
+    $users = $userModel->like('name', $userName)->findAll();
+
+    // Return the users as JSON
+    return $this->response->setJSON($users);
+}
 
 
 

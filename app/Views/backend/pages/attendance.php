@@ -315,29 +315,79 @@ function signOutAttendance(attendanceId, session) {
     });
 }
 </script>
-<script>
+<!-- <script>
 $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        // Get user ID and name from the selected row
-        const userId = $(this).find('td:eq(0)').text(); // Assuming the first column contains user ID
-        const userName = $(this).find('td:eq(1)').text(); // Assuming the second column contains user name
-        const officeId = $(this).find('td:eq(2)').text(); // Assuming the third column contains office ID
-        const positionId = $(this).find('td:eq(3)').text(); // Assuming the fourth column contains position ID
+        const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
+        const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
+        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
+        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
 
         // Populate the fields in the PM Sign In form
-        $('#employeeNumberInput2').val(userId); // Update the employee number field
-        $('#employeeNameInput2').val(userName); // Update the employee name field
-        $('#selectedUserId2').val(userId); // Set the hidden input for user ID
+        $('#employeeNumberInput2').val(employeeId);
+        $('#employeeNameInput2').val(employeeName);
+        $('#selectedEmployeeId2').val(employeeId);
 
-        // Set Office and Position based on selected user
+        // Set Office and Position based on selected employee
         $('#officeSelect2').val(officeId).change(); // Set the office select value
         $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
+
+</script> -->
+<script>
+    $(document).ready(function() {
+    // Listen for input in the user input field
+    $('#userInput').on('input', function() {
+        let userName = $(this).val();
+
+        // Check if the input is not empty
+        if (userName.length > 0) {
+            // Perform an AJAX request to fetch users from the server
+            $.ajax({
+                url: '/path/to/your/controller/getUserSuggestions', // Replace with your controller method
+                method: 'GET',
+                data: { name: userName },  // Send the user input as a query parameter
+                success: function(data) {
+                    let userList = $('#userList');
+                    userList.empty();  // Clear previous suggestions
+
+                    // If there are users found, display them in the list
+                    if (data.length > 0) {
+                        data.forEach(function(user) {
+                            userList.append('<li class="list-group-item" data-user-id="' + user.id + '">' + user.name + '</li>');
+                        });
+
+                        // Show the list of suggestions
+                        userList.show();
+                    } else {
+                        userList.hide();
+                    }
+                }
+            });
+        } else {
+            // Hide the suggestion list if the input is empty
+            $('#userList').hide();
+        }
+    });
+
+    // When a user selects a name from the list
+    $('#userList').on('click', 'li', function() {
+        let userId = $(this).data('user-id');
+        let userName = $(this).text();
+
+        // Set the selected user ID in the hidden input and display the user name
+        $('#selectedUserId').val(userId);
+        $('#userInput').val(userName);
+
+        // Hide the suggestions list
+        $('#userList').hide();
+    });
+});
+
 </script>
->
 <script>
 function signInPmEmployee(attendanceId) {
     if (!attendanceId) {
