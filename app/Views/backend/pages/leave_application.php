@@ -247,7 +247,7 @@ $(document).ready(function() {
             text: 'Are you sure you want to Cancel this leave application?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, Canceled it!',
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.isConfirmed) {
