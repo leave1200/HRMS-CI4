@@ -132,8 +132,7 @@ $routes->group('', static function($routes){
         $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
         $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
         $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
-        $routes->post('admin/fetch-leave-applications', 'AdminController::fetchLeaveApplications', ['as' => 'admin.fetch_leave_applications']);
-
+        
 
 
         

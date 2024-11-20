@@ -1248,28 +1248,6 @@ public function leave_application()
     return view('backend/pages/leave_application', $data);
 }
 
-public function fetchLeaveApplications()
-{
-    $leaveApplicationModel = new \App\Models\LeaveApplicationModel();
-    $leaveTypeModel = new \App\Models\LeaveTypeModel();
-    $userModel = new \App\Models\User();
-
-    $userId = $this->request->getPost('user_id');
-    $userStatus = $this->request->getPost('user_status');
-
-    if ($userStatus !== 'ADMIN') {
-        $leaveApplicationModel->where('la_name', $userId);
-    }
-
-    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, [
-        'id' => $userId,
-        'status' => $userStatus
-    ]);
-
-    return $this->response->setJSON([
-        'data' => $leaveApplications
-    ]);
-}
 
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
