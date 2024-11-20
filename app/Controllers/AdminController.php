@@ -1256,17 +1256,18 @@ public function leave_application()
     // Get the logged-in user's ID from the session
     $loggedInUserId = session()->get('user_id');  // Assuming the user ID is stored in the session
 
-    // Fetch all leave applications with details, passing the logged-in user's ID
+    // Fetch leave applications for the logged-in user
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
-        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId), // Pass the logged-in user ID here
+        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
     ];
 
     return view('backend/pages/leave_application', $data);
 }
+
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
 {
