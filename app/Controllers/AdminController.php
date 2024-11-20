@@ -102,7 +102,7 @@ class AdminController extends BaseController
 
 //     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
 // }
-public function getAllLeaves()
+public function getUserLeaveApplications()
 {
     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
     if (!$userId) {
@@ -111,19 +111,20 @@ public function getAllLeaves()
 
     $leaveModel = new \App\Models\LeaveApplicationModel();
 
-    // Query to count leave applications grouped by date and status
+    // Query to count leave applications for the logged-in user grouped by date and status
     $leaveData = $leaveModel->select("DATE(la_start) as leave_date, status, COUNT(*) as leave_count")
-                            ->where('la_name', $userId) // Filter by the currently logged-in user's ID
-                            ->groupBy('leave_date, status') // Group by both leave_date and status
+                            ->where('la_name', $userId) // Filter by the logged-in user's ID
+                            ->groupBy('leave_date, status')
                             ->orderBy('leave_date', 'ASC')
                             ->findAll();
 
     if (empty($leaveData)) {
-        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No leave data found.']);
+        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No leave applications found for the user.']);
     }
 
     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
 }
+
 
 
 

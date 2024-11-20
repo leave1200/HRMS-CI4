@@ -87,7 +87,7 @@ $routes->group('', static function($routes){
                 $routes->get('pending_leave','AdminController::pendingleave',['as'=>'admin.pending_leave']);
                 $routes->post('admin/cancel-leave', 'AdminController::cancelLeave', ['as' => 'admin.cancel.leave']);
                 $routes->post('reject-leave', 'AdminController::rejectLeave', ['as' => 'admin.reject.leave']);
-                $routes->get('/getApprovedLeaves', 'AdminController::getApprovedLeaves');
+                $routes->get('/getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
 
 
     });
