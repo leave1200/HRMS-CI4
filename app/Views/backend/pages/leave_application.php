@@ -257,12 +257,14 @@ $(document).ready(function() {
         url: '<?= route_to("employee.fetch_my_leave_applications") ?>',
         type: 'POST',
     },
-    columns: [
-        { data: 'la_id' },
-        { data: 'leave_type_name' },
-        { data: 'la_start' },
-        { data: 'la_end' },
-        { data: 'status' },
+    "data": [
+        {
+            "la_id": "1",
+            "leave_type_name": "Vacation Leave",
+            "la_start": "2024-11-01",
+            "la_end": "2024-11-10",
+            "status": "Pending"
+        }
     ],
 });
 
