@@ -31,7 +31,7 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    // public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel)
+    // public function getLeaveApplicationsWithDetailed($leaveTypeModel, $userModel)
     // {
     //     // Fetch all pending leave applications
     //     return array_map(function ($application) use ($leaveTypeModel, $userModel) {

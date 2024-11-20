@@ -1242,7 +1242,7 @@ public function cancelHolidays()
 //         'leaveTypes' => $leaveTypeModel->findAll(),
 //         'users' => $userModel->select('id, name')->findAll(),
 //         'userStatus' => session()->get('userStatus'),
-//         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel),
+//         'LeaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetailed($leaveTypeModel, $userModel),
 //     ];
 
 //     return view('backend/pages/leave_application', $data);
