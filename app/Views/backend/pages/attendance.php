@@ -32,12 +32,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>User</label>
-                                <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
-                                <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="user" id="selectedUserId" required>
+                                <label>Employee</label>
+                                <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
+                                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="employee" id="selectedEmployeeId" required>
                             </div>
-
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
@@ -315,7 +314,7 @@ function signOutAttendance(attendanceId, session) {
     });
 }
 </script>
-<!-- <script>
+<script>
 $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
@@ -333,57 +332,6 @@ $(document).ready(function() {
         // Set Office and Position based on selected employee
         $('#officeSelect2').val(officeId).change(); // Set the office select value
         $('#positionSelect2').val(positionId).change(); // Set the position select value
-    });
-});
-
-</script> -->
-<script>
-    $(document).ready(function() {
-    // Listen for input in the user input field
-    $('#userInput').on('input', function() {
-        let userName = $(this).val();
-
-        // Check if the input is not empty
-        if (userName.length > 0) {
-            // Perform an AJAX request to fetch users from the server
-            $.ajax({
-                url: '/path/to/your/controller/getUserSuggestions', // Replace with your controller method
-                method: 'GET',
-                data: { name: userName },  // Send the user input as a query parameter
-                success: function(data) {
-                    let userList = $('#userList');
-                    userList.empty();  // Clear previous suggestions
-
-                    // If there are users found, display them in the list
-                    if (data.length > 0) {
-                        data.forEach(function(user) {
-                            userList.append('<li class="list-group-item" data-user-id="' + user.id + '">' + user.name + '</li>');
-                        });
-
-                        // Show the list of suggestions
-                        userList.show();
-                    } else {
-                        userList.hide();
-                    }
-                }
-            });
-        } else {
-            // Hide the suggestion list if the input is empty
-            $('#userList').hide();
-        }
-    });
-
-    // When a user selects a name from the list
-    $('#userList').on('click', 'li', function() {
-        let userId = $(this).data('user-id');
-        let userName = $(this).text();
-
-        // Set the selected user ID in the hidden input and display the user name
-        $('#selectedUserId').val(userId);
-        $('#userInput').val(userName);
-
-        // Hide the suggestions list
-        $('#userList').hide();
     });
 });
 
