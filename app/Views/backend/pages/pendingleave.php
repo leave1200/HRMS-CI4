@@ -45,6 +45,7 @@
                             <td><?= esc($application['status']) ?></td>
                             <td>
                                 <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                                <button class="btn btn-danger btn-sm reject-btn" data-id="<?= esc($application['la_id']) ?>">Reject</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -106,6 +107,45 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+<script>
+    $(document).ready(function() {
+    // Reject button click handler
+    $('.reject-btn').on('click', function() {
+        var applicationId = $(this).data('id');
+        Swal.fire({
+            title: 'Confirm Rejection',
+            text: 'Are you sure you want to reject and delete this leave application?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, reject it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?= route_to('admin.reject.leave') ?>', // Your route to handle rejection
+                    data: { la_id: applicationId },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire('Rejected!', response.message, 'success').then(() => {
+                                location.reload(); // Reload the page after confirmation
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('AJAX Error:', xhr);
+                        Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
+
 </script>
 
 <?= $this->endSection() ?>

@@ -1286,6 +1286,24 @@ public function pendingleave(){
 return view('backend/pages/pendingleave', $data);
 
 }
+public function rejectLeave()
+{
+    $la_id = $this->request->getPost('la_id');
+    $leaveModel = new LeaveModel(); // Replace with your leave model name
+
+    if ($leaveModel->delete($la_id)) {
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'Leave application successfully rejected and deleted.'
+        ]);
+    } else {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Failed to reject the leave application. Please try again.'
+        ]);
+    }
+}
+
 
 public function cancelLeave()
 {

@@ -86,6 +86,8 @@ $routes->group('', static function($routes){
                 $routes->post('admin/cancel-holidays', 'AdminController::cancelHolidays', ['as' => 'admin.cancel_holidays']);
                 $routes->get('pending_leave','AdminController::pendingleave',['as'=>'admin.pending_leave']);
                 $routes->post('admin/cancel-leave', 'AdminController::cancelLeave', ['as' => 'admin.cancel.leave']);
+                $routes->post('admin/reject-leave', 'AdminController::rejectLeave', ['as' => 'admin.reject.leave']);
+
     });
 
     $routes->group('Account-center', ['filter'=>'cifilter:auth'], static function($routes){
