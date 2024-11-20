@@ -31,28 +31,15 @@ class LeaveApplicationModel extends Model
         'la_end' => 'required|valid_date',
     ];
     
-    public function getLeaveApplications(leave_typeModel $leaveTypeModel, EmployeeModel $employeeModel)
+    public function getLeaveApplications($leaveTypeModel, $userModel)
     {
-        $leaveApplications = $this->where('status', 'Pending')->findAll(); // Fetch all leave applications
-
-        // Prepare an array to hold the applications with names
-        $applicationsWithDetails = [];
-        
-        foreach ($leaveApplications as $application) {
-            // Fetch leave type name
-            $leaveType = $leaveTypeModel->find($application['la_type']);
-            $application['leave_type_name'] = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
-        
-            // Fetch user name instead of employee name
-            $user = $userModel->find($application['la_name']); // Assuming la_name is user ID
-            $application['user_name'] = $user ? $user['name'] : 'Unknown User';
-        
-            // Add the application details to the array
-            $applicationsWithDetails[] = $application;
-        }
-        
-        return $applicationsWithDetails;
-        
+        // Fetch all pending leave applications
+        return array_map(function ($application) use ($leaveTypeModel, $userModel) {
+            // Fetch leave type and user details
+            $application['leave_type_name'] = $leaveTypeModel->find($application['la_type'])['l_name'] ?? 'Unknown Leave Type';
+            $application['user_name'] = $userModel->find($application['la_name'])['name'] ?? 'Unknown User';
+            return $application;
+        }, $this->where('status', 'Pending')->findAll());
     }
     
     public function getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId)
