@@ -210,17 +210,20 @@
         processUrl:'<?= route_to('update-profile-picture') ?>',
         withCSRF: ['<?= csrf_token() ?>', '<?= csrf_hash() ?>'],
         onSuccess:function(responseText, element, status) {
-            if( status == 1 ) {
-                Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Successfully updated picture!',
-            }).then((result) => {
+            if (response.status === 'success') {
+                        // Show SweetAlert for success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message
+                        }).then((result) => {
                             if (result.isConfirmed) {
                                 location.reload();
+                                // Optionally reload the page or perform other actions
+                                // Example: location.reload(); // Reload the page
                             }
                         });
-            } else {
+                    } else {
                 Swal.fire({
                 icon: 'error',
                 title: 'Error!',
