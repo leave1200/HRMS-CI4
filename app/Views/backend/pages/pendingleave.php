@@ -109,28 +109,29 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    $(document).ready(function() {
-    // Reject button click handler
-    $('.reject-btn').on('click', function() {
+$(document).ready(function() {
+    // Delete button click handler
+    $('.delete-btn').on('click', function() {
         var applicationId = $(this).data('id');
+
         Swal.fire({
             title: 'Confirm Rejection',
-            text: 'Are you sure you want to reject and delete this leave application?',
+            text: 'Are you sure you want to Reject this leave application?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, reject it!',
-            cancelButtonText: 'Cancel'
+            confirmButtonText: 'Yes, Rejected it!',
+            cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'POST',
-                    url: '<?= route_to('admin.reject.leave') ?>', // Your route to handle rejection
+                    url: '<?= route_to('admin.reject.leave') ?>', // Your route to handle deletion
                     data: { la_id: applicationId },
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            Swal.fire('Rejected!', response.message, 'success').then(() => {
-                                location.reload(); // Reload the page after confirmation
+                            Swal.fire('Canceled!', response.message, 'success').then(() => {
+                                location.reload(); // Reload the page after deletion
                             });
                         } else {
                             Swal.fire('Error!', response.message, 'error');
