@@ -751,7 +751,8 @@ public function attendance()
     // Fetch users instead of employees
     $userModel = new User(); // Assuming your model for users is `User.php`
     $users = $userModel->findAll(); // Fetch all users
-    
+    $current_user = session()->get('user'); // Get current logged-in user
+
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
     
@@ -783,8 +784,6 @@ public function saveAttendance()
     $userModel = new User(); // Assuming UserModel is used for user-related data
     $designationModel = new Designation();
     $positionModel = new Position();
-    $current_user = session()->get('user'); // Get current logged-in user
-
 
     // Get user, office, and position data from POST request
     $userId = $this->request->getPost('user'); // Assuming 'employee' is passed as 'userId' in the front-end
