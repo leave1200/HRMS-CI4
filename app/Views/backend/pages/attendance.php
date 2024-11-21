@@ -374,7 +374,7 @@ function signOutAttendance(attendanceId, session) {
     });
 }
 </script>
-<script>
+<!-- <script>
 $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
@@ -395,7 +395,29 @@ $(document).ready(function() {
     });
 });
 
+</script> -->
+<script>
+$(document).ready(function() {
+    const table = $('#DataTables_Table_0').DataTable();
+
+    $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
+        const userId = $(this).find('td:eq(0)').text(); // Get user ID from the first column
+        const userName = $(this).find('td:eq(1)').text(); // Get user name from the second column
+        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
+        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
+
+        // Populate the fields in the PM Sign In form
+        $('#userNumberInput2').val(userId);
+        $('#userNameInput2').val(userName);
+        $('#selectedUserId2').val(userId);
+
+        // Set Office and Position based on selected user
+        $('#officeSelect2').val(officeId).change(); // Set the office select value
+        $('#positionSelect2').val(positionId).change(); // Set the position select value
+    });
+});
 </script>
+
 <script>
 function signInPmEmployee(attendanceId) {
     if (!attendanceId) {
