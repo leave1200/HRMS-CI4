@@ -780,23 +780,23 @@ public function attendance()
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
-    $employeeModel = new EmployeeModel();
+    $userModel = new UserModel(); // Assuming UserModel is used for user-related data
     $designationModel = new Designation();
     $positionModel = new Position();
 
-    // Get employee, office, and position data from POST request
-    $employeeId = $this->request->getPost('employee');
+    // Get user, office, and position data from POST request
+    $userId = $this->request->getPost('employee'); // Assuming 'employee' is passed as 'userId' in the front-end
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
 
-    // Fetch employee details
-    $employee = $employeeModel->find($employeeId);
+    // Fetch user details
+    $user = $userModel->find($userId); // Get user from the UserModel
     $designation = $designationModel->find($officeId);
     $position = $positionModel->find($positionId);
 
-    // Validate employee, office, and position data
-    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
-        return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+    // Validate user, office, and position data
+    if (!$user || !isset($user['name'])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
     }
 
     if (!$designation || !isset($designation['name'])) {
@@ -810,7 +810,7 @@ public function saveAttendance()
     // Prepare attendance data
     $currentTime = date('Y-m-d H:i:s');
     $attendanceData = [
-        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+        'name' => $user['name'], // Use 'name' from the user model
         'office' => $designation['name'],
         'position' => $position['position_name'],
         'sign_in' => null, // Set to null for AM sign-in initially
@@ -833,6 +833,7 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
+
 
 public function pmSave()
 {
