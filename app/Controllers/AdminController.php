@@ -718,7 +718,7 @@ public function updateDesignation()
 
 public function attendance()
 {
-    $employeeModel = new EmployeeModel();
+    $employeeModel = new User();
     $employees = $employeeModel->findAll();
     
     
@@ -751,7 +751,7 @@ public function attendance()
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
-    $employeeModel = new EmployeeModel();
+    $employeeModel = new User();
     $designationModel = new Designation();
     $positionModel = new Position();
 
@@ -766,7 +766,7 @@ public function saveAttendance()
     $position = $positionModel->find($positionId);
 
     // Validate employee, office, and position data
-    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
+    if (!$employee || !isset($employee['name'])) {
         return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
     }
 
@@ -781,7 +781,7 @@ public function saveAttendance()
     // Prepare attendance data
     $currentTime = date('Y-m-d H:i:s');
     $attendanceData = [
-        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+        'name' => $employee['name'],
         'office' => $designation['name'],
         'position' => $position['position_name'],
         'sign_in' => null, // Set to null for AM sign-in initially
