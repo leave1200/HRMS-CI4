@@ -780,7 +780,7 @@ public function attendance()
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
-    $userModel = new UserModel(); // Assuming UserModel is used for user-related data
+    $userModel = new User(); // Assuming UserModel is used for user-related data
     $designationModel = new Designation();
     $positionModel = new Position();
 
