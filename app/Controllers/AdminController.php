@@ -785,7 +785,7 @@ public function saveAttendance()
     $positionModel = new Position();
 
     // Get user, office, and position data from POST request
-    $userId = $this->request->getPost('employee'); // Assuming 'employee' is passed as 'userId' in the front-end
+    $userId = $this->request->getPost('user'); // Assuming 'employee' is passed as 'userId' in the front-end
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
 
