@@ -751,8 +751,7 @@ public function attendance()
     // Fetch users instead of employees
     $userModel = new User(); // Assuming your model for users is `User.php`
     $users = $userModel->findAll(); // Fetch all users
-    $current_user = session()->get('user'); // Get current logged-in user
-
+    
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
     
@@ -771,8 +770,7 @@ public function attendance()
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include attendance records here
-        'userStatus' => $userStatus,
-        'current_user' => $current_user
+        'userStatus' => $userStatus
     ];
     
     return view('backend/pages/attendance', $data);
