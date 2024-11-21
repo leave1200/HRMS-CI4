@@ -170,20 +170,20 @@ input.addEventListener('input', function() {
 
     if (filterValue) {
         const filteredUsers = users.filter(user =>
-            `${user.firstname} ${user.lastname}`.toLowerCase().includes(filterValue)
+            user.name.toLowerCase().includes(filterValue) // Use 'name' field for filtering
         );
 
         filteredUsers.forEach(user => {
             const li = document.createElement('li');
-            li.textContent = `${user.firstname} ${user.lastname}`;
+            li.textContent = user.name; // Display the full name
             li.className = 'list-group-item'; // Bootstrap list group class
             li.onclick = () => {
-                input.value = `${user.firstname} ${user.lastname}`; // Set input value
+                input.value = user.name; // Set input value
                 selectedUserId.value = user.id; // Set hidden input value
                 
                 // Update PM sign-in fields
                 $('#userNumberInput2').val(user.id);
-                $('#userNameInput2').val(`${user.firstname} ${user.lastname}`);
+                $('#userNameInput2').val(user.name);
                 $('#selectedUserId2').val(user.id);
 
                 list.style.display = 'none'; // Hide the list after selection
@@ -196,6 +196,7 @@ input.addEventListener('input', function() {
         }
     }
 });
+
 
 // Hide the list if clicking outside
 document.addEventListener('click', (event) => {
