@@ -751,7 +751,7 @@ public function attendance()
     // Fetch users instead of employees
     $userModel = new User(); // Assuming your model for users is `User.php`
     $users = $userModel->findAll(); // Fetch all users
-    
+    $userStatus = session()->get('userStatus');
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
     
@@ -765,7 +765,7 @@ public function attendance()
         // If the user is an admin, fetch all attendance records
         $attendances = $attendanceModel->findAll();
     } // Adjust this to include pm_sign_out if necessary
-    $userStatus = session()->get('userStatus');
+
 
     $data = [
         'pageTitle' => 'Attendance',
