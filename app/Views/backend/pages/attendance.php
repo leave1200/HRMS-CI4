@@ -167,7 +167,7 @@
                     <?php if (!empty($attendances)): ?>
                         <?php foreach ($attendances as $attendance): ?>
                             <!-- Add this condition to display only the logged-in employee's data -->
-                            <?php if ($attendance['user_id'] === $current_user['id'] || $current_user['role'] === 'ADMIN'): ?>
+                            <?php if ($attendance['user_id'] === $current_user['id'] || $current_user['status'] === 'ADMIN'): ?>
                                 <tr>
                                     <td><?= esc($attendance['id']) ?></td>
                                     <td><?= esc($attendance['name']) ?></td>
