@@ -797,7 +797,7 @@ public function attendance()
     // Fetch attendance records; filter by user ID if the user is not an ADMIN
     if ($userStatus !== 'ADMIN') {
         // For non-admin users (e.g., EMPLOYEE or STAFF), fetch only their own attendance records
-        $attendances = $attendanceModel->where('user_id', $userId)->findAll();
+        $attendances = $attendanceModel->where('name', $userId)->findAll();
     } else {
         // For admins, fetch all attendance records
         $attendances = $attendanceModel->findAll();
