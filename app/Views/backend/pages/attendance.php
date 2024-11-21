@@ -214,19 +214,19 @@ document.addEventListener('click', (event) => {
 });
 
 function signInEmployee() {
-    const selectedEmployee = selectedEmployeeId.value;
-    if (!selectedEmployee) {
+    const selectedUser = selectedUserId.value;  // Assuming this holds the user ID
+    if (!selectedUser) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select an employee.',
+            text: 'Please select a user.',
         });
         return;
     }
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "You want to sign in this employee?",
+        text: "You want to sign in this user?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -266,8 +266,8 @@ function signInEmployee() {
             });
         }
     });
-
 }
+
 
 function signOutAttendance(attendanceId, session) {
     const sessionText = session === 'am' ? 'AM' : 'PM';
@@ -326,21 +326,22 @@ $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
-        const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
+        const userId = $(this).find('td:eq(0)').text(); // Get user ID from the first column
+        const userName = $(this).find('td:eq(1)').text(); // Get user name from the second column
         const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
         const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
 
         // Populate the fields in the PM Sign In form
-        $('#employeeNumberInput2').val(employeeId);
-        $('#employeeNameInput2').val(employeeName);
-        $('#selectedEmployeeId2').val(employeeId);
+        $('#userNumberInput2').val(userId);
+        $('#userNameInput2').val(userName);
+        $('#selectedUserId2').val(userId);
 
-        // Set Office and Position based on selected employee
+        // Set Office and Position based on selected user
         $('#officeSelect2').val(officeId).change(); // Set the office select value
         $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
+
 
 </script>
 <script>
