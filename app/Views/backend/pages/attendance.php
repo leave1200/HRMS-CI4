@@ -31,12 +31,33 @@
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Employee</label>
                                 <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
                                 <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                                 <input type="hidden" name="employee" id="selectedEmployeeId" required>
+                            </div> -->
+                            <div class="form-group">
+                                <label>User</label>
+                                <input 
+                                    type="text" 
+                                    id="userInput" 
+                                    class="form-control" 
+                                    placeholder="Type user's name..." 
+                                    autocomplete="off" 
+                                    required>
+                                <ul 
+                                    id="userList" 
+                                    class="list-group" 
+                                    style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;">
+                                </ul>
+                                <input 
+                                    type="hidden" 
+                                    name="user" 
+                                    id="selectedUserId" 
+                                    required>
                             </div>
+
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
@@ -158,41 +179,80 @@
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
 <script>
-const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
+// const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
 
-const input = document.getElementById('employeeInput');
-const list = document.getElementById('employeeList');
-const selectedEmployeeId = document.getElementById('selectedEmployeeId');
+// const input = document.getElementById('employeeInput');
+// const list = document.getElementById('employeeList');
+// const selectedEmployeeId = document.getElementById('selectedEmployeeId');
 
-input.addEventListener('input', function() {
+// input.addEventListener('input', function() {
+//     const filterValue = this.value.toLowerCase();
+//     list.innerHTML = ''; // Clear previous results
+//     list.style.display = 'none'; // Hide the list initially
+
+//     if (filterValue) {
+//         const filteredEmployees = employees.filter(employee =>
+//             `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
+//         );
+
+//         filteredEmployees.forEach(employee => {
+//             const li = document.createElement('li');
+//             li.textContent = `${employee.firstname} ${employee.lastname}`;
+//             li.className = 'list-group-item'; // Bootstrap list group class
+//             li.onclick = () => {
+//                 input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
+//                 selectedEmployeeId.value = employee.id; // Set hidden input value
+                
+//                 // Update PM sign-in fields
+//                 $('#employeeNumberInput2').val(employee.id);
+//                 $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
+//                 $('#selectedEmployeeId2').val(employee.id);
+
+//                 list.style.display = 'none'; // Hide the list after selection
+//             };
+//             list.appendChild(li);
+//         });
+
+//         if (filteredEmployees.length > 0) {
+//             list.style.display = 'block'; // Show the list if there are results
+//         }
+//     }
+// });
+const users = <?= json_encode($users); ?>; // Fetching user data from PHP
+
+const input = document.getElementById('userInput'); // Updated ID for the input field
+const list = document.getElementById('userList'); // Updated ID for the list
+const selectedUserId = document.getElementById('selectedUserId'); // Updated ID for the hidden input
+
+input.addEventListener('input', function () {
     const filterValue = this.value.toLowerCase();
     list.innerHTML = ''; // Clear previous results
     list.style.display = 'none'; // Hide the list initially
 
     if (filterValue) {
-        const filteredEmployees = employees.filter(employee =>
-            `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
+        const filteredUsers = users.filter(user =>
+            user.name.toLowerCase().includes(filterValue) // Assuming `name` is the field in your `users` table
         );
 
-        filteredEmployees.forEach(employee => {
+        filteredUsers.forEach(user => {
             const li = document.createElement('li');
-            li.textContent = `${employee.firstname} ${employee.lastname}`;
+            li.textContent = user.name; // Display user name
             li.className = 'list-group-item'; // Bootstrap list group class
             li.onclick = () => {
-                input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
-                selectedEmployeeId.value = employee.id; // Set hidden input value
-                
-                // Update PM sign-in fields
-                $('#employeeNumberInput2').val(employee.id);
-                $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
-                $('#selectedEmployeeId2').val(employee.id);
+                input.value = user.name; // Set input value to user name
+                selectedUserId.value = user.id; // Set hidden input value to user ID
+
+                // Update PM sign-in fields if necessary
+                $('#userNumberInput2').val(user.id);
+                $('#userNameInput2').val(user.name);
+                $('#selectedUserId2').val(user.id);
 
                 list.style.display = 'none'; // Hide the list after selection
             };
             list.appendChild(li);
         });
 
-        if (filteredEmployees.length > 0) {
+        if (filteredUsers.length > 0) {
             list.style.display = 'block'; // Show the list if there are results
         }
     }

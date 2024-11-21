@@ -716,11 +716,98 @@ public function updateDesignation()
 
 
 
+// public function attendance()
+// {
+//     $employeeModel = new EmployeeModel();
+//     $employees = $employeeModel->findAll();
+    
+    
+//     $designationModel = new Designation();
+//     $designations = $designationModel->findAll();
+    
+//     $positionModel = new Position();
+//     $positions = $positionModel->findAll();
+    
+//     $attendanceModel = new AttendanceModel();
+    
+//     // Fetch attendance records including pm_sign_out
+//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+//     $userStatus = session()->get('userStatus');
+
+//     $data = [
+//         'pageTitle' => 'Attendance',
+//         'employees' => $employees,
+//         'designations' => $designations,
+//         'positions' => $positions,
+//         'attendances' => $attendances, // Include attendance records here
+//         'userStatus' => $userStatus
+//     ];
+    
+//     return view('backend/pages/attendance', $data);
+// }
+
+
+
+// public function saveAttendance()
+// {
+//     $attendanceModel = new AttendanceModel();
+//     $employeeModel = new EmployeeModel();
+//     $designationModel = new Designation();
+//     $positionModel = new Position();
+
+//     // Get employee, office, and position data from POST request
+//     $employeeId = $this->request->getPost('employee');
+//     $officeId = $this->request->getPost('office');
+//     $positionId = $this->request->getPost('position');
+
+//     // Fetch employee details
+//     $employee = $employeeModel->find($employeeId);
+//     $designation = $designationModel->find($officeId);
+//     $position = $positionModel->find($positionId);
+
+//     // Validate employee, office, and position data
+//     if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+//     }
+
+//     if (!$designation || !isset($designation['name'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Office not found or missing data.']);
+//     }
+
+//     if (!$position || !isset($position['position_name'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
+//     }
+
+//     // Prepare attendance data
+//     $currentTime = date('Y-m-d H:i:s');
+//     $attendanceData = [
+//         'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+//         'office' => $designation['name'],
+//         'position' => $position['position_name'],
+//         'sign_in' => null, // Set to null for AM sign-in initially
+//         'sign_out' => null, // Initially null for AM sign-out
+//         'pm_sign_in' => null, // Initially null for PM sign-in
+//         'pm_sign_out' => null, // Initially null for PM sign-out
+//     ];
+
+//     // Insert new attendance record
+//     if ($this->request->getPost('pm_sign_in')) {
+//         $attendanceData['pm_sign_in'] = $currentTime; // Record PM sign-in time
+//     } else {
+//         $attendanceData['sign_in'] = $currentTime; // Record AM sign-in time
+//     }
+
+//     // Insert the new attendance record regardless of previous records
+//     if ($attendanceModel->insert($attendanceData)) {
+//         return $this->response->setJSON(['success' => true, 'message' => 'Attendance recorded successfully.']);
+//     } else {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+//     }
+// }
 public function attendance()
 {
-    $employeeModel = new EmployeeModel();
-    $employees = $employeeModel->findAll();
-    
+    $userModel = new User(); // Load the User model
+    $users = $userModel->findAll(); // Fetch all users
     
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
@@ -729,45 +816,42 @@ public function attendance()
     $positions = $positionModel->findAll();
     
     $attendanceModel = new AttendanceModel();
+    $attendances = $attendanceModel->findAll(); // Fetch all attendance records
     
-    // Fetch attendance records including pm_sign_out
-    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-    $userStatus = session()->get('userStatus');
+    $userStatus = session()->get('userStatus'); // Fetch user status from the session
 
     $data = [
         'pageTitle' => 'Attendance',
-        'employees' => $employees,
+        'users' => $users, // Pass users data to the view
         'designations' => $designations,
         'positions' => $positions,
-        'attendances' => $attendances, // Include attendance records here
+        'attendances' => $attendances,
         'userStatus' => $userStatus
     ];
     
-    return view('backend/pages/attendance', $data);
+    return view('backend/pages/attendance', $data); // Load the attendance view
 }
-
-
 
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
-    $employeeModel = new EmployeeModel();
+    $userModel = new User(); // Load the User model
     $designationModel = new Designation();
     $positionModel = new Position();
 
-    // Get employee, office, and position data from POST request
-    $employeeId = $this->request->getPost('employee');
+    // Get user, office, and position data from POST request
+    $userId = $this->request->getPost('user'); // Change to 'user' to align with the users table
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
 
-    // Fetch employee details
-    $employee = $employeeModel->find($employeeId);
+    // Fetch user details
+    $user = $userModel->find($userId);
     $designation = $designationModel->find($officeId);
     $position = $positionModel->find($positionId);
 
-    // Validate employee, office, and position data
-    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
-        return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+    // Validate user, office, and position data
+    if (!$user || !isset($user['name'])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
     }
 
     if (!$designation || !isset($designation['name'])) {
@@ -781,7 +865,7 @@ public function saveAttendance()
     // Prepare attendance data
     $currentTime = date('Y-m-d H:i:s');
     $attendanceData = [
-        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+        'name' => $user['name'], // Use the user's name
         'office' => $designation['name'],
         'position' => $position['position_name'],
         'sign_in' => null, // Set to null for AM sign-in initially
