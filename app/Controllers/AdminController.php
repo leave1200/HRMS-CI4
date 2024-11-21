@@ -792,7 +792,7 @@ public function attendance()
     // Get current logged-in user's status from the session
     $current_user = session()->get('user'); // Get the logged-in user
     $userStatus = $current_user['status']; // Assuming the user's status is stored as 'status'
-    $userId = $current_user['id']; // Get the logged-in user's ID
+    $userId = $current_user['name']; // Get the logged-in user's ID
     
     // Fetch attendance records; filter by user ID if the user is not an ADMIN
     if ($userStatus !== 'ADMIN') {
