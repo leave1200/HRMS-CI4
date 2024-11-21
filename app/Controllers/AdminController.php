@@ -768,7 +768,7 @@ public function attendance()
             ->join('users', 'users.id = attendance.user_id')
             ->join('offices', 'offices.id = attendance.office_id')
             ->join('positions', 'positions.id = attendance.position_id')
-            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm_sign-out is missing
+            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm-sign-out is missing
             ->findAll();
     } else {
         // If the user is not an admin, filter attendance records by the logged-in user's name
@@ -778,7 +778,7 @@ public function attendance()
             ->join('offices', 'offices.id = attendance.office_id')
             ->join('positions', 'positions.id = attendance.position_id')
             ->where('users.name', $userName) // Filter by the logged-in user's name
-            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm_sign-out is missing
+            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm-sign-out is missing
             ->findAll();
     }
 
@@ -794,6 +794,7 @@ public function attendance()
     
     return view('backend/pages/attendance', $data);
 }
+
 
 
 
