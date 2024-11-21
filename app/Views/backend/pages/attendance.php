@@ -126,7 +126,7 @@
                                             <!-- PM Sign In and Out status -->
                                             <td>
                                                 <?php if (empty($attendance['pm_sign_in'])): ?>
-                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmUser(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
                                                 <?php else: ?>
                                                     <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
                                                     <?php if (empty($attendance['pm_sign_out'])): ?>
