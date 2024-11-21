@@ -325,22 +325,31 @@ function signOutAttendance(attendanceId, session) {
 $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
+    // Assuming you have the logged-in user ID available as a JS variable
+    const loggedInUserId = <?= json_encode($current_user['id']); ?>; // Pass the logged-in user's ID from PHP to JS
+
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
         const userId = $(this).find('td:eq(0)').text(); // Get user ID from the first column
         const userName = $(this).find('td:eq(1)').text(); // Get user name from the second column
         const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
         const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
 
-        // Populate the fields in the PM Sign In form
-        $('#userNumberInput2').val(userId);
-        $('#userNameInput2').val(userName);
-        $('#selectedUserId2').val(userId);
+        // Check if the clicked row belongs to the logged-in user (employee or staff)
+        if (userId == loggedInUserId) {
+            // Populate the fields in the PM Sign In form
+            $('#userNumberInput2').val(userId);
+            $('#userNameInput2').val(userName);
+            $('#selectedUserId2').val(userId);
 
-        // Set Office and Position based on selected user
-        $('#officeSelect2').val(officeId).change(); // Set the office select value
-        $('#positionSelect2').val(positionId).change(); // Set the position select value
+            // Set Office and Position based on selected user
+            $('#officeSelect2').val(officeId).change(); // Set the office select value
+            $('#positionSelect2').val(positionId).change(); // Set the position select value
+        } else {
+            alert("You can only view your own attendance data.");
+        }
     });
 });
+
 
 
 </script>
