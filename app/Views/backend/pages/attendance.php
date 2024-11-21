@@ -31,33 +31,12 @@
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <label>Employee</label>
                                 <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
                                 <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                                 <input type="hidden" name="employee" id="selectedEmployeeId" required>
-                            </div> -->
-                            <div class="form-group">
-                                <label>User</label>
-                                <input 
-                                    type="text" 
-                                    id="userInput" 
-                                    class="form-control" 
-                                    placeholder="Type user's name..." 
-                                    autocomplete="off" 
-                                    required>
-                                <ul 
-                                    id="userList" 
-                                    class="list-group" 
-                                    style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;">
-                                </ul>
-                                <input 
-                                    type="hidden" 
-                                    name="user" 
-                                    id="selectedUserId" 
-                                    required>
                             </div>
-
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
@@ -75,7 +54,7 @@
                                 </select>
                             </div>
                             <!-- <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button> -->
-                            <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInUser()">Sign In</button>
+                            <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
@@ -179,80 +158,41 @@
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
 <script>
-// const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
+const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
 
-// const input = document.getElementById('employeeInput');
-// const list = document.getElementById('employeeList');
-// const selectedEmployeeId = document.getElementById('selectedEmployeeId');
+const input = document.getElementById('employeeInput');
+const list = document.getElementById('employeeList');
+const selectedEmployeeId = document.getElementById('selectedEmployeeId');
 
-// input.addEventListener('input', function() {
-//     const filterValue = this.value.toLowerCase();
-//     list.innerHTML = ''; // Clear previous results
-//     list.style.display = 'none'; // Hide the list initially
-
-//     if (filterValue) {
-//         const filteredEmployees = employees.filter(employee =>
-//             `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
-//         );
-
-//         filteredEmployees.forEach(employee => {
-//             const li = document.createElement('li');
-//             li.textContent = `${employee.firstname} ${employee.lastname}`;
-//             li.className = 'list-group-item'; // Bootstrap list group class
-//             li.onclick = () => {
-//                 input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
-//                 selectedEmployeeId.value = employee.id; // Set hidden input value
-                
-//                 // Update PM sign-in fields
-//                 $('#employeeNumberInput2').val(employee.id);
-//                 $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
-//                 $('#selectedEmployeeId2').val(employee.id);
-
-//                 list.style.display = 'none'; // Hide the list after selection
-//             };
-//             list.appendChild(li);
-//         });
-
-//         if (filteredEmployees.length > 0) {
-//             list.style.display = 'block'; // Show the list if there are results
-//         }
-//     }
-// });
-const users = <?= json_encode($users); ?>; // Fetching user data from PHP
-
-const input = document.getElementById('userInput'); // Updated ID for the input field
-const list = document.getElementById('userList'); // Updated ID for the list
-const selectedUserId = document.getElementById('selectedUserId'); // Updated ID for the hidden input
-
-input.addEventListener('input', function () {
+input.addEventListener('input', function() {
     const filterValue = this.value.toLowerCase();
     list.innerHTML = ''; // Clear previous results
     list.style.display = 'none'; // Hide the list initially
 
     if (filterValue) {
-        const filteredUsers = users.filter(user =>
-            user.name.toLowerCase().includes(filterValue) // Assuming `name` is the field in your `users` table
+        const filteredEmployees = employees.filter(employee =>
+            `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
         );
 
-        filteredUsers.forEach(user => {
+        filteredEmployees.forEach(employee => {
             const li = document.createElement('li');
-            li.textContent = user.name; // Display user name
+            li.textContent = `${employee.firstname} ${employee.lastname}`;
             li.className = 'list-group-item'; // Bootstrap list group class
             li.onclick = () => {
-                input.value = user.name; // Set input value to user name
-                selectedUserId.value = user.id; // Set hidden input value to user ID
-
-                // Update PM sign-in fields if necessary
-                $('#userNumberInput2').val(user.id);
-                $('#userNameInput2').val(user.name);
-                $('#selectedUserId2').val(user.id);
+                input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
+                selectedEmployeeId.value = employee.id; // Set hidden input value
+                
+                // Update PM sign-in fields
+                $('#employeeNumberInput2').val(employee.id);
+                $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
+                $('#selectedEmployeeId2').val(employee.id);
 
                 list.style.display = 'none'; // Hide the list after selection
             };
             list.appendChild(li);
         });
 
-        if (filteredUsers.length > 0) {
+        if (filteredEmployees.length > 0) {
             list.style.display = 'block'; // Show the list if there are results
         }
     }
@@ -266,20 +206,20 @@ document.addEventListener('click', (event) => {
     }
 });
 
-function signInUser() {
-    const selectedUser = selectedUserId.value; // Updated to reference selectedUserId
-    if (!selectedUser) {
+function signInEmployee() {
+    const selectedEmployee = selectedEmployeeId.value;
+    if (!selectedEmployee) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select a user.',
+            text: 'Please select an employee.',
         });
         return;
     }
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "You want to sign in this user?",
+        text: "You want to sign in this employee?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -319,8 +259,8 @@ function signInUser() {
             });
         }
     });
-}
 
+}
 
 function signOutAttendance(attendanceId, session) {
     const sessionText = session === 'am' ? 'AM' : 'PM';
@@ -374,7 +314,7 @@ function signOutAttendance(attendanceId, session) {
     });
 }
 </script>
-<!-- <script>
+<script>
 $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
@@ -395,29 +335,7 @@ $(document).ready(function() {
     });
 });
 
-</script> -->
-<script>
-$(document).ready(function() {
-    const table = $('#DataTables_Table_0').DataTable();
-
-    $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        const userId = $(this).find('td:eq(0)').text(); // Get user ID from the first column
-        const userName = $(this).find('td:eq(1)').text(); // Get user name from the second column
-        const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
-        const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
-
-        // Populate the fields in the PM Sign In form
-        $('#userNumberInput2').val(userId);
-        $('#userNameInput2').val(userName);
-        $('#selectedUserId2').val(userId);
-
-        // Set Office and Position based on selected user
-        $('#officeSelect2').val(officeId).change(); // Set the office select value
-        $('#positionSelect2').val(positionId).change(); // Set the position select value
-    });
-});
 </script>
-
 <script>
 function signInPmEmployee(attendanceId) {
     if (!attendanceId) {
