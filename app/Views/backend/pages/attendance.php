@@ -37,13 +37,6 @@
                                 <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
                                 <input type="hidden" name="employee" id="selectedEmployeeId" required>
                             </div>
-                                        <!-- New Input for User -->
-                            <div class="form-group">
-                                <label>User</label>
-                                <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
-                                <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="user" id="selectedUserId" required>
-                            </div>
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
@@ -163,30 +156,6 @@
 </div>
 
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
-
-<script>
-    $(document).ready(function() {
-        // Assuming 'users' data is passed as a JSON object to the view
-        var users = <?= json_encode($users); ?>; // Access the PHP array of users as JavaScript object
-
-        // For example, dynamically populating a user dropdown or input
-        users.forEach(function(user) {
-            $('#userSelect').append('<option value="' + user.id + '">' + user.name + '</option>');
-        });
-
-        // Use the 'users' array to implement your functionality
-        // For example, autocomplete or search functionality
-        $('#userInput').on('keyup', function() {
-            let query = $(this).val().toLowerCase();
-            $('#userSelect').empty(); // Clear previous results
-            users.forEach(function(user) {
-                if (user.name.toLowerCase().includes(query)) {
-                    $('#userSelect').append('<option value="' + user.id + '">' + user.name + '</option>');
-                }
-            });
-        });
-    });
-</script>
 
 <script>
 const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
