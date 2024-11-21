@@ -266,20 +266,20 @@ document.addEventListener('click', (event) => {
     }
 });
 
-function signInEmployee() {
-    const selectedEmployee = selectedEmployeeId.value;
-    if (!selectedEmployee) {
+function signInUser() {
+    const selectedUser = selectedUserId.value; // Updated to reference selectedUserId
+    if (!selectedUser) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select an employee.',
+            text: 'Please select a user.',
         });
         return;
     }
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "You want to sign in this employee?",
+        text: "You want to sign in this user?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -319,8 +319,8 @@ function signInEmployee() {
             });
         }
     });
-
 }
+
 
 function signOutAttendance(attendanceId, session) {
     const sessionText = session === 'am' ? 'AM' : 'PM';
