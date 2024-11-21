@@ -716,20 +716,51 @@ public function updateDesignation()
 
 
 
+// public function attendance()
+// {
+//     $employeeModel = new EmployeeModel();
+//     $employees = $employeeModel->findAll();
+    
+    
+//     $designationModel = new Designation();
+//     $designations = $designationModel->findAll();
+    
+//     $positionModel = new Position();
+//     $positions = $positionModel->findAll();
+    
+//     $attendanceModel = new AttendanceModel();
+    
+//     // Fetch attendance records including pm_sign_out
+//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+//     $userStatus = session()->get('userStatus');
+
+//     $data = [
+//         'pageTitle' => 'Attendance',
+//         'employees' => $employees,
+//         'designations' => $designations,
+//         'positions' => $positions,
+//         'attendances' => $attendances, // Include attendance records here
+//         'userStatus' => $userStatus
+//     ];
+    
+//     return view('backend/pages/attendance', $data);
+// }
 public function attendance()
 {
     $employeeModel = new EmployeeModel();
     $employees = $employeeModel->findAll();
-    
-    
+
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
-    
+
     $positionModel = new Position();
     $positions = $positionModel->findAll();
-    
+
+    $userModel = new User(); // Load the User model
+    $users = $userModel->findAll(); // Fetch all user data
+
     $attendanceModel = new AttendanceModel();
-    
+
     // Fetch attendance records including pm_sign_out
     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
@@ -739,12 +770,14 @@ public function attendance()
         'employees' => $employees,
         'designations' => $designations,
         'positions' => $positions,
+        'users' => $users, // Include user data here
         'attendances' => $attendances, // Include attendance records here
         'userStatus' => $userStatus
     ];
-    
+
     return view('backend/pages/attendance', $data);
 }
+
 
 
 

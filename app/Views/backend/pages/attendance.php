@@ -165,6 +165,30 @@
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
 <script>
+    $(document).ready(function() {
+        // Assuming 'users' data is passed as a JSON object to the view
+        var users = <?= json_encode($users); ?>; // Access the PHP array of users as JavaScript object
+
+        // For example, dynamically populating a user dropdown or input
+        users.forEach(function(user) {
+            $('#userSelect').append('<option value="' + user.id + '">' + user.name + '</option>');
+        });
+
+        // Use the 'users' array to implement your functionality
+        // For example, autocomplete or search functionality
+        $('#userInput').on('keyup', function() {
+            let query = $(this).val().toLowerCase();
+            $('#userSelect').empty(); // Clear previous results
+            users.forEach(function(user) {
+                if (user.name.toLowerCase().includes(query)) {
+                    $('#userSelect').append('<option value="' + user.id + '">' + user.name + '</option>');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
 const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
 
 const input = document.getElementById('employeeInput');
