@@ -746,6 +746,35 @@ public function updateDesignation()
 //     return view('backend/pages/attendance', $data);
 // }
 
+// public function attendance()
+// {
+//     // Fetch users instead of employees
+//     $userModel = new User(); // Assuming your model for users is `User.php`
+//     $users = $userModel->findAll(); // Fetch all users
+    
+//     $designationModel = new Designation();
+//     $designations = $designationModel->findAll();
+    
+//     $positionModel = new Position();
+//     $positions = $positionModel->findAll();
+    
+//     $attendanceModel = new AttendanceModel();
+    
+//     // Fetch attendance records, including pm_sign_out if necessary
+//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+//     $userStatus = session()->get('userStatus');
+
+//     $data = [
+//         'pageTitle' => 'Attendance',
+//         'users' => $users, // Replace 'employees' with 'users'
+//         'designations' => $designations,
+//         'positions' => $positions,
+//         'attendances' => $attendances, // Include attendance records here
+//         'userStatus' => $userStatus
+//     ];
+    
+//     return view('backend/pages/attendance', $data);
+// }
 public function attendance()
 {
     // Fetch users instead of employees
@@ -760,9 +789,19 @@ public function attendance()
     
     $attendanceModel = new AttendanceModel();
     
-    // Fetch attendance records, including pm_sign_out if necessary
-    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-    $userStatus = session()->get('userStatus');
+    // Get current logged-in user's status from the session
+    $current_user = session()->get('user'); // Get the logged-in user
+    $userStatus = $current_user['status']; // Assuming the user's status is stored as 'status'
+    $userId = $current_user['id']; // Get the logged-in user's ID
+    
+    // Fetch attendance records; filter by user ID if the user is not an ADMIN
+    if ($userStatus !== 'ADMIN') {
+        // For non-admin users (e.g., EMPLOYEE or STAFF), fetch only their own attendance records
+        $attendances = $attendanceModel->where('user_id', $userId)->findAll();
+    } else {
+        // For admins, fetch all attendance records
+        $attendances = $attendanceModel->findAll();
+    }
 
     $data = [
         'pageTitle' => 'Attendance',
@@ -775,6 +814,7 @@ public function attendance()
     
     return view('backend/pages/attendance', $data);
 }
+
 
 
 public function saveAttendance()
