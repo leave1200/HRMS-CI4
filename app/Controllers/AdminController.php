@@ -843,24 +843,24 @@ public function saveAttendance()
     $userId = $this->request->getPost('user'); // Change to 'user' to align with the users table
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
-
+    log_message('debug', 'User: ' . $userId . ' Office: ' . $officeId . ' Position: ' . $positionId);
     // Fetch user details
     $user = $userModel->find($userId);
     $designation = $designationModel->find($officeId);
     $position = $positionModel->find($positionId);
 
-    // Validate user, office, and position data
     if (!$user || !isset($user['name'])) {
         return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
     }
-
+    
     if (!$designation || !isset($designation['name'])) {
         return $this->response->setJSON(['success' => false, 'message' => 'Office not found or missing data.']);
     }
-
+    
     if (!$position || !isset($position['position_name'])) {
         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
     }
+    
 
     // Prepare attendance data
     $currentTime = date('Y-m-d H:i:s');
@@ -885,8 +885,10 @@ public function saveAttendance()
     if ($attendanceModel->insert($attendanceData)) {
         return $this->response->setJSON(['success' => true, 'message' => 'Attendance recorded successfully.']);
     } else {
+        log_message('error', 'Failed to insert attendance: ' . implode(', ', $attendanceModel->errors()));
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
+    
 }
 
 public function pmSave()
