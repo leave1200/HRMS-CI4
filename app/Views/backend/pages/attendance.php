@@ -101,57 +101,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php
-// Get the logged-in user's status from the session (assuming the user data includes a 'status' field)
-$current_user = session()->get('user');
-$user_status = $current_user['status']; // Adjust this based on your actual user data structure
-?>
+                                <?php if (!empty($attendances)): ?>
+                                    <?php foreach ($attendances as $attendance): ?>
+                                        <tr>
+                                            <td><?= esc($attendance['id']) ?></td>
+                                            <td><?= esc($attendance['name']) ?></td>
+                                            <td><?= esc($attendance['office']) ?></td>
+                                            <td><?= esc($attendance['position']) ?></td>
+                                            
+                                            <!-- AM Sign Out status -->
+                                            <td>
+                                                <?php if (empty($attendance['sign_out'])): ?>
+                                                    <?php if (!empty($attendance['sign_in'])): ?>
+                                                        <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
+                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'am')">Sign Out (AM)</button>
+                                                    <?php else: ?>
+                                                        <span>No AM Sign In</span>
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <span class="badge bg-danger">AM Signed Out: <?= esc(date('H:i', strtotime($attendance['sign_out']))) ?></span>
+                                                <?php endif; ?>
+                                            </td>
 
-<?php if (!empty($attendances)): ?>
-    <?php foreach ($attendances as $attendance): ?>
-        <?php if ($user_status === 'ADMIN' || $attendance['id'] === $current_user['id']): ?>
-            <tr>
-                <td><?= esc($attendance['id']) ?></td>
-                <td><?= esc($attendance['name']) ?></td>
-                <td><?= esc($attendance['office']) ?></td>
-                <td><?= esc($attendance['position']) ?></td>
-
-                <!-- AM Sign Out status -->
-                <td>
-                    <?php if (empty($attendance['sign_out'])): ?>
-                        <?php if (!empty($attendance['sign_in'])): ?>
-                            <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
-                            <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'am')">Sign Out (AM)</button>
-                        <?php else: ?>
-                            <span>No AM Sign In</span>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <span class="badge bg-danger">AM Signed Out: <?= esc(date('H:i', strtotime($attendance['sign_out']))) ?></span>
-                    <?php endif; ?>
-                </td>
-
-                <!-- PM Sign In and Out status -->
-                <td>
-                    <?php if (empty($attendance['pm_sign_in'])): ?>
-                        <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
-                    <?php else: ?>
-                        <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
-                        <?php if (empty($attendance['pm_sign_out'])): ?>
-                            <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
-                        <?php else: ?>
-                            <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endif; ?>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="6">No attendance records found.</td>
-    </tr>
-<?php endif; ?>
-
+                                            <!-- PM Sign In and Out status -->
+                                            <td>
+                                                <?php if (empty($attendance['pm_sign_in'])): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
+                                                    <?php if (empty($attendance['pm_sign_out'])): ?>
+                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6">No attendance records found.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
 
                         </table>
