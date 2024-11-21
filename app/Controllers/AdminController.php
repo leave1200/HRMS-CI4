@@ -746,7 +746,6 @@ public function attendance()
     // Fetch the current logged-in user
     $current_user = session()->get('user'); // Assuming the logged-in user's session data contains 'user'
     $userName = $current_user['name']; // Get the name of the logged-in user
-    $userStatus = session()->get('userStatus'); // Get the user status (EMPLOYEE, ADMIN, etc.)
 
     // Fetch users and related data
     $userModel = new User();
@@ -760,27 +759,15 @@ public function attendance()
 
     $attendanceModel = new AttendanceModel();
     
-    // Fetch attendance records based on the user's status
-    if ($userStatus == 'ADMIN') {
-        // If the user is an admin, fetch all attendance records
-        $attendances = $attendanceModel
-            ->select('attendance.id, users.name, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
-            ->join('users', 'users.id = attendance.user_id')
-            ->join('offices', 'offices.id = attendance.office_id')
-            ->join('positions', 'positions.id = attendance.position_id')
-            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm-sign-out is missing
-            ->findAll();
-    } else {
-        // If the user is not an admin, filter attendance records by the logged-in user's name
-        $attendances = $attendanceModel
-            ->select('attendance.id, users.name, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
-            ->join('users', 'users.id = attendance.user_id')
-            ->join('offices', 'offices.id = attendance.office_id')
-            ->join('positions', 'positions.id = attendance.position_id')
-            ->where('users.name', $userName) // Filter by the logged-in user's name
-            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm-sign-out is missing
-            ->findAll();
-    }
+    // Fetch attendance records filtered by the logged-in user's name
+    $attendances = $attendanceModel
+        ->select('attendance.id, users.name, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
+        ->join('users', 'users.id = attendance.user_id')
+        ->join('offices', 'offices.id = attendance.office_id')
+        ->join('positions', 'positions.id = attendance.position_id')
+        ->where('users.name', $userName) // Filter by the logged-in user's name
+        ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm-sign-out is missing
+        ->findAll();
 
     // Pass the necessary data to the view
     $data = [
@@ -789,11 +776,11 @@ public function attendance()
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include filtered attendance records
-        'userStatus' => $userStatus
     ];
     
     return view('backend/pages/attendance', $data);
 }
+
 
 
 
