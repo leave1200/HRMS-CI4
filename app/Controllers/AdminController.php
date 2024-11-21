@@ -777,43 +777,52 @@ public function updateDesignation()
 // }
 public function attendance()
 {
-    // Fetch users instead of employees
-    $userModel = new User(); // Assuming your model for users is `User.php`
+    // Fetch the current logged-in user
+    $current_user = session()->get('user'); // Assuming the logged-in user's session data contains 'user'
+    $userName = $current_user['name']; // Get the name of the logged-in user
+    $userStatus = session()->get('userStatus'); // Get the user status (EMPLOYEE, ADMIN, etc.)
+
+    // Fetch users and related data
+    $userModel = new User();
     $users = $userModel->findAll(); // Fetch all users
-    
+
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
-    
+
     $positionModel = new Position();
     $positions = $positionModel->findAll();
-    
+
     $attendanceModel = new AttendanceModel();
     
-    // Get current logged-in user's status from the session
-    $current_user = session()->get('user'); // Get the logged-in user
-    $userStatus = $current_user['status']; // Assuming the user's status is stored as 'status'
-    $userId = $current_user['name']; // Get the logged-in user's ID
-    
-    // Fetch attendance records; filter by user ID if the user is not an ADMIN
-    if ($userStatus !== 'ADMIN') {
-        // For non-admin users (e.g., EMPLOYEE or STAFF), fetch only their own attendance records
-        $attendances = $attendanceModel->where('name', $userId)->findAll();
-    } else {
-        // For admins, fetch all attendance records
+    // Fetch attendance records based on the user's status
+    if ($userStatus == 'ADMIN') {
+        // If the user is an admin, fetch all attendance records
         $attendances = $attendanceModel->findAll();
+    } else {
+        // If the user is not an admin, filter attendance records by the logged-in user's name
+        $attendances = $attendanceModel
+            ->select('attendance.id, users.firstname, users.lastname, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
+            ->join('users', 'users.id = attendance.user_id')
+            ->join('offices', 'offices.id = attendance.office_id')
+            ->join('positions', 'positions.id = attendance.position_id')
+            ->where('users.firstname', $userName) // Filter by the logged-in user's name
+            ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm_sign-out is missing
+            ->findAll();
     }
 
+    // Pass the necessary data to the view
     $data = [
         'pageTitle' => 'Attendance',
-        'users' => $users, // Replace 'employees' with 'users'
+        'users' => $users,
         'designations' => $designations,
         'positions' => $positions,
-        'attendances' => $attendances, // Include attendance records here
+        'attendances' => $attendances, // Include filtered attendance records
         'userStatus' => $userStatus
     ];
     
     return view('backend/pages/attendance', $data);
 }
+
 
 
 
