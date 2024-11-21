@@ -716,11 +716,41 @@ public function updateDesignation()
 
 
 
+// public function attendance()
+// {
+//     $employeeModel = new EmployeeModel();
+//     $employees = $employeeModel->findAll();
+    
+    
+//     $designationModel = new Designation();
+//     $designations = $designationModel->findAll();
+    
+//     $positionModel = new Position();
+//     $positions = $positionModel->findAll();
+    
+//     $attendanceModel = new AttendanceModel();
+    
+//     // Fetch attendance records including pm_sign_out
+//     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+//     $userStatus = session()->get('userStatus');
+
+//     $data = [
+//         'pageTitle' => 'Attendance',
+//         'employees' => $employees,
+//         'designations' => $designations,
+//         'positions' => $positions,
+//         'attendances' => $attendances, // Include attendance records here
+//         'userStatus' => $userStatus
+//     ];
+    
+//     return view('backend/pages/attendance', $data);
+// }
+
 public function attendance()
 {
-    $employeeModel = new EmployeeModel();
-    $employees = $employeeModel->findAll();
-    
+    // Fetch users instead of employees
+    $userModel = new User(); // Assuming your model for users is `User.php`
+    $users = $userModel->findAll(); // Fetch all users
     
     $designationModel = new Designation();
     $designations = $designationModel->findAll();
@@ -730,13 +760,13 @@ public function attendance()
     
     $attendanceModel = new AttendanceModel();
     
-    // Fetch attendance records including pm_sign_out
+    // Fetch attendance records, including pm_sign_out if necessary
     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
 
     $data = [
         'pageTitle' => 'Attendance',
-        'employees' => $employees,
+        'users' => $users, // Replace 'employees' with 'users'
         'designations' => $designations,
         'positions' => $positions,
         'attendances' => $attendances, // Include attendance records here
@@ -745,7 +775,6 @@ public function attendance()
     
     return view('backend/pages/attendance', $data);
 }
-
 
 
 public function saveAttendance()
