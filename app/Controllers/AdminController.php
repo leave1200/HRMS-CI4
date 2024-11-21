@@ -801,11 +801,11 @@ public function attendance()
     } else {
         // If the user is not an admin, filter attendance records by the logged-in user's name
         $attendances = $attendanceModel
-            ->select('attendance.id, users.firstname, users.lastname, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
+            ->select('attendance.id, users.name, offices.name AS office, positions.position_name AS position, sign_in, sign_out, pm_sign_in, pm_sign_out')
             ->join('users', 'users.id = attendance.user_id')
             ->join('offices', 'offices.id = attendance.office_id')
             ->join('positions', 'positions.id = attendance.position_id')
-            ->where('users.firstname', $userName) // Filter by the logged-in user's name
+            ->where('users.name', $userName) // Filter by the logged-in user's name
             ->where('sign_out IS NULL OR pm_sign_out IS NULL') // Ensure either sign-out or pm_sign-out is missing
             ->findAll();
     }
