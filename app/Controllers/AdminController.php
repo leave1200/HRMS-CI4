@@ -761,7 +761,10 @@ public function attendance()
     $attendanceModel = new AttendanceModel();
     
     // Fetch attendance records, including pm_sign_out if necessary
-    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+    if ($userStatus == 'ADMIN') {
+        // If the user is an admin, fetch all attendance records
+        $attendances = $attendanceModel->findAll();
+    } // Adjust this to include pm_sign_out if necessary
     $userStatus = session()->get('userStatus');
 
     $data = [
