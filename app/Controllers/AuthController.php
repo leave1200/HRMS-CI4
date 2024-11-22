@@ -382,7 +382,7 @@ class AuthController extends BaseController
             ]);
 
             // Prepare email data
-            $resetLink = base_url() . "/admin/reset-password-with-pin/$pinCode";
+            $resetLink = base_url() . "backend/pages/auth/reset-password-with-pin";
             $mail_data = [
                 'name' => $user_info->name,
                 'pin_code' => $pinCode,
