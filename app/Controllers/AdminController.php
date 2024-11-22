@@ -748,17 +748,20 @@ public function updateDesignation()
     public function attendance()
     {
         $userModel = new User(); 
-        $users = $userModel->findAll(); 
-    
         $designationModel = new Designation();
-        $designations = $designationModel->findAll();
-    
         $positionModel = new Position();
-        $positions = $positionModel->findAll();
-    
         $attendanceModel = new AttendanceModel();
-        $attendances = $attendanceModel->findAll(); 
     
+        // Get the logged-in user's ID
+        $loggedInUserId = session()->get('userId'); // Ensure 'userId' is set in session during login
+    
+        // Fetch attendance records only for the logged-in user
+        $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
+    
+        // Get additional data if required
+        $users = $userModel->findAll(); 
+        $designations = $designationModel->findAll();
+        $positions = $positionModel->findAll();
         $userStatus = session()->get('userStatus'); 
     
         $data = [
@@ -772,6 +775,7 @@ public function updateDesignation()
     
         return view('backend/pages/attendance', $data);
     }
+    
     
 
 
