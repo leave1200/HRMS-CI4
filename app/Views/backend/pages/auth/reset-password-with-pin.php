@@ -11,12 +11,12 @@
 
         <!-- Pin verification form -->
         <?= form_open(route_to('reset-password-handler-with-pin')) ?>
-        <input type="hidden" name="pin" value="<?= esc($pin) ?>">
+        <input type="hidden" name="token" value="<?= esc($pin) ?>">
 
         <div class="form-group">
             <label for="pin">Enter Pin Code</label>
-            <input type="text" name="pin" id="pin" class="form-control" value="<?= old('pin', $pin) ?>" required>
-            <small class="text-danger"><?= isset($validation) ? $validation->getError('pin') : '' ?></small>
+            <input type="text" name="token" id="pin" class="form-control" value="<?= old('token', $pin) ?>" required>
+            <small class="text-danger"><?= isset($validation) ? $validation->getError('token') : '' ?></small>
         </div>
 
         <button type="submit" class="btn btn-primary">Verify Pin</button>
