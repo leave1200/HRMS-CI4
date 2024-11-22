@@ -716,65 +716,65 @@ public function updateDesignation()
 
 
 
-    // public function attendance()
-    // {
-    //     // Fetch users instead of employees
-    //     $userModel = new User(); // Assuming your model for users is User.php
-    //     $users = $userModel->findAll(); // Fetch all users
-        
-    //     $designationModel = new Designation();
-    //     $designations = $designationModel->findAll();
-        
-    //     $positionModel = new Position();
-    //     $positions = $positionModel->findAll();
-        
-    //     $attendanceModel = new AttendanceModel();
-        
-    //     // Fetch attendance records, including pm_sign_out if necessary
-    //     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-    //     $userStatus = session()->get('userStatus');
-    
-    //     $data = [
-    //         'pageTitle' => 'Attendance',
-    //         'users' => $users, // Replace 'employees' with 'users'
-    //         'designations' => $designations,
-    //         'positions' => $positions,
-    //         'attendances' => $attendances, // Include attendance records here
-    //         'userStatus' => $userStatus
-    //     ];
-        
-    //     return view('backend/pages/attendance', $data);
-    // }
     public function attendance()
     {
-        $userModel = new User(); 
+        // Fetch users instead of employees
+        $userModel = new User(); // Assuming your model for users is User.php
+        $users = $userModel->findAll(); // Fetch all users
+        
         $designationModel = new Designation();
-        $positionModel = new Position();
-        $attendanceModel = new AttendanceModel();
-    
-        // Get the logged-in user's ID
-        $loggedInUserId = session()->get('userId'); // Ensure 'userId' is set in session during login
-    
-        // Fetch attendance records only for the logged-in user
-        $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
-    
-        // Get additional data if required
-        $users = $userModel->findAll(); 
         $designations = $designationModel->findAll();
+        
+        $positionModel = new Position();
         $positions = $positionModel->findAll();
-        $userStatus = session()->get('userStatus'); 
+        
+        $attendanceModel = new AttendanceModel();
+        
+        // Fetch attendance records, including pm_sign_out if necessary
+        $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+        $userStatus = session()->get('userStatus');
     
         $data = [
             'pageTitle' => 'Attendance',
-            'users' => $users,
+            'users' => $users, // Replace 'employees' with 'users'
             'designations' => $designations,
             'positions' => $positions,
-            'attendances' => $attendances,
-            'userStatus' => $userStatus,
+            'attendances' => $attendances, // Include attendance records here
+            'userStatus' => $userStatus
         ];
-    
+        
         return view('backend/pages/attendance', $data);
     }
+    // public function attendance()
+    // {
+    //     $userModel = new User(); 
+    //     $designationModel = new Designation();
+    //     $positionModel = new Position();
+    //     $attendanceModel = new AttendanceModel();
+    
+    //     // Get the logged-in user's ID
+    //     $loggedInUserId = session()->get('userId'); // Ensure 'userId' is set in session during login
+    
+    //     // Fetch attendance records only for the logged-in user
+    //     $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
+    
+    //     // Get additional data if required
+    //     $users = $userModel->findAll(); 
+    //     $designations = $designationModel->findAll();
+    //     $positions = $positionModel->findAll();
+    //     $userStatus = session()->get('userStatus'); 
+    
+    //     $data = [
+    //         'pageTitle' => 'Attendance',
+    //         'users' => $users,
+    //         'designations' => $designations,
+    //         'positions' => $positions,
+    //         'attendances' => $attendances,
+    //         'userStatus' => $userStatus,
+    //     ];
+    
+    //     return view('backend/pages/attendance', $data);
+    // }
     
     
 
