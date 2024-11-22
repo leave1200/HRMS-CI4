@@ -730,13 +730,9 @@ public function updateDesignation()
         $positions = $positionModel->findAll();
         
         $attendanceModel = new AttendanceModel();
-         // Get the logged-in user's ID
-         $loggedInUserId = session()->get('userId'); // Ensure 'userId' is set in session during login
-    
-         // Fetch attendance records only for the logged-in user
-         $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
+        
         // Fetch attendance records, including pm_sign_out if necessary
-        // $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+        $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
         $userStatus = session()->get('userStatus');
     
         $data = [
