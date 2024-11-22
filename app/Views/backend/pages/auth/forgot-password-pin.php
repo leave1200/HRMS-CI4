@@ -6,7 +6,7 @@
         <?php if (session()->has('fail')): ?>
             <div class="alert alert-danger"><?= session('fail') ?></div>
         <?php endif; ?>
-        <form action="<?= route_to('resetPasswordWithPin') ?>" method="post">
+        <form action="<?= route_to('reset-password-with-pin') ?>" method="post">
             <?= csrf_field() ?>
             <div class="form-group">
                 <label for="pin">Enter the Pin Code</label>
