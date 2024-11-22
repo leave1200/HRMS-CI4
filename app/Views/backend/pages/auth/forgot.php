@@ -59,10 +59,6 @@
 									</div>
 								</div>
 							</form>
-							 <!-- New Button for Pin Code Reset -->
-								<div class="mt-4 text-center">
-									<a class="btn btn-outline-secondary btn-lg" href="<?= route_to('reset_password_via_pin') ?>">Reset Password via Pin Code</a>
-								</div>
 						</div>
 
 <?= $this->endSection()?>
