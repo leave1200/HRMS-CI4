@@ -79,37 +79,38 @@ class AdminController extends BaseController
 
             return $this->response->setJSON($fileData);
         }
-    public function getUserAttendances()
+        public function getUserAttendances()
         {
             $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
             $attendanceModel = new \App\Models\AttendanceModel();
         
-            // Query to get attendance counts grouped by date and type
+            // Query to get attendance counts grouped by the derived date and type
             $attendanceData = $attendanceModel
-                ->select("DATE(sign_in) as attendance_date, 'AM Sign-In' as status, COUNT(sign_in) as count")
+                ->select("DATE(sign_in) as date, 'AM Sign-In' as status, COUNT(sign_in) as count")
                 ->where('attendance', $userId)
-                ->groupBy('attendance_date')
+                ->groupBy('DATE(sign_in)')
                 ->union(
-                    $attendanceModel->select("DATE(sign_out) as attendance_date, 'AM Sign-Out' as status, COUNT(sign_out) as count")
+                    $attendanceModel->select("DATE(sign_out) as date, 'AM Sign-Out' as status, COUNT(sign_out) as count")
                         ->where('attendance', $userId)
-                        ->groupBy('attendance_date')
+                        ->groupBy('DATE(sign_out)')
                 )
                 ->union(
-                    $attendanceModel->select("DATE(pm_sign_in) as attendance_date, 'PM Sign-In' as status, COUNT(pm_sign_in) as count")
+                    $attendanceModel->select("DATE(pm_sign_in) as date, 'PM Sign-In' as status, COUNT(pm_sign_in) as count")
                         ->where('attendance', $userId)
-                        ->groupBy('attendance_date')
+                        ->groupBy('DATE(pm_sign_in)')
                 )
                 ->union(
-                    $attendanceModel->select("DATE(pm_sign_out) as attendance_date, 'PM Sign-Out' as status, COUNT(pm_sign_out) as count")
+                    $attendanceModel->select("DATE(pm_sign_out) as date, 'PM Sign-Out' as status, COUNT(pm_sign_out) as count")
                         ->where('attendance', $userId)
-                        ->groupBy('attendance_date')
+                        ->groupBy('DATE(pm_sign_out)')
                 )
-                ->orderBy('attendance_date', 'ASC')
+                ->orderBy('date', 'ASC') // Use the derived 'date' alias for ordering
                 ->findAll();
         
             // Return the data as JSON response
             return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
         }
+        
         
 
 public function getUserLeaveApplications()
