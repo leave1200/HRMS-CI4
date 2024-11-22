@@ -753,17 +753,14 @@ public function updateDesignation()
         $positionModel = new Position();
     
         // Get the logged-in user's ID and status
-        $loggedInUserId = session()->get('userId'); 
+        $loggedInUserId = session()->get('user_id'); 
         $userStatus = session()->get('userStatus'); 
     
         // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
         if ($userStatus !== 'ADMIN') {
             $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll();
         } else {
-            // Admin can see all attendance records, with user details (join 'users' table)
-            $attendances = $attendanceModel->select('attendances.*, users.name as name')
-                                            ->join('users', 'users.id = attendances.att')
-                                            ->findAll();
+            $attendances = $attendanceModel->findAll();
         }
     
         // Fetch other related data (e.g., designations, positions)
