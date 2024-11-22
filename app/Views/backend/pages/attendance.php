@@ -144,37 +144,8 @@
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
-
                         </table>
-                                        <table class="data-table table table-striped table-hover" id="DataTables_Table_0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Office</th>
-                            <th>Position</th>
-                            <th>AM Sign In</th>
-                            <th>Sign Out</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($attendances)): ?>
-                            <?php foreach ($attendances as $attendance): ?>
-                                <tr>
-                                    <td><?= esc($attendance['id']) ?></td>
-                                    <td><?= esc($attendance['name']) ?></td>
-                                    <td><?= esc($attendance['office']) ?></td>
-                                    <td><?= esc($attendance['position']) ?></td>
-                                    <td><?= esc($attendance['sign_in'] ? date('H:i', strtotime($attendance['sign_in'])) : 'No AM Sign In') ?></td>
-                                    <td><?= esc($attendance['sign_out'] ? date('H:i', strtotime($attendance['sign_out'])) : 'No Sign Out') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr><td colspan="6">No attendance records found.</td></tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-                                    </div>
+                    </div>
                 </div>
             </div>
 
