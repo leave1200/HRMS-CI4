@@ -91,12 +91,13 @@
 
 <div class="header">
 <div class="header-left">
-    <div class="menu-icon bi bi-list"></div>
-    <div class="header-search"></div>
-
-    <!-- Running Text Section -->
-    <div class="welcome-message">
-        <marquee behavior="scroll" direction="left" id="welcomeText"></marquee>
+<div class="menu-icon bi bi-list"></div>
+    <div class="header-search">
+        <div class="running-text-container">
+            <marquee id="welcomeText" style="font-size: 16px; color: #000; font-weight: bold;">
+                Welcome to the system <span id="userStatus"></span> <span id="userName"></span>!
+            </marquee>
+        </div>
     </div>
 </div>
 
