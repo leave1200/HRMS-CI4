@@ -338,12 +338,12 @@ class AuthController extends BaseController
         }
     }
     public function requestPin()
-{
-    return view('backend/pages/auth/request_pin', [
-        'pageTitle' => 'Request PIN Code',
-        'validation' => null
-    ]);
-}
+    {
+        return view('backend/pages/auth/request_pin', [
+            'pageTitle' => 'Request PIN Code',
+            'validation' => null
+        ]);
+    }
 
 public function sendPinCode()
 {
