@@ -12,11 +12,6 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' => 'send_password_reset_link']);
     $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
     $routes->post('reset-password-handler/(:any)', 'AuthController::resetPasswordHandler/$1', ['as' => 'reset-password-handler']);
-    $routes->get('forgot-password-pin', 'AuthController::forgotPasswordWithPin', ['as' => 'forgot-password-pin']);
-    $routes->post('send-pin-code', 'AuthController::sendPinCode');
-    $routes->get('reset-password-with-pin/(:any)', 'AuthController::resetPasswordWithPin/$1');
-    $routes->post('reset-password-handler-pin', 'AuthController::resetPasswordHandlerWithPin');
-
     
 });
 
