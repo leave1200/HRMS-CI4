@@ -70,7 +70,6 @@ class User extends Model
         // Update the picture field of the user with the given user ID
         return $this->update($userId, ['picture' => $fileName]);
     }
-    
 
 
 }
