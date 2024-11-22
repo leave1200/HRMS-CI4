@@ -188,63 +188,6 @@
 					</div>
 				</div>
 				<script>
-						// document.addEventListener('DOMContentLoaded', function () {
-						// 	fetch('/getApprovedLeaves')
-						// 		.then(response => response.json())
-						// 		.then(data => {
-						// 			if (!data.success || !data.data || data.data.length === 0) {
-						// 				console.warn(data.message || 'No data returned from API.');
-						// 				Highcharts.chart('leaveApplicationsChart', {
-						// 					chart: { type: 'column' },
-						// 					title: { text: 'No Approved Leaves Data Available' },
-						// 					xAxis: { categories: [] },
-						// 					yAxis: { title: { text: 'Number of Approved Leaves' } },
-						// 					series: [{ name: 'Approved Leaves', data: [], color: '#28a745' }]
-						// 				});
-						// 				return;
-						// 			}
-
-						// 			// Extract data for Highcharts
-						// 			const categories = data.data.map(item => item.leave_date); // X-axis (leave dates)
-						// 			const seriesData = data.data.map(item => parseInt(item.leave_count)); // Y-axis (leave counts)
-
-						// 			// Render the chart
-						// 			Highcharts.chart('leaveApplicationsChart', {
-						// 				chart: {
-						// 					type: 'column'
-						// 				},
-						// 				title: {
-						// 					text: 'Approved Leave Applications'
-						// 				},
-						// 				xAxis: {
-						// 					categories: categories,
-						// 					title: {
-						// 						text: 'Leave Dates'
-						// 					}
-						// 				},
-						// 				yAxis: {
-						// 					title: {
-						// 						text: 'Number of Approved Leaves'
-						// 					}
-						// 				},
-						// 				series: [{
-						// 					name: 'Approved Leaves',
-						// 					data: seriesData,
-						// 					color: '#28a745'
-						// 				}]
-						// 			});
-						// 		})
-						// 		.catch(error => {
-						// 			console.error('Error fetching approved leave data:', error);
-						// 			Highcharts.chart('leaveApplicationsChart', {
-						// 				chart: { type: 'column' },
-						// 				title: { text: 'Error Loading Data' },
-						// 				xAxis: { categories: [] },
-						// 				yAxis: { title: { text: 'Number of Approved Leaves' } },
-						// 				series: []
-						// 			});
-						// 		});
-						// });
 						document.addEventListener('DOMContentLoaded', function () {
 							fetch('/getUserLeaveApplications') // Update this route to match your setup
 								.then(response => response.json())
