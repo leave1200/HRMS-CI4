@@ -368,7 +368,7 @@
 											if (!response.success || !response.data || response.data.length === 0) {
 												console.warn(response.message || 'No data returned from API.');
 												Highcharts.chart('allAttendanceChart', {
-													chart: { type: 'line' },
+													chart: { type: 'bar' },
 													title: { text: 'No Attendance Data Available' },
 													xAxis: { categories: [] },
 													yAxis: { title: { text: 'Attendance Status Count' } },
@@ -400,7 +400,7 @@
 
 											// Render the chart for all users
 											Highcharts.chart('allAttendanceChart', {
-												chart: { type: 'line' },
+												chart: { type: 'bar' },
 												title: { text: 'All Users Attendance Records' },
 												xAxis: {
 													categories: dates,
@@ -420,7 +420,7 @@
 										.catch(error => {
 											console.error('Error fetching all users attendance data:', error);
 											Highcharts.chart('allAttendanceChart', {
-												chart: { type: 'line' },
+												chart: { type: 'bar' },
 												title: { text: 'Error Loading Data' },
 												xAxis: { categories: [] },
 												yAxis: { title: { text: 'Attendance Status Count' } },
