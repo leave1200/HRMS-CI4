@@ -714,37 +714,6 @@ public function updateDesignation()
     
     /////&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-
-
-    // public function attendance()
-    // {
-    //     // Fetch users instead of employees
-    //     $userModel = new User(); // Assuming your model for users is User.php
-    //     $users = $userModel->findAll(); // Fetch all users
-        
-    //     $designationModel = new Designation();
-    //     $designations = $designationModel->findAll();
-        
-    //     $positionModel = new Position();
-    //     $positions = $positionModel->findAll();
-        
-    //     $attendanceModel = new AttendanceModel();
-        
-    //     // Fetch attendance records, including pm_sign_out if necessary
-    //     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-    //     $userStatus = session()->get('userStatus');
-    
-    //     $data = [
-    //         'pageTitle' => 'Attendance',
-    //         'users' => $users, // Replace 'employees' with 'users'
-    //         'designations' => $designations,
-    //         'positions' => $positions,
-    //         'attendances' => $attendances, // Include attendance records here
-    //         'userStatus' => $userStatus
-    //     ];
-        
-    //     return view('backend/pages/attendance', $data);
-    // }
     public function attendance()
     {
         $userModel = new User(); 
@@ -757,7 +726,7 @@ public function updateDesignation()
         $userStatus = session()->get('userStatus'); 
     
         // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
-        if ($userStatus !== 'ADMIN') {
+        if ($userStatus == 'EMPLOYEE') {
             $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
         } else {
             $attendances = $attendanceModel->findAll();
@@ -784,62 +753,6 @@ public function updateDesignation()
     
 
 
-// public function saveAttendance()
-// {
-//     $attendanceModel = new AttendanceModel();
-//     $userModel = new User(); // Assuming UserModel is used for user-related data
-//     $designationModel = new Designation();
-//     $positionModel = new Position();
-
-//     // Get user, office, and position data from POST request
-//     $userId = $this->request->getPost('user'); // Assuming 'employee' is passed as 'userId' in the front-end
-//     $officeId = $this->request->getPost('office');
-//     $positionId = $this->request->getPost('position');
-
-//     // Fetch user details
-//     $user = $userModel->find($userId); // Get user from the UserModel
-//     $designation = $designationModel->find($officeId);
-//     $position = $positionModel->find($positionId);
-
-//     // Validate user, office, and position data
-//     if (!$user || !isset($user['name'])) {
-//         return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
-//     }
-
-//     if (!$designation || !isset($designation['name'])) {
-//         return $this->response->setJSON(['success' => false, 'message' => 'Office not found or missing data.']);
-//     }
-
-//     if (!$position || !isset($position['position_name'])) {
-//         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
-//     }
-
-//     // Prepare attendance data
-//     $currentTime = date('Y-m-d H:i:s');
-//     $attendanceData = [
-//         'name' => $user['name'], // Use 'name' from the user model
-//         'office' => $designation['name'],
-//         'position' => $position['position_name'],
-//         'sign_in' => null, // Set to null for AM sign-in initially
-//         'sign_out' => null, // Initially null for AM sign-out
-//         'pm_sign_in' => null, // Initially null for PM sign-in
-//         'pm_sign_out' => null, // Initially null for PM sign-out
-//     ];
-
-//     // Insert new attendance record
-//     if ($this->request->getPost('pm_sign_in')) {
-//         $attendanceData['pm_sign_in'] = $currentTime; // Record PM sign-in time
-//     } else {
-//         $attendanceData['sign_in'] = $currentTime; // Record AM sign-in time
-//     }
-
-//     // Insert the new attendance record regardless of previous records
-//     if ($attendanceModel->insert($attendanceData)) {
-//         return $this->response->setJSON(['success' => true, 'message' => 'Attendance recorded successfully.']);
-//     } else {
-//         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
-//     }
-// }
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
