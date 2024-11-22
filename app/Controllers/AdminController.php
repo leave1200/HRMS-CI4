@@ -79,44 +79,38 @@ class AdminController extends BaseController
 
             return $this->response->setJSON($fileData);
         }
-    public function getUserAttendance()
-    {
-        $attendanceModel = new AttendanceModel();
-
-        // Get the logged-in user's ID
-        $loggedInUserId = session()->get('user_id');
-
-        // Fetch attendance data for the logged-in user
-        $attendances = $attendanceModel
-            ->select('DATE(sign_in) as date, "AM Sign-In" as status, COUNT(sign_in) as count')
-            ->where('attendance', $loggedInUserId)
-            ->groupBy('DATE(sign_in)')
-            ->union(
-                $attendanceModel
-                    ->select('DATE(sign_out) as date, "AM Sign-Out" as status, COUNT(sign_out) as count')
-                    ->where('attendance', $loggedInUserId)
-                    ->groupBy('DATE(sign_out)')
-            )
-            ->union(
-                $attendanceModel
-                    ->select('DATE(pm_sign_in) as date, "PM Sign-In" as status, COUNT(pm_sign_in) as count')
-                    ->where('attendance', $loggedInUserId)
-                    ->groupBy('DATE(pm_sign_in)')
-            )
-            ->union(
-                $attendanceModel
-                    ->select('DATE(pm_sign_out) as date, "PM Sign-Out" as status, COUNT(pm_sign_out) as count')
-                    ->where('attendance', $loggedInUserId)
-                    ->groupBy('DATE(pm_sign_out)')
-            )
-            ->findAll();
-
-        if (empty($attendances)) {
-            return $this->response->setJSON(['success' => false, 'message' => 'No attendance data found.']);
+        public function getUserAttendance()
+        {
+            $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
+            $attendanceModel = new \App\Models\AttendanceModel();
+        
+            // Query to get attendance counts grouped by date and type
+            $attendanceData = $attendanceModel
+                ->select("DATE(sign_in) as attendance_date, 'AM Sign-In' as status, COUNT(sign_in) as count")
+                ->where('attendance', $userId)
+                ->groupBy('attendance_date')
+                ->union(
+                    $attendanceModel->select("DATE(sign_out) as attendance_date, 'AM Sign-Out' as status, COUNT(sign_out) as count")
+                        ->where('attendance', $userId)
+                        ->groupBy('attendance_date')
+                )
+                ->union(
+                    $attendanceModel->select("DATE(pm_sign_in) as attendance_date, 'PM Sign-In' as status, COUNT(pm_sign_in) as count")
+                        ->where('attendance', $userId)
+                        ->groupBy('attendance_date')
+                )
+                ->union(
+                    $attendanceModel->select("DATE(pm_sign_out) as attendance_date, 'PM Sign-Out' as status, COUNT(pm_sign_out) as count")
+                        ->where('attendance', $userId)
+                        ->groupBy('attendance_date')
+                )
+                ->orderBy('attendance_date', 'ASC')
+                ->findAll();
+        
+            // Return the data as JSON response
+            return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
         }
-
-    return $this->response->setJSON(['success' => true, 'data' => $attendances]);
-}
+        
 
 public function getUserLeaveApplications()
 {
