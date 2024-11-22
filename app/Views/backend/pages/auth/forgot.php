@@ -47,6 +47,11 @@
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
 										</div>
 									</div>
+									<div class="col-2">
+										<div class="font-16 weight-600 text-center" data-color="#707373" style="color: rgb(112, 115, 115);">
+											OR
+										</div>
+									</div>
 									<div class="col-4">
 										<div class="input-group mb-0">
 											<a class="btn btn-outline-primary btn-lg btn-block" href="<?= route_to('admin.login.form') ?>">Login</a>
