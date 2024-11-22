@@ -42,7 +42,7 @@
                                     </div>
                                 <?php endif; ?>
 								<div class="row align-items-center">
-									<div class="col-5">
+									<div class="col-3">
 										<div class="input-group mb-0">
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
 										</div>
@@ -52,7 +52,7 @@
 											OR
 										</div>
 									</div>
-									<div class="col-5">
+									<div class="col-3">
 										<div class="input-group mb-0">
 											<a class="btn btn-outline-primary btn-lg btn-block" href="<?= route_to('admin.login.form') ?>">Login</a>
 										</div>
