@@ -93,6 +93,7 @@
                             <thead>
                                 <tr role="row">
                                     <th>#</th>
+                                    <th>Att</th>
                                     <th>Name</th>
                                     <th>Office</th>
                                     <th>Position</th>
@@ -105,6 +106,7 @@
                                     <?php foreach ($attendances as $attendance): ?>
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
+                                            <td><?= esc($attendance['att']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
                                             <td><?= esc($attendance['office']) ?></td>
                                             <td><?= esc($attendance['position']) ?></td>
