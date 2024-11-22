@@ -262,6 +262,90 @@
 				</script>
 
 					<?php endif; ?>
+					<?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+						<div class="card-box pb-8">
+							<div class="col-md-15 mb-20">
+								<div class="card-box height-100-p pd-20">
+									<div class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3">
+										<div class="h5 mb-md-0"><?= get_user()->name ?></div>
+									</div>
+									<div id="attendanceChart" style="width:100%; height:400px;"></div>
+								</div>
+							</div>
+						</div>
+						<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								fetch('/getUserAttendance') // Update this route to match your backend
+									.then(response => response.json())
+									.then(response => {
+										if (!response.success || !response.data || response.data.length === 0) {
+											console.warn(response.message || 'No data returned from API.');
+											Highcharts.chart('attendanceChart', {
+												chart: { type: 'column' },
+												title: { text: 'No Attendance Data Available' },
+												xAxis: { categories: [] },
+												yAxis: { title: { text: 'Attendance Status' } },
+												series: []
+											});
+											return;
+										}
+
+										const data = response.data;
+
+										// Prepare unique dates and attendance statuses
+										const dates = [...new Set(data.map(item => item.date))];
+										const statuses = ['AM Sign-In', 'AM Sign-Out', 'PM Sign-In', 'PM Sign-Out'];
+
+										// Prepare series data for each status
+										const series = statuses.map(status => {
+											const statusData = dates.map(date => {
+												const entry = data.find(item => item.date === date && item.status === status);
+												return entry ? parseInt(entry.count) : 0; // Fill missing data with 0
+											});
+
+											return {
+												name: status,
+												data: statusData
+											};
+										});
+
+										// Render the chart
+										Highcharts.chart('attendanceChart', {
+											chart: {
+												type: 'column'
+											},
+											title: {
+												text: 'Your Attendance Records'
+											},
+											xAxis: {
+												categories: dates,
+												title: {
+													text: 'Dates'
+												}
+											},
+											yAxis: {
+												min: 0,
+												title: {
+													text: 'Attendance Status Count'
+												}
+											},
+											series: series
+										});
+									})
+									.catch(error => {
+										console.error('Error fetching attendance data:', error);
+										Highcharts.chart('attendanceChart', {
+											chart: { type: 'column' },
+											title: { text: 'Error Loading Data' },
+											xAxis: { categories: [] },
+											yAxis: { title: { text: 'Attendance Status Count' } },
+											series: []
+										});
+									});
+							});
+						</script>
+
+						<?php endif; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

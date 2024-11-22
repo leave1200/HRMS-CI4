@@ -79,29 +79,45 @@ class AdminController extends BaseController
 
     return $this->response->setJSON($fileData);
 }
-// public function getApprovedLeaves()
-// {
-//     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
-//     if (!$userId) {
-//         return $this->response->setJSON(['success' => false, 'message' => 'User not logged in.']);
-//     }
+public function getUserAttendance()
+{
+    $attendanceModel = new AttendanceModel();
 
-//     $leaveModel = new \App\Models\LeaveApplicationModel();
+    // Get the logged-in user's ID
+    $loggedInUserId = session()->get('userId');
 
-//     // Query to count approved leave applications by date
-//     $leaveData = $leaveModel->select("DATE(la_start) as leave_date, COUNT(*) as leave_count")
-//                             ->where('la_name', $userId) // Use la_name to filter by user ID
-//                             ->where('status', 'Approved') // Filter only approved leaves
-//                             ->groupBy('leave_date')
-//                             ->orderBy('leave_date', 'ASC')
-//                             ->findAll();
+    // Fetch attendance data for the logged-in user
+    $attendances = $attendanceModel
+        ->select('DATE(sign_in) as date, "AM Sign-In" as status, COUNT(sign_in) as count')
+        ->where('attendance', $loggedInUserId)
+        ->groupBy('DATE(sign_in)')
+        ->union(
+            $attendanceModel
+                ->select('DATE(sign_out) as date, "AM Sign-Out" as status, COUNT(sign_out) as count')
+                ->where('att', $loggedInUserId)
+                ->groupBy('DATE(sign_out)')
+        )
+        ->union(
+            $attendanceModel
+                ->select('DATE(pm_sign_in) as date, "PM Sign-In" as status, COUNT(pm_sign_in) as count')
+                ->where('attendance', $loggedInUserId)
+                ->groupBy('DATE(pm_sign_in)')
+        )
+        ->union(
+            $attendanceModel
+                ->select('DATE(pm_sign_out) as date, "PM Sign-Out" as status, COUNT(pm_sign_out) as count')
+                ->where('attendance', $loggedInUserId)
+                ->groupBy('DATE(pm_sign_out)')
+        )
+        ->findAll();
 
-//     if (empty($leaveData)) {
-//         return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No approved leaves found.']);
-//     }
+    if (empty($attendances)) {
+        return $this->response->setJSON(['success' => false, 'message' => 'No attendance data found.']);
+    }
 
-//     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
-// }
+    return $this->response->setJSON(['success' => true, 'data' => $attendances]);
+}
+
 public function getUserLeaveApplications()
 {
     $userId = session()->get('user_id'); // Get logged-in user's ID from the session
