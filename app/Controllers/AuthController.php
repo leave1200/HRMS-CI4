@@ -347,56 +347,56 @@ class AuthController extends BaseController
     }
 
     public function sendPinCode()
-    {
-        $isValid = $this->validate([
-            'email' => [
-                'rules' => 'required|valid_email|is_not_unique[users.email]',
-                'errors' => [
-                    'required' => 'Email required',
-                    'valid_email' => 'Please check email field. It does not appear to be valid.',
-                    'is_not_unique' => 'Email not found in our system.',
+        {
+            $isValid = $this->validate([
+                'email' => [
+                    'rules' => 'required|valid_email|is_not_unique[users.email]',
+                    'errors' => [
+                        'required' => 'Email required',
+                        'valid_email' => 'Please check email field. It does not appear to be valid.',
+                        'is_not_unique' => 'Email not exists in our system.',
+                    ]
                 ]
-            ]
-        ]);
-
-        if (!$isValid) {
-            return view('backend/pages/auth/forgot-password-pin', [
-                'pageTitle' => 'Forgot Password with Pin',
-                'validation' => $this->validator
-            ]);
-        } else {
-            $user = new User();
-            $user_info = $user->asObject()->where('email', $this->request->getVar('email'))->first();
-
-            // Generate pin code
-            $pinCode = rand(100000, 999999);
-
-            // Save the pin code and its expiration
-            $password_reset_token = new PasswordResetToken();
-            $password_reset_token->insert([
-                'email' => $user_info->email,
-                'token' => $pinCode,
-                'created_at' => Carbon::now(),
-                'expires_at' => Carbon::now()->addMinutes(15) // Pin expires in 15 minutes
             ]);
 
-            // Send the pin code to the user
-            $mailConfig = [
-                'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
-                'mail_from_name' => env('EMAIL_FROM_NAME'),
-                'mail_recipient_email' => $user_info->email,
-                'mail_recipient_name' => $user_info->name,
-                'mail_subject' => 'Password Reset Pin Code',
-                'mail_body' => "Your password reset pin code is: $pinCode"
-            ];
-
-            if (sendEmail($mailConfig)) {
-                return redirect()->route_to('backend/pages/auth/forgot-password-pin')->with('success', 'A pin code has been sent to your email.');
+            if (!$isValid) {
+                return view('backend/pages/auth/forgot-password-pin', [
+                    'pageTitle' => 'Forgot Password with Pin',
+                    'validation' => $this->validator
+                ]);
             } else {
-                return redirect()->route_to('backend/pages/auth/forgot-password-pin')->with('fail', 'Failed to send the pin code.');
+                $user = new User();
+                $user_info = $user->asObject()->where('email', $this->request->getVar('email'))->first();
+
+                // Generate pin code
+                $pinCode = rand(100000, 999999);
+
+                // Save the pin code and its expiration
+                $password_reset_token = new PasswordResetToken();
+                $password_reset_token->insert([
+                    'email' => $user_info->email,
+                    'token' => $pinCode,
+                    'created_at' => Carbon::now(),
+                    'expires_at' => Carbon::now()->addMinutes(15) // Pin expires in 15 minutes
+                ]);
+
+                // Send the pin code to the user
+                $mailConfig = [
+                    'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
+                    'mail_from_name' => env('EMAIL_FROM_NAME'),
+                    'mail_recipient_email' => $user_info->email,
+                    'mail_recipient_name' => $user_info->name,
+                    'mail_subject' => 'Password Reset Pin Code',
+                    'mail_body' => "Your password reset pin code is: $pinCode"
+                ];
+
+                if (sendEmail($mailConfig)) {
+                    return redirect()->route('/forgot-password-pin')->with('success', 'A pin code has been sent to your email.');
+                } else {
+                    return redirect()->route('/forgot-password-pin')->with('fail', 'Failed to send the pin code.');
+                }
             }
         }
-    }
     // Pin verification page (reset password with pin)
     public function resetPasswordWithPin($pin)
     {
