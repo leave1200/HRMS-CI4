@@ -3,32 +3,35 @@
 
 
 <div class="login-box bg-white box-shadow border-radius-10">
-							<div class="login-title">
-								<h2 class="text-center text-primary">Forgot Password</h2>
-							</div>
-							<h6 class="mb-20">
-								Enter your email address to send Pin code
-							</h6>
-<form action="<?= route_to('send-pin-code') ?>" method="POST">
-    <?= csrf_field(); ?>
-
-    <?php if (!empty(session()->getFlashdata('success'))): ?>
-        <div class="alert alert-success">
-            <?= session()->getFlashdata('success'); ?>
-        </div>
-    <?php endif; ?>
-
-    <div class="input-group custom">
-        <input type="email" class="form-control" placeholder="Enter your email" name="email">
-        <div class="input-group-append">
-            <span class="input-group-text"><i class="fa fa-envelope-o"></i></span>
-        </div>
+    <div class="login-title">
+        <h2 class="text-center text-primary">Forgot Password</h2>
     </div>
+    <h6 class="mb-20">
+        Enter your email address to send Pin code
+    </h6>
+    <form action="<?= route_to('send-pin-code') ?>" method="POST">
+        <?= csrf_field(); ?>
 
-    <button type="submit" class="btn btn-primary">Send Pin</button>
-</form>
+        <?php if (!empty(session()->getFlashdata('success'))): ?>
+            <div class="alert alert-success">
+                <?= session()->getFlashdata('success'); ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="input-group custom">
+            <input type="email" class="form-control" placeholder="Enter your email" name="email">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fa fa-envelope-o"></i></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Pin</button>
+    </form>
+
+    <!-- Back Button -->
+    <div class="text-center mt-3">
+        <a href="<?= route_to('login') ?>" class="btn btn-secondary">Back to Login</a>
+    </div>
 </div>
 
-
-
-<?= $this->endSection()?>
+<?= $this->endSection() ?>
