@@ -775,6 +775,62 @@ public function updateDesignation()
     
 
 
+// public function saveAttendance()
+// {
+//     $attendanceModel = new AttendanceModel();
+//     $userModel = new User(); // Assuming UserModel is used for user-related data
+//     $designationModel = new Designation();
+//     $positionModel = new Position();
+
+//     // Get user, office, and position data from POST request
+//     $userId = $this->request->getPost('user'); // Assuming 'employee' is passed as 'userId' in the front-end
+//     $officeId = $this->request->getPost('office');
+//     $positionId = $this->request->getPost('position');
+
+//     // Fetch user details
+//     $user = $userModel->find($userId); // Get user from the UserModel
+//     $designation = $designationModel->find($officeId);
+//     $position = $positionModel->find($positionId);
+
+//     // Validate user, office, and position data
+//     if (!$user || !isset($user['name'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
+//     }
+
+//     if (!$designation || !isset($designation['name'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Office not found or missing data.']);
+//     }
+
+//     if (!$position || !isset($position['position_name'])) {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
+//     }
+
+//     // Prepare attendance data
+//     $currentTime = date('Y-m-d H:i:s');
+//     $attendanceData = [
+//         'name' => $user['name'], // Use 'name' from the user model
+//         'office' => $designation['name'],
+//         'position' => $position['position_name'],
+//         'sign_in' => null, // Set to null for AM sign-in initially
+//         'sign_out' => null, // Initially null for AM sign-out
+//         'pm_sign_in' => null, // Initially null for PM sign-in
+//         'pm_sign_out' => null, // Initially null for PM sign-out
+//     ];
+
+//     // Insert new attendance record
+//     if ($this->request->getPost('pm_sign_in')) {
+//         $attendanceData['pm_sign_in'] = $currentTime; // Record PM sign-in time
+//     } else {
+//         $attendanceData['sign_in'] = $currentTime; // Record AM sign-in time
+//     }
+
+//     // Insert the new attendance record regardless of previous records
+//     if ($attendanceModel->insert($attendanceData)) {
+//         return $this->response->setJSON(['success' => true, 'message' => 'Attendance recorded successfully.']);
+//     } else {
+//         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
+//     }
+// }
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
@@ -783,7 +839,7 @@ public function saveAttendance()
     $positionModel = new Position();
 
     // Get user, office, and position data from POST request
-    $userId = $this->request->getPost('user'); // Assuming 'employee' is passed as 'userId' in the front-end
+    $userId = $this->request->getPost('user'); // Assuming 'user' is passed in the front-end
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
 
@@ -811,6 +867,8 @@ public function saveAttendance()
         'name' => $user['name'], // Use 'name' from the user model
         'office' => $designation['name'],
         'position' => $position['position_name'],
+        'attendance' => 'Present', // Example value; modify based on logic
+        'att' => $userId, // Store the user ID in the 'att' field
         'sign_in' => null, // Set to null for AM sign-in initially
         'sign_out' => null, // Initially null for AM sign-out
         'pm_sign_in' => null, // Initially null for PM sign-in
