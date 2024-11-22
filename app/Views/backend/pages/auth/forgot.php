@@ -52,11 +52,6 @@
 											<a class="btn btn-outline-primary btn-lg btn-block" href="<?= route_to('admin.login.form') ?>">Login</a>
 										</div>
 									</div>
-									<div class="col-4">
-										<div class="input-group mb-0">
-											<a class="btn btn-outline-primary btn-lg btn-block" href="<?= route_to('admin.login.form') ?>">Login</a>
-										</div>
-									</div>
 								</div>
 							</form>
 							<div class="col-8">
