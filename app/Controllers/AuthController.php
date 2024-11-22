@@ -384,7 +384,7 @@ class AuthController extends BaseController
             // Prepare email data
             $resetLink = base_url() . "reset-password-with-pin/$pinCode";
             $mail_data = [
-                'user'=>$user_info,
+                'name' => $user_info->name,
                 'pin_code' => $pinCode,
                 'reset_link' => $resetLink,
             ];
