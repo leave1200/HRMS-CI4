@@ -14,7 +14,7 @@
         <?php endif; ?>
 
         <!-- Email input form -->
-        <?= form_open(route_to('admin.send-pin')) ?>
+        <form action="<?= route_to('admin.send-pin') ?>" method="POST">
             <?= csrf_field(); ?> <!-- Add CSRF token for security -->
             <div class="form-group">
                 <label for="email">Enter your email</label>
@@ -23,7 +23,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Send Pin</button>
-        <?= form_close() ?>
+        </form>
     </div>
 </div>
 
