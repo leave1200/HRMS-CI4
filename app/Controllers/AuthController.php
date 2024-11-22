@@ -412,6 +412,48 @@ class AuthController extends BaseController
             'pin' => $pin
         ]);
     }
+    public function resetPasswordHandlerWithPin()
+    {
+        $isValid = $this->validate([
+            'new_password' => [
+                'rules' => 'required|min_length[8]|max_length[15]|is_password_strong[new_password]',
+                'errors' => [
+                    'required' => 'Enter New Password',
+                    'min_length' => 'New Password must be 8 characters',
+                    'max_length' => 'New Password must be 15 characters',
+                    'is_password_strong' => 'New Password is weak. Please include a mix of letters and numbers.'
+                ]
+            ],
+            'confirm_new_password' => 'required|matches[new_password]',
+        ]);
+
+        if (!$isValid) {
+            return view('backend/pages/auth/reset-password-with-pin', [
+                'validation' => $this->validator,
+                'pin' => $this->request->getVar('pin')
+            ]);
+        }
+
+        $passwordResetToken = new PasswordResetToken();
+        $pin = $this->request->getVar('pin');
+        $resetToken = $passwordResetToken->where('token', $pin)->first();
+
+        if (!$resetToken) {
+            return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin.');
+        }
+
+        // Update the user password
+        $user = new User();
+        $user->where('email', $resetToken->email)->set([
+            'password' => password_hash($this->request->getVar('new_password'), PASSWORD_DEFAULT)
+        ])->update();
+
+        // Delete the used reset token
+        $passwordResetToken->where('token', $pin)->delete();
+
+        return redirect()->route('admin.login')->with('success', 'Password reset successful.');
+    }
+
 
 
 }
