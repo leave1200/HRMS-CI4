@@ -94,7 +94,7 @@ public function getUserAttendance()
         ->union(
             $attendanceModel
                 ->select('DATE(sign_out) as date, "AM Sign-Out" as status, COUNT(sign_out) as count')
-                ->where('att', $loggedInUserId)
+                ->where('attendance', $loggedInUserId)
                 ->groupBy('DATE(sign_out)')
         )
         ->union(
