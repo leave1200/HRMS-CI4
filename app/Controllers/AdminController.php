@@ -716,37 +716,63 @@ public function updateDesignation()
 
 
 
+    // public function attendance()
+    // {
+    //     // Fetch users instead of employees
+    //     $userModel = new User(); // Assuming your model for users is User.php
+    //     $users = $userModel->findAll(); // Fetch all users
+        
+    //     $designationModel = new Designation();
+    //     $designations = $designationModel->findAll();
+        
+    //     $positionModel = new Position();
+    //     $positions = $positionModel->findAll();
+        
+    //     $attendanceModel = new AttendanceModel();
+        
+    //     // Fetch attendance records, including pm_sign_out if necessary
+    //     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+    //     $userStatus = session()->get('userStatus');
+    
+    //     $data = [
+    //         'pageTitle' => 'Attendance',
+    //         'users' => $users, // Replace 'employees' with 'users'
+    //         'designations' => $designations,
+    //         'positions' => $positions,
+    //         'attendances' => $attendances, // Include attendance records here
+    //         'userStatus' => $userStatus
+    //     ];
+        
+    //     return view('backend/pages/attendance', $data);
+    // }
     public function attendance()
     {
-        // Fetch users instead of employees
-        $userModel = new User(); // Assuming your model for users is User.php
-        $users = $userModel->findAll(); // Fetch all users
-        
+        $userModel = new User(); 
+        $users = $userModel->findAll(); 
+    
         $designationModel = new Designation();
         $designations = $designationModel->findAll();
-        
+    
         $positionModel = new Position();
         $positions = $positionModel->findAll();
-        
+    
         $attendanceModel = new AttendanceModel();
-        
-        // Fetch attendance records, including pm_sign_out if necessary
-        $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-        $userStatus = session()->get('userStatus');
+        $attendances = $attendanceModel->findAll(); 
+    
+        $userStatus = session()->get('userStatus'); 
     
         $data = [
             'pageTitle' => 'Attendance',
-            'users' => $users, // Replace 'employees' with 'users'
+            'users' => $users,
             'designations' => $designations,
             'positions' => $positions,
-            'attendances' => $attendances, // Include attendance records here
-            'userStatus' => $userStatus
+            'attendances' => $attendances,
+            'userStatus' => $userStatus,
         ];
-        
+    
         return view('backend/pages/attendance', $data);
     }
-
-
+    
 
 
 public function saveAttendance()
