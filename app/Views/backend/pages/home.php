@@ -275,7 +275,7 @@
 						</div>
 						<script>
 							document.addEventListener('DOMContentLoaded', function () {
-								fetch('/getUserAttendance') // Update this route to match your backend
+								fetch('/getUserAttendance') // Update the route to match your application setup
 									.then(response => response.json())
 									.then(response => {
 										if (!response.success || !response.data || response.data.length === 0) {
@@ -284,7 +284,7 @@
 												chart: { type: 'column' },
 												title: { text: 'No Attendance Data Available' },
 												xAxis: { categories: [] },
-												yAxis: { title: { text: 'Attendance Status' } },
+												yAxis: { title: { text: 'Number of Attendance Actions' } },
 												series: []
 											});
 											return;
@@ -292,14 +292,14 @@
 
 										const data = response.data;
 
-										// Prepare unique dates and attendance statuses
-										const dates = [...new Set(data.map(item => item.date))];
-										const statuses = ['AM Sign-In', 'AM Sign-Out', 'PM Sign-In', 'PM Sign-Out'];
+										// Prepare unique dates and statuses
+										const dates = [...new Set(data.map(item => item.attendance_date))];
+										const statuses = [...new Set(data.map(item => item.status))];
 
 										// Prepare series data for each status
 										const series = statuses.map(status => {
 											const statusData = dates.map(date => {
-												const entry = data.find(item => item.date === date && item.status === status);
+												const entry = data.find(item => item.attendance_date === date && item.status === status);
 												return entry ? parseInt(entry.count) : 0; // Fill missing data with 0
 											});
 
@@ -315,18 +315,18 @@
 												type: 'column'
 											},
 											title: {
-												text: 'Your Attendance Records'
+												text: 'Your Attendance Data by Status'
 											},
 											xAxis: {
 												categories: dates,
 												title: {
-													text: 'Dates'
+													text: 'Attendance Dates'
 												}
 											},
 											yAxis: {
 												min: 0,
 												title: {
-													text: 'Attendance Status Count'
+													text: 'Number of Attendance Actions'
 												}
 											},
 											series: series
@@ -338,11 +338,12 @@
 											chart: { type: 'column' },
 											title: { text: 'Error Loading Data' },
 											xAxis: { categories: [] },
-											yAxis: { title: { text: 'Attendance Status Count' } },
+											yAxis: { title: { text: 'Number of Attendance Actions' } },
 											series: []
 										});
 									});
 							});
+
 						</script>
 
 						<?php endif; ?>
