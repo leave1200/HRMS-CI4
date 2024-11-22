@@ -337,4 +337,12 @@ class AuthController extends BaseController
             }
         }
     }
+    ///////////////////////////////////////////////pin
+    public function forgotPasswordWithPin()
+    {
+        return view('backend/pages/auth/forgot-with-pin', [
+            'pageTitle' => 'Forgot Password with Pin'
+        ]);
+    }
+
 }
