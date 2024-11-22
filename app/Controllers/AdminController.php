@@ -1656,53 +1656,5 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             return view('backend/pages/terms', $data);
         }
         ///////////////////////////////pin forgot password
-        // AdminController.php
-            public function resetPassword() {
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $password = $_POST['password'];
-                    $confirmPassword = $_POST['confirm_password'];
-                    $email = session()->get('email');
-                    
-                    // Validate passwords match
-                    if ($password === $confirmPassword) {
-                        // Hash the password before saving it
-                        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-                        
-                        // Update the password in the database
-                        $this->userModel->updatePassword($email, $hashedPassword);
-                        
-                        // Redirect to the login page or confirmation page
-                        return redirect()->route('login');
-                    } else {
-                        // Display error message if passwords don't match
-                        return redirect()->back()->with('error', 'Passwords do not match');
-                    }
-                }
-
-                // Load the reset password view
-                return view('reset_password');
-            }
-            // AdminController.php
-                public function verifyPin() {
-                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        $pin = $_POST['pin'];
-                        $storedPin = session()->get('pin_code');
-                        $email = session()->get('email');
-                        
-                        // Check if the entered PIN matches the stored PIN
-                        if ($pin == $storedPin) {
-                            // Redirect to password reset page
-                            return redirect()->route('reset-password');
-                        } else {
-                            // Invalid PIN, display error message
-                            return redirect()->back()->with('error', 'Invalid PIN code');
-                        }
-                    }
-
-                    // Load the PIN verification view
-                    return view('verify_pin');
-                }
-
-
 
 }

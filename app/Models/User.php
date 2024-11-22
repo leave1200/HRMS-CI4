@@ -70,13 +70,7 @@ class User extends Model
         // Update the picture field of the user with the given user ID
         return $this->update($userId, ['picture' => $fileName]);
     }
-    // UserModel.php
-    public function updatePassword($email, $hashedPassword) {
-        $this->db->table('users')
-            ->where('email', $email)
-            ->update(['password' => $hashedPassword]);
-    }
-
+    
 
 
 }
