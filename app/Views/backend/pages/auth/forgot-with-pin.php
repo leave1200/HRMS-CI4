@@ -30,7 +30,7 @@
 
     <!-- Back Button -->
     <div class="text-center mt-3">
-        <a href="<?= route_to('login') ?>" class="btn btn-secondary">Back to Login</a>
+        <a href="<?= route_to('admin.login') ?>" class="btn btn-secondary">Back to Login</a>
     </div>
 </div>
 
