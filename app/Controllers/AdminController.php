@@ -66,25 +66,25 @@ class AdminController extends BaseController
         return view('backend/pages/home', $data);
     }
     public function getUserFileUploads()
-{
-    $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
-    $fileModel = new \App\Models\FileModel();
+        {
+            $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
+            $fileModel = new \App\Models\FileModel();
 
-    // Query to get file upload counts grouped by date
-    $fileData = $fileModel->select("DATE(uploaded_at) as upload_date, COUNT(*) as file_count")
-                          ->where('user_id', $userId)
-                          ->groupBy('upload_date')
-                          ->orderBy('upload_date', 'ASC')
-                          ->findAll();
+            // Query to get file upload counts grouped by date
+            $fileData = $fileModel->select("DATE(uploaded_at) as upload_date, COUNT(*) as file_count")
+                                ->where('user_id', $userId)
+                                ->groupBy('upload_date')
+                                ->orderBy('upload_date', 'ASC')
+                                ->findAll();
 
-    return $this->response->setJSON($fileData);
-}
+            return $this->response->setJSON($fileData);
+        }
     public function getUserAttendance()
     {
         $attendanceModel = new AttendanceModel();
 
         // Get the logged-in user's ID
-        $loggedInUserId = session()->get('userId');
+        $loggedInUserId = session()->get('user_id');
 
         // Fetch attendance data for the logged-in user
         $attendances = $attendanceModel
