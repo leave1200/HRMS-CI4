@@ -404,7 +404,7 @@ class AuthController extends BaseController
         $check_token = $passwordResetPassword->where('token', $pin)->first();
 
         if (!$check_token || Carbon::now()->isAfter($check_token->expires_at)) {
-            return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
         }
 
         return view('backend/pages/auth/reset-password-with-pin', [
