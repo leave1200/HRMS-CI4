@@ -27,12 +27,13 @@
 
     <button type="submit" class="btn btn-primary">Send Pin</button>
 </form>
-</div>
 <div class="col-5">
 										<div class="input-group mb-0">
 											<a class="btn btn-outline-primary btn-lg btn-block" href="<?= route_to('admin.login.form') ?>">Login</a>
 										</div>
 									</div>
+</div>
+
 
 
 <?= $this->endSection()?>
