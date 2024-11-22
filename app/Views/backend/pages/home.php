@@ -359,6 +359,77 @@
 									</div>
 								</div>
 							<?php endif; ?>
+							<script>
+								document.addEventListener('DOMContentLoaded', function () {
+									// Fetch the attendance data for all users
+									fetch('/getAllAttendances') // Adjust the route to match your backend method for all users' attendance data
+										.then(response => response.json())
+										.then(response => {
+											if (!response.success || !response.data || response.data.length === 0) {
+												console.warn(response.message || 'No data returned from API.');
+												Highcharts.chart('allAttendanceChart', {
+													chart: { type: 'line' },
+													title: { text: 'No Attendance Data Available' },
+													xAxis: { categories: [] },
+													yAxis: { title: { text: 'Attendance Status Count' } },
+													series: []
+												});
+												return;
+											}
+
+											const data = response.data;
+
+											// Extract unique dates
+											const dates = [...new Set(data.map(item => item.date))];
+
+											// Define attendance statuses to be displayed
+											const statuses = ['AM Sign-In', 'PM Sign-In'];
+
+											// Prepare series data for each status
+											const series = statuses.map(status => {
+												const statusData = dates.map(date => {
+													const entry = data.find(item => item.date === date && item.status === status);
+													return entry ? parseInt(entry.count) : 0; // Fill missing data with 0
+												});
+
+												return {
+													name: status,
+													data: statusData
+												};
+											});
+
+											// Render the chart for all users
+											Highcharts.chart('allAttendanceChart', {
+												chart: { type: 'line' },
+												title: { text: 'All Users Attendance Records' },
+												xAxis: {
+													categories: dates,
+													title: { text: 'Dates' }
+												},
+												yAxis: {
+													min: 0,
+													title: { text: 'Attendance Status Count' }
+												},
+												tooltip: {
+													shared: true,
+													crosshairs: true
+												},
+												series: series
+											});
+										})
+										.catch(error => {
+											console.error('Error fetching all users attendance data:', error);
+											Highcharts.chart('allAttendanceChart', {
+												chart: { type: 'line' },
+												title: { text: 'Error Loading Data' },
+												xAxis: { categories: [] },
+												yAxis: { title: { text: 'Attendance Status Count' } },
+												series: []
+											});
+										});
+								});
+							</script>
+
 
 
 <script>
