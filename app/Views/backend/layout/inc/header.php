@@ -95,7 +95,7 @@
     <div class="header-search">
         <div class="running-text-container">
             <marquee id="welcomeText" style="font-size: 16px; font-weight: bold;">
-                Welcome to the system <span id="userStatus"></span> <span id="userName"></span>!
+                Welcome to the system Madridejos-HR <span id="userStatus"></span> <span id="userName"></span>!
             </marquee>
         </div>
     </div>
