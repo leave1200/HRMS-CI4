@@ -139,6 +139,7 @@ $routes->group('', static function($routes){
         $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
         $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
         $routes->get('getUserAttendances', 'AdminController::getUserAttendances');
+        $routes->get('getAllAttendances', 'AdminController::getAllAttendances');
 
         
 

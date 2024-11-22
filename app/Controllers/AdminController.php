@@ -107,7 +107,31 @@ class AdminController extends BaseController
             return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
         }
         
-        
+        public function getAllAttendances()
+                {
+                    $attendanceModel = new \App\Models\AttendanceModel();
+
+                    // Query to get all attendance counts grouped by the derived date and type
+                    $amSignInData = $attendanceModel
+                        ->select("DATE(sign_in) as date, 'AM Sign-In' as status, COUNT(*) as count")
+                        ->where('sign_in IS NOT NULL')
+                        ->groupBy('DATE(sign_in)')
+                        ->get()
+                        ->getResultArray();
+
+                    $pmSignInData = $attendanceModel
+                        ->select("DATE(pm_sign_in) as date, 'PM Sign-In' as status, COUNT(*) as count")
+                        ->where('pm_sign_in IS NOT NULL')
+                        ->groupBy('DATE(pm_sign_in)')
+                        ->get()
+                        ->getResultArray();
+
+                    // Combine both datasets
+                    $attendanceData = array_merge($amSignInData, $pmSignInData);
+
+                    return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
+                }
+
         
         
 
