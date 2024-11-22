@@ -716,70 +716,73 @@ public function updateDesignation()
 
 
 
-    public function attendance()
-    {
-        
-        // Fetch users instead of employees
-        $userModel = new User(); // Assuming your model for users is User.php
-        $users = $userModel->findAll(); // Fetch all users
-        
-        $designationModel = new Designation();
-        $designations = $designationModel->findAll();
-        
-        $positionModel = new Position();
-        $positions = $positionModel->findAll();
-        
-        $attendanceModel = new AttendanceModel();
-         // Get the logged-in user's ID
-        $loggedInUserId = session()->get('att'); // Ensure 'userId' is set in session during login
-    
-        // Fetch attendance records only for the logged-in user
-        $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
-        // Fetch attendance records, including pm_sign_out if necessary
-        $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
-        $userStatus = session()->get('userStatus');
-    
-        $data = [
-            'pageTitle' => 'Attendance',
-            'users' => $users, // Replace 'employees' with 'users'
-            'designations' => $designations,
-            'positions' => $positions,
-            'attendances' => $attendances, // Include attendance records here
-            'userStatus' => $userStatus
-        ];
-        
-        return view('backend/pages/attendance', $data);
-    }
     // public function attendance()
     // {
-    //     $userModel = new User(); 
+    //     // Fetch users instead of employees
+    //     $userModel = new User(); // Assuming your model for users is User.php
+    //     $users = $userModel->findAll(); // Fetch all users
+        
     //     $designationModel = new Designation();
-    //     $positionModel = new Position();
-    //     $attendanceModel = new AttendanceModel();
-    
-    //     // Get the logged-in user's ID
-    //     $loggedInUserId = session()->get('userId'); // Ensure 'userId' is set in session during login
-    
-    //     // Fetch attendance records only for the logged-in user
-    //     $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll(); 
-    
-    //     // Get additional data if required
-    //     $users = $userModel->findAll(); 
     //     $designations = $designationModel->findAll();
+        
+    //     $positionModel = new Position();
     //     $positions = $positionModel->findAll();
-    //     $userStatus = session()->get('userStatus'); 
+        
+    //     $attendanceModel = new AttendanceModel();
+        
+    //     // Fetch attendance records, including pm_sign_out if necessary
+    //     $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+    //     $userStatus = session()->get('userStatus');
     
     //     $data = [
     //         'pageTitle' => 'Attendance',
-    //         'users' => $users,
+    //         'users' => $users, // Replace 'employees' with 'users'
     //         'designations' => $designations,
     //         'positions' => $positions,
-    //         'attendances' => $attendances,
-    //         'userStatus' => $userStatus,
+    //         'attendances' => $attendances, // Include attendance records here
+    //         'userStatus' => $userStatus
     //     ];
-    
+        
     //     return view('backend/pages/attendance', $data);
     // }
+    public function attendance()
+    {
+        $userModel = new User(); 
+        $attendanceModel = new AttendanceModel();
+        $designationModel = new Designation();
+        $positionModel = new Position();
+    
+        // Get the logged-in user's ID and status
+        $loggedInUserId = session()->get('userId'); 
+        $userStatus = session()->get('userStatus'); 
+    
+        // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
+        if ($userStatus !== 'ADMIN') {
+            $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll();
+        } else {
+            // Admin can see all attendance records, with user details (join 'users' table)
+            $attendances = $attendanceModel->select('attendances.*, users.name as username')
+                                            ->join('users', 'users.id = attendances.att')
+                                            ->findAll();
+        }
+    
+        // Fetch other related data (e.g., designations, positions)
+        $users = $userModel->findAll(); 
+        $designations = $designationModel->findAll();
+        $positions = $positionModel->findAll();
+    
+        $data = [
+            'pageTitle' => 'Attendance',
+            'users' => $users,
+            'designations' => $designations,
+            'positions' => $positions,
+            'attendances' => $attendances,
+            'userStatus' => $userStatus,
+        ];
+    
+        return view('backend/pages/attendance', $data);
+    }
+    
     
     
 
