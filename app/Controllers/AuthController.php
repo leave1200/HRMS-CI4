@@ -389,78 +389,78 @@ class AuthController extends BaseController
                 ];
 
                 if (sendEmail($mailConfig)) {
-                    return redirect()->route('forgot-with-pin')->with('success', 'A pin code has been sent to your email.');
+                    return redirect()->route('admin.forgot-password-pin')->with('success', 'A pin code has been sent to your email.');
                 } else {
-                    return redirect()->route('forgot-with-pin')->with('fail', 'Failed to send the pin code.');
+                    return redirect()->route('admin.forgot-password-pin')->with('fail', 'Failed to send the pin code.');
                 }
             }
         }
-        // public function resetPasswordWithPin($pin)
-        // {
-        //     $passwordResetPassword = new PasswordResetToken();
-        //     $check_token = $passwordResetPassword->asObject()->where('token', $pin)->first();
+        public function resetPasswordWithPin($pin)
+        {
+            $passwordResetPassword = new PasswordResetToken();
+            $check_token = $passwordResetPassword->asObject()->where('token', $pin)->first();
 
-        //     if (!$check_token || Carbon::now()->isAfter($check_token->expires_at)) {
-        //         return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
-        //     }
+            if (!$check_token || Carbon::now()->isAfter($check_token->expires_at)) {
+                return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
+            }
 
-        //     return view('backend/pages/auth/reset-with-pin', [
-        //         'pageTitle' => 'Reset Password with Pin',
-        //         'validation' => null,
-        //         'pin' => $pin
-        //     ]);
-        // }
-        // public function resetPasswordHandlerWithPin()
-        // {
-        //     $isValid = $this->validate([
-        //         'new_password' => [
-        //             'rules' => 'required|min_length[8]|max_length[15]|is_password_strong[new_password]',
-        //             'errors' => [
-        //                 'required' => 'Enter New Password',
-        //                 'min_length' => 'New Password must be 8 characters',
-        //                 'max_length' => 'New Password must be 15 characters',
-        //                 'is_password_strong' => 'New Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character',
-        //             ]
-        //         ],
-        //         'confirm_new_password' => [
-        //             'rules' => 'required|matches[new_password]',
-        //             'errors' => [
-        //                 'required' => 'Confirm New Password',
-        //                 'matches' => 'Password does not match',
-        //             ]
-        //         ]
-        //     ]);
+            return view('backend/pages/auth/reset-with-pin', [
+                'pageTitle' => 'Reset Password with Pin',
+                'validation' => null,
+                'pin' => $pin
+            ]);
+        }
+        public function resetPasswordHandlerWithPin()
+        {
+            $isValid = $this->validate([
+                'new_password' => [
+                    'rules' => 'required|min_length[8]|max_length[15]|is_password_strong[new_password]',
+                    'errors' => [
+                        'required' => 'Enter New Password',
+                        'min_length' => 'New Password must be 8 characters',
+                        'max_length' => 'New Password must be 15 characters',
+                        'is_password_strong' => 'New Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character',
+                    ]
+                ],
+                'confirm_new_password' => [
+                    'rules' => 'required|matches[new_password]',
+                    'errors' => [
+                        'required' => 'Confirm New Password',
+                        'matches' => 'Password does not match',
+                    ]
+                ]
+            ]);
 
-        //     if (!$isValid) {
-        //         return view('backend/pages/auth/reset-with-pin', [
-        //             'pageTitle' => 'Reset Password with Pin',
-        //             'validation' => null,
-        //             'pin' => $this->request->getVar('pin'),
-        //         ]);
-        //     } else {
-        //         $passwordResetPassword = new PasswordResetToken();
-        //         $get_token = $passwordResetPassword->asObject()->where('token', $this->request->getVar('pin'))->first();
+            if (!$isValid) {
+                return view('backend/pages/auth/reset-with-pin', [
+                    'pageTitle' => 'Reset Password with Pin',
+                    'validation' => null,
+                    'pin' => $this->request->getVar('pin'),
+                ]);
+            } else {
+                $passwordResetPassword = new PasswordResetToken();
+                $get_token = $passwordResetPassword->asObject()->where('token', $this->request->getVar('pin'))->first();
 
-        //         // Ensure the token is valid and hasn't expired
-        //         if (!$get_token || Carbon::now()->isAfter($get_token->expires_at)) {
-        //             return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin.');
-        //         }
+                // Ensure the token is valid and hasn't expired
+                if (!$get_token || Carbon::now()->isAfter($get_token->expires_at)) {
+                    return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin.');
+                }
 
-        //         // Get user info
-        //         $user = new User();
-        //         $user_info = $user->asObject()->where('email', $get_token->email)->first();
+                // Get user info
+                $user = new User();
+                $user_info = $user->asObject()->where('email', $get_token->email)->first();
 
-        //         // Update user password
-        //         $user->update($user_info->id, [
-        //             'password' => Hash::make($this->request->getVar('new_password'))
-        //         ]);
+                // Update user password
+                $user->update($user_info->id, [
+                    'password' => Hash::make($this->request->getVar('new_password'))
+                ]);
 
-        //         // Delete the reset token
-        //         $passwordResetPassword->where('token', $this->request->getVar('pin'))->delete();
+                // Delete the reset token
+                $passwordResetPassword->where('token', $this->request->getVar('pin'))->delete();
 
-        //         return redirect()->route('admin.login.form')->with('success', 'Your password has been reset successfully.');
-        //     }
-        // }
+                return redirect()->route('admin.login.form')->with('success', 'Your password has been reset successfully.');
+            }
+        }
 
 
 
