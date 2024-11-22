@@ -98,7 +98,6 @@
                                     <th>Position</th>
                                     <th>AM Sign In</th>
                                     <th>Sign Out</th>
-                                    <th>ATT</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,7 +108,6 @@
                                             <td><?= esc($attendance['name']) ?></td>
                                             <td><?= esc($attendance['office']) ?></td>
                                             <td><?= esc($attendance['position']) ?></td>
-                                            <td><?= esc($attendance['att']) ?></td>
                                             
                                             <!-- AM Sign Out status -->
                                             <td>
