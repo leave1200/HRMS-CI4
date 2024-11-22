@@ -106,7 +106,7 @@
                                     <?php foreach ($attendances as $attendance): ?>
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
-                                            <td><?= esc($attendance['att']) ?></td>
+                                            <td><?= esc($attendance['attendance']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
                                             <td><?= esc($attendance['office']) ?></td>
                                             <td><?= esc($attendance['position']) ?></td>
