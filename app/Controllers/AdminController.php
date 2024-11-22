@@ -758,7 +758,7 @@ public function updateDesignation()
     
         // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
         if ($userStatus !== 'ADMIN') {
-            $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll();
+            $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
         } else {
             $attendances = $attendanceModel->findAll();
         }
@@ -877,7 +877,7 @@ public function saveAttendance()
         'office' => $designation['name'],
         'position' => $position['position_name'],
         'attendance' => 'Present', // Example value; modify based on logic
-        'att' => $userId, // Store the user ID in the 'att' field
+        'attendance' => $userId, // Store the user ID in the 'att' field
         'sign_in' => null, // Set to null for AM sign-in initially
         'sign_out' => null, // Initially null for AM sign-out
         'pm_sign_in' => null, // Initially null for PM sign-in
