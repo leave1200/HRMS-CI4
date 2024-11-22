@@ -761,7 +761,7 @@ public function updateDesignation()
             $attendances = $attendanceModel->where('att', $loggedInUserId)->findAll();
         } else {
             // Admin can see all attendance records, with user details (join 'users' table)
-            $attendances = $attendanceModel->select('attendances.*, users.name as username')
+            $attendances = $attendanceModel->select('attendances.*, users.name as name')
                                             ->join('users', 'users.id = attendances.att')
                                             ->findAll();
         }
