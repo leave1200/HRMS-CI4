@@ -59,6 +59,11 @@
 									</div>
 								</div>
 							</form>
+							<div class="col-8">
+										<div class="input-group mb-0">
+											<a class="btn btn-outline-secondary btn-lg btn-block" href="<?= route_to('forgot-password-pin') ?>">Using Pin Code</a>
+										</div>
+									</div>
 						</div>
 
 <?= $this->endSection()?>
