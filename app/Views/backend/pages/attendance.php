@@ -100,7 +100,7 @@
                                     <th>Sign Out</th>
                                 </tr>
                             </thead>
-                            <!-- <tbody>
+                            <tbody>
                                 <?php if (!empty($attendances)): ?>
                                     <?php foreach ($attendances as $attendance): ?>
                                         <tr>
@@ -143,39 +143,98 @@
                                         <td colspan="6">No attendance records found.</td>
                                     </tr>
                                 <?php endif; ?>
-                            </tbody> -->
-                            <tbody>
-                        <?php if (!empty($attendances)): ?>
-                            <?php foreach ($attendances as $attendance): ?>
-                                <tr>
-                                    <td><?= esc($attendance['id']) ?></td>
-                                    <td><?= esc($attendance['name']) ?></td>
-                                    <td><?= esc($attendance['office']) ?></td>
-                                    <td><?= esc($attendance['position']) ?></td>
-                                    <td>
-                                        <?php if (!empty($attendance['sign_in'])): ?>
-                                            <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
-                                        <?php else: ?>
-                                            <span>No AM Sign In</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <?php if (!empty($attendance['pm_sign_in'])): ?>
-                                            <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
-                                        <?php else: ?>
-                                            <span>No PM Sign In</span>
-                                        <?php endif; ?>
-                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>                        
+    </div>
+</div>
+
+<div class="card-box mb-30">
+    <div class="pd-20">
+        <h4 class="text-blue h4">Attendance Records</h4>
+    </div>
+    <div class="pb-20">
+        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+            <div class="row">
+                    <script>
+                    function filterTable() {
+                        const input = document.getElementById('searchInput');
+                        const filter = input.value.toLowerCase();
+                        const rows = document.querySelectorAll('#DataTables_Table_0_wrapper tbody tr');
+
+                        rows.forEach(row => {
+                            const nameCell = row.cells[1]; // Assuming the Name is the second column
+                            if (nameCell) {
+                                const txtValue = nameCell.textContent || nameCell.innerText;
+                                row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+                            }
+                        });
+                    }
+                    </script>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="data-table table table-striped table-hover dataTable no-footer dtr-inline collapsed" id="DataTables_Table_0" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Office</th>
+                                    <th>Position</th>
+                                    <th>AM Sign In</th>
+                                    <th>Sign Out</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6">No attendance records found for you.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($attendances)): ?>
+                                    <?php foreach ($attendances as $attendance): ?>
+                                        <tr>
+                                            <td><?= esc($attendance['id']) ?></td>
+                                            <td><?= esc($attendance['name']) ?></td>
+                                            <td><?= esc($attendance['office']) ?></td>
+                                            <td><?= esc($attendance['position']) ?></td>
+                                            
+                                            <!-- AM Sign Out status -->
+                                            <td>
+                                                <?php if (empty($attendance['sign_out'])): ?>
+                                                    <?php if (!empty($attendance['sign_in'])): ?>
+                                                        <span class="badge bg-success">AM Signed In: <?= esc(date('H:i', strtotime($attendance['sign_in']))) ?></span>
+                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'am')">Sign Out (AM)</button>
+                                                    <?php else: ?>
+                                                        <span>No AM Sign In</span>
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <span class="badge bg-danger">AM Signed Out: <?= esc(date('H:i', strtotime($attendance['sign_out']))) ?></span>
+                                                <?php endif; ?>
+                                            </td>
 
-
+                                            <!-- PM Sign In and Out status -->
+                                            <td>
+                                                <?php if (empty($attendance['pm_sign_in'])): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm" onclick="signInPmEmployee(<?= esc($attendance['id']) ?>)">Sign In (PM)</button>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success">PM Signed In: <?= esc(date('H:i', strtotime($attendance['pm_sign_in']))) ?></span>
+                                                    <?php if (empty($attendance['pm_sign_out'])): ?>
+                                                        <button type="button" class="btn btn-danger btn-sm ml-2" onclick="signOutAttendance(<?= esc($attendance['id']) ?>, 'pm')">Sign Out (PM)</button>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger">PM Signed Out: <?= esc(date('H:i', strtotime($attendance['pm_sign_out']))) ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6">No attendance records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>
