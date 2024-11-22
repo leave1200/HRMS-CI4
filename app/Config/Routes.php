@@ -140,6 +140,8 @@ $routes->group('', static function($routes){
         $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
         $routes->get('getUserAttendances', 'AdminController::getUserAttendances');
         $routes->get('getAllAttendances', 'AdminController::getAllAttendances');
+        $routes->get('/getUserInfo', 'AdminController::getUserInfo');
+
 
         
 

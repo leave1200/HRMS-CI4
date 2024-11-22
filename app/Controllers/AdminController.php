@@ -157,6 +157,27 @@ public function getUserLeaveApplications()
 
     return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
 }
+// Controller Method
+        public function getUserInfo()
+        {
+            $userId = session()->get('user_id'); // Get the logged-in user's ID from the session
+            $userModel = new \App\Models\User(); // Assuming you have a UserModel for your users table
+            
+            // Fetch user data by user ID
+            $user = $userModel->find($userId);
+
+            if ($user) {
+                // Return user data as JSON response
+                return $this->response->setJSON([
+                    'success' => true,
+                    'name' => $user['name'],
+                    'status' => $user['status'],
+                ]);
+            }
+
+            return $this->response->setJSON(['success' => false, 'message' => 'User not found']);
+        }
+
 
 
 
