@@ -7,7 +7,7 @@
 								<h2 class="text-center text-primary">Forgot Password</h2>
 							</div>
 							<h6 class="mb-20">
-								Enter your email address to reset your password
+								Enter your email address to send Pin code
 							</h6>
 <form action="<?= route_to('send-pin-code') ?>" method="POST">
     <?= csrf_field(); ?>
