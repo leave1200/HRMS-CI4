@@ -346,6 +346,7 @@ class AuthController extends BaseController
         ]);
     }
 
+
     public function sendPinCode()
         {
             $isValid = $this->validate([
@@ -382,7 +383,7 @@ class AuthController extends BaseController
             ]);
 
             // Prepare email data
-            $resetLink = base_url() . "backend/pages/auth/reset-password-with-pin";
+            $resetLink = base_url(route_to('reset-password-with-pin'));
             $mail_data = [
                 'name' => $user_info->name,
                 'pin_code' => $pinCode,
@@ -452,7 +453,7 @@ class AuthController extends BaseController
         $resetToken = $passwordResetToken->where('token', $pin)->first();
 
         if (!$resetToken) {
-            return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin.');
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin.');
         }
 
         // Update the user password
