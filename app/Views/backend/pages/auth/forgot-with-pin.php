@@ -1,6 +1,14 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
 
+
+<div class="login-box bg-white box-shadow border-radius-10">
+							<div class="login-title">
+								<h2 class="text-center text-primary">Forgot Password</h2>
+							</div>
+							<h6 class="mb-20">
+								Enter your email address to reset your password
+							</h6>
 <form action="<?= route_to('send-pin-code') ?>" method="POST">
     <?= csrf_field(); ?>
 
@@ -19,6 +27,7 @@
 
     <button type="submit" class="btn btn-primary">Send Pin</button>
 </form>
+</div>
 
 
 <?= $this->endSection()?>
