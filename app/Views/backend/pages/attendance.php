@@ -147,50 +147,12 @@
 
                         </table>
                     </div>
-                     <!-- Second Table (New DataTable) -->
-                        <h4>Filtered User Attendance</h4>
-                        <div class="table-responsive">
-                            <table id="newAttendanceTable" class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Designation</th>
-                                        <th>Position</th>
-                                        <th>AM Sign In</th>
-                                        <th>PM Sign Out</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($users as $user): ?>
-                                    <tr>
-                                        <td><?= esc($user['id']) ?></td>
-                                        <td><?= esc($user['name']) ?></td>
-                                        <td><?= esc($user['designation']) ?></td>
-                                        <td><?= esc($user['position']) ?></td>
-                                        <td></td> <!-- No attendance record yet -->
-                                        <td></td> <!-- No attendance record yet -->
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
                 </div>
             </div>
 
         </div>                        
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        // Initialize the second table
-        $('#newAttendanceTable').DataTable({
-            paging: true,
-            searching: true,
-            responsive: true,
-        });
-    });
-</script>
 
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
