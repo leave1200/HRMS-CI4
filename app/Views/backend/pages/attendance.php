@@ -181,6 +181,16 @@
         </div>                        
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Initialize the second table
+        $('#newAttendanceTable').DataTable({
+            paging: true,
+            searching: true,
+            responsive: true,
+        });
+    });
+</script>
 
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
