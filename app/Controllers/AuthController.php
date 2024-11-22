@@ -414,7 +414,7 @@ class AuthController extends BaseController
     public function resetPasswordWithPin($pin)
     {
         $passwordResetPassword = new PasswordResetToken();
-        $check_token = $passwordResetPassword->where('pin', $pin)->first();
+        $check_token = $passwordResetPassword->where('token', $pin)->first();
 
         if (!$check_token || Carbon::now()->isAfter($check_token->expires_at)) {
             return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
