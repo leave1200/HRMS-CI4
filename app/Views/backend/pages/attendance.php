@@ -93,7 +93,7 @@
                             <thead>
                                 <tr role="row">
                                     <th>#</th>
-                                    <th>Att</th>
+                                    <th>Attendance ID</th>
                                     <th>Name</th>
                                     <th>Office</th>
                                     <th>Position</th>
