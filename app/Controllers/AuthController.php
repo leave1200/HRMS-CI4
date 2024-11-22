@@ -391,9 +391,9 @@ class AuthController extends BaseController
             ];
 
             if (sendEmail($mailConfig)) {
-                return redirect()->route('admin.forgot-password-pin')->with('success', 'A pin code has been sent to your email.');
+                return redirect()->route('forgot-password-pin')->with('success', 'A pin code has been sent to your email.');
             } else {
-                return redirect()->route('admin.forgot-password-pin')->with('fail', 'Failed to send the pin code.');
+                return redirect()->route('forgot-password-pin')->with('fail', 'Failed to send the pin code.');
             }
         }
     }
