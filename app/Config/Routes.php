@@ -13,8 +13,8 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
     $routes->post('reset-password-handler/(:any)', 'AuthController::resetPasswordHandler/$1', ['as' => 'reset-password-handler']);
     // Route for the pin sender page
-    $routes->get('admin/forgot-password-pin', 'AuthController::forgotPasswordPinPage');
-    $routes->post('admin/send-pin', 'AuthController::sendPinCode');
+    $routes->get('forgot-password-pin', 'AuthController::forgotPasswordPinPage');
+    $routes->post('send-pin', 'AuthController::sendPinCode');
 
 });
 
