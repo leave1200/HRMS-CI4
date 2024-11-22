@@ -138,7 +138,7 @@ $routes->group('', static function($routes){
         $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
         $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
         $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
-        $routes->get('getUserAttendance', 'AdminController::getUserAttendance');
+        $routes->get('getUserAttendances', 'AdminController::getUserAttendances');
 
         
 

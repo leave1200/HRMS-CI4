@@ -275,7 +275,7 @@
 						</div>
 						<script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('/getUserAttendance') // Update this route to match your backend
+        fetch('/getUserAttendances') // Update this route to match your backend
             .then(response => response.json())
             .then(response => {
                 if (!response.success || !response.data || response.data.length === 0) {

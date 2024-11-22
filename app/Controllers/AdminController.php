@@ -79,7 +79,7 @@ class AdminController extends BaseController
 
             return $this->response->setJSON($fileData);
         }
-    public function getUserAttendance()
+    public function getUserAttendances()
         {
             $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
             $attendanceModel = new \App\Models\AttendanceModel();
