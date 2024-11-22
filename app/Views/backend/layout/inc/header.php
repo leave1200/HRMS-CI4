@@ -90,10 +90,16 @@
 </style>
 
 <div class="header">
-	<div class="header-left">
-		<div class="menu-icon bi bi-list"></div>
-		<div class="header-search"></div>
-	</div>
+<div class="header-left">
+    <div class="menu-icon bi bi-list"></div>
+    <div class="header-search"></div>
+
+    <!-- Running Text Section -->
+    <div class="welcome-message">
+        <marquee behavior="scroll" direction="left" id="welcomeText"></marquee>
+    </div>
+</div>
+
 	<div class="header-right">
 		<div class="dashboard-setting user-notification">
 			<div class="dropdown">
@@ -218,3 +224,17 @@ $(document).ready(function() {
 });
 
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Assuming you have the user's status and name available from session or API
+        const userStatus = 'EMPLOYEE'; // Replace with dynamic user status (e.g., from session or backend)
+        const userName = 'John Doe'; // Replace with dynamic username (e.g., from session or backend)
+
+        // Create the welcome message
+        const welcomeMessage = `Welcome to the system ${userStatus} ${userName}!`;
+
+        // Set the welcome message inside the marquee
+        document.getElementById('welcomeText').textContent = welcomeMessage;
+    });
+</script>
+
