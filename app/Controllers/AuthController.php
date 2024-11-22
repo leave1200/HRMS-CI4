@@ -337,4 +337,39 @@ class AuthController extends BaseController
             }
         }
     }
+
+    /////////////////pin code reset password
+    public function resetPasswordViaPin()
+    {
+        return view('auth/reset-password-via-pin');
+    }
+
+    public function sendPinReset()
+    {
+        $email = $this->request->getPost('email');
+        $pin = random_int(100000, 999999); // Generate a 6-digit pin
+
+        // Send the pin to the user's email
+        $this->sendPinEmail($email, $pin);
+
+        // Store the pin and email (for verification purpose)
+        session()->setFlashdata('pin', $pin);
+        session()->setFlashdata('email', $email);
+
+        return redirect()->to(route_to('reset-password-via-pin'))->with('success', 'Pin sent to your email!');
+    }
+
+    private function sendPinEmail($email, $pin)
+    {
+        $emailService = \Config\Services::email();
+        $emailService->setFrom('your-email@gmail.com', 'Your App Name');
+        $emailService->setTo($email);
+        $emailService->setSubject('Password Reset Pin Code');
+        $emailService->setMessage("Your pin code to reset the password is: $pin");
+
+        // Send email
+        if (!$emailService->send()) {
+            session()->setFlashdata('fail', 'Failed to send the pin code. Please try again.');
+        }
+    }
 }
