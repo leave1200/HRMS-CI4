@@ -530,5 +530,20 @@ class AuthController extends BaseController
         return redirect()->to('/reset-password/' . $inputPin); // Pass pin for further verification
     }
     
-
+    public function resetPassword($pin)
+    {
+        // Validate pin again to ensure security
+        $passwordResetToken = new PasswordResetToken();
+        $resetToken = $passwordResetToken->where('token', $pin)->first();
+    
+        if (!$resetToken) {
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin.');
+        }
+    
+        return view('backend/pages/auth/reset-password', [
+            'pageTitle' => 'Reset Password',
+            'pin' => $pin, // Pass pin to the view for form submission
+        ]);
+    }
+    
 }
