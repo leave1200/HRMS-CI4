@@ -456,24 +456,24 @@ class AuthController extends BaseController
                 'rules' => 'required|min_length[8]|max_length[15]|is_password_strong[new_password]',
                 'errors' => [
                     'required' => 'Enter New Password',
-                    'min_length' => 'New Password must be 8 characters',
-                    'max_length' => 'New Password must be 15 characters',
-                    'is_password_strong' => 'New Password is weak. Please include a mix of letters and numbers.'
-                ]
+                    'min_length' => 'New Password must be at least 8 characters.',
+                    'max_length' => 'New Password must be less than 15 characters.',
+                    'is_password_strong' => 'New Password is weak. Please include a mix of letters and numbers.',
+                ],
             ],
             'confirm_new_password' => [
                 'rules' => 'required|matches[new_password]',
                 'errors' => [
-                    'required' => 'Confirm New Password is required',
-                    'matches' => 'Passwords do not match.'
-                ]
-            ]
+                    'required' => 'Confirm New Password is required.',
+                    'matches' => 'Passwords do not match.',
+                ],
+            ],
         ]);
     
         if (!$isValid) {
             return view('backend/pages/auth/reset-password-with-pin', [
                 'validation' => $this->validator,
-                'pinCode' => $this->request->getVar('pin')
+                'pin' => $this->request->getVar('pin'),
             ]);
         }
     
@@ -486,16 +486,18 @@ class AuthController extends BaseController
         }
     
         $user = new User();
-        if (!$user->where('email', $resetToken->email)->set([
-            'password' => password_hash($this->request->getVar('new_password'), PASSWORD_DEFAULT)
-        ])->update()) {
+        $newPasswordHash = password_hash($this->request->getVar('new_password'), PASSWORD_ARGON2ID);
+    
+        if (!$user->where('email', $resetToken['email'])->update(null, ['password' => $newPasswordHash])) {
             return redirect()->route('forgot-password-pin')->with('fail', 'Failed to reset password.');
         }
     
+        // Delete the token after successful password reset
         $passwordResetToken->where('token', $pin)->delete();
     
         return redirect()->route('login')->with('success', 'Password reset successful.');
     }
+    
     
     public function verifyPin()
     {
