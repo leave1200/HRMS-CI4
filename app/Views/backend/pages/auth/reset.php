@@ -70,7 +70,7 @@
         var icon = this.querySelector('i');
         
         // Toggle the password type between text and password
-        if (passwordField.type === "password") {
+        if (passwordField.type === "new_password") {
             passwordField.type = "text"; // Show password
             icon.classList.remove('dw-padlock1');  // Optionally change icon
             icon.classList.add('dw-eye');          // Change to 'eye' icon (for example)
