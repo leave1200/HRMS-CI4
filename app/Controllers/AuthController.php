@@ -427,12 +427,6 @@ class AuthController extends BaseController
     // Pin verification page (reset password with pin)
     public function resetPasswordWithPin($pin)
     {
-        $inputPin = $this->request->getPost('pin'); // User input
-        $hiddenPin = $this->request->getPost('pin_hidden'); // Optional hidden field
-        
-        if (!$inputPin) {
-            return redirect()->back()->with('fail', 'Pin is required.');
-        }
         $passwordResetToken = new PasswordResetToken();
         
         // Find the token in the database
