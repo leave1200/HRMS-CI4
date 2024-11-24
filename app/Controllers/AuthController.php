@@ -469,13 +469,7 @@ class AuthController extends BaseController
                 ],
             ],
         ]);
-        
-        
-        // Debug validation success
-        log_message('info', 'Validation passed.');
-        
-
-    
+           
         $passwordResetToken = new PasswordResetToken();
         $pin = $this->request->getVar('pin');
         $resetToken = $passwordResetToken->where('token', $pin)->first();
@@ -494,7 +488,7 @@ class AuthController extends BaseController
         // Delete the token after successful password reset
         $passwordResetToken->where('token', $pin)->delete();
     
-        return redirect()->route('login')->with('success', 'Password reset successful.');
+        return redirect()->route('admin.login')->with('success', 'Password reset successful.');
     }
     
     
