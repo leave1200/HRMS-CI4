@@ -11,7 +11,7 @@
 
         <!-- Pin verification form -->
         <?= form_open(route_to('reset-password-handler-with-pin')) ?>
-        <input type="hidden" name="token" value="<?= esc($pin) ?>">
+        <input type="hidden" name="token" value="<?= esc($pinCode) ?>">
 
         <div class="form-group">
             <label for="token">Enter Pin Code</label>
