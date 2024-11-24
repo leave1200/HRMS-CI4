@@ -50,6 +50,10 @@
                                     </div>
                                     <?php endif; ?>
 								<div class="row align-items-center">
+								<div class="form-group">
+									<input type="checkbox" id="togglePassword"> Show Password
+								</div>
+
 									<div class="col-5">
 										<div class="input-group mb-0">
 											
