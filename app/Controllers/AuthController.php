@@ -436,7 +436,7 @@ class AuthController extends BaseController
 
         return view('backend/pages/auth/reset-password-with-pin', [
             'pageTitle' => 'Reset Password with Pin',
-            'token' => $pinCode
+            'pinCode' => $pinCode 
         ]);
     }
     public function resetPasswordHandlerWithPin()
