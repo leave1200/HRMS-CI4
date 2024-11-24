@@ -488,7 +488,7 @@ class AuthController extends BaseController
         // Delete the token after successful password reset
         $passwordResetToken->where('token', $pin)->delete();
     
-        return redirect()->route('admin.login.form')->with('success', 'Password reset successful.');
+        return redirect()->route('admin.login.form')->with('success','Done!, Your Password has been changed. Use new password to login into the system');
     }
     
     
