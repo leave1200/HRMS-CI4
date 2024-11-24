@@ -5,7 +5,7 @@
         <h2 class="mt-5">Reset Password</h2>
 
         <!-- Display validation errors -->
-        <?= form_open(route_to('admin.reset-password-handler-with-pin')) ?>
+        <?= form_open(route_to('reset-password-handler-with-pin')) ?>
         <input type="hidden" name="pin" value="<?= esc($pin) ?>">
 
         <div class="form-group">
