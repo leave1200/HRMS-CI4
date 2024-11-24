@@ -424,22 +424,21 @@ class AuthController extends BaseController
     }
     
 
-    public function resetPasswordWithPin($pinCode)
+    // Pin verification page (reset password with pin)
+    public function resetPasswordWithPin($pin)
     {
         $passwordResetPassword = new PasswordResetToken();
-        $check_token = $passwordResetPassword->where('token', $pinCode)->first();
-    
+        $check_token = $passwordResetPassword->where('token', $pin)->first();
+
         if (!$check_token || Carbon::now()->isAfter($check_token->expires_at)) {
             return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin. Please request a new one.');
         }
-    
+
         return view('backend/pages/auth/reset-password-with-pin', [
             'pageTitle' => 'Reset Password with Pin',
-            'pinCode' => $pinCode, // Ensure this matches the variable name used in the view
-            'validation' => \Config\Services::validation()
+            'pin' => $pin
         ]);
     }
-    
     public function resetPasswordHandlerWithPin()
     {
         $isValid = $this->validate([
@@ -452,35 +451,42 @@ class AuthController extends BaseController
                     'is_password_strong' => 'New Password is weak. Please include a mix of letters and numbers.'
                 ]
             ],
-            'confirm_new_password' => 'required|matches[new_password]',
+            'confirm_new_password' => [
+                'rules' => 'required|matches[new_password]',
+                'errors' => [
+                    'required' => 'Confirm New Password is required',
+                    'matches' => 'Passwords do not match.'
+                ]
+            ]
         ]);
-
+    
         if (!$isValid) {
             return view('backend/pages/auth/reset-password-with-pin', [
                 'validation' => $this->validator,
-                'token' => $this->request->getVar('token')
+                'pinCode' => $this->request->getVar('pin')
             ]);
         }
-
+    
         $passwordResetToken = new PasswordResetToken();
         $pin = $this->request->getVar('pin');
         $resetToken = $passwordResetToken->where('token', $pin)->first();
-
+    
         if (!$resetToken) {
-            return redirect()->route('admin.forgot-password-pin')->with('fail', 'Invalid or expired pin.');
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid or expired pin.');
         }
-
-        // Update the user password
+    
         $user = new User();
-        $user->where('email', $resetToken->email)->set([
+        if (!$user->where('email', $resetToken->email)->set([
             'password' => password_hash($this->request->getVar('new_password'), PASSWORD_DEFAULT)
-        ])->update();
-
-        // Delete the used reset token
+        ])->update()) {
+            return redirect()->route('forgot-password-pin')->with('fail', 'Failed to reset password.');
+        }
+    
         $passwordResetToken->where('token', $pin)->delete();
-
-        return redirect()->route('admin.login')->with('success', 'Password reset successful.');
+    
+        return redirect()->route('login')->with('success', 'Password reset successful.');
     }
+    
 
 
 }
