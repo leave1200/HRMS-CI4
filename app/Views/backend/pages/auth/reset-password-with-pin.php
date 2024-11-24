@@ -15,7 +15,7 @@
 
         <div class="form-group">
             <label for="token">Enter Pin Code</label>
-            <input type="text" name="token" id="token" class="form-control" value="<?= old('token', $pin) ?>" required>
+            <input type="text" name="token" id="token" class="form-control" value="<?= old('token', $pinCode) ?>" required>
             <small class="text-danger"><?= isset($validation) ? $validation->getError('token') : '' ?></small>
         </div>
 
