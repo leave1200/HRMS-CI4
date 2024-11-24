@@ -497,6 +497,12 @@ class AuthController extends BaseController
         return redirect()->route('login')->with('success', 'Password reset successful.');
     }
     
-    
+    public function resetPasswordpin()
+        {
+            return view('backend/pages/auth/reset-password', [
+                'pageTitle' => 'Reset Password',
+            ]);
+        }
+
 
 }

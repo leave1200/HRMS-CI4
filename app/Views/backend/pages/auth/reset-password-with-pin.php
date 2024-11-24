@@ -10,18 +10,19 @@
     <?php endif; ?>
 
     <!-- Pin verification form -->
-    <form action="<?= route_to('') ?>" method="POST">
-        <?= csrf_field(); ?>
-        <input type="hidden" name="pin" value="<?= esc($pin) ?>">
+    <form action="<?= route_to('verify-pin') ?>" method="POST">
+    <?= csrf_field(); ?>
+    <input type="hidden" name="pin" value="<?= esc($pin) ?>">
 
-        <div class="form-group">
-            <label for="pin">Enter Pin Code</label>
-            <input type="text" name="pin" id="pin" class="form-control" value="<?= old('pin', $pin) ?>" required>
-            <small class="text-danger"><?= isset($validation) ? $validation->getError('pin') : '' ?></small>
-        </div>
+    <div class="form-group">
+        <label for="pin">Enter Pin Code</label>
+        <input type="text" name="pin" id="pin" class="form-control" value="<?= old('pin', $pin) ?>" required>
+        <small class="text-danger"><?= isset($validation) ? $validation->getError('pin') : '' ?></small>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Verify Pin</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Verify Pin</button>
+</form>
+
 </div>
 
 <?= $this->endSection() ?>
