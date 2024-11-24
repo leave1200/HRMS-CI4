@@ -497,6 +497,38 @@ class AuthController extends BaseController
         return redirect()->route('login')->with('success', 'Password reset successful.');
     }
     
-
+    public function verifyPin()
+    {
+        // Validate user input
+        $rules = [
+            'pin' => 'required|min_length[6]|max_length[6]', // Adjust length based on your pin length
+        ];
+    
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('fail', 'Invalid pin format.')->withInput();
+        }
+    
+        // Get the pin entered by the user
+        $inputPin = $this->request->getPost('pin');
+    
+        // Query the database to check if the token exists
+        $passwordResetToken = new PasswordResetToken();
+        $resetToken = $passwordResetToken->where('token', $inputPin)->first();
+    
+        if (!$resetToken) {
+            // Token not found
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid pin. Please request a new one.');
+        }
+    
+        // Check if the token has expired (assuming a 15-minute expiration time)
+        $tokenExpiration = Carbon::parse($resetToken['created_at'])->addMinutes(15);
+        if (Carbon::now()->isAfter($tokenExpiration)) {
+            return redirect()->route('forgot-password-pin')->with('fail', 'The pin has expired. Please request a new one.');
+        }
+    
+        // Pin is valid, navigate to reset-password.php
+        return redirect()->to('/reset-password/' . $inputPin); // Pass pin for further verification
+    }
+    
 
 }
