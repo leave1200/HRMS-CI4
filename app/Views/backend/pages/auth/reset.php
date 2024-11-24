@@ -63,23 +63,26 @@
 							</form>
 						</div>
 					</div>
-					<script>
-    // Toggle password visibility
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        var passwordField = document.getElementById('new_password');
-        var icon = this.querySelector('i');
-        
-        // Toggle the password type between text and password
-        if (passwordField.type === "new_password") {
-            passwordField.type = "text"; // Show password
-            icon.classList.remove('dw-padlock1');  // Optionally change icon
-            icon.classList.add('dw-eye');          // Change to 'eye' icon (for example)
-        } else {
-            passwordField.type = "new_password"; // Hide password
-            icon.classList.remove('dw-eye');  // Optionally change icon back
-            icon.classList.add('dw-padlock1'); // Change to padlock icon
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword'); // Ensure you have an element with this ID
+        const newPasswordField = document.getElementById('new_password');
+
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function () {
+                // Toggle the password field type between text and password
+                if (newPasswordField.type === "password") {
+                    newPasswordField.type = "text"; // Show password
+                } else {
+                    newPasswordField.type = "password"; // Hide password
+                }
+            });
         }
     });
+</script>
+
 </script>
 
 <?= $this->endSection()?>
