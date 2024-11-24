@@ -530,7 +530,7 @@ class AuthController extends BaseController
         return redirect()->to('/reset-password/' . $inputPin); // Pass pin for further verification
     }
     
-    public function resetPassword($pin)
+    public function resetPasswords($pin)
     {
         // Validate pin again to ensure security
         $passwordResetToken = new PasswordResetToken();
