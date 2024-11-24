@@ -471,7 +471,7 @@ class AuthController extends BaseController
         ]);
     
         if (!$isValid) {
-            return view('backend/pages/auth/reset-password-with-pin', [
+            return view('backend/pages/auth/reset-password', [
                 'validation' => $this->validator,
                 'pinCode' => $this->request->getVar('pin')
             ]);
