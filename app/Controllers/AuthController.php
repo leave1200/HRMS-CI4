@@ -435,8 +435,6 @@ class AuthController extends BaseController
         // Check if the token exists and if it has not expired
         if (!$resetToken) {
             return redirect()->route('forgot-password-pin')->with('fail', 'Invalid pin. Please request a new one.');
-        }else {
-            return redirect()->route('reset-password')->with('success', 'Pin verified successfully. Please reset your password.');
         }
     
         $tokenExpiration = Carbon::parse($resetToken['created_at'])->addMinutes(15);
