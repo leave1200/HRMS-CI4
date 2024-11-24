@@ -19,7 +19,7 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->get('reset-pin', 'AuthController::resetPin');
     $routes->post('reset-password-handler-with-pin', 'AuthController::resetPasswordHandlerWithPin',['as' => 'reset-password-handler-with-pin']);
     $routes->post('/verify-pin', 'AuthController::verifyPin', ['as' => 'verify-pin']);
-    $routes->get('/reset-password/(:segment)', 'AuthController::resetPassword/$1', ['as' => 'reset-password']);
+    $routes->get('/reset-password/(:segment)', 'AuthController::resetPasswords/$1', ['as' => 'reset-password']);
 
 
     
