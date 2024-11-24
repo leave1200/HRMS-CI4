@@ -440,10 +440,7 @@ class AuthController extends BaseController
         $tokenExpiration = Carbon::parse($resetToken['created_at'])->addMinutes(15);
         if (Carbon::now()->isAfter($tokenExpiration)) {
             return redirect()->route('forgot-password-pin')->with('fail', 'The pin has expired. Please request a new one.');
-        } else {
-            return redirect()->route('reset-password')->with('success', 'Pin verified successfully. Please reset your password.');
         }
-        
     
         // Load the reset password view and pass the pin
         return view('backend/pages/auth/reset-password-with-pin', [
