@@ -17,6 +17,7 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->post('send-pin', 'AuthController::sendPinCode',['as' => 'admin.send-pin']);
     $routes->get('reset-password-with-pin/(:segment)', 'AuthController::resetPasswordWithPin/$1');
     $routes->get('reset-pin', 'AuthController::resetPin');
+    $routes->post('reset-password-handler-with-pin', 'AuthController::resetPasswordHandlerWithPin',['as' => 'reset-password-handler-with-pin']);
     
 
 
