@@ -75,7 +75,7 @@
             icon.classList.remove('dw-padlock1');  // Optionally change icon
             icon.classList.add('dw-eye');          // Change to 'eye' icon (for example)
         } else {
-            passwordField.type = "password"; // Hide password
+            passwordField.type = "new_password"; // Hide password
             icon.classList.remove('dw-eye');  // Optionally change icon back
             icon.classList.add('dw-padlock1'); // Change to padlock icon
         }
