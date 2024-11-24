@@ -1,6 +1,6 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
-
+<div class="login-box bg-white box-shadow border-radius-10">
 <div class="container">
         <h2 class="mt-5">Reset Password</h2>
 
@@ -24,5 +24,6 @@
         <button type="submit" class="btn btn-primary">Reset Password</button>
         <?= form_close() ?>
     </div>
+</div>
 
 <?= $this->endSection()?>
