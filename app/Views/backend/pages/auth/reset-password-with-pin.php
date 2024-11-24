@@ -12,16 +12,17 @@
     <!-- Pin verification form -->
     <form action="<?= route_to('verify-pin') ?>" method="POST">
     <?= csrf_field(); ?>
-    <input type="hidden" name="pin" value="<?= esc($pin) ?>">
+    <input type="hidden" name="pin_hidden" value="<?= esc($pin) ?>">
 
     <div class="form-group">
         <label for="pin">Enter Pin Code</label>
-        <input type="text" name="pin" id="pin" class="form-control" value="<?= old('pin', $pin) ?>" required>
+        <input type="text" name="pin" id="pin" class="form-control" required>
         <small class="text-danger"><?= isset($validation) ? $validation->getError('pin') : '' ?></small>
     </div>
 
     <button type="submit" class="btn btn-primary">Verify Pin</button>
 </form>
+
 
 </div>
 
