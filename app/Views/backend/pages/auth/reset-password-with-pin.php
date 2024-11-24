@@ -12,7 +12,7 @@
     <!-- Pin verification form -->
     <form action="<?= route_to('verify-pin') ?>" method="POST">
     <?= csrf_field(); ?>
-    <input type="hidden" name="pin_hidden" value="<?= esc($pin) ?>">
+    <input type="hidden" name="pin" value="<?= esc($pin) ?>">
 
     <div class="form-group">
         <label for="pin">Enter Pin Code</label>
