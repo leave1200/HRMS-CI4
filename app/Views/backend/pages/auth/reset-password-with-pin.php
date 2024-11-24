@@ -14,7 +14,7 @@
         <input type="hidden" name="token" value="<?= esc($pin) ?>">
 
         <div class="form-group">
-            <label for="pin">Enter Pin Code</label>
+            <label for="token">Enter Pin Code</label>
             <input type="text" name="token" id="token" class="form-control" value="<?= old('token', $pin) ?>" required>
             <small class="text-danger"><?= isset($validation) ? $validation->getError('token') : '' ?></small>
         </div>
