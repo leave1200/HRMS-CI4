@@ -1,7 +1,7 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
 
-<div class="col-md-6">
+<div class="col-md-10">
 						<div class="login-box bg-white box-shadow border-radius-10">
 							<div class="login-title">
 								<h2 class="text-center text-primary">Reset Password</h2>
