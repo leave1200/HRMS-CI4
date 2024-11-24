@@ -63,7 +63,7 @@
 							</form>
 						</div>
 					</div>
-					<script>
+ <script>
     // Toggle password visibility for new password
     document.getElementById('toggleNewPassword').addEventListener('click', function() {
         var passwordField = document.getElementById('new_password');
