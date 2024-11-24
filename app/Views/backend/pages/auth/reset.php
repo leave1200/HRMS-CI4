@@ -50,10 +50,6 @@
                                     </div>
                                     <?php endif; ?>
 								<div class="row align-items-center">
-								<div class="form-group">
-									<input type="checkbox" id="togglePassword"> Show Password
-								</div>
-
 									<div class="col-5">
 										<div class="input-group mb-0">
 											
@@ -67,26 +63,6 @@
 							</form>
 						</div>
 					</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Toggle password visibility
-        const togglePassword = document.getElementById('togglePassword'); // Ensure you have an element with this ID
-        const newPasswordField = document.getElementById('new_password');
-
-        if (togglePassword) {
-            togglePassword.addEventListener('click', function () {
-                // Toggle the password field type between text and password
-                if (newPasswordField.type === "password") {
-                    newPasswordField.type = "text"; // Show password
-                } else {
-                    newPasswordField.type = "password"; // Hide password
-                }
-            });
-        }
-    });
-</script>
-
-</script>
+					
 
 <?= $this->endSection()?>
