@@ -5,7 +5,7 @@
     <h2 class="mt-5">Reset Password with Pin</h2>
 
     <!-- Display success or error message -->
-    <?php if(session()->getFlashdata('fail')): ?>
+    <?php if (session()->getFlashdata('fail')): ?>
         <div class="alert alert-danger"><?= session()->getFlashdata('fail') ?></div>
     <?php endif; ?>
 
@@ -32,6 +32,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const pinInputs = document.querySelectorAll('.pin-input');
+    const form = document.getElementById('pinForm');
 
     // Focus on the next input after entering a digit
     pinInputs.forEach((input, index) => {
@@ -49,10 +50,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Combine all input values into a single hidden field for form submission
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const pin = Array.from(pinInputs).map(input => input.value).join('');
+        if (pin.length !== 6) {
+            alert('Please enter all 6 digits of the PIN.');
+            return;
+        }
+
+        // Create a hidden input to hold the combined PIN
+        const hiddenPinInput = document.createElement('input');
+        hiddenPinInput.type = 'hidden';
+        hiddenPinInput.name = 'pin_combined';
+        hiddenPinInput.value = pin;
+
+        form.appendChild(hiddenPinInput);
+        form.submit();
+    });
+
     // Automatically focus on the first input field when the page loads
     pinInputs[0].focus();
 });
 </script>
 
 <?= $this->endSection() ?>
-
