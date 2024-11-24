@@ -66,7 +66,7 @@
 					<script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
-        var passwordField = document.getElementById('password');
+        var passwordField = document.getElementById('new_password');
         var icon = this.querySelector('i');
         
         // Toggle the password type between text and password
