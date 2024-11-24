@@ -425,7 +425,7 @@ class AuthController extends BaseController
     
 
     // Pin verification page (reset password with pin)
-    public function resetPasswordWithPin()
+    public function resetPasswordWithPin($pin)
     {
         $passwordResetToken = new PasswordResetToken();
         
