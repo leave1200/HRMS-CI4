@@ -497,35 +497,40 @@ class AuthController extends BaseController
         return redirect()->route('login')->with('success', 'Password reset successful.');
     }
     public function verifyPin()
-{
-    $pin = $this->request->getPost('pin');
+    {
+        $pin = $this->request->getPost('pin');
 
-    // Validate the input
-    if (!$pin) {
-        return redirect()->back()->with('fail', 'Pin is required.');
+        // Validate the input
+        if (!$pin) {
+            return redirect()->back()->with('fail', 'Pin is required.');
+        }
+
+        $passwordResetToken = new PasswordResetToken();
+
+        // Find the token in the database
+        $resetToken = $passwordResetToken->where('token', $pin)->first();
+
+        if (!$resetToken) {
+            return redirect()->route('forgot-password-pin')->with('fail', 'Invalid pin. Please request a new one.');
+        }
+
+        // Check if the token is expired
+        $tokenExpiration = Carbon::parse($resetToken['created_at'])->addMinutes(15);
+        if (Carbon::now()->isAfter($tokenExpiration)) {
+            return redirect()->route('forgot-password-pin')->with('fail', 'The pin has expired. Please request a new one.');
+        }
+
+        // Token is valid; redirect to the reset-password page
+        return redirect()->route('reset-password')->with('success', 'Pin verified successfully. Please reset your password.');
     }
-
-    $passwordResetToken = new PasswordResetToken();
-
-    // Find the token in the database
-    $resetToken = $passwordResetToken->where('token', $pin)->first();
-
-    if (!$resetToken) {
-        return redirect()->route('forgot-password-pin')->with('fail', 'Invalid pin. Please request a new one.');
-    }
-
-    // Check if the token is expired
-    $tokenExpiration = Carbon::parse($resetToken['created_at'])->addMinutes(15);
-    if (Carbon::now()->isAfter($tokenExpiration)) {
-        return redirect()->route('forgot-password-pin')->with('fail', 'The pin has expired. Please request a new one.');
-    }
-
-    // Token is valid; redirect to the reset-password page
-    return redirect()->route('reset-password')->with('success', 'Pin verified successfully. Please reset your password.');
-}
 
     public function resetPasswordpin($pin)
         {
+            $passwordResetToken = new PasswordResetToken();
+        
+            // Find the token in the database
+            $resetToken = $passwordResetToken->where('token', $pin)->first();
+            
             return view('backend/pages/auth/reset-password', [
                 'pageTitle' => 'Reset Password',
             ]);
