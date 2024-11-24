@@ -10,7 +10,7 @@
     <?php endif; ?>
 
     <!-- Pin verification form -->
-    <form action="<?= route_to('verify-pin') ?>" method="POST">
+    <form action="<?= route_to('reset-password-with-pin') ?>" method="POST">
         <?= csrf_field(); ?>
         <input type="hidden" name="pin" value="<?= esc($pin) ?>">
 
