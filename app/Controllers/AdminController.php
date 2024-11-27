@@ -1597,9 +1597,16 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         // Fetch employees whose result is "Pending"
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
-        // Pass the pending employees to the view
-        return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
+        // Count the pending employees
+        $pendingCount = count($pendingEmployees);
+    
+        // Pass both the pending employees and their count to the view
+        return view('backend/pages/pendingemployee', [
+            'pendingEmployees' => $pendingEmployees,
+            'pendingCount' => $pendingCount
+        ]);
     }
+    
     public function fetchPendingResults()
         {
             $employeeModel = new EmployeeModel();

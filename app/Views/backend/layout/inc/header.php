@@ -114,9 +114,9 @@
           <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
               <i class="icon-copy dw dw-notification"></i>
               <?php if (!empty($pendingEmployees)): ?>
-                  <span class="notification-active">
-                      <?= count($pendingEmployees) ?>
-                  </span> <!-- Display count -->
+                <span class="notification-active">
+                    <?= $pendingCount ?>
+                </span>
               <?php endif; ?>
               <span class="heartbit"></span>
           </a>
