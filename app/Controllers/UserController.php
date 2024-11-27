@@ -216,7 +216,7 @@ class UserController extends Controller
             $new_password = $request->getPost('new_password');
     
             // Hash the new password using bcrypt
-            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+            $hashed_password = password_hash($new_password, PASSWORD_ARGON2ID);
     
             // Update the user password in the database
             $user->update($user_id, ['password' => $hashed_password]);
