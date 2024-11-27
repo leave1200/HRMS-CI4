@@ -1605,7 +1605,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             'pendingEmployees' => $pendingEmployees,
             'pendingCount' => $pendingCount
         ];
-        return $this->response->setJSON($data);
+        return view('backend/layout/inc/header', $data);
     }
     
     public function fetchPendingResults()
