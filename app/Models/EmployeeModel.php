@@ -24,15 +24,7 @@ class EmployeeModel extends Model
     {
         return $this->update($id, ['result' => 'Hired']); // Ensure 'result' matches your database column
     }    
-    public function getPendingResults()
-{
-    // Example query to fetch pending employee results
-    return $this->db->table('employee_results')
-                    ->where('status', 'pending')
-                    ->get()
-                    ->getResultArray();
-}
-
+    
 }
 
 

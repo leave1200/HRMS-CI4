@@ -1593,20 +1593,18 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     public function notifications()
     {
         $employeeModel = new EmployeeModel();
-        $leaveModel = new LeaveApplicatioModel();
-        // Fetch pending employee results from the database
-    $pendingEmployees = $this->employeeModel->getPendingResults();
-
-    // Fetch pending leave applications from the database
-    $pendingLeaves = $this->leaveModel->getPendingLeaves();
-
-    // Prepare the data to return as JSON
-    $data = [
-        'employees' => $pendingEmployees,
-        'leaves' => $pendingLeaves
-    ];
-
-    return $this->response->setJSON($data);
+    
+        // Fetch employees whose result is "Pending"
+        $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+    
+        // Count the pending employees
+        $pendingCount = count($pendingEmployees);
+    
+        // Pass both the pending employees and their count to the view
+        return view('backend/pages/pendingemployee', [
+            'pendingEmployees' => $pendingEmployees,
+            'pendingCount' => $pendingCount
+        ]);
     }
     
     public function fetchPendingResults()

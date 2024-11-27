@@ -96,116 +96,100 @@
 </style>
 
 <div class="header">
-  <div class="header-left">
+<div class="header-left">
     <div class="menu-icon bi bi-list"></div>
     <div class="header-search">
-      <div class="running-text-container">
-        <marquee id="welcomeText" style="font-size: 16px; font-weight: bold;">
-          Welcome to the system HRMO <span id="userStatus"></span> <span id="userName"></span>!
-        </marquee>
-      </div>
-    </div>
-  </div>
-
-  <div class="header-right">
-    <div class="dashboard-setting user-notification">
-      <div class="dropdown">
-        <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-          <i class="dw dw-settings2"></i>
-        </a>
-      </div>
-    </div>
-    <div class="user-notification">
-      <div class="dropdown">
-        <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-          <i class="icon-copy dw dw-notification"></i>
-          <?php if (!empty($pendingCount)): ?>
-            <span class="heartbit">
-              <?= $pendingCount ?>
-            </span>
-          <?php endif; ?>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-          <h6 class="dropdown-header">Notifications</h6>
-          <ul class="list-group">
-            <?php if (!empty($pendingEmployees)): ?>
-              <?php foreach ($pendingEmployees as $employee): ?>
-                <li class="list-group-item">
-                  <a href="<?= route_to('admin.pendinglist') ?>">
-                    <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                  </a> has a pending result.
-                </li>
-              <?php endforeach; ?>
-            <?php endif; ?>
-
-            <?php if (!empty($pendingLeaves)): ?>
-              <?php foreach ($pendingLeaves as $leave): ?>
-                <li class="list-group-item">
-                  <a href="<?= route_to('admin.leaveApplications') ?>">
-                    Leave application from <?= htmlspecialchars($leave['employee_name']) ?>
-                  </a> is pending approval.
-                </li>
-              <?php endforeach; ?>
-            <?php endif; ?>
-
-            <?php if (empty($pendingEmployees) && empty($pendingLeaves)): ?>
-              <li class="list-group-item">No pending results.</li>
-            <?php endif; ?>
-          </ul>
+        <div class="running-text-container">
+            <marquee id="welcomeText" style="font-size: 16px; font-weight: bold;">
+                Welcome to the system HRMO <span id="userStatus"></span> <span id="userName"></span>!
+            </marquee>
         </div>
-      </div>
     </div>
-
-    <div class="user-info-dropdown">
-      <div class="dropdown">
-        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-          <span class="user-icon ci-photo">
-            <img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" />
-          </span>
-          <span class="user-name ci-name"><?= get_user()->name ?></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-          <a class="dropdown-item" href="<?= route_to('admin.profile'); ?>"><i class="dw dw-user1"></i> Profile</a>
-          <a class="dropdown-item" href="<?= route_to('setting'); ?>"><i class="dw dw-settings2"></i> Setting</a>
-          <a class="dropdown-item" href="<?= route_to('admin.terms'); ?>"><i class="dw dw-help"></i> Terms and Conditions</a>
-          <a class="dropdown-item" href="<?= route_to('admin.logout') ?>"><i class="dw dw-logout"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
+	<div class="header-right">
+		<div class="dashboard-setting user-notification">
+			<div class="dropdown">
+				<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+					<i class="dw dw-settings2"></i>
+				</a>
+			</div>
+		</div>
+    <div class="user-notification">
+      <div class="dropdown">
+      <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+          <i class="icon-copy dw dw-notification"></i>
+          <?php if (!empty($pendingCount)): ?>
+              <span class="heartbit">
+                  <?= $pendingCount ?>
+              </span>
+          <?php endif; ?>
+      </a>
+          <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
+              <h6 class="dropdown-header">Notifications</h6>
+              <ul class="list-group">
+                  <?php if (!empty($pendingEmployees)): ?>
+                      <?php foreach ($pendingEmployees as $employee): ?>
+                          <li class="list-group-item">
+                              <a href="<?= route_to('admin.pendinglist') ?>">
+                                  <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                              </a> has a pending result.
+                          </li>
+                      <?php endforeach; ?>
+                  <?php else: ?>
+                      <li class="list-group-item">No pending results.</li>
+                  <?php endif; ?>
+              </ul>
+          </div>
+      </div>
+  </div>
+
+
+
+
+
+		<div class="user-info-dropdown">
+			<div class="dropdown">
+				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+					<span class="user-icon ci-photo">
+						<img src="<?= get_user()->picture == null ? '/images/users/userav-min.png' : '/images/users/'.get_user()->picture ?>" alt="" />
+					</span>
+					<span class="user-name ci-name"><?= get_user()->name ?></span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+					<a class="dropdown-item" href="<?= route_to('admin.profile'); ?>"><i class="dw dw-user1"></i> Profile</a>
+					<a class="dropdown-item" href="<?= route_to('setting'); ?>"><i class="dw dw-settings2"></i> Setting</a>
+					<a class="dropdown-item" href="<?= route_to('admin.terms'); ?>"><i class="dw dw-help"></i> Terms and Conditions</a>
+					<a class="dropdown-item" href="<?= route_to('admin.logout') ?>"><i class="dw dw-logout"></i> Log Out</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 <script>
 $(document).ready(function() {
     function fetchPendingNotifications() {
         $.ajax({
-            url: '<?= route_to('admin.pending_notifications') ?>', // Adjust the route to fetch both pending employees and pending leave applications
+            url: '<?= route_to('admin.pending_results') ?>', // Uses the named route defined earlier
             method: 'GET',
             dataType: 'json',
             success: function(data) {
                 var notificationList = $('.notifications-dropdown .list-group');
                 notificationList.empty();
 
-                // Handle employee pending results
-                if (data.employees.length > 0) {
-                    data.employees.forEach(function(employee) {
+                if (data.length > 0) {
+                    data.forEach(function(notification) {
                         notificationList.append('<li class="list-group-item">' + 
-                            employee.firstname + ' ' + employee.lastname + 
+                            notification.firstname + ' ' + notification.lastname + 
                             ' Waiting for Approval.</li>');
                     });
-                }
-
-                // Handle pending leave applications
-                if (data.leaves.length > 0) {
-                    data.leaves.forEach(function(leave) {
-                        notificationList.append('<li class="list-group-item">' + 
-                            'Leave application from ' + leave.employee_name + 
-                            ' is pending approval.</li>');
-                    });
-                }
-
-                // If no notifications
-                if (data.employees.length === 0 && data.leaves.length === 0) {
+                } else {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
             },
@@ -214,14 +198,6 @@ $(document).ready(function() {
             }
         });
     }
-
-    // Fetch notifications on page load
-    fetchPendingNotifications();
-
-    // Optionally, set an interval to refresh notifications
-    setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
-});
-
 
     // Fetch notifications on page load
     fetchPendingNotifications();
@@ -256,6 +232,28 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
-</script>
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch the user data from the server
+        fetch('/getUserInfo') // Update the route to match your backend
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Dynamically set the user status and name
+                    document.getElementById('userStatus').textContent = data.status;
+                    document.getElementById('userName').textContent = data.name;
+
+                    // Optionally, set the color dynamically (can be set as per your preference)
+                    document.getElementById('welcomeText').style.color = 'green'; // Set color here
+                } else {
+                    console.error(data.message || 'Failed to fetch user data.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    });
+</script>
 
