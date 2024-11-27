@@ -141,14 +141,13 @@
                   <?php endif; ?>
               </ul>
           </div>
+          <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
+            <h6 class="dropdown-header">Leave Applications</h6>
+            <ul class="list-group">
+                <!-- Pending leave notifications will be appended here by JS -->
+            </ul>
+        </div>
       </div>
-      <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-        <h6 class="dropdown-header">Leave Applications</h6>
-        <ul class="list-group">
-            <!-- Pending leave notifications will be appended here by JS -->
-        </ul>
-    </div>
-
   </div>
 
 
