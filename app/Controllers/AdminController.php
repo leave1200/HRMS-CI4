@@ -1592,6 +1592,8 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
 
     public function notifications()
     {
+        $employeeModel = new EmployeeModel();
+        $leaveModel = new LeaveApplicatioModel();
         // Fetch pending employee results from the database
     $pendingEmployees = $this->employeeModel->getPendingResults();
 
