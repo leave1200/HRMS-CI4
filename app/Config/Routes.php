@@ -125,6 +125,8 @@ $routes->group('', static function($routes){
         $routes->post('mark-notifications-read', 'AdminController::markNotificationsRead');
         $routes->post('users/fetch', 'UserController::fetchUsers');
         $routes->get('admin/pending-results', 'AdminController::fetchPendingResults', ['as' => 'admin.pending_results']);
+        $routes->get('admin/pending_notifications', 'AdminController::fetchPendingNotifications');
+
     });
     $routes->group('Setting-page', ['filter'=>'cifilter:auth'], static function($routes){
 

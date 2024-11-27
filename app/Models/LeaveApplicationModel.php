@@ -75,5 +75,13 @@ class LeaveApplicationModel extends Model
     {
         return $this->where('status', 'Pending')->countAllResults();
     }
-    
+    public function getPendingLeaves()
+{
+    // Example query to fetch pending leave applications
+    return $this->db->table('leave_applications')
+                    ->where('status', 'pending')
+                    ->get()
+                    ->getResultArray();
+}
+
 }
