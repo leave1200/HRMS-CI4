@@ -114,7 +114,9 @@
           <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
               <i class="icon-copy dw dw-notification"></i>
               <?php if (!empty($pendingEmployees)): ?>
-                  <span class="notification-active"><?= count($pendingEmployees) ?></span> <!-- Display count -->
+                  <span class="notification-active">
+                      <?= count($pendingEmployees) ?>
+                  </span> <!-- Display count -->
               <?php endif; ?>
               <span class="heartbit"></span>
           </a>
@@ -122,14 +124,12 @@
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
                   <?php if (!empty($pendingEmployees)): ?>
-                      <?php $count = 1; ?> <!-- Initialize counter -->
                       <?php foreach ($pendingEmployees as $employee): ?>
                           <li class="list-group-item">
                               <a href="<?= route_to('admin.pendinglist') ?>">
-                                  <?= $count ?>. <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                                  <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
                               </a> has a pending result.
                           </li>
-                          <?php $count++; ?> <!-- Increment counter -->
                       <?php endforeach; ?>
                   <?php else: ?>
                       <li class="list-group-item">No pending results.</li>
@@ -138,6 +138,7 @@
           </div>
       </div>
   </div>
+
 
 
 
