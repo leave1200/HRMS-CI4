@@ -1607,24 +1607,53 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         ]);
     }
     
-    public function fetchPendingResults()
-        {
-            $employeeModel = new EmployeeModel();
-            
-            // Fetch employees with a pending result
-            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-
-            // Format the response
-            $data = [];
-            foreach ($pendingEmployees as $employee) {
-                $data[] = [
-                    'firstname' => $employee['firstname'],
-                    'lastname' => $employee['lastname']
-                ];
-            }
-
-            return $this->response->setJSON($data);
+    public function fetchLeaveStatus()
+    {
+        $employeeModel = new EmployeeModel();
+        $userId = session()->get('user_id'); // Get the logged-in user's ID
+        $role = session()->get('role'); // Assuming the user role is stored in the session
+    
+        if ($role === 'Admin') {
+            // If the user is an Admin, fetch leave status for all users
+            $pendingLeaves = $employeeModel
+                ->where('result', 'Pending')
+                ->countAllResults();
+    
+            $approvedLeaves = $employeeModel
+                ->where('result', 'Approved')
+                ->countAllResults();
+    
+            $rejectedLeaves = $employeeModel
+                ->where('result', 'Rejected')
+                ->countAllResults();
+        } else {
+            // If the user is not an Admin, fetch leave status for only the logged-in user
+            $pendingLeaves = $employeeModel
+                ->where('user_id', $userId)
+                ->where('result', 'Pending')
+                ->countAllResults();
+    
+            $approvedLeaves = $employeeModel
+                ->where('user_id', $userId)
+                ->where('result', 'Approved')
+                ->countAllResults();
+    
+            $rejectedLeaves = $employeeModel
+                ->where('user_id', $userId)
+                ->where('result', 'Rejected')
+                ->countAllResults();
         }
+    
+        // Format the response
+        $data = [
+            'pending' => $pendingLeaves,
+            'approved' => $approvedLeaves,
+            'rejected' => $rejectedLeaves,
+        ];
+    
+        return $this->response->setJSON($data);
+    }
+    
         public function deleteuser()
         {
             if ($this->request->isAJAX()) {
