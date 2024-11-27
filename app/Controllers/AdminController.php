@@ -1601,10 +1601,10 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         $pendingCount = count($pendingEmployees);
     
         // Pass both the pending employees and their count to the view
-        return view('backend/pages/pendingemployee', [
+        $data = [
             'pendingEmployees' => $pendingEmployees,
             'pendingCount' => $pendingCount
-        ]);
+        ];
     }
     
     public function fetchPendingResults()
