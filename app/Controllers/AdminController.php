@@ -1625,6 +1625,29 @@ public function notifications()
 
             return $this->response->setJSON($data);
         }
+        public function fetchPendingLeaves()
+        {
+            $leaveModel = new LeaveModel(); // Assuming you have a LeaveModel for leave applications
+            
+            // Fetch pending leave applications
+            $pendingLeaves = $leaveModel->where('status', 'Pending')->findAll(); // Adjust based on your column names
+
+            // Format the response for pending leave applications
+            $data = [];
+            
+            foreach ($pendingLeaves as $leave) {
+                $data[] = [
+                    'firstname' => $leave['employee_name'], // Assuming 'employee_name' exists in the leave table
+                    'lastname' => $leave['employee_lastname'], // Assuming 'employee_lastname' exists in the leave table
+                    'leave_type' => $leave['leave_type'], // Assuming 'leave_type' exists in the leave table
+                    'leave_dates' => $leave['leave_dates'], // Adjust this as per your leave application table
+                    'message' => 'has a pending leave application.'
+                ];
+            }
+
+            return $this->response->setJSON($data);
+        }
+
         public function deleteuser()
         {
             if ($this->request->isAJAX()) {
