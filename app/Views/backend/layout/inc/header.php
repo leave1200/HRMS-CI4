@@ -113,13 +113,11 @@
       <div class="dropdown">
           <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
               <i class="icon-copy dw dw-notification"></i>
-              <!-- <?php if (isset($pendingCount) && $pendingCount > 0): ?>
-                  <span class="notification-active">
-                      <?= $pendingCount ?>
+              <?php if (isset($pendingCount) && $pendingCount > 0): ?>
+                  <span class="notification-active">              
+                      <span class="heartbit"><?= $pendingCount ?></span>
                   </span>
-              <?php endif; ?> -->
-              <span class="notification-active"><?= $pendingCount ?></span>
-              <span class="heartbit"></span>
+              <?php endif; ?>
           </a>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
