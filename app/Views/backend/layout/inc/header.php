@@ -118,7 +118,7 @@
                       <?= $pendingCount ?>
                   </span>
               <?php endif; ?> -->
-              <span class="notification-active">5</span>
+              <span class="notification-active"><?= $pendingCount ?></span>
               <span class="heartbit"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
