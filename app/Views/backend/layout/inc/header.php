@@ -185,12 +185,18 @@ $(document).ready(function() {
 
                 if (data.length > 0) {
                     data.forEach(function(notification) {
-                        notificationList.append('<li class="list-group-item">' + 
-                            notification.firstname + ' ' + notification.lastname + 
-                            ' Waiting for Approval.</li>');
+                        if (notification.type === 'result') {
+                            // Handle pending results notifications
+                            notificationList.append('<li class="list-group-item">' +
+                                notification.firstname + ' ' + notification.lastname + ' Waiting for Approval.</li>');
+                        } else if (notification.type === 'leave') {
+                            // Handle pending leave applications notifications
+                            notificationList.append('<li class="list-group-item">' +
+                                notification.firstname + ' has a pending leave application.</li>');
+                        }
                     });
                 } else {
-                    notificationList.append('<li class="list-group-item">No pending results.</li>');
+                    notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
                 }
             },
             error: function(xhr, status, error) {
@@ -198,6 +204,10 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Call the function to load notifications
+    fetchPendingNotifications();
+});
 
     // Fetch notifications on page load
     fetchPendingNotifications();
