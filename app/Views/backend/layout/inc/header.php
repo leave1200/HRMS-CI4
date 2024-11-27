@@ -125,23 +125,38 @@
               </span>
           <?php endif; ?>
       </a>
-          <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
-              <h6 class="dropdown-header">Notifications</h6>
-              <ul class="list-group">
-                  <?php if (!empty($pendingEmployees)): ?>
-                      <?php foreach ($pendingEmployees as $employee): ?>
-                          <li class="list-group-item">
-                              <a href="<?= route_to('admin.pendinglist') ?>">
-                                  <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                              </a> has a pending result.
-                          </li>
-                      <?php endforeach; ?>
-                  <?php else: ?>
-                      <li class="list-group-item">No pending results.</li>
-                  <?php endif; ?>
-              </ul>
-          </div>
-      </div>
+      <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
+            <h6 class="dropdown-header">Notifications</h6>
+            <ul class="list-group">
+                <!-- Pending Employees Notification -->
+                <?php if (!empty($pendingEmployees)): ?>
+                    <?php foreach ($pendingEmployees as $employee): ?>
+                        <li class="list-group-item">
+                            <a href="<?= route_to('admin.pendinglist') ?>">
+                                <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                            </a> has a pending result.
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="list-group-item">No pending results.</li>
+                <?php endif; ?>
+                
+                <!-- Leave Status Notifications -->
+                <li class="list-group-item">
+                    <strong>Leave Status:</strong>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge badge-warning">Pending: <?= $pendingLeaves ?></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge badge-success">Approved: <?= $approvedLeaves ?></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge badge-danger">Rejected: <?= $rejectedLeaves ?></span>
+                </li>
+            </ul>
+        </div>
+
   </div>
 
 
