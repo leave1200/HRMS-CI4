@@ -140,7 +140,12 @@
                       <li class="list-group-item">No pending results.</li>
                   <?php endif; ?>
               </ul>
-              
+              <h6>Leave Status</h6>
+      <ul>
+          <li>Pending Leaves: <?= $pendingLeaves ?></li>
+          <li>Approved Leaves: <?= $approvedLeaves ?></li>
+          <li>Rejected Leaves: <?= $rejectedLeaves ?></li>
+      </ul>
           </div>
       </div>
   </div>

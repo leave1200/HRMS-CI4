@@ -1632,7 +1632,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             'approvedLeaves' => $approvedLeaves,
             'rejectedLeaves' => $rejectedLeaves
         ]);
-    
+    }
     
     public function fetchPendingResults()
         {
