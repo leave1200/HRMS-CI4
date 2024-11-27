@@ -1,6 +1,6 @@
 <style>
 	.notification-active {
-		background-color: red;
+		background-color: #f00;
 		border-radius: 50%;
 		padding: 2px 6px;
 		font-size: 12px;
