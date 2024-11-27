@@ -1,25 +1,33 @@
 <style>
-	.notification-active {
-		background-color: #f00;
-		border-radius: 50%;
-		padding: 2px 6px;
-		font-size: 12px;
-		color: white;
-	}
-	.dropdown-menu.notifications-dropdown {
-		width: 300px; /* Adjust width of the dropdown */
-		max-height: 300px; /* Control height and enable scroll */
-		overflow-y: auto;
-	}
-    .heartbit {
-      display: inline-block;
-      width: 5px;
-      height: 5px;
-      background-color: blue;
-      border-radius: 50%;
-      position: relative;
-      animation: heartbeat 2s ease-in-out infinite;
-    }
+/* Ensure the notification badge is positioned above the notification icon */
+.notification-active {
+    position: absolute;
+    top: -5px; /* Move the badge above the icon */
+    right: -5px; /* Align it to the right of the icon */
+    background-color: #f00; /* Red background for visibility */
+    color: #fff; /* White text for contrast */
+    font-size: 12px; /* Adjust size as needed */
+    font-weight: bold; /* Make the number bold */
+    border-radius: 50%; /* Create a circular badge */
+    width: 20px; /* Circle dimensions */
+    height: 20px;
+    display: flex; /* Center the text */
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /* Ensure it appears above the heartbeat */
+}
+
+/* Ensure the heartbit doesn't overlap the notification number */
+.heartbit {
+    position: absolute;
+    bottom: -5px; /* Adjust based on icon size */
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: blue;
+    border-radius: 50%;
+    animation: heartbeat 2s ease-in-out infinite;
+}
 
     @keyframes heartbeat {
       0% {
@@ -111,15 +119,15 @@
 		</div>
     <div class="user-notification">
       <div class="dropdown">
-          <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-              <i class="icon-copy dw dw-notification"></i>
-              <?php if (!empty($pendingEmployees)): ?>
-                  <span class="notification-active">
-                      <?= count($pendingEmployees) ?>
-                  </span> <!-- Display count -->
-              <?php endif; ?>
-              <span class="heartbit"></span>
-          </a>
+              <a class="dropdown-toggle no-arrow position-relative" href="#" role="button" data-toggle="dropdown">
+            <i class="icon-copy dw dw-notification"></i>
+            <?php if (!empty($pendingEmployees)): ?>
+                <span class="notification-active">
+                    <?= count($pendingEmployees) ?>
+                </span> <!-- Display count -->
+            <?php endif; ?>
+            <span class="heartbit"></span>
+        </a>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
