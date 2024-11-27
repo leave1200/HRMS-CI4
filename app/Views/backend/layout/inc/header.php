@@ -11,15 +11,21 @@
 		max-height: 300px; /* Control height and enable scroll */
 		overflow-y: auto;
 	}
-    .heartbit {
-      display: inline-block;
-      width: 5px;
-      height: 5px;
-      background-color: blue;
-      border-radius: 50%;
-      position: relative;
-      animation: heartbeat 2s ease-in-out infinite;
-    }
+  .heartbit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px; /* Adjust size as needed */
+    height: 24px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    position: relative;
+    animation: heartbeat 2s ease-in-out infinite;
+    text-align: center;
+}
 
     @keyframes heartbeat {
       0% {
@@ -112,14 +118,13 @@
     <div class="user-notification">
       <div class="dropdown">
       <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-            <i class="icon-copy dw dw-notification"></i>
-            <?php if (!empty($pendingCount)): ?>
-                <span class="hearbit">
-                    <?= $pendingCount ?>
-                </span>
-            <?php endif; ?>
-        </a>
-
+          <i class="icon-copy dw dw-notification"></i>
+          <?php if (!empty($pendingCount)): ?>
+              <span class="heartbit">
+                  <?= $pendingCount ?>
+              </span>
+          <?php endif; ?>
+      </a>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
