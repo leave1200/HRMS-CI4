@@ -21,8 +21,18 @@
                 <input type="email" name="email" id="email" class="form-control" value="<?= old('email') ?>" required>
                 <small class="text-danger"><?= isset($validation) ? $validation->getError('email') : '' ?></small>
             </div>
+            <div class="row align-items-center">
+									<div class="col-5">
+										<div class="input-group mb-0">
+                                        <button type="submit" class="btn btn-primary">Send Pin</button>
+											<!-- use code for form submit -->
+											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
+										
+											<!-- <a class="btn btn-primary btn-lg btn-block" href="index.html">Submit</a> -->
+										</div>
+									</div>
+								</div>
 
-            <button type="submit" class="btn btn-primary">Send Pin</button>
         </form>
     </div>
 </div>
