@@ -262,4 +262,38 @@ $(document).ready(function() {
             });
     });
 </script>
+<script>
+  $(document).ready(function() {
+    function fetchPendingLeavesNotifications() {
+        $.ajax({
+            url: '<?= route_to('admin.pending_leaves') ?>', // This route will be mapped to the fetchPendingLeaves method in the controller
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var notificationList = $('.notifications-dropdown .list-group');
+                notificationList.empty();
+
+                if (data.length > 0) {
+                    data.forEach(function(notification) {
+                        // Handle pending leave applications notifications
+                        notificationList.append('<li class="list-group-item">' +
+                            notification.firstname + ' ' + notification.lastname + 
+                            ' has a pending leave application for ' + notification.leave_type + 
+                            ' from ' + notification.leave_dates + '.</li>');
+                    });
+                } else {
+                    notificationList.append('<li class="list-group-item">No pending leave applications.</li>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching pending leave notifications:', error);
+            }
+        });
+    }
+
+    // Call the function to load pending leave notifications
+    fetchPendingLeavesNotifications();
+});
+
+</script>
 
