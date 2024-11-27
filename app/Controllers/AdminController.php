@@ -1607,42 +1607,24 @@ public function notifications()
     ]);
 }
 
-public function fetchPendingResults()
-{
-    $employeeModel = new EmployeeModel();
-    $leaveModel = new LeaveModel(); // Assuming you have a LeaveModel for leave applications
-    
-    // Fetch employees with a pending result
-    $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+    public function fetchPendingResults()
+        {
+            $employeeModel = new EmployeeModel();
+            
+            // Fetch employees with a pending result
+            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
 
-    // Fetch pending leave applications
-    $pendingLeaves = $leaveModel->where('status', 'Pending')->findAll(); // Adjust based on your column names
+            // Format the response
+            $data = [];
+            foreach ($pendingEmployees as $employee) {
+                $data[] = [
+                    'firstname' => $employee['firstname'],
+                    'lastname' => $employee['lastname']
+                ];
+            }
 
-    // Format the response
-    $data = [];
-    
-    // Add pending employee results
-    foreach ($pendingEmployees as $employee) {
-        $data[] = [
-            'type' => 'result', // Type of notification
-            'firstname' => $employee['firstname'],
-            'lastname' => $employee['lastname'],
-            'message' => 'has a pending result.'
-        ];
-    }
-
-    // Add pending leave applications
-    foreach ($pendingLeaves as $leave) {
-        $data[] = [
-            'type' => 'leave', // Type of notification
-            'firstname' => $leave['employee_name'], // Assuming 'employee_name' exists in the leave table
-            'message' => 'has a pending leave application.'
-        ];
-    }
-
-    return $this->response->setJSON($data);
-}
-
+            return $this->response->setJSON($data);
+        }
         public function deleteuser()
         {
             if ($this->request->isAJAX()) {

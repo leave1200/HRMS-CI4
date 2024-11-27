@@ -128,7 +128,17 @@
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
-                 
+                  <?php if (!empty($pendingEmployees)): ?>
+                      <?php foreach ($pendingEmployees as $employee): ?>
+                          <li class="list-group-item">
+                              <a href="<?= route_to('admin.pendinglist') ?>">
+                                  <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
+                              </a> has a pending result.
+                          </li>
+                      <?php endforeach; ?>
+                  <?php else: ?>
+                      <li class="list-group-item">No pending results.</li>
+                  <?php endif; ?>
               </ul>
           </div>
       </div>
@@ -175,18 +185,12 @@ $(document).ready(function() {
 
                 if (data.length > 0) {
                     data.forEach(function(notification) {
-                        if (notification.type === 'result') {
-                            // Handle pending results notifications
-                            notificationList.append('<li class="list-group-item">' +
-                                notification.firstname + ' ' + notification.lastname + ' Waiting for Approval.</li>');
-                        } else if (notification.type === 'leave') {
-                            // Handle pending leave applications notifications
-                            notificationList.append('<li class="list-group-item">' +
-                                notification.firstname + ' has a pending leave application.</li>');
-                        }
+                        notificationList.append('<li class="list-group-item">' + 
+                            notification.firstname + ' ' + notification.lastname + 
+                            ' Waiting for Approval.</li>');
                     });
                 } else {
-                    notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
+                    notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
             },
             error: function(xhr, status, error) {
@@ -194,10 +198,6 @@ $(document).ready(function() {
             }
         });
     }
-
-    // Call the function to load notifications
-    fetchPendingNotifications();
-});
 
     // Fetch notifications on page load
     fetchPendingNotifications();
