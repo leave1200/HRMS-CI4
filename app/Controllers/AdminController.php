@@ -1593,7 +1593,6 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     public function notifications()
     {
         $employeeModel = new EmployeeModel();
-        $userId = session()->get('user_id'); // Assuming the logged-in user's ID is stored in the session
     
         // Fetch employees whose result is "Pending"
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
@@ -1601,36 +1600,10 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         // Count the pending employees
         $pendingCount = count($pendingEmployees);
     
-        // Fetch the leave status counts for the logged-in user
-        $pendingLeaves = $employeeModel
-            ->where('user_id', $userId)
-            ->where('result', 'Pending')
-            ->countAllResults();
-    
-        $approvedLeaves = $employeeModel
-            ->where('user_id', $userId)
-            ->where('result', 'Approved')
-            ->countAllResults();
-    
-        $rejectedLeaves = $employeeModel
-            ->where('user_id', $userId)
-            ->where('result', 'Rejected')
-            ->countAllResults();
-    
-        // If the user is an admin, display all employees' leave status
-        if (session()->get('role') === 'ADMIN') {
-            $pendingLeaves = $employeeModel->where('result', 'Pending')->countAllResults();
-            $approvedLeaves = $employeeModel->where('result', 'Approved')->countAllResults();
-            $rejectedLeaves = $employeeModel->where('result', 'Rejected')->countAllResults();
-        }
-    
-        // Pass the data to the view
+        // Pass both the pending employees and their count to the view
         return view('backend/pages/pendingemployee', [
             'pendingEmployees' => $pendingEmployees,
-            'pendingCount' => $pendingCount,
-            'pendingLeaves' => $pendingLeaves,
-            'approvedLeaves' => $approvedLeaves,
-            'rejectedLeaves' => $rejectedLeaves
+            'pendingCount' => $pendingCount
         ]);
     }
     
