@@ -1600,10 +1600,12 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         // Count the pending employees
         $pendingCount = count($pendingEmployees);
     
-        // Pass both the pending employees and their count to the view
+        // Store the pending count in session
+        session()->set('pendingCount', $pendingCount);
+    
+        // Pass the pending employees to the view
         $data = [
-            'pendingEmployees' => $pendingEmployees,
-            'pendingCount' => $pendingCount
+            'pendingEmployees' => $pendingEmployees
         ];
         return view('backend/layout/inc/header', $data);
     }

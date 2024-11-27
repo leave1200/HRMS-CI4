@@ -118,13 +118,14 @@
     <div class="user-notification">
       <div class="dropdown">
       <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-          <i class="icon-copy dw dw-notification"></i>
-          <?php if (!empty($pendingCount)): ?>
-              <span class="heartbit">
-                  <?= $pendingCount ?>
-              </span>
-          <?php endif; ?>
-      </a>
+            <i class="icon-copy dw dw-notification"></i>
+            <?php if (!empty(session()->get('pendingCount'))): ?>
+                <span class="heartbit">
+                    <?= session()->get('pendingCount') ?>
+                </span>
+            <?php endif; ?>
+        </a>
+
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
