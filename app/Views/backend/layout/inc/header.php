@@ -117,31 +117,18 @@
 		</div>
     <div class="user-notification">
       <div class="dropdown">
-      <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-          <i class="icon-copy dw dw-notification"></i>
-          <?php if (!empty($pendingCount)): ?>
-              <span class="heartbit">
-                  <?= $pendingCount ?>
-              </span>
-          <?php endif; ?>
-      </a>
+          <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+              <i class="icon-copy dw dw-notification"></i>
+              <span class="heartbit" style="display: none;">0</span> <!-- Default hidden -->
+          </a>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
-                  <?php if (!empty($pendingEmployees)): ?>
-                      <?php foreach ($pendingEmployees as $employee): ?>
-                          <li class="list-group-item">
-                              <a href="<?= route_to('admin.pendinglist') ?>">
-                                  <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
-                              </a> has a pending result.
-                          </li>
-                      <?php endforeach; ?>
-                  <?php else: ?>
-                      <li class="list-group-item">No pending results.</li>
-                  <?php endif; ?>
+                  <li class="list-group-item">Loading...</li> <!-- Placeholder -->
               </ul>
           </div>
       </div>
+  </div>
   </div>
 
 
@@ -173,65 +160,52 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 <script>
-$(document).ready(function() {
-    function fetchPendingNotifications() {
+$(document).ready(function () {
+    function updateNotificationCount() {
         $.ajax({
-            url: '<?= route_to('admin.pending_results') ?>', // Uses the named route defined earlier
+            url: '<?= route_to("admin.notifications") ?>', // Your notifications route
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
+                // Update notification count
+                if (data.pendingCount > 0) {
+                    $('.heartbit').text(data.pendingCount).show(); // Show the count badge
+                } else {
+                    $('.heartbit').hide(); // Hide if no pending notifications
+                }
+
+                // Update the dropdown list with pending notifications
                 var notificationList = $('.notifications-dropdown .list-group');
                 notificationList.empty();
-
-                if (data.length > 0) {
-                    data.forEach(function(notification) {
-                        notificationList.append('<li class="list-group-item">' + 
-                            notification.firstname + ' ' + notification.lastname + 
-                            ' Waiting for Approval.</li>');
+                if (data.pendingEmployees.length > 0) {
+                    data.pendingEmployees.forEach(function (employee) {
+                        notificationList.append(
+                            '<li class="list-group-item">' +
+                            '<a href="<?= route_to("admin.pendinglist") ?>">' +
+                            employee.firstname +
+                            ' ' +
+                            employee.lastname +
+                            '</a> has a pending result.' +
+                            '</li>'
+                        );
                     });
                 } else {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
             },
-            error: function(xhr, status, error) {
-                console.error('Error fetching pending notifications:', error);
-            }
+            error: function (xhr, status, error) {
+                console.error('Error fetching notification count:', error);
+            },
         });
     }
 
-    // Fetch notifications on page load
-    fetchPendingNotifications();
+    // Call function on page load
+    updateNotificationCount();
 
-    // Optionally, set an interval to refresh notifications
-    setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
-
-    // Handle dropdown toggle for notifications
-    $('.user-notification .dropdown-toggle').on('click', function(e) {
-        e.preventDefault(); // Prevent default anchor behavior
-        $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
-    });
-
-    // Handle dropdown toggle for user info
-    $('.user-info-dropdown .dropdown-toggle').on('click', function(e) {
-        e.preventDefault(); // Prevent default anchor behavior
-        $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
-    });
-
-    // Close dropdowns when clicking outside
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.user-notification').length) {
-            $('.notifications-dropdown').hide(); // Close notifications dropdown
-        }
-        if (!$(e.target).closest('.user-info-dropdown').length) {
-            $('.user-info-dropdown .dropdown-menu').hide(); // Close user dropdown
-        }
-    });
-
-    // Prevent closing dropdown when clicking inside them
-    $('.notifications-dropdown, .user-info-dropdown .dropdown-menu').on('click', function(e) {
-        e.stopPropagation(); // Prevent click from bubbling up
-    });
+    // Optionally, refresh notifications every 30 seconds
+    setInterval(updateNotificationCount, 30000); // Adjust interval as needed
 });
+
 
 </script>
 <script>
