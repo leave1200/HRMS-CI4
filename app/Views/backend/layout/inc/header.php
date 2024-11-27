@@ -15,8 +15,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 24px; /* Adjust size as needed */
-    height: 24px;
+    width: 15px; /* Adjust size as needed */
+    height: 15px;
     background-color: red;
     color: white;
     font-size: 8px;
