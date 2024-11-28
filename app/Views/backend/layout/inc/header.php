@@ -181,19 +181,19 @@ $(document).ready(function() {
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log('Received data:', data);
+                console.log('Received data:', data);  // Log data to verify the response
 
                 var notificationList = $('.notifications-dropdown .list-group');
                 var heartbit = $('.heartbit');
                 notificationList.empty();
 
-                // Calculate total notifications
+                // Calculate total notifications (pending results + pending leaves)
                 var totalCount = data.pending_results_count + data.pending_leaves_count;
-                console.log('Total Pending Notifications:', totalCount);
+                console.log('Total Pending Notifications:', totalCount); // Log total count for debugging
 
                 // Show heartbit with count if there are pending notifications
                 if (totalCount > 0) {
-                    heartbit.text(totalCount).show();
+                    heartbit.text(totalCount).show();  // Update heartbit text with the count
                 } else {
                     heartbit.text('').hide();  // Hide heartbit if no notifications
                 }
@@ -219,6 +219,7 @@ $(document).ready(function() {
                     notificationList.append('<li class="list-group-item">No pending leave applications.</li>');
                 }
 
+                // Default message if no notifications are found
                 if (totalCount === 0) {
                     notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
                 }
@@ -228,8 +229,6 @@ $(document).ready(function() {
             }
         });
     }
-
-
 
     // Fetch notifications on page load
     fetchPendingNotifications();
@@ -264,6 +263,7 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
+
 
 
 </script>
