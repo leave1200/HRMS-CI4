@@ -335,34 +335,42 @@ class UserController extends Controller
     {
         $fileModel = new FileModel();
         $file = $fileModel->find($id);
-
+    
+        // Check if the file exists
         if (!$file) {
             $this->session->setFlashdata('error', 'File not found.');
             return redirect()->back();
         }
-
-        // Authorization: Ensure the file belongs to the logged-in user
-        if ($file['user_id'] !== $this->session->get('user_id')) {
+    
+        $userStatus = $this->session->get('userStatus');
+        $loggedInUserId = $this->session->get('user_id'); // Get the logged-in user's ID
+    
+        // Check if the user is ADMIN or the file belongs to the logged-in user (owner)
+        if ($userStatus !== 'ADMIN' && $file['user_id'] !== $loggedInUserId) {
+            // Show an error message if the user is not ADMIN or the file does not belong to them
             $this->session->setFlashdata('error', 'You do not have permission to access this file.');
             return redirect()->back();
         }
-
+    
+        // File path
         $filePath = WRITEPATH . 'uploads/' . $file['name'];
-
+    
+        // Check if the file exists on the server
         if (!file_exists($filePath)) {
             $this->session->setFlashdata('error', 'File does not exist.');
             return redirect()->back();
         }
-
+    
         // Determine the MIME type of the file
         $mime = mime_content_type($filePath) ?: 'application/octet-stream';
-
+    
         // Serve the file for download
         return $this->response
                     ->setHeader('Content-Type', $mime)
                     ->setHeader('Content-Disposition', 'attachment; filename="' . $file['original_name'] . '"')
                     ->setBody(file_get_contents($filePath));
     }
+    
 
     public function viewFile($id)
 {
