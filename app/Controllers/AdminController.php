@@ -1339,6 +1339,7 @@ public function leave_application()
     $userStatus = session()->get('userStatus');
 
     // If the user is an EMPLOYEE, only get their own data
+    // If the user is an EMPLOYEE, fetch only their own data
     if ($userStatus == 'EMPLOYEE') {
         // Fetch only the logged-in user's data
         $users = $userModel->select('id, name')->where('id', $loggedInUserId)->findAll();
