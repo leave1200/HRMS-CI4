@@ -31,10 +31,11 @@
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
                         <select name="la_name" class="form-control" required>
-                            <option value="" disabled selected>Select User</option>
+                            <option value="" disabled>Select User</option>
                             <?php if (!empty($users) && is_array($users)): ?>
                                 <?php foreach ($users as $user): ?>
-                                    <option value="<?= esc($user['id']) ?>">
+                                    <option value="<?= esc($user['id']) ?>"
+                                        <?= (isset($user['id']) && $user['id'] == $loggedInUser['id']) ? 'selected' : '' ?>>
                                         <?= esc($user['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -44,7 +45,7 @@
                         </select>
                     </div>
                 </div>
-                <?php endif; ?>
+                                <?php endif; ?>
                 <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                     <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
