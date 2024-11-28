@@ -189,7 +189,7 @@ $(document).ready(function() {
                 notificationList.empty();
 
                 var totalNotifications = 0;  // To keep track of total notifications
-                <?php if (isset($userStatus) && $userStatus == 'ADMIN'): ?>
+
                 // Check and display pending employee results notifications
                 if (data.employees && data.employees.length > 0) {
                     data.employees.forEach(function(notification) {
@@ -201,7 +201,7 @@ $(document).ready(function() {
                 } else {
                     notificationList.append('<li class="list-group-item">No pending Employee.</li>');
                 }
-                <?php endif; ?>
+
                 // Check and display pending leave applications notifications
                 if (data.leave_applications && data.leave_applications.length > 0) {
                     data.leave_applications.forEach(function(application) {
