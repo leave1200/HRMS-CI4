@@ -1632,21 +1632,24 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     {
         $employeeModel = new EmployeeModel();
         $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
+        $userModel = new User(); // Assuming the User model exists for fetching user details
+        $leaveTypeModel = new Leave_typeModel(); // Load the LeaveTypeModel
     
         // Fetch employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
-        // Fetch pending leave applications
-        $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
+        // Fetch pending leave applications with user details
+        $pendingLeaveApplications = $leaveApplicationModel
+            ->where('status', 'Pending')
+            ->findAll();
     
         // Format the response
         $data = [
-            'pending_results_count' => count($pendingEmployees),
-            'pending_leaves_count'  => count($pendingLeaveApplications),
             'employees'             => [],
             'leave_applications'    => []
         ];
     
+        // Process pending employees
         foreach ($pendingEmployees as $employee) {
             $data['employees'][] = [
                 'firstname' => $employee['firstname'],
@@ -1654,15 +1657,23 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             ];
         }
     
+        // Process pending leave applications and fetch user details
         foreach ($pendingLeaveApplications as $leave) {
+            // Get user data based on user_id (assuming `user_id` is the foreign key in leave applications)
+            $user = $userModel->find($leave['user_id']); // Adjust field name as needed
+    
+            // Fetch leave type from the leave_types table
+            $leaveType = $leaveTypeModel->find($leave['la_type']); // Assuming `la_type` is the leave type ID in the leave application
+    
             $data['leave_applications'][] = [
-                'la_name' => $leave['la_name'], // Adjust field names as needed
-                'la_type'    => $leave['la_type']
+                'la_name' => $user ? $user['firstname'] . ' ' . $user['lastname'] : 'Unknown User',
+                'la_type' => $leaveType ? $leaveType['name'] : 'Unknown Leave Type'
             ];
         }
     
         return $this->response->setJSON($data);
     }
+    
     
     
 
