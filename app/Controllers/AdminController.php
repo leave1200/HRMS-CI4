@@ -1334,27 +1334,14 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
-    // Get the logged-in user's ID and status from the session
-    $loggedInUserId = session()->get('user_id'); 
-    $userStatus = session()->get('userStatus');
+    // Get the logged-in user's ID from the session
+    $loggedInUserId = session()->get('user_id');  // Assuming the user ID is stored in the session
 
-    // Fetch the logged-in user's data
-    $loggedInUser = $userModel->find($loggedInUserId); // This fetches the logged-in user by their ID
-
-    // Fetch leave applications for the logged-in user if EMPLOYEE, otherwise for all users
-    if ($userStatus == 'EMPLOYEE') {
-        // Fetch only the logged-in user's leave applications
-        $leaveApplications = $leaveApplicationModel->where('user_id', $loggedInUserId)->findAll();
-    } else {
-        // Fetch all leave applications if the user is ADMIN or another role
-        $leaveApplications = $leaveApplicationModel->findAll();
-    } $attendances = $attendanceModel->findAll();
-    
     // Fetch leave applications for the logged-in user
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypeModel->findAll(),
-       'users' => ($userStatus == 'EMPLOYEE') ? [$loggedInUser] : $userModel->select('id, name')->findAll(), // Show only the logged-in user if EMPLOYEE
+        'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
     ];
