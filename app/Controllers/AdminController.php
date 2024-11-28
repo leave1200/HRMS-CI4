@@ -1637,7 +1637,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     
          // Fetch the logged-in user role (assumes 'role' is stored in session)
     $loggedInUserRole = session()->get('status'); // Example: 'ADMIN' or 'EMPLOYEE'
-    $loggedInUserId = session()->get('user_id'); // Assuming user ID is also stored in session
+    $loggedInUserId = session()->get('id'); // Assuming user ID is also stored in session
 
     // Fetch employees with pending results
     if ($loggedInUserRole === 'ADMIN') {
