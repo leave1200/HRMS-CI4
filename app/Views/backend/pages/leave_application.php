@@ -25,7 +25,7 @@
             </div>
             <form id="leaveApplicationForm" action="<?= route_to('admin.submit_leave') ?>" method="POST">
                 <?= csrf_field() ?>
-                
+                <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
                 <!-- Form fields -->
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
@@ -44,7 +44,26 @@
                         </select>
                     </div>
                 </div>
-
+                <?php endif; ?>
+                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
+                    <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Name</label>
+                    <div class="col-sm-12 col-md-10">
+                        <select name="la_name" class="form-control" required>
+                            <option value="" disabled selected>Select User</option>
+                            <?php if (!empty($users) && is_array($users)): ?>
+                                <?php foreach ($users as $user): ?>
+                                    <option value="<?= esc($user['id']) ?>">
+                                        <?= esc($user['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>No users available</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+                <?php endif; ?>
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Leave Type</label>
                     <div class="col-sm-12 col-md-10">
