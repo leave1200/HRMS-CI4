@@ -337,8 +337,10 @@ class UserController extends Controller
         $file = $fileModel->find($id);
         $userStatus = $this->session->get('userStatus');
 
-        if (!$file) {
-            $this->session->setFlashdata('error', 'File not found.');
+        // Check if the user is an EMPLOYEE or if the file does not belong to the logged-in user
+        if ($userStatus == 'EMPLOYEE' || $file['user_id'] !== $this->session->get('user_id')) {
+            // Show an error message if the user is EMPLOYEE or the file does not belong to them
+            $this->session->setFlashdata('error', 'You do not have permission to access this file.');
             return redirect()->back();
         }
 
