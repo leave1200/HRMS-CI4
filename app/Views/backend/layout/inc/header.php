@@ -118,12 +118,14 @@
     <div class="user-notification">
       <div class="dropdown">
       <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                    <i class="icon-copy dw dw-notification"></i>
-                    <?php if (!empty($pendingEmployees)): ?>
-                        <span class="notification-active"><?= count($pendingEmployees) ?></span> <!-- Display count -->
-                    <?php endif; ?>
-                    <span class="heartbit"></span>
-                </a>
+        <i class="icon-copy dw dw-notification"></i>
+        <?php if (!empty($pendingEmployees)): ?>
+            <span class="heartbit"><?= count($pendingEmployees) ?></span> <!-- Add count inside heartbit -->
+        <?php else: ?>
+            <span class="heartbit"></span> <!-- Empty heartbit when no notifications -->
+        <?php endif; ?>
+    </a>
+
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
