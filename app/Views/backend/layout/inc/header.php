@@ -123,7 +123,7 @@
         <span class="heartbit"></span> <!-- Empty heartbit when no notifications -->
     <?php endif; ?>
 </a>
-<?php endif; ?>
+
 
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
@@ -143,7 +143,7 @@
           </div>
       </div>
   </div>
-
+  <?php endif; ?>
 
 
 
