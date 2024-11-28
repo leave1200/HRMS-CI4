@@ -1632,6 +1632,8 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     {
         $employeeModel = new EmployeeModel();
         $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
+        $userModel = new User(); // Assuming the User model handles users
+        $leaveTypeModel = new LeaveTypeModel(); // Assuming this model handles leave types
     
         // Fetch employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
@@ -1655,14 +1657,21 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         }
     
         foreach ($pendingLeaveApplications as $leave) {
+            // Fetch the user who applied for the leave
+            $user = $userModel->find($leave['user_id']); // Assuming 'user_id' exists in the leave applications table
+    
+            // Fetch the leave type
+            $leaveType = $leaveTypeModel->find($leave['la_type']);
+    
             $data['leave_applications'][] = [
-                'la_name' => $leave['la_name'], // Adjust field names as needed
-                'la_type'    => $leave['la_type']
+                'la_name'        => $user ? $user['name'] : 'Unknown User',
+                'leave_type'     => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type',
             ];
         }
     
         return $this->response->setJSON($data);
     }
+    
     
     
 
