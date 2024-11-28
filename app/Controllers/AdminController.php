@@ -1636,7 +1636,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         $leaveTypeModel = new leave_typeModel(); // Load the LeaveTypeModel
     
         // Get the logged-in user's ID and status
-        $loggedInUserId = session()->get('user_id');
+        $loggedInUserId = session()->get('id');
         $loggedInUserStatus = session()->get('userStatus'); // Assuming this holds 'ADMIN', 'EMPLOYEE', etc.
         
         // Initialize empty data array for employees and leave applications
@@ -1655,7 +1655,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         } else {
             // Non-ADMIN users (EMPLOYEE/STAFF), only fetch their own pending results
             $pendingEmployees = $employeeModel->where('result', 'Pending')
-                                            ->where('user_id', $loggedInUserId) // Only fetch their own results
+                                            ->where('id', $loggedInUserId) // Only fetch their own results
                                             ->findAll();
             
             // Non-ADMIN users, only fetch their own pending leave applications
