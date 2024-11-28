@@ -272,7 +272,7 @@ $(document).ready(function() {
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fetch the user data from the server
-        fetch('getUserInfo') // Update the route to match your backend
+        fetch('/getUserInfo') // Update the route to match your backend
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
