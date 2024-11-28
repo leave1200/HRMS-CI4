@@ -31,7 +31,7 @@
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
-                        <?php if (isset($userStatus) && $userStatus == 'ADMIN'): ?>
+                        <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
                             <div class="form-group">
                                 <label>User</label>
                                 <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
