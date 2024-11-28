@@ -340,7 +340,7 @@ class UserController extends Controller
         $loggedInUserId = $this->session->get('user_id');  // Get the logged-in user's ID
     
         // If the user is EMPLOYEE and the file does not belong to them, deny access
-        if ($userStatus == 'EMPLOYEE' && $file['user_id'] !== $loggedInUserId) {
+        if ($file['user_id'] !== $loggedInUserId) {
             // Show an error message if the user is EMPLOYEE and the file does not belong to them
             $this->session->setFlashdata('error', 'You do not have permission to access this file.');
             return redirect()->back();
