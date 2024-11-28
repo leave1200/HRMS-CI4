@@ -1631,14 +1631,14 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     public function fetchPendingResults()
     {
         $employeeModel = new EmployeeModel();
-        $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
-        $userModel = new User(); // Assuming this model handles users
-        $leaveTypeModel = new leave_typeModel(); // Assuming this model handles leave types
+        $leaveApplicationModel = new LeaveApplicationModel();
+        $userModel = new \App\Models\User(); // Reference to your users model
+        $leaveTypeModel = new \App\Models\leave_typeModel(); // Reference to your leave_type model
     
         // Fetch employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
-        // Fetch pending leave applications
+        // Fetch leave applications with pending status
         $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
     
         // Format the response
@@ -1657,20 +1657,23 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         }
     
         foreach ($pendingLeaveApplications as $leave) {
-            // Fetch user details for la_name
-            $user = $userModel->find($leave['user_id']); // Assuming `user_id` exists in leave applications table
-            
-            // Fetch leave type details for la_type
-            $leaveType = $leaveTypeModel->find($leave['la_type']); // Assuming `la_type` references leave types table
+            // Fetch user name based on user_id in leave_application
+            $user = $userModel->find($leave['user_id']);
+            $userName = $user ? $user['name'] : 'Unknown User';
+    
+            // Fetch leave type name based on la_type in leave_application
+            $leaveType = $leaveTypeModel->find($leave['la_type']);
+            $leaveTypeName = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
     
             $data['leave_applications'][] = [
-                'la_name' => $user ? $user['name'] : 'Unknown User', // Default to 'Unknown User' if not found
-                'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Default to 'Unknown Leave Type' if not found
+                'la_name' => $userName,
+                'la_type' => $leaveTypeName
             ];
         }
     
         return $this->response->setJSON($data);
     }
+    
     
     
     
