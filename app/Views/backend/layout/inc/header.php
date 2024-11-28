@@ -188,18 +188,7 @@ $(document).ready(function() {
                 var heartbit = $('.heartbit');
                 notificationList.empty();
 
-                // Calculate total notifications (pending results + pending leaves)
-                var totalCount = data.pending_results_count + data.pending_leaves_count;
-                console.log('Total Pending Notifications:', totalCount); // Log total count for debugging
-
-                // Ensure the heartbit is visible when there are notifications
-                if (totalCount > 0) {
-                    heartbit.text(totalCount).show();  // Update heartbit text with the count
-                    console.log('Heartbit updated:', totalCount);  // Log the updated heartbit value
-                } else {
-                    heartbit.text('').hide();  // Hide heartbit if no notifications
-                    console.log('No notifications, heartbit hidden');
-                }
+                var totalNotifications = 0;  // To keep track of total notifications
 
                 // Check and display pending employee results notifications
                 if (data.employees && data.employees.length > 0) {
@@ -207,6 +196,7 @@ $(document).ready(function() {
                         notificationList.append('<li class="list-group-item">' + 
                             notification.firstname + ' ' + notification.lastname + 
                             ' has a pending result.</li>');
+                        totalNotifications++; // Increment the total notifications count
                     });
                 } else {
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
@@ -217,15 +207,25 @@ $(document).ready(function() {
                     data.leave_applications.forEach(function(application) {
                         notificationList.append('<li class="list-group-item">' +
                             application.la_name + ' has a pending ' + application.la_type + ' leave application.</li>');
+                        totalNotifications++; // Increment the total notifications count
                     });
                 } else {
                     notificationList.append('<li class="list-group-item">No pending leave applications.</li>');
                 }
 
                 // Default message if no notifications are found
-                if (totalCount === 0) {
+                if (totalNotifications === 0) {
                     notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
                 }
+
+                // Update the heartbit count based on the total number of notifications
+                if (totalNotifications > 0) {
+                    heartbit.text(totalNotifications).show();  // Show the heartbit and update with the count
+                } else {
+                    heartbit.text('').hide();  // Hide the heartbit if no notifications
+                }
+                
+                console.log('Total Notifications:', totalNotifications);  // Log the total count for debugging
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching pending notifications:', error);
@@ -266,8 +266,6 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
-
-
 
 
 </script>
