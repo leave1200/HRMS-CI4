@@ -206,7 +206,7 @@ $(document).ready(function() {
                 if (data.leave_applications && data.leave_applications.length > 0) {
                     data.leave_applications.forEach(function(application) {
                         notificationList.append('<li class="list-group-item">' +
-                            application.la_name + ' has a pending ' + application.la_type + ' leave application.</li>');
+                            application.la_name + ' has a pending ' + application.la_type + ' application.</li>');
                         totalNotifications++; // Increment the total notifications count
                     });
                 } else {
