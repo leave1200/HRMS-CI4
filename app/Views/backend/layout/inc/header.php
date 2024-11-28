@@ -104,7 +104,7 @@
             </div>
         </div>
   </div>
-  <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
+
 	<div class="header-right">
 		<div class="dashboard-setting user-notification">
 			<div class="dropdown">
@@ -113,6 +113,7 @@
 				</a>
 			</div>
 		</div>
+    <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
     <div class="user-notification">
       <div class="dropdown">
       <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
