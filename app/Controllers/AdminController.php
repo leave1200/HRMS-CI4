@@ -1658,10 +1658,10 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     
         foreach ($pendingLeaveApplications as $leave) {
             // Fetch user details for la_name
-            $user = $userModel->find($leave['user_id']); // Assuming `user_id` exists in leave applications table
+            $user = $userModel->find($leave['id']); // Assuming `user_id` exists in leave applications table
             
             // Fetch leave type details for la_type
-            $leaveType = $leaveTypeModel->find($leave['la_type']); // Assuming `la_type` references leave types table
+            $leaveType = $leaveTypeModel->find($leave['l_id']); // Assuming `la_type` references leave types table
     
             $data['leave_applications'][] = [
                 'la_name' => $user ? $user['name'] : 'Unknown User', // Default to 'Unknown User' if not found
