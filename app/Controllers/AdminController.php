@@ -1590,22 +1590,22 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         return view('backend/pages/print', $data);
     }
 
-public function notifications()
-{
-    $employeeModel = new EmployeeModel();
+// public function notifications()
+// {
+//     $employeeModel = new EmployeeModel();
 
-    // Fetch employees whose result is "Pending"
-    $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+//     // Fetch employees whose result is "Pending"
+//     $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
 
-    // Count the pending employees
-    $pendingCount = count($pendingEmployees);
+//     // Count the pending employees
+//     $pendingCount = count($pendingEmployees);
 
-    // Pass both the pending employees and their count to the view
-    return view('backend/layout/inc/header', [
-            'pendingEmployees' => $pendingEmployees,
-        'pendingCount' => $pendingCount
-    ]);
-}
+//     // Pass both the pending employees and their count to the view
+//     return view('backend/layout/inc/header', [
+//             'pendingEmployees' => $pendingEmployees,
+//         'pendingCount' => $pendingCount
+//     ]);
+// }
 
     // public function fetchPendingResults()
     //     {
