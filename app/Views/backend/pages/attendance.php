@@ -39,7 +39,7 @@
                                     value="<?= isset($users['name']) ? $users['name'] : '' ?>" 
                                     <?= $userStatus == 'EMPLOYEE' ? 'readonly' : '' ?>>
                                 <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="user" id="selectedUserId" required value="<?= isset($users['id']) ? $users['id'] : '' ?>">
+                                <input type="text" name="user" id="selectedUserId" required value="<?= isset($users['id']) ? $users['id'] : '' ?>">
                             </div>
                             <?php endif; ?>
                             <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
