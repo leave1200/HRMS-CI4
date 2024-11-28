@@ -33,14 +33,13 @@
                         <div class="col-md-6">
                         <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
                             <div class="form-group">
-                            <label>User</label>
-                            <input type="text" id="userInput" class="form-control" 
-                                placeholder="User's name" autocomplete="off" 
-                                value="<?= isset($users['name']) ? $users['name'] : '' ?>" 
-                                readonly> <!-- Make the input readonly so it cannot be edited -->
-                            <input type="hidden" name="user" id="selectedUserId" required value="<?= isset($users['id']) ? $users['id'] : '' ?>">
-                        </div>
-
+                                <label>User</label>
+                                <input type="text" id="userInput" class="form-control" 
+                                    placeholder="Type user's name..." autocomplete="off" required 
+                                    value="<?= isset($users['name']) ? $users['name'] : '' ?>" 
+                                    <?= $userStatus == 'EMPLOYEE' ? 'readonly' : '' ?>> <!-- Make it readonly for EMPLOYEE -->
+                                <input type="hidden" name="user" id="selectedUserId" required value="<?= isset($users['id']) ? $users['id'] : '' ?>">
+                            </div>
                             <?php endif; ?>
                             <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
                             <div class="form-group">

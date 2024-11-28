@@ -798,6 +798,7 @@ public function updateDesignation()
             'positions' => $positions,
             'attendances' => $attendances,
             'userStatus' => $userStatus,
+            'users' => $loggedInUser,
         ];
     
         return view('backend/pages/attendance', $data);
