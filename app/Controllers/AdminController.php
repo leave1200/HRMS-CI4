@@ -1334,8 +1334,18 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
-    // Get the logged-in user's ID from the session
-    $loggedInUserId = session()->get('user_id');  // Assuming the user ID is stored in the session
+    // Get the logged-in user's ID and status from the session
+    $loggedInUserId = session()->get('user_id'); 
+    $userStatus = session()->get('userStatus');
+
+    // If the user is an EMPLOYEE, only get their own data
+    if ($userStatus == 'EMPLOYEE') {
+        // Fetch only the logged-in user's data
+        $users = $userModel->select('id, name')->where('id', $loggedInUserId)->findAll();
+    } else {
+        // Fetch all users if the user is an ADMIN or other role
+        $users = $userModel->select('id, name')->findAll();
+    }
 
     // Fetch leave applications for the logged-in user
     $data = [
@@ -1467,11 +1477,6 @@ public function submitLeaveApplication()
 
     $leaveApplicationModel = new LeaveApplicationModel();
     $holidayModel = new HolidayModel(); // Load the HolidayModel
-    // Get the logged-in user's ID
-    $loggedInUserId = session()->get('user_id'); 
-    
-    // Fetch the logged-in user's data
-    $loggedInUser = $userModel->find($loggedInUserId);
     
     $validation = \Config\Services::validation();
     $validation->setRules([
@@ -1512,7 +1517,6 @@ public function submitLeaveApplication()
         'la_start' => $la_start,
         'la_end' => $la_end,
         'status' => 'Pending',
-        'users' => $loggedInUser,
     ];
 
     if ($leaveApplicationModel->insert($data)) {
