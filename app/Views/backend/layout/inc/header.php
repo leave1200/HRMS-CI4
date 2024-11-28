@@ -181,18 +181,19 @@ $(document).ready(function() {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            console.log(data); // Log the response for debugging
             var notificationList = $('.notifications-dropdown .list-group');
             var heartbit = $('.heartbit');
             notificationList.empty();
 
+            // Update heartbit count
             var totalCount = data.pending_results_count + data.pending_leaves_count;
             if (totalCount > 0) {
                 heartbit.text(totalCount).show();
             } else {
-                heartbit.hide();
+                heartbit.text('').hide();
             }
 
+            // Append employee pending results notifications
             if (data.employees.length > 0) {
                 data.employees.forEach(function(notification) {
                     notificationList.append('<li class="list-group-item">' + 
@@ -201,6 +202,7 @@ $(document).ready(function() {
                 });
             }
 
+            // Append pending leave applications notifications
             if (data.leave_applications.length > 0) {
                 data.leave_applications.forEach(function(application) {
                     notificationList.append('<li class="list-group-item">' +
@@ -209,6 +211,7 @@ $(document).ready(function() {
                 });
             }
 
+            // If no notifications, show default message
             if (totalCount === 0) {
                 notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
             }
@@ -218,7 +221,6 @@ $(document).ready(function() {
         }
     });
 }
-
 
 
     // Fetch notifications on page load

@@ -1631,14 +1631,12 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     public function fetchPendingResults()
     {
         $employeeModel = new EmployeeModel();
-        $leaveApplicationModel = new LeaveApplicationModel();
-        $userModel = new \App\Models\User(); // Reference to your users model
-        $leaveTypeModel = new \App\Models\leave_typeModel(); // Reference to your leave_type model
+        $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
     
         // Fetch employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
-        // Fetch leave applications with pending status
+        // Fetch pending leave applications
         $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
     
         // Format the response
@@ -1657,24 +1655,14 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         }
     
         foreach ($pendingLeaveApplications as $leave) {
-            // Fetch user name based on user_id in leave_application
-            $user = $userModel->find($leave['user_id']);
-            $userName = $user ? $user['name'] : 'Unknown User';
-    
-            // Fetch leave type name based on la_type in leave_application
-            $leaveType = $leaveTypeModel->find($leave['la_type']);
-            $leaveTypeName = $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type';
-    
             $data['leave_applications'][] = [
-                'la_name' => $userName,
-                'la_type' => $leaveTypeName
+                'la_name' => $leave['la_name'], // Adjust field names as needed
+                'la_type'    => $leave['la_type']
             ];
         }
     
         return $this->response->setJSON($data);
     }
-    
-    
     
     
 
