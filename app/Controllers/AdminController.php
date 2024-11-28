@@ -1341,12 +1341,15 @@ public function leave_application()
     // Fetch the logged-in user's data
     $loggedInUser = $userModel->find($loggedInUserId); // This fetches the logged-in user by their ID
 
-    // Get attendance data for the logged-in user (EMPLOYEE) or all users (ADMIN)
+    // Fetch leave applications for the logged-in user if EMPLOYEE, otherwise for all users
     if ($userStatus == 'EMPLOYEE') {
-        $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
+        // Fetch only the logged-in user's leave applications
+        $leaveApplications = $leaveApplicationModel->where('user_id', $loggedInUserId)->findAll();
     } else {
-        $attendances = $attendanceModel->findAll();
-    }
+        // Fetch all leave applications if the user is ADMIN or another role
+        $leaveApplications = $leaveApplicationModel->findAll();
+    } $attendances = $attendanceModel->findAll();
+    
     // Fetch leave applications for the logged-in user
     $data = [
         'pageTitle' => 'Leave Application',
