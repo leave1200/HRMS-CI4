@@ -780,7 +780,7 @@ public function updateDesignation()
         $userStatus = session()->get('userStatus'); 
         $loggedInUser = $userModel->find($loggedInUserId); // This will fetch the logged-in user
         // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
-        if ($userStatus == 'EMPLOYEE') {
+        if ($userStatus !== 'ADMIN') {
             $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
         } else {
             $attendances = $attendanceModel->findAll();
@@ -1339,7 +1339,7 @@ public function leave_application()
     $userStatus = session()->get('userStatus');   // Get the logged-in user's status (EMPLOYEE, ADMIN, etc.)
 
     // Fetch the logged-in user's data if the user is an EMPLOYEE
-    if ($userStatus == 'EMPLOYEE') {
+    if ($userStatus !== 'ADMIN') {
         $loggedInUser = $userModel->find($loggedInUserId); // Fetch only the logged-in user's data
     } else {
         // Optionally, fetch all users if the user is an ADMIN
