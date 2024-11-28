@@ -774,7 +774,7 @@ public function updateDesignation()
         $attendanceModel = new AttendanceModel();
         $designationModel = new Designation();
         $positionModel = new Position();
-    
+        $loggedInUser = $userModel->find($loggedInUserId);
         // Get the logged-in user's ID and status
         $loggedInUserId = session()->get('user_id'); 
         $userStatus = session()->get('userStatus'); 
