@@ -1601,7 +1601,8 @@ public function notifications()
     $pendingCount = count($pendingEmployees);
 
     // Pass both the pending employees and their count to the view
-    return view('backend/layout/inc/header', [
+    return view('backend/pages/pendingemployeelist', [
+            'pendingEmployees' => $pendingEmployees,
         'pendingCount' => $pendingCount
     ]);
 }
