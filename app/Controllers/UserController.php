@@ -336,36 +336,40 @@ class UserController extends Controller
         $fileModel = new FileModel();
         $file = $fileModel->find($id);
         $userStatus = $this->session->get('userStatus');
-
-        if (!$file) {
-            $this->session->setFlashdata('error', 'File not found.');
-            return redirect()->back();
-        }
-
-               // If the user is STAFF or ADMIN, allow the download
-               if ($userStatus == 'STAFF' || $userStatus == 'ADMIN') {
-                // File path
-                $filePath = WRITEPATH . 'uploads/' . $file['name'];
-        
-                // Check if the file exists
-                if (!file_exists($filePath)) {
-                    $this->session->setFlashdata('error', 'File does not exist.');
-                    return redirect()->back();
-                }
-        
-                // Determine the MIME type of the file
-                $mime = mime_content_type($filePath) ?: 'application/octet-stream';
-        
-                // Serve the file for download
-                return $this->response
-                            ->setHeader('Content-Type', $mime)
-                            ->setHeader('Content-Disposition', 'attachment; filename="' . $file['original_name'] . '"')
-                            ->setBody(file_get_contents($filePath));
-            }
-        
-            // If the user is neither STAFF nor ADMIN, deny access
+        $userStatus = $this->session->get('userStatus');
+        $loggedInUserId = $this->session->get('user_id');  // Get the logged-in user's ID
+    
+        // If the user is EMPLOYEE and the file does not belong to them, deny access
+        if ($userStatus == 'EMPLOYEE' && $file['user_id'] !== $loggedInUserId) {
+            // Show an error message if the user is EMPLOYEE and the file does not belong to them
             $this->session->setFlashdata('error', 'You do not have permission to access this file.');
             return redirect()->back();
+        }
+    
+        // If the user is STAFF or ADMIN, allow the download
+        if ($userStatus == 'STAFF' || $userStatus == 'ADMIN') {
+            // File path
+            $filePath = WRITEPATH . 'uploads/' . $file['name'];
+    
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                $this->session->setFlashdata('error', 'File does not exist.');
+                return redirect()->back();
+            }
+    
+            // Determine the MIME type of the file
+            $mime = mime_content_type($filePath) ?: 'application/octet-stream';
+    
+            // Serve the file for download
+            return $this->response
+                        ->setHeader('Content-Type', $mime)
+                        ->setHeader('Content-Disposition', 'attachment; filename="' . $file['original_name'] . '"')
+                        ->setBody(file_get_contents($filePath));
+        }
+    
+        // If the user is neither STAFF nor ADMIN, deny access
+        $this->session->setFlashdata('error', 'You do not have permission to access this file.');
+        return redirect()->back();
     }
 
     public function viewFile($id)
