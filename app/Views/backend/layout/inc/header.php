@@ -142,9 +142,9 @@
                       <li class="list-group-item">No pending Employee.</li>
                   <?php endif; ?>
               </ul>
-          </div>
-      </div>
+          </div>  
       <?php endif; ?>
+      </div>
   </div>
 
 
