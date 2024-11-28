@@ -126,7 +126,7 @@
     <?php endif; ?>
 </a>
 
-
+<?php if (isset($userStatus) && $userStatus == 'ADMIN'): ?>
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
               <ul class="list-group">
@@ -144,6 +144,7 @@
               </ul>
           </div>
       </div>
+      <?php endif; ?>
   </div>
 
 
