@@ -1655,12 +1655,12 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         } else {
             // Non-ADMIN users (EMPLOYEE/STAFF), only fetch their own pending results
             $pendingEmployees = $employeeModel->where('result', 'Pending')
-                                            ->where('id', $loggedInUserId) // Only fetch their own results
+                                            ->where('user_id', $loggedInUserId) // Only fetch their own results
                                             ->findAll();
             
             // Non-ADMIN users, only fetch their own pending leave applications
             $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')
-                                                            ->where('id', $loggedInUserId) // Only fetch their own applications
+                                                            ->where('user_id', $loggedInUserId) // Only fetch their own applications
                                                             ->findAll();
         }
         
