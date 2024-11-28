@@ -1635,43 +1635,61 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         $userModel = new User(); // Assuming the User model exists for fetching user details
         $leaveTypeModel = new leave_typeModel(); // Load the LeaveTypeModel
     
-        // Fetch employees with pending results
+         // Fetch the logged-in user role (assumes 'role' is stored in session)
+    $loggedInUserRole = session()->get('status'); // Example: 'ADMIN' or 'EMPLOYEE'
+    $loggedInUserId = session()->get('user_id'); // Assuming user ID is also stored in session
+
+    // Fetch employees with pending results
+    if ($loggedInUserRole === 'ADMIN') {
+        // ADMIN: Fetch all employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-    
-        // Fetch pending leave applications
-        $pendingLeaveApplications = $leaveApplicationModel
-            ->where('status', 'Pending')
-            ->findAll();
-    
-        // Format the response
-        $data = [
-            'employees'             => [],
-            'leave_applications'    => []
+    } else {
+        // EMPLOYEE: Fetch only the logged-in user's pending result
+        $pendingEmployees = $employeeModel->where('result', 'Pending')
+                                          ->where('user_id', $loggedInUserId) // Filter by the logged-in user's ID
+                                          ->findAll();
+    }
+
+    // Fetch pending leave applications
+    if ($loggedInUserRole === 'ADMIN') {
+        // ADMIN: Fetch all pending leave applications
+        $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
+    } else {
+        // EMPLOYEE: Fetch only the logged-in user's pending leave applications
+        $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')
+                                                          ->where('user_id', $loggedInUserId) // Filter by the logged-in user's ID
+                                                          ->findAll();
+    }
+
+    // Format the response
+    $data = [
+        'employees'             => [],
+        'leave_applications'    => []
+    ];
+
+    // Process pending employees
+    foreach ($pendingEmployees as $employee) {
+        $data['employees'][] = [
+            'firstname' => $employee['firstname'],
+            'lastname'  => $employee['lastname']
         ];
-    
-        // Process pending employees
-        foreach ($pendingEmployees as $employee) {
-            $data['employees'][] = [
-                'firstname' => $employee['firstname'],
-                'lastname'  => $employee['lastname']
-            ];
-        }
-    
-        // Process pending leave applications and fetch user and leave type details
-        foreach ($pendingLeaveApplications as $leave) {
-            // Fetch the user based on user_id (assuming la_name is user_id)
-            $user = $userModel->find($leave['la_name']); // Fetch user by user_id (la_name is user_id here)
-    
-            // Fetch leave type from the leave_types table (assuming la_type is the leave type ID)
-            $leaveType = $leaveTypeModel->find($leave['la_type']); // Fetch leave type by ID
-    
-            $data['leave_applications'][] = [
-                'la_name' => $user ? $user['name'] : 'Unknown User', // Get full name from user data
-                'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Get leave type name from leave types
-            ];
-        }
-    
-        return $this->response->setJSON($data);
+    }
+
+    // Process pending leave applications and fetch user and leave type details
+    foreach ($pendingLeaveApplications as $leave) {
+        // Fetch the user based on user_id (assuming la_name is user_id)
+        $user = $userModel->find($leave['la_name']); // Fetch user by user_id (la_name is user_id here)
+
+        // Fetch leave type from the leave_types table (assuming la_type is the leave type ID)
+        $leaveType = $leaveTypeModel->find($leave['la_type']); // Fetch leave type by ID
+
+        $data['leave_applications'][] = [
+            'la_name' => $user ? $user['name'] : 'Unknown User', // Get full name from user data
+            'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Get leave type name from leave types
+        ];
+    }
+
+    return $this->response->setJSON($data);
     }
     
     
