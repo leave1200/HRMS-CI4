@@ -1334,6 +1334,7 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
+    // Get the logged-in user's ID and status from the session
     $loggedInUserId = session()->get('user_id'); 
     $userStatus = session()->get('userStatus');
 
