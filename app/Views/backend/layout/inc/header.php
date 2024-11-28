@@ -139,7 +139,7 @@
                           </li>
                       <?php endforeach; ?>
                   <?php else: ?>
-                      <li class="list-group-item">No pending results.</li>
+                      <li class="list-group-item">No pending Employee.</li>
                   <?php endif; ?>
               </ul>
           </div>

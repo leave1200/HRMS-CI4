@@ -1635,58 +1635,58 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         $userModel = new User(); // Assuming the User model exists for fetching user details
         $leaveTypeModel = new leave_typeModel(); // Load the LeaveTypeModel
     
- // Get the logged-in user's ID and status
- $loggedInUserId = session()->get('user_id');
- $loggedInUserStatus = session()->get('userStatus'); // Assuming this holds 'ADMIN', 'EMPLOYEE', etc.
- 
- // Initialize empty data array for employees and leave applications
- $data = [
-     'employees' => [],
-     'leave_applications' => []
- ];
+        // Get the logged-in user's ID and status
+        $loggedInUserId = session()->get('user_id');
+        $loggedInUserStatus = session()->get('userStatus'); // Assuming this holds 'ADMIN', 'EMPLOYEE', etc.
+        
+        // Initialize empty data array for employees and leave applications
+        $data = [
+            'employees' => [],
+            'leave_applications' => []
+        ];
 
- // If user is ADMIN, fetch all pending results and leave applications
- if ($loggedInUserStatus === 'ADMIN') {
-     // Fetch all employees with pending results
-     $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-     
-     // Fetch all pending leave applications
-     $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
- } else {
-     // Non-ADMIN users (EMPLOYEE/STAFF), only fetch their own pending results
-     $pendingEmployees = $employeeModel->where('result', 'Pending')
-                                       ->where('user_id', $loggedInUserId) // Only fetch their own results
-                                       ->findAll();
-     
-     // Non-ADMIN users, only fetch their own pending leave applications
-     $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')
-                                                       ->where('user_id', $loggedInUserId) // Only fetch their own applications
-                                                       ->findAll();
- }
- 
- // Process pending employees
- foreach ($pendingEmployees as $employee) {
-     $data['employees'][] = [
-         'firstname' => $employee['firstname'],
-         'lastname'  => $employee['lastname']
-     ];
- }
+        // If user is ADMIN, fetch all pending results and leave applications
+        if ($loggedInUserStatus === 'ADMIN') {
+            // Fetch all employees with pending results
+            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+            
+            // Fetch all pending leave applications
+            $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
+        } else {
+            // Non-ADMIN users (EMPLOYEE/STAFF), only fetch their own pending results
+            $pendingEmployees = $employeeModel->where('result', 'Pending')
+                                            ->where('user_id', $loggedInUserId) // Only fetch their own results
+                                            ->findAll();
+            
+            // Non-ADMIN users, only fetch their own pending leave applications
+            $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')
+                                                            ->where('user_id', $loggedInUserId) // Only fetch their own applications
+                                                            ->findAll();
+        }
+        
+        // Process pending employees
+        foreach ($pendingEmployees as $employee) {
+            $data['employees'][] = [
+                'firstname' => $employee['firstname'],
+                'lastname'  => $employee['lastname']
+            ];
+        }
 
- // Process pending leave applications and fetch user and leave type details
- foreach ($pendingLeaveApplications as $leave) {
-     // Fetch the user based on user_id (assuming la_name is user_id)
-     $user = $userModel->find($leave['la_name']); // Fetch user by user_id (la_name is user_id here)
+        // Process pending leave applications and fetch user and leave type details
+        foreach ($pendingLeaveApplications as $leave) {
+            // Fetch the user based on user_id (assuming la_name is user_id)
+            $user = $userModel->find($leave['la_name']); // Fetch user by user_id (la_name is user_id here)
 
-     // Fetch leave type from the leave_types table (assuming la_type is the leave type ID)
-     $leaveType = $leaveTypeModel->find($leave['la_type']); // Fetch leave type by ID
+            // Fetch leave type from the leave_types table (assuming la_type is the leave type ID)
+            $leaveType = $leaveTypeModel->find($leave['la_type']); // Fetch leave type by ID
 
-     $data['leave_applications'][] = [
-         'la_name' => $user ? $user['name'] : 'Unknown User', // Get full name from user data
-         'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Get leave type name from leave types
-     ];
- }
+            $data['leave_applications'][] = [
+                'la_name' => $user ? $user['name'] : 'Unknown User', // Get full name from user data
+                'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Get leave type name from leave types
+            ];
+        }
 
- return $this->response->setJSON($data);
+        return $this->response->setJSON($data);
     }
     
     
