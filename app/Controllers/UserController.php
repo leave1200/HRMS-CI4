@@ -335,6 +335,7 @@ class UserController extends Controller
     {
         $fileModel = new FileModel();
         $file = $fileModel->find($id);
+        $userStatus = $this->session->get('userStatus');
 
         if (!$file) {
             $this->session->setFlashdata('error', 'File not found.');
