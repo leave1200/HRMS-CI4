@@ -199,7 +199,7 @@ $(document).ready(function() {
                         totalNotifications++; // Increment the total notifications count
                     });
                 } else {
-                    notificationList.append('<li class="list-group-item">No pending results.</li>');
+                    notificationList.append('<li class="list-group-item">No pending Employee.</li>');
                 }
 
                 // Check and display pending leave applications notifications
