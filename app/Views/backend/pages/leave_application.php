@@ -30,7 +30,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
-                        <input type="text" class="form-control" value="<?= esc($loggedInUser['name']) ?>" readonly>
+                    <input type="text" class="form-control" value="<?= esc($users[0]['name']) ?>" readonly>
                     </div>
                 </div>
                 <?php endif; ?>
