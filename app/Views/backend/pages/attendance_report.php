@@ -42,7 +42,7 @@
         </div>
 
     </div>
-    <button onclick="printDataTable()" class="btn btn-primary">Print</button>
+    <button onclick="printDataTable()" class="btn btn-primary"><i class="icon-copy bi bi-printer"></i>Print</button>
     <!-- <button onclick="fetchArchivedData()" class="btn btn-secondary">View Archived Records</button> -->
     <div class="table-responsive">
         <div id="print-area">
