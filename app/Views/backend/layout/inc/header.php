@@ -98,13 +98,11 @@
 <div class="header">
 <div class="header-left">
     <div class="menu-icon bi bi-list"></div>
-      <div class="header-search">
         <div class="running-text-container">
             <div class="scrolling-text" id="welcomeText">
               <marquee behavior="" direction=""> Welcome to the system HRMO <span id="userStatus"></span> <span id="userName"></span>!</marquee>
             </div>
         </div>
-    </div>
   </div>
 
 	<div class="header-right">
