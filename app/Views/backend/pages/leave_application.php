@@ -30,7 +30,11 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
-                    <input type="text" class="form-control" value="<?= esc($users[0]['name']) ?>" readonly>
+                        <?php if ($userStatus == 'EMPLOYEE'): ?>
+                            <input type="text" class="form-control" value="<?= esc($loggedInUser['name']) ?>" readonly>
+                        <?php else: ?>
+                            <input type="text" class="form-control" value="Select User" readonly>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>

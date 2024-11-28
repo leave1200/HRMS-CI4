@@ -1334,8 +1334,17 @@ public function leave_application()
     $leaveApplicationModel = new LeaveApplicationModel();
     $userModel = new User();
 
-    // Get the logged-in user's ID from the session
+    // Get the logged-in user's ID and status from the session
     $loggedInUserId = session()->get('user_id');  // Assuming the user ID is stored in the session
+    $userStatus = session()->get('userStatus');   // Get the logged-in user's status (EMPLOYEE, ADMIN, etc.)
+
+    // Fetch the logged-in user's data if the user is an EMPLOYEE
+    if ($userStatus == 'EMPLOYEE') {
+        $loggedInUser = $userModel->find($loggedInUserId); // Fetch only the logged-in user's data
+    } else {
+        // Optionally, fetch all users if the user is an ADMIN
+        $loggedInUser = null; 
+    }
 
     // Fetch leave applications for the logged-in user
     $data = [
@@ -1343,6 +1352,7 @@ public function leave_application()
         'leaveTypes' => $leaveTypeModel->findAll(),
         'users' => $userModel->select('id, name')->findAll(),
         'userStatus' => session()->get('userStatus'),
+        'loggedInUser' => $loggedInUser,  // Pass logged-in user data
         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
     ];
 
