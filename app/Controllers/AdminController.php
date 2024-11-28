@@ -1634,7 +1634,6 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
         $userModel = new User(); // Assuming the User model exists for fetching user details
         $leaveTypeModel = new leave_typeModel(); // Load the LeaveTypeModel
-        $userStatus = session()->get('userStatus');
         // Get the logged-in user's ID and status
         $loggedInUserId = session()->get('id');
         $loggedInUserStatus = session()->get('userStatus'); // Assuming this holds 'ADMIN', 'EMPLOYEE', etc.
