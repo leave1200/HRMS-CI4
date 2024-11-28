@@ -185,30 +185,34 @@ $(document).ready(function() {
             var heartbit = $('.heartbit');
             notificationList.empty();
 
-            var totalNotifications = [];
+            // Update heartbit count
+            var totalCount = data.pending_results_count + data.pending_leaves_count;
+            if (totalCount > 0) {
+                heartbit.text(totalCount).show();
+            } else {
+                heartbit.text('').hide();
+            }
 
             // Append employee pending results notifications
             if (data.employees.length > 0) {
                 data.employees.forEach(function(notification) {
-                    totalNotifications.push(notification.firstname + ' ' + notification.lastname + ' has a pending result.');
+                    notificationList.append('<li class="list-group-item">' + 
+                        notification.firstname + ' ' + notification.lastname + 
+                        ' has a pending result.</li>');
                 });
             }
 
             // Append pending leave applications notifications
             if (data.leave_applications.length > 0) {
                 data.leave_applications.forEach(function(application) {
-                    totalNotifications.push(application.la_name + ' has a pending ' + application.la_type + ' leave application.');
+                    notificationList.append('<li class="list-group-item">' +
+                        application.la_name + 
+                        ' has a pending ' + application.la_type + ' leave application.</li>');
                 });
             }
 
-            // Update heartbit count and display notifications
-            if (totalNotifications.length > 0) {
-                heartbit.text(totalNotifications.length).show();
-                totalNotifications.forEach(function(notificationText) {
-                    notificationList.append('<li class="list-group-item">' + notificationText + '</li>');
-                });
-            } else {
-                heartbit.hide();
+            // If no notifications, show default message
+            if (totalCount === 0) {
                 notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
             }
         },
@@ -217,7 +221,6 @@ $(document).ready(function() {
         }
     });
 }
-
 
 
     // Fetch notifications on page load
