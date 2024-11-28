@@ -275,21 +275,17 @@ $(document).ready(function() {
         fetch('/getUserInfo') // Update the route to match your backend
             .then(response => response.json())
             .then(data => {
-              if (data.success) {
-                  const userStatusElement = document.getElementById('userStatus');
-                  const userNameElement = document.getElementById('userName');
-                  
-                  if (userStatusElement && userNameElement) {
-                      userStatusElement.textContent = data.status;
-                      userNameElement.textContent = data.name;
-                  } else {
-                      console.error('Missing userStatus or userName elements.');
-                  }
-              } else {
-                  console.error(data.message || 'Failed to fetch user data.');
-              }
-          })
+                if (data.success) {
+                    // Dynamically set the user status and name
+                    document.getElementById('userStatus').textContent = data.status;
+                    document.getElementById('userName').textContent = data.name;
 
+                    // Optionally, set the color dynamically (can be set as per your preference)
+                    document.getElementById('welcomeText').style.color = 'green'; // Set color here
+                } else {
+                    console.error(data.message || 'Failed to fetch user data.');
+                }
+            })
             .catch(error => {
                 console.error('Error fetching user data:', error);
             });
