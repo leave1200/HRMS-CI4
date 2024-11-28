@@ -94,7 +94,7 @@
     }
 
 </style>
-<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
+
 <div class="header">
 <div class="header-left">
     <div class="menu-icon bi bi-list"></div>
@@ -104,7 +104,7 @@
             </div>
         </div>
   </div>
-
+  <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
 	<div class="header-right">
 		<div class="dashboard-setting user-notification">
 			<div class="dropdown">
@@ -123,7 +123,7 @@
         <span class="heartbit"></span> <!-- Empty heartbit when no notifications -->
     <?php endif; ?>
 </a>
-
+<?php endif; ?>
 
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
@@ -143,7 +143,7 @@
           </div>
       </div>
   </div>
-  <?php endif; ?>
+
 
 
 
