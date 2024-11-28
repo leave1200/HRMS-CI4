@@ -185,8 +185,14 @@ $(document).ready(function() {
             var heartbit = $('.heartbit');
             notificationList.empty();
 
+            // Debug: log the response data
+            console.log(data);
+
             // Update heartbit count
             var totalCount = data.pending_results_count + data.pending_leaves_count;
+            console.log('Total Pending Notifications:', totalCount); // Log total count
+
+            // Show heartbit if count is greater than 0
             if (totalCount > 0) {
                 heartbit.text(totalCount).show();
             } else {
@@ -221,6 +227,7 @@ $(document).ready(function() {
         }
     });
 }
+
 
 
     // Fetch notifications on page load
