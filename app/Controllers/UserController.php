@@ -335,7 +335,7 @@ class UserController extends Controller
     {
         $fileModel = new FileModel();
         $file = $fileModel->find($id);
-        $userStatus = $this->session->get('userStatus');
+
         $userStatus = $this->session->get('userStatus');
         $loggedInUserId = $this->session->get('user_id');  // Get the logged-in user's ID
     
