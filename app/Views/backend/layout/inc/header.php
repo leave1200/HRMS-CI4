@@ -182,15 +182,24 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 var notificationList = $('.notifications-dropdown .list-group');
+                var heartbit = $('.heartbit');
                 notificationList.empty();
 
-                if (data.length > 0) {
-                    data.forEach(function(notification) {
+                if (data.count > 0) {
+                    // Update the heartbit count
+                    heartbit.text(data.count).show();
+
+                    // Append notifications to the list
+                    data.employees.forEach(function(notification) {
                         notificationList.append('<li class="list-group-item">' + 
                             notification.firstname + ' ' + notification.lastname + 
                             ' Waiting for Approval.</li>');
                     });
                 } else {
+                    // Hide the heartbit if there are no notifications
+                    heartbit.text('').hide();
+
+                    // Show no pending results message
                     notificationList.append('<li class="list-group-item">No pending results.</li>');
                 }
             },
@@ -233,6 +242,7 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
+
 
 </script>
 <script>

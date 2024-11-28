@@ -1590,44 +1590,67 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         return view('backend/pages/print', $data);
     }
 
-public function notifications()
+// public function notifications()
+// {
+//     $employeeModel = new EmployeeModel();
+
+//     // Fetch employees whose result is "Pending"
+//     $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+
+//     // Count the pending employees
+//     $pendingCount = count($pendingEmployees);
+
+//     // Pass both the pending employees and their count to the view
+//     return view('backend/layout/inc/header', [
+//             'pendingEmployees' => $pendingEmployees,
+//         'pendingCount' => $pendingCount
+//     ]);
+// }
+
+    // public function fetchPendingResults()
+    //     {
+    //         $employeeModel = new EmployeeModel();
+            
+    //         // Fetch employees with a pending result
+    //         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+    //         $data = [
+    //             'count' => count($pendingEmployees), // Add the count of pending employees
+    //             'employees' => [] // Initialize the employee details array
+    //         ];
+    //         // Format the response
+    //         $data = [];
+    //         foreach ($pendingEmployees as $employee) {
+    //             $data[] = [
+    //                 'firstname' => $employee['firstname'],
+    //                 'lastname' => $employee['lastname']
+    //             ];
+    //         }
+
+    //         return $this->response->setJSON($data);
+    //     }
+    public function fetchPendingResults()
 {
     $employeeModel = new EmployeeModel();
-
-    // Fetch employees whose result is "Pending"
+    
+    // Fetch employees with a pending result
     $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+    
+    // Format the response
+    $data = [
+        'count' => count($pendingEmployees), // Add the count of pending employees
+        'employees' => [] // Initialize the employee details array
+    ];
 
-    // Count the pending employees
-    $pendingCount = count($pendingEmployees);
+    foreach ($pendingEmployees as $employee) {
+        $data['employees'][] = [
+            'firstname' => $employee['firstname'],
+            'lastname'  => $employee['lastname']
+        ];
+    }
 
-    // Pass both the pending employees and their count to the view
-    return view('backend/layout/inc/header', [
-            'pendingEmployees' => $pendingEmployees,
-        'pendingCount' => $pendingCount
-    ]);
+    return $this->response->setJSON($data);
 }
 
-    public function fetchPendingResults()
-        {
-            $employeeModel = new EmployeeModel();
-            
-            // Fetch employees with a pending result
-            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-            $data = [
-                'count' => count($pendingEmployees), // Add the count of pending employees
-                'employees' => [] // Initialize the employee details array
-            ];
-            // Format the response
-            $data = [];
-            foreach ($pendingEmployees as $employee) {
-                $data[] = [
-                    'firstname' => $employee['firstname'],
-                    'lastname' => $employee['lastname']
-                ];
-            }
-
-            return $this->response->setJSON($data);
-        }
         public function deleteuser()
         {
             if ($this->request->isAJAX()) {
