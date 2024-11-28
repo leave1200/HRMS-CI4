@@ -1631,9 +1631,9 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     public function fetchPendingResults()
     {
         $employeeModel = new EmployeeModel();
-        $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists for leave applications
+        $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
     
-        // Fetch employees with a pending result
+        // Fetch employees with pending results
         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
     
         // Fetch pending leave applications
@@ -1641,10 +1641,10 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     
         // Format the response
         $data = [
-            'pending_results_count' => count($pendingEmployees), // Count of pending results
-            'pending_leaves_count'  => count($pendingLeaveApplications), // Count of pending leave applications
-            'employees'             => [], // Initialize the employee details array
-            'leave_applications'    => [] // Initialize the leave application details array
+            'pending_results_count' => count($pendingEmployees),
+            'pending_leaves_count'  => count($pendingLeaveApplications),
+            'employees'             => [],
+            'leave_applications'    => []
         ];
     
         foreach ($pendingEmployees as $employee) {
@@ -1656,15 +1656,14 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     
         foreach ($pendingLeaveApplications as $leave) {
             $data['leave_applications'][] = [
-                'employee_name' => $leave['employee_name'], // Adjust field based on your database structure
-                'leave_type'    => $leave['leave_type'],
-                'start_date'    => $leave['start_date'],
-                'end_date'      => $leave['end_date']
+                'employee_name' => $leave['employee_name'], // Adjust field names as needed
+                'leave_type'    => $leave['leave_type']
             ];
         }
     
         return $this->response->setJSON($data);
     }
+    
     
 
         public function deleteuser()
