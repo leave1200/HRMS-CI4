@@ -1354,7 +1354,7 @@ public function leave_application()
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
+       'users' => ($userStatus == 'EMPLOYEE') ? [$loggedInUser] : $userModel->select('id, name')->findAll(), // Show only the logged-in user if EMPLOYEE
         'userStatus' => session()->get('userStatus'),
         'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
     ];
