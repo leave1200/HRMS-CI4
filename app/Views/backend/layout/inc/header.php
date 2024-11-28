@@ -105,7 +105,7 @@
             </div>
         </div>
     </div>
-  </div>
+  </div>>
 
 	<div class="header-right">
 		<div class="dashboard-setting user-notification">
