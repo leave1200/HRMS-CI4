@@ -175,76 +175,74 @@
 </body>
 <script>
 $(document).ready(function() {
-function fetchPendingNotifications() {
-    $.ajax({
-        url: '<?= route_to('admin.pending_results') ?>', // Use your backend route
-        method: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            var notificationList = $('.notifications-dropdown .list-group');
-            var heartbit = $('.heartbit');
-            notificationList.empty();
+  $(document).ready(function() {
+    function fetchPendingNotifications() {
+        $.ajax({
+            url: '<?= route_to('admin.pending_results') ?>', // Your backend route
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var notificationList = $('.notifications-dropdown .list-group');
+                var heartbit = $('.heartbit');
+                notificationList.empty(); // Clear existing notifications
 
-            // Debug: log the response data
-            console.log(data);
+                // Check if the response has the required data
+                console.log(data); // Debug: Log the response data
 
-            // Update heartbit count
-            var totalCount = data.pending_results_count + data.pending_leaves_count;
-            console.log('Total Pending Notifications:', totalCount); // Log total count
+                var totalCount = (data.pending_results_count || 0) + (data.pending_leaves_count || 0); // Ensure counts are valid numbers
+                console.log('Total Pending Notifications:', totalCount); // Log total count
 
-            // Show heartbit if count is greater than 0
-            if (totalCount > 0) {
-                heartbit.text(totalCount).show();
-            } else {
-                heartbit.text('').hide();
+                // Update heartbit count and visibility
+                if (totalCount > 0) {
+                    heartbit.text(totalCount).show(); // Show and update count
+                } else {
+                    heartbit.text('').hide(); // Hide heartbit if no notifications
+                }
+
+                // Append employee pending results notifications
+                if (data.employees && data.employees.length > 0) {
+                    data.employees.forEach(function(employee) {
+                        notificationList.append('<li class="list-group-item">' + 
+                            employee.firstname + ' ' + employee.lastname + 
+                            ' has a pending result.</li>');
+                    });
+                }
+
+                // Append pending leave applications notifications
+                if (data.leave_applications && data.leave_applications.length > 0) {
+                    data.leave_applications.forEach(function(application) {
+                        notificationList.append('<li class="list-group-item">' +
+                            application.la_name + 
+                            ' has a pending ' + application.la_type + ' leave application.</li>');
+                    });
+                }
+
+                // If no notifications, show default message
+                if (totalCount === 0) {
+                    notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching pending notifications:', error);
             }
-
-            // Append employee pending results notifications
-            if (data.employees.length > 0) {
-                data.employees.forEach(function(notification) {
-                    notificationList.append('<li class="list-group-item">' + 
-                        notification.firstname + ' ' + notification.lastname + 
-                        ' has a pending result.</li>');
-                });
-            }
-
-            // Append pending leave applications notifications
-            if (data.leave_applications.length > 0) {
-                data.leave_applications.forEach(function(application) {
-                    notificationList.append('<li class="list-group-item">' +
-                        application.la_name + 
-                        ' has a pending ' + application.la_type + ' leave application.</li>');
-                });
-            }
-
-            // If no notifications, show default message
-            if (totalCount === 0) {
-                notificationList.append('<li class="list-group-item">No pending results or leave applications.</li>');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching pending notifications:', error);
-        }
-    });
-}
-
-
+        });
+    }
 
     // Fetch notifications on page load
     fetchPendingNotifications();
 
-    // Optionally, set an interval to refresh notifications
-    setInterval(fetchPendingNotifications, 30000); // Every 30 seconds
+    // Optionally, set an interval to refresh notifications every 30 seconds
+    setInterval(fetchPendingNotifications, 30000);
 
     // Handle dropdown toggle for notifications
     $('.user-notification .dropdown-toggle').on('click', function(e) {
-        e.preventDefault(); // Prevent default anchor behavior
+        e.preventDefault();
         $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
     });
 
     // Handle dropdown toggle for user info
     $('.user-info-dropdown .dropdown-toggle').on('click', function(e) {
-        e.preventDefault(); // Prevent default anchor behavior
+        e.preventDefault();
         $(this).next('.dropdown-menu').toggle(); // Toggle the dropdown menu
     });
 
