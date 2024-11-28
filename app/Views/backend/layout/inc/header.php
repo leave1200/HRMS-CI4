@@ -94,7 +94,7 @@
     }
 
 </style>
-
+<?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?> 
 <div class="header">
 <div class="header-left">
     <div class="menu-icon bi bi-list"></div>
@@ -143,7 +143,7 @@
           </div>
       </div>
   </div>
-
+  <?php endif; ?>
 
 
 
