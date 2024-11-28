@@ -1467,6 +1467,11 @@ public function submitLeaveApplication()
 
     $leaveApplicationModel = new LeaveApplicationModel();
     $holidayModel = new HolidayModel(); // Load the HolidayModel
+    // Get the logged-in user's ID
+    $loggedInUserId = session()->get('user_id'); 
+    
+    // Fetch the logged-in user's data
+    $loggedInUser = $userModel->find($loggedInUserId);
     
     $validation = \Config\Services::validation();
     $validation->setRules([
@@ -1507,6 +1512,7 @@ public function submitLeaveApplication()
         'la_start' => $la_start,
         'la_end' => $la_end,
         'status' => 'Pending',
+        'users' => $loggedInUser,
     ];
 
     if ($leaveApplicationModel->insert($data)) {
