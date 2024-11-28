@@ -35,6 +35,8 @@
                         <input type="text" class="form-control" value="<?= esc($loggedInUser['name']) ?>" readonly>
                         <input type="hidden" name="la_name" value="<?= esc($loggedInUser['id']) ?>">
                         <?php else: ?>
+                            <input type="text" class="form-control" value="Select User" readonly>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
