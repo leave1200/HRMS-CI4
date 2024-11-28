@@ -1613,7 +1613,10 @@ public function notifications()
             
             // Fetch employees with a pending result
             $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-
+            $data = [
+                'count' => count($pendingEmployees), // Add the count of pending employees
+                'employees' => [] // Initialize the employee details array
+            ];
             // Format the response
             $data = [];
             foreach ($pendingEmployees as $employee) {
