@@ -774,11 +774,11 @@ public function updateDesignation()
         $attendanceModel = new AttendanceModel();
         $designationModel = new Designation();
         $positionModel = new Position();
-        $loggedInUser = $userModel->find($loggedInUserId);
+    
         // Get the logged-in user's ID and status
         $loggedInUserId = session()->get('user_id'); 
         $userStatus = session()->get('userStatus'); 
-    
+        $loggedInUser = $userModel->find($loggedInUserId); // This will fetch the logged-in user
         // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
         if ($userStatus == 'EMPLOYEE') {
             $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
