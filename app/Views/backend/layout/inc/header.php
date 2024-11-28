@@ -118,13 +118,14 @@
     <div class="user-notification">
       <div class="dropdown">
       <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-        <i class="icon-copy dw dw-notification"></i>
-        <?php if (!empty($pendingEmployees)): ?>
-            <span class="heartbit"><?= count($pendingEmployees) ?></span> <!-- Add count inside heartbit -->
-        <?php else: ?>
-            <span class="heartbit"></span> <!-- Empty heartbit when no notifications -->
-        <?php endif; ?>
-    </a>
+    <i class="icon-copy dw dw-notification"></i>
+    <?php if (!empty($pendingEmployees)): ?>
+        <span class="heartbit"><?= count($pendingEmployees) ?></span> <!-- Add count inside heartbit -->
+    <?php else: ?>
+        <span class="heartbit"></span> <!-- Empty heartbit when no notifications -->
+    <?php endif; ?>
+</a>
+
 
           <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
               <h6 class="dropdown-header">Notifications</h6>
@@ -191,11 +192,13 @@ $(document).ready(function() {
                 var totalCount = data.pending_results_count + data.pending_leaves_count;
                 console.log('Total Pending Notifications:', totalCount); // Log total count for debugging
 
-                // Show heartbit with count if there are pending notifications
+                // Ensure the heartbit is visible when there are notifications
                 if (totalCount > 0) {
                     heartbit.text(totalCount).show();  // Update heartbit text with the count
+                    console.log('Heartbit updated:', totalCount);  // Log the updated heartbit value
                 } else {
                     heartbit.text('').hide();  // Hide heartbit if no notifications
+                    console.log('No notifications, heartbit hidden');
                 }
 
                 // Check and display pending employee results notifications
@@ -263,6 +266,7 @@ $(document).ready(function() {
         e.stopPropagation(); // Prevent click from bubbling up
     });
 });
+
 
 
 
