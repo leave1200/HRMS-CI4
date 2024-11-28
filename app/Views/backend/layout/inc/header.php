@@ -130,7 +130,7 @@
 <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
             <h6 class="dropdown-header">Notifications</h6>
             <ul class="list-group">
-                <?php if (!empty($pendingEmployees) && session()->get('userStatus') !== 'EMPLOYEE'): ?>
+                <?php if (!empty($pendingEmployees) && session()->get('userStatus') !== ''): ?>
                     <?php foreach ($pendingEmployees as $employee): ?>
                         <li class="list-group-item">
                             <a href="<?= route_to('admin.pendinglist') ?>">
