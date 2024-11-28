@@ -1656,7 +1656,7 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
     
         foreach ($pendingLeaveApplications as $leave) {
             $data['leave_applications'][] = [
-                'la_name' => $leave['la_name'], // Adjust field names as needed
+                'la_name' => $leave['name'], // Adjust field names as needed
                 'la_type'    => $leave['la_type']
             ];
         }
