@@ -206,8 +206,8 @@ $(document).ready(function() {
             if (data.leave_applications.length > 0) {
                 data.leave_applications.forEach(function(application) {
                     notificationList.append('<li class="list-group-item">' +
-                        application.employee_name + 
-                        ' has a pending ' + application.leave_type + ' leave application.</li>');
+                        application.la_name + 
+                        ' has a pending ' + application.la_type + ' leave application.</li>');
                 });
             }
 
