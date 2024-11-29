@@ -59,6 +59,7 @@ abstract class BaseController extends Controller
    $response->setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self';");
    $response->setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
    $response->setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+   delete_cookie('ci_session');
 
    return $response;
 
