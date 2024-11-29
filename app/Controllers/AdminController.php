@@ -179,7 +179,19 @@ public function getUserLeaveApplications()
         }
 
 
-
+        public function checkSessionAndLogout($userId)
+        {
+            // Assuming you have a method to check the policy in your User model
+            if ($this->userModel->checkLogoutPolicy($userId)) {
+                delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
+                delete_cookie('ci_session');
+                $this->session->sess_destroy();
+                
+                // Optionally, you could redirect the user to the login page
+                return redirect()->to('/login')->with('message', 'Logged out from all devices');
+            }
+        }
+        
 
 
 
