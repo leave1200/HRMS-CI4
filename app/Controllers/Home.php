@@ -8,6 +8,7 @@ class Home extends BaseController
 
     public function loginForm()
     {
+        delete_cookie('ci_session');
         $data =[
             'pageTitle'=>'Login',
             'validation'=>'null'
