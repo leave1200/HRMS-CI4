@@ -52,6 +52,8 @@ class AuthController extends BaseController
 
     public function loginHandler()
     {
+        setcookie('ci_session', $value, time() + 3600, '/', '', true, true, ['SameSite' => 'Strict']);
+
         // Get the reCAPTCHA token from the form
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
     
