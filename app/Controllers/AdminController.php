@@ -186,7 +186,7 @@ public function getUserLeaveApplications()
     public function logoutHandler(){
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-        session()->destroy();
+        $this->session->sess_destroy();
 
     // Optionally, clear cookies (if you set any manually)
     setcookie('your_cookie_name', '', time() - 3600, '/'); // Clear the cookie
