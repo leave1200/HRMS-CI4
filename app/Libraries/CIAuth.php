@@ -35,12 +35,13 @@ class CIAuth
         // Remove session data
         $session->remove('logged_in');
         $session->remove('userdata');
-
+  
         // Destroy the ci_session cookie
         setcookie('ci_session', '', time() - 3600, '/', '', true, true); // Expire the cookie immediately
 
         // Optionally, you can also destroy any other cookies like csrf_cookie_name
         setcookie('csrf_cookie_name', '', time() - 3600, '/', '', true, true); // Expire CSRF cookie if needed
+        $session->destroy();
     }
 
     public static function user(){
