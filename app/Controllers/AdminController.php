@@ -188,8 +188,12 @@ public function getUserLeaveApplications()
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
         $this->session->sess_destroy();
 
-    // Optionally, clear cookies (if you set any manually)
-    setcookie('ci_session', '', time() - 3600, '/'); // Clear the cookie
+        // Remove the ci_session cookie
+    setcookie('ci_session', '', time() - 3600, '/', '', true, true);
+
+    // Remove the csrf_cookie_name cookie
+    setcookie('csrf_cookie_name', '', time() - 3600, '/', '', true, true);
+
 
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
