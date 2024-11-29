@@ -12,6 +12,7 @@
 		<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self';">
 		<meta name="referrer" content="no-referrer-when-downgrade">
+		<meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
 		<meta name="csrf-token-name" content="<?= csrf_token() ?>">
 		<title><?= isset($pageTitle) ? $pageTitle : 'New Page Title'; ?></title>
 

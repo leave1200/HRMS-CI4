@@ -58,6 +58,7 @@ abstract class BaseController extends Controller
    $response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
    $response->setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self';");
    $response->setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
+   $response->setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
    return $response;
 
