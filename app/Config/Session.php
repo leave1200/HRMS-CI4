@@ -124,4 +124,7 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+    public bool $cookieSecure = true; 
+    public bool $cookieHttpOnly = true;
+    public string $cookieSameSite = 'Lax';
 }
