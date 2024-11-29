@@ -6,15 +6,6 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="Content-Security-Policy" content="
-			default-src 'self';
-			script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
-			style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
-			img-src 'self' data:;
-			font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
-		">
-
-
 		<meta http-equiv="X-Frame-Options" content="DENY">
 		<meta http-equiv="X-XSS-Protection" content="1; mode=block">
 		<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
