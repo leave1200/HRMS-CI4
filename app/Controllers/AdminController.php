@@ -190,10 +190,10 @@ public function getUserLeaveApplications()
             $this->session->sess_destroy(); // Destroy CodeIgniter session
         
             // Remove the ci_session cookie across all paths and domains
-            setcookie('ci_session', '', time() - 3600, '/', '', true, true);
+            setcookie('ci_session', '', time() - 3600, '/', '.hrmo-lawis.com', true, true);
         
             // Remove the csrf_cookie_name cookie across all paths and domains
-            setcookie('csrf_cookie_name', '', time() - 3600, '/', '', true, true);
+            setcookie('csrf_cookie_name', '', time() - 3600, '/', '.hrmo-lawis.com', true, true);
         
             // Redirect to the login page after logout
             return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
