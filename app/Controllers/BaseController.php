@@ -50,7 +50,6 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
-        delete_cookie('csrf_cookie_name');
          // Set security headers
    // Set security headers
    $response->setHeader('X-Content-Type-Options', 'nosniff');
