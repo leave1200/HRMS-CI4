@@ -57,4 +57,20 @@ class CIAuth
             return null;
         }
     }
+      // New Method: Check Logout Policy
+      public static function checkLogoutPolicy(){
+        $session = session();
+        $userId = CIAuth::id();
+        if($userId) {
+            $userModel = new User();
+            $user = $userModel->find($userId);
+            
+            // If the policy is set to logout all devices, force logout
+            if($user && $user['policy'] === 'logout_all_devices'){
+                CIAuth::forget(); // Log out the user across all devices
+                return true;
+            }
+        }
+        return false;
+    }
 }

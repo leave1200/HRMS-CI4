@@ -126,7 +126,9 @@ class AuthController extends BaseController
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-    
+        // Assuming you have a UserModel loaded
+    $this->userModel->update($userId, ['policy' => 'logout_all_devices']);
+
         // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
