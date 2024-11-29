@@ -66,17 +66,5 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
     }
-    // In your BaseController or middleware
-public function before(RequestInterface $request, $arguments = null)
-{
-    // Get user ID from the session
-    $userId = session()->get('user_id');
-
-    if ($userId && $this->userModel->checkLogoutPolicy($userId)) {
-        // Force logout
-        session()->destroy();
-        return redirect()->to('/login')->with('message', 'Logged out from all devices');
-    }
-}
-
+    
 }
