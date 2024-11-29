@@ -71,19 +71,19 @@ class User extends Model
         return $this->update($userId, ['picture' => $fileName]);
     }
 // Check if the user should be logged out from all devices
-public function checkLogoutPolicy($userId)
-{
-    // Fetch the policy from the database
-    $user = $this->find($userId);
-    
-    // If the policy is set to logout all devices
-    if ($user && $user['policy'] == 'logout_all_devices') {
-        // Trigger logout action (invalidate session, clear cookies, etc.)
-        return true;
-    }
+    public function checkLogoutPolicy($userId)
+    {
+        // Fetch the policy from the database
+        $user = $this->find($userId);
+        
+        // If the policy is set to logout all devices
+        if ($user && $user['policy'] == 'logout_all_devices') {
+            // Trigger logout action (invalidate session, clear cookies, etc.)
+            return true;
+        }
 
-    return false;
-}
+        return false;
+    }
 
 
 }
