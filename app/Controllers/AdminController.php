@@ -189,10 +189,10 @@ public function getUserLeaveApplications()
         $this->session->sess_destroy();
 
         // Remove the ci_session cookie
-    setcookie('ci_session', '', time() - 0, '/', '', true, true);
-
-    // Remove the csrf_cookie_name cookie
-    setcookie('csrf_cookie_name', '', time() - 0, '/', '', true, true);
+        setcookie('ci_session', '', time() - 3600, '/', '.hrmo-lawis.com', true, true);
+        
+        // Remove the csrf_cookie_name cookie across all paths and domains
+        setcookie('csrf_cookie_name', '', time() - 3600, '/', '.hrmo-lawis.com', true, true);
 
 
     // Redirect to the login page after logout
