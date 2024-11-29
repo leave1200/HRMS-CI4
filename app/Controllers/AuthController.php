@@ -52,7 +52,6 @@ class AuthController extends BaseController
 
     public function loginHandler()
     {
-        
         // Get the reCAPTCHA token from the form
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
     
@@ -126,9 +125,11 @@ class AuthController extends BaseController
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
-        // Assuming you have a UserModel loaded
-    $this->userModel->update($userId, ['policy' => 'logout_all_devices']);
-
+    
+        // Update logout policy for the user
+        $userId = $userInfo['id'];  // Get the correct user ID
+        $this->userModel->update($userId, ['policy' => 'logout_all_devices']);
+    
         // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
@@ -142,13 +143,16 @@ class AuthController extends BaseController
             'userStatus' => $userInfo['status'],
             'isLoggedIn' => true
         ]);
-            // Check if the user has accepted the terms and conditions
-    if ($userInfo['terms'] != 1) {
-        // If the user has not accepted the terms, redirect them to the terms acceptance page
-        return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-    }
+    
+        // Check if the user has accepted the terms and conditions
+        if ($userInfo['terms'] != 1) {
+            // If the user has not accepted the terms, redirect them to the terms acceptance page
+            return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+        }
+    
         return redirect()->route('admin.home');
     }
+    
     
     
     
