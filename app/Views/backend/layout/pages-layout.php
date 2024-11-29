@@ -7,13 +7,13 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Content-Security-Policy" content="
-			default-src 'self'; 
-			script-src 'self' https://cdn.example.com 'unsafe-inline'; 
-			style-src 'self' https://cdn.example.com 'unsafe-inline'; 
-			img-src 'self' data:; 
-			font-src 'self' https://cdn.example.com;
-			connect-src 'self';
+			default-src 'self';
+			script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
+			style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
+			img-src 'self' data:;
+			font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
 		">
+
 
 		<meta http-equiv="X-Frame-Options" content="DENY">
 		<meta http-equiv="X-XSS-Protection" content="1; mode=block">
