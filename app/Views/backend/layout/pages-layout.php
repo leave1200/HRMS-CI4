@@ -6,6 +6,12 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-Content-Type-Options" content="nosniff">
+		<meta http-equiv="X-Frame-Options" content="DENY">
+		<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+		<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self';">
+		<meta name="referrer" content="no-referrer-when-downgrade">
 		<meta name="csrf-token-name" content="<?= csrf_token() ?>">
 		<title><?= isset($pageTitle) ? $pageTitle : 'New Page Title'; ?></title>
 
