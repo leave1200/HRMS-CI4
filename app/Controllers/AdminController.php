@@ -202,8 +202,9 @@ public function getUserLeaveApplications()
         }
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-        delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
-        delete_cookie('ci_session');
+        foreach ($_COOKIE as $key => $value) {
+            delete_cookie($key);
+        }
 
         $this->session->sess_destroy();
 
