@@ -40,7 +40,7 @@
 
         <h3>8. Confidentiality</h3>
         <p>
-        Any information accessed through the HRMS platform that is confidential, sensitive, or proprietary to Lawis-HRMO must be treated with the highest level of care and must not, under any circumstances, be disclosed to unauthorized individuals or external parties. This includes, but is not limited to, employee records, attendance data, leave applications, organizational schedules, and other information stored within the platform that is critical to the company's operations.
+        Any information accessed through the Lawis-HRMO platform that is confidential, sensitive, or proprietary to Lawis-HRMO must be treated with the highest level of care and must not, under any circumstances, be disclosed to unauthorized individuals or external parties. This includes, but is not limited to, employee records, attendance data, leave applications, organizational schedules, and other information stored within the platform that is critical to the company's operations.
 
         As a user of the platform, you agree to adhere strictly to the organization's confidentiality policies, ensuring that data access is restricted solely to those with proper authorization and a legitimate need to know. This obligation extends to protecting login credentials, refraining from sharing information in public or unsecured channels, and avoiding the misuse of data for personal gain or any purpose outside the scope of your official responsibilities.
 
@@ -108,11 +108,11 @@
 
         You can reach the HR Department through the following methods:
         <br><br><br>
-        Email: [HR Department Email Address] – For general inquiries, technical support, or if you need assistance understanding any part of the Terms and Conditions.
+        Email: [markbarsaga121@gmail.com] – For general inquiries, technical support, or if you need assistance understanding any part of the Terms and Conditions.
         <br>
-        Phone: [HR Department Phone Number] – For immediate or urgent matters, or if you prefer to speak with someone directly regarding your queries.
+        Phone: [09365407104] – For immediate or urgent matters, or if you prefer to speak with someone directly regarding your queries.
         <br><br><br>
-        In-person: [HR Department Office Location] – If you prefer face-to-face communication, you can visit the HR Department during working hours. Our team is happy to provide assistance and answer any questions in person.
+        In-person: [Poblacion, Madridejos, Cebu] – If you prefer face-to-face communication, you can visit the HR Department during working hours. Our team is happy to provide assistance and answer any questions in person.
         If you encounter any technical difficulties or require support with accessing or using the HRMS platform, including issues related to login credentials, personal data, or account management, our support team is ready to help resolve any issues you may be experiencing.
 
         Please ensure that you review these Terms and Conditions thoroughly, as they are essential for your continued use of the HRMS platform. If you require any further explanation or have concerns about specific clauses, the HR Department is available to guide you and ensure that you fully understand your rights and responsibilities under these terms.

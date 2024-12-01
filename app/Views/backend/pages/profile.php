@@ -159,11 +159,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
-
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.js"></script>
 
 <script>
            $('#personal_details_from').on('submit', function(e) {
