@@ -6,6 +6,16 @@ class Home extends BaseController
 {
     protected $helpers =['url','form', 'CIMail', 'CIFunctions'];
 
+    public function __construct()
+    {
+        $user = CIAuth::user();
+
+        // If the user is logged out (because the policy is "Offline"), redirect them to the login page
+        if (!$user) {
+            return redirect()->to('admin.login.form');  // Replace with your login page URL
+        }
+    }
+
     public function loginForm()
     {
         $data =[
