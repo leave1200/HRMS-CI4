@@ -22,8 +22,7 @@ class AuthController extends BaseController
     }
     public function loginForm()
     {
-        delete_cookie('NID', '.google.com', '/');
-        delete_cookie('_GRECAPTCHA', '.google.com', '/recaptcha');
+        delete_cookie('NID', '.google.com', '/');;
         delete_cookie('ci_session', 'hrmo-lawis.com', '/');
         delete_cookie('debug-bar-state', 'hrmo-lawis.com', '/');
         // Assume we have a function to check system availability
