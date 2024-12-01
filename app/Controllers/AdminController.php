@@ -199,30 +199,34 @@ public function getUserLeaveApplications()
     // }
     public function logoutHandler()
     {
-        // Retrieve the logged-in user's ID from the session
-        $userId = session()->get('user_id');
+        try {
+            // Retrieve the logged-in user's ID from the session
+            $userId = session()->get('user_id');
     
-        if ($userId) {
-            // Update the policy field to 'Offline'
-            $updateResult = $this->userModel->update($userId, ['policy' => 'Offline']);
-            if (!$updateResult) {
-                log_message('error', 'Failed to update policy for user ID: ' . $userId);
+            if ($userId) {
+                // Update the policy field to 'Offline'
+                if (!$this->userModel->update($userId, ['policy' => 'Offline'])) {
+                    log_message('error', 'Failed to update policy for user ID: ' . $userId);
+                }
             }
-        } else {
-            log_message('warning', 'No user ID found in session during logout.');
+    
+            // Forget authentication and destroy the session
+            CIAuth::forget();
+            delete_cookie('csrf_cookie_name'); // Replace with your actual CSRF cookie name
+            delete_cookie('ci_session');
+            $this->session->destroy();
+    
+            // Redirect to the login page
+            return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+        } catch (Exception $e) {
+            // Log unexpected errors
+            log_message('critical', 'Logout error: ' . $e->getMessage());
+    
+            // Redirect to login page with a generic failure message
+            return redirect()->route('admin.login.form')->with('fail', 'An unexpected error occurred during logout. Please try again.');
         }
-    
-        // Forget authentication and clear cookies
-        CIAuth::forget();
-        delete_cookie('csrf_cookie_name'); // Replace with your CSRF cookie name
-        delete_cookie('ci_session');
-    
-        // Destroy the session completely
-        $this->session->destroy();
-    
-        // Redirect to login page with a success message
-        return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
+    
     
     
     
