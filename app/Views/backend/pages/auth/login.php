@@ -178,7 +178,21 @@
 </script>
 
 <script>
-    document.cookie = "ci_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+  function deleteAllCookies() {
+    // Get all cookies
+    var cookies = document.cookie.split(";");
+
+    // Loop through the cookies and delete each one
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var equalsPos = cookie.indexOf("=");
+        var name = equalsPos > -1 ? cookie.substr(0, equalsPos) : cookie;
+
+        // Remove the cookie by setting its expiration date to the past
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    }
+}
+
 
 </script>
 
