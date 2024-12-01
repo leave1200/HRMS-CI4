@@ -24,7 +24,7 @@ class AdminController extends BaseController
     {
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
-        $this->userModel = new \App\Models\UserModel();
+        $this->userModel = new \App\Models\User();
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
