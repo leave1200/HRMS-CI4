@@ -75,12 +75,14 @@
 		<script src="/backend/vendors/scripts/script.min.js"></script>
 		<script src="/backend/vendors/scripts/process.js"></script>
 		<script src="/backend/vendors/scripts/layout-settings.js"></script>
+		<!-- <script src="/backend/src/plugins/apexcharts/apexcharts.min.js"></script> -->
 		<script src="/backend/src/plugins/jquery-steps/jquery.steps.js"></script>
 		<script src="/backend/vendors/scripts/steps-setting.js"></script>
 		<script src="/backend/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
 		<script src="/backend/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 		<script src="/backend/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 		<script src="/backend/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+		<!-- <script src="/backend/vendors/scripts/dashboard3.js"></script> -->
 		<script src="/extra-assets/ijaboCropTool/ijaboCropTool.min.js"></script>
 		<script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 		<script src="/backend/src/plugins/sweetalert2/sweet-alert.init.js"></script>
@@ -91,37 +93,5 @@
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
 		<?= $this->renderSection('scripts') ?>
-		<script>
-function deleteSpecificCookies() {
-    var cookieNames = [
-        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
-        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
-        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
-    ];
-
-    // Loop through each cookie name and remove it
-    for (var i = 0; i < cookieNames.length; i++) {
-        var cookieName = cookieNames[i];
-
-        // Try to remove cookies for the root path and specific domains
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
-    }
-}
-
-// Call the function to delete the specific cookies
-deleteSpecificCookies();
-
-
-		</script>
 	</body>
 </html>
