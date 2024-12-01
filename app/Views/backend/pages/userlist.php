@@ -15,6 +15,7 @@
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                 <td><?= $user['id'] ?></td>
                 <td><?= $user['name'] ?></td>
                 <td><?= $user['username'] ?></td>
+                <td><?= $user['policy'] ?></td>
                 <td><?= $user['email'] ?></td>
                 <td>
                 <button class="btn btn-danger" onclick="deleteUser(<?= $user['id'] ?>)">Delete</button>
