@@ -49,6 +49,10 @@ class AdminController extends BaseController
         $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
         $pmAttendanceRecords = $attendanceModel->where('pm_sign_in IS NOT NULL')->countAllResults();
         $user = CIAuth::user();
+        if(!$user){
+            CIAuth::forget();
+            return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+        }
         
 
 
