@@ -25,22 +25,6 @@ class AdminController extends BaseController
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
         $this->userModel = new \App\Models\User();
-         $user = CIAuth::user();
-
-        // If the user is logged out (because the policy is "Offline"), redirect them to the login page
-        if (!$user) {
-        CIAuth::forget();
-        return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-        delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
-        delete_cookie('ci_session');
-
-        $this->session->sess_destroy();
-
-
-
-        // Redirect to the login page after logout
-        return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
-        }
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
