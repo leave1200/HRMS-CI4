@@ -35,15 +35,38 @@ class CIAuth
         $session->remove('userdata');
     }
 
+    // public static function user(){
+    //     $session = session();
+    //     if( $session->has('logged_in') ){
+    //         if( $session->has('userdata') ){
+    //            // return $session->get('userdata');
+
+    //            $user = new User();
+    //             return $user->asObject()->where('id',CIAuth::id())->first();
+
+    //         }else{
+    //             return null;
+    //         }
+    //     }else{
+    //         return null;
+    //     }
+    // }
     public static function user(){
         $session = session();
         if( $session->has('logged_in') ){
             if( $session->has('userdata') ){
-               // return $session->get('userdata');
+                // Fetch user data
+                $user = new User();
+                $userData = $user->asObject()->where('id', CIAuth::id())->first();
 
-               $user = new User();
-                return $user->asObject()->where('id',CIAuth::id())->first();
+                // Check if the policy is "Offline"
+                if ($userData && $userData->policy === 'Offline') {
+                    // If policy is "Offline", log the user out automatically
+                    CIAuth::forget();
+                    return null;
+                }
 
+                return $userData;
             }else{
                 return null;
             }
