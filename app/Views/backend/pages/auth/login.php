@@ -178,11 +178,11 @@
 </script>
 
 <script>
-function deleteAllCookies() {
+function deleteSpecificCookies() {
     var cookieNames = [
-        'ci_session', '__Secure-3PSIDTS', '__Secure-3PSIDCC', '__Secure-3PSID', '__Secure-3PAPISID',
-        '__Secure-1PSIDTS', '__Secure-1PSIDCC', '__Secure-1PSID', '__Secure-1PAPISID', 'SSID', 
-        'SIDCC', 'SID', 'SEARCH_SAMESITE', 'SAPISID', 'NID', 'APISID', 'AEC'
+        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
+        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
+        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
     ];
 
     // Loop through each cookie name and remove it
@@ -191,19 +191,21 @@ function deleteAllCookies() {
 
         // Try to remove cookies for the root path and specific domains
         document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com"; // Google domain cookies
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.hrmo-lawis.com"; // Your domain cookies (adjust as needed)
-
-        // If the cookie is secure, also include the secure flag in the deletion
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com; Secure";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.hrmo-lawis.com; Secure";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
     }
 }
 
-// Call the function to delete all cookies
-deleteAllCookies();
-
-
+// Call the function to delete the specific cookies
+deleteSpecificCookies();
 
 </script>
 
