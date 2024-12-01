@@ -214,10 +214,12 @@ public function getUserLeaveApplications()
                     
                     // Delete the CSRF and session cookies (ensure the cookie names are correct)
                     if (isset($_COOKIE['csrf_cookie_name'])) {
+                        log_message('info', 'Deleting CSRF cookie.');
                         delete_cookie('csrf_cookie_name', '', '/', '', false, true);
                     }
     
                     if (isset($_COOKIE['ci_session'])) {
+                        log_message('info', 'Deleting session cookie.');
                         delete_cookie('ci_session', '', '/', '', false, true);
                     }
     
