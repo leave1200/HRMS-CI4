@@ -222,7 +222,7 @@ public function getUserLeaveApplications()
                     }
     
                     // Destroy the session
-                    $this->session->destroy();
+                    session()->destroy();
         
                     // Redirect to the login page with a success message
                     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
