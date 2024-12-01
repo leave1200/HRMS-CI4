@@ -30,7 +30,6 @@ class AdminController extends BaseController
 
     public function index()
     {
-        
         $employeeModel = new EmployeeModel();
         $employee = $employeeModel->findAll();
         $employeeCount = $employeeModel->where('result !=', 'Pending')->countAllResults();
@@ -52,10 +51,9 @@ class AdminController extends BaseController
         $user = CIAuth::user();
         if(!$user){
             CIAuth::forget();
-            delete_cookie('NID', '.google.com', '/');
-            delete_cookie('_GRECAPTCHA', '.google.com', '/recaptcha');
-            delete_cookie('ci_session', 'hrmo-lawis.com', '/');
-            delete_cookie('debug-bar-state', 'hrmo-lawis.com', '/');
+            foreach ($_COOKIE as $key => $value) {
+                delete_cookie($key);
+            }
             return redirect()->route('admin.login.form')->with('success', 'You are logged out!');
         }
         
