@@ -229,7 +229,7 @@ class AuthController extends BaseController
     session()->remove('wait_time');
 
     // ** Update the policy field to 'log_in' **
-    $this->userModel->update($userInfo['id'], ['policy' => 'log_in']);
+    $this->userModel->update($userInfo['id'], ['policy' => 'Online']);
 
     // Set user session and authenticate
     CIAuth::setCIAuth($userInfo);
