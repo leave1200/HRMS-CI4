@@ -198,26 +198,34 @@ public function getUserLeaveApplications()
     // return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     // }
     public function logoutHandler()
-{
-    // Update the policy field to 'offline' for the logged-in user
-    $userId = session()->get('user_id'); // Retrieve the logged-in user's ID from the session
-    if ($userId) {
-        $this->userModel->update($userId, ['policy' => 'Offline']);
+    {
+        try {
+            // Update the policy field to 'offline'
+            $userId = session()->get('user_id');
+            if ($userId) {
+                if (!$this->userModel->update($userId, ['policy' => 'offline'])) {
+                    throw new \Exception('Failed to update policy field.');
+                }
+            }
+    
+            // Clear authentication
+            CIAuth::forget();
+    
+            // Delete cookies
+            delete_cookie('csrf_cookie_name');
+            delete_cookie('ci_session');
+    
+            // Destroy the session
+            $this->session->sess_destroy();
+    
+            // Redirect to the login page
+            return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+        } catch (\Exception $e) {
+            log_message('error', 'Logout error: ' . $e->getMessage());
+            return redirect()->route('admin.login.form')->with('fail', 'An error occurred during logout. Please try again.');
+        }
     }
-
-    // Forget authentication
-    CIAuth::forget();
-
-    // Delete cookies
-    delete_cookie('csrf_cookie_name');  // Adjust this if your cookie name is different
-    delete_cookie('ci_session');
-
-    // Destroy the session
-    $this->session->sess_destroy();
-
-    // Redirect to the login page with a logout message
-    return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
-}
+    
 
     public function profile(){
         $userStatus = session()->get('userStatus');
