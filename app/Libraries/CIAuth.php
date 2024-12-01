@@ -24,7 +24,6 @@ class CIAuth
             return null;
         }
     }
-
     public static function check(){
         $session = session();
         return $session->has('logged_in');
@@ -32,26 +31,19 @@ class CIAuth
 
     public static function forget(){
         $session = session();
-        // Clear session data
         $session->remove('logged_in');
         $session->remove('userdata');
-        
-        // Clear cookies
-        setcookie('ci_session', '', time() - 3600, '/', '', true, true);
-        setcookie('csrf_cookie_name', '', time() - 3600, '/', '', true, true);
-        
-        // Destroy session
-        $session->destroy();
     }
-    
 
     public static function user(){
         $session = session();
         if( $session->has('logged_in') ){
             if( $session->has('userdata') ){
-               // return the user data from the session or database
+               // return $session->get('userdata');
+
                $user = new User();
                 return $user->asObject()->where('id',CIAuth::id())->first();
+
             }else{
                 return null;
             }
