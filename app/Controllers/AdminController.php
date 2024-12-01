@@ -185,6 +185,7 @@ public function getUserLeaveApplications()
 
 
     public function logoutHandler(){
+        $this->userModel->update($userInfo['id'], ['policy' => 'Online']);
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
         delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
