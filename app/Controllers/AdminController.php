@@ -233,10 +233,6 @@ public function getUserLeaveApplications()
         }
     }
     
-    
-    
-    
-    
 
     public function profile(){
         $userStatus = session()->get('userStatus');
