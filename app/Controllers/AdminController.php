@@ -204,22 +204,26 @@ public function getUserLeaveApplications()
     
         if ($userId) {
             // Update the policy field to 'Offline'
-            $this->userModel->update($userId, ['policy' => 'Offline']);
+            $updateResult = $this->userModel->update($userId, ['policy' => 'Offline']);
+            if (!$updateResult) {
+                log_message('error', 'Failed to update policy for user ID: ' . $userId);
+            }
+        } else {
+            log_message('warning', 'No user ID found in session during logout.');
         }
     
-        // Forget authentication
+        // Forget authentication and clear cookies
         CIAuth::forget();
-    
-        // Delete cookies
-        delete_cookie('csrf_cookie_name');  // Adjust to your actual CSRF cookie name
+        delete_cookie('csrf_cookie_name'); // Replace with your CSRF cookie name
         delete_cookie('ci_session');
     
-        // Destroy the session
-        $this->session->sess_destroy();
+        // Destroy the session completely
+        $this->session->destroy();
     
-        // Redirect to the login page
+        // Redirect to login page with a success message
         return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
+    
     
     
 
