@@ -202,7 +202,7 @@ public function getUserLeaveApplications()
     // Update the policy field to 'offline' for the logged-in user
     $userId = session()->get('user_id'); // Retrieve the logged-in user's ID from the session
     if ($userId) {
-        $this->userModel->update($userId, ['policy' => 'offline']);
+        $this->userModel->update($userId, ['policy' => 'Offline']);
     }
 
     // Forget authentication
