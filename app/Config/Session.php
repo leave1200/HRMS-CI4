@@ -30,7 +30,7 @@ class Session extends BaseConfig
      *
      * The session cookie name, must contain only [0-9a-z_-] characters
      */
-    public string $cookieName = '';
+    public string $cookieName = 'none';
 
     /**
      * --------------------------------------------------------------------------
@@ -124,4 +124,5 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+
 }
