@@ -93,9 +93,6 @@
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
-		<!-- Toastr JS -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 		<?= $this->renderSection('scripts') ?>
 		<script>
 function deleteSpecificCookies() {
