@@ -51,9 +51,6 @@ class AdminController extends BaseController
         $user = CIAuth::user();
         if(!$user){
             CIAuth::forget();
-            foreach ($_COOKIE as $key => $value) {
-                delete_cookie($key);
-            }
             return redirect()->route('admin.login.form')->with('success', 'You are logged out!');
         }
         
