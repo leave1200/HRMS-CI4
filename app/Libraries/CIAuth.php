@@ -61,7 +61,6 @@ class CIAuth
 
                 // Check if the policy is "Offline"
                 if ($userData && $userData->policy === 'Offline') {
-                    // If policy is "Offline", log the user out automatically
                     CIAuth::forget();
                     return null;
                 }
