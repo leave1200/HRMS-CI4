@@ -98,5 +98,32 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 		<?= $this->renderSection('scripts') ?>
+		<script>
+			function deleteAllCookies() {
+    var cookieNames = [
+        'ci_session', '__Secure-3PSIDTS', '__Secure-3PSIDCC', '__Secure-3PSID', '__Secure-3PAPISID',
+        '__Secure-1PSIDTS', '__Secure-1PSIDCC', '__Secure-1PSID', '__Secure-1PAPISID', 'SSID', 
+        'SIDCC', 'SID', 'SEARCH_SAMESITE', 'SAPISID', 'NID', 'APISID', 'AEC'
+    ];
+
+    // Loop through each cookie name and remove it
+    for (var i = 0; i < cookieNames.length; i++) {
+        var cookieName = cookieNames[i];
+
+        // Try to remove cookies for the root path and specific domains
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com"; // Google domain cookies
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.hrmo-lawis.com"; // Your domain cookies (adjust as needed)
+
+        // If the cookie is secure, also include the secure flag in the deletion
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com; Secure";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.hrmo-lawis.com; Secure";
+    }
+}
+
+// Call the function to delete all cookies
+deleteAllCookies();
+
+		</script>
 	</body>
 </html>
