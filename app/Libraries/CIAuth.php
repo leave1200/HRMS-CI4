@@ -42,9 +42,6 @@ class CIAuth
         
         // Destroy session
         $session->destroy();
-    
-        // Optional: Redirect user to the login page
-        return redirect()->to('/login');
     }
     
 
