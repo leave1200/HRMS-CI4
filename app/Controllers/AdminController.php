@@ -184,69 +184,69 @@ public function getUserLeaveApplications()
 
 
 
-    // public function logoutHandler(){
-    //     CIAuth::forget();
-    //     return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-    //     delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
-    //    delete_cookie('ci_session');
+    public function logoutHandler(){
+        CIAuth::forget();
+        return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
+        delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
+       delete_cookie('ci_session');
 
-    //     $this->session->sess_destroy();
+        $this->session->sess_destroy();
 
 
 
-    // // Redirect to the login page after logout
-    // return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
-    // }
-    public function logoutHandler()
-    {
-        try {
-            // Check if the session is active and retrieve the logged-in user's ID
-            $userId = session()->get('user_id');
-            
-            // If a user is logged in
-            if ($userId) {
-                // Attempt to update the 'policy' field to 'Offline'
-                $updateSuccess = $this->userModel->update($userId, ['policy' => 'Offline']);
-        
-                if ($updateSuccess) {
-                    // If the update is successful, proceed with logout
-                    CIAuth::forget();
-                    
-                    // Delete the CSRF and session cookies (ensure the cookie names are correct)
-                    if (isset($_COOKIE['csrf_cookie_name'])) {
-                        log_message('info', 'Deleting CSRF cookie.');
-                        delete_cookie('csrf_cookie_name', '', '/', '', false, true);
-                    }
-    
-                    if (isset($_COOKIE['ci_session'])) {
-                        log_message('info', 'Deleting session cookie.');
-                        delete_cookie('ci_session', '', '/', '', false, true);
-                    }
-    
-                    // Regenerate session ID before destroying it
-                    session()->regenerate(true);
-    
-                    // Destroy the session
-                    session()->destroy();
-        
-                    // Redirect to the login page with a success message
-                    return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
-                } else {
-                    // Log an error and keep the user logged in
-                    log_message('error', "Failed to update 'policy' to 'Offline' for user ID: $userId.");
-                    return redirect()->back()->with('fail', 'Failed to log out. Please try again.');
-                }
-            } else {
-                // If no user ID is found, log and show a message
-                log_message('warning', 'No user ID found in session during logout.');
-                return redirect()->back()->with('fail', 'No active session found. Unable to log out.');
-            }
-        } catch (Exception $e) {
-            // Log unexpected errors and redirect back with a failure message
-            log_message('critical', 'Unexpected logout error: ' . $e->getMessage());
-            return redirect()->back()->with('fail', 'An error occurred during logout. Please try again.');
-        }
+    // Redirect to the login page after logout
+    return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
+    // public function logoutHandler()
+    // {
+    //     try {
+    //         // Check if the session is active and retrieve the logged-in user's ID
+    //         $userId = session()->get('user_id');
+            
+    //         // If a user is logged in
+    //         if ($userId) {
+    //             // Attempt to update the 'policy' field to 'Offline'
+    //             $updateSuccess = $this->userModel->update($userId, ['policy' => 'Offline']);
+        
+    //             if ($updateSuccess) {
+    //                 // If the update is successful, proceed with logout
+    //                 CIAuth::forget();
+                    
+    //                 // Delete the CSRF and session cookies (ensure the cookie names are correct)
+    //                 if (isset($_COOKIE['csrf_cookie_name'])) {
+    //                     log_message('info', 'Deleting CSRF cookie.');
+    //                     delete_cookie('csrf_cookie_name', '', '/', '', false, true);
+    //                 }
+    
+    //                 if (isset($_COOKIE['ci_session'])) {
+    //                     log_message('info', 'Deleting session cookie.');
+    //                     delete_cookie('ci_session', '', '/', '', false, true);
+    //                 }
+    
+    //                 // Regenerate session ID before destroying it
+    //                 session()->regenerate(true);
+    
+    //                 // Destroy the session
+    //                 session()->destroy();
+        
+    //                 // Redirect to the login page with a success message
+    //                 return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+    //             } else {
+    //                 // Log an error and keep the user logged in
+    //                 log_message('error', "Failed to update 'policy' to 'Offline' for user ID: $userId.");
+    //                 return redirect()->back()->with('fail', 'Failed to log out. Please try again.');
+    //             }
+    //         } else {
+    //             // If no user ID is found, log and show a message
+    //             log_message('warning', 'No user ID found in session during logout.');
+    //             return redirect()->back()->with('fail', 'No active session found. Unable to log out.');
+    //         }
+    //     } catch (Exception $e) {
+    //         // Log unexpected errors and redirect back with a failure message
+    //         log_message('critical', 'Unexpected logout error: ' . $e->getMessage());
+    //         return redirect()->back()->with('fail', 'An error occurred during logout. Please try again.');
+    //     }
+    // }
     
     
 
