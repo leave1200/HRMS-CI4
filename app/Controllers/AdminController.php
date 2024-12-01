@@ -48,6 +48,7 @@ class AdminController extends BaseController
         $attendances = $attendanceModel->findAll();
         $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
         $pmAttendanceRecords = $attendanceModel->where('pm_sign_in IS NOT NULL')->countAllResults();
+        $user = CIAuth::user();
         
 
 
