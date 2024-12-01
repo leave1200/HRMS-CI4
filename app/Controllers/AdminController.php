@@ -51,7 +51,7 @@ class AdminController extends BaseController
         $user = CIAuth::user();
         if(!$user){
             CIAuth::forget();
-            return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+            return redirect()->route('admin.login.form')->with('success', 'You are logged out!');
         }
         
 
