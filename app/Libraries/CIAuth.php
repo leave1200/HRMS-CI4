@@ -33,9 +33,6 @@ class CIAuth
         $session = session();
         $session->remove('logged_in');
         $session->remove('userdata');
-        foreach ($_COOKIE as $key => $value) {
-            delete_cookie($key);
-        }
     }
 
     // public static function user(){
