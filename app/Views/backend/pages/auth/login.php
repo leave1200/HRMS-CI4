@@ -178,20 +178,26 @@
 </script>
 
 <script>
-  function deleteAllCookies() {
-    // Get all cookies
-    var cookies = document.cookie.split(";");
+function deleteAllCookies() {
+    // List all cookie names to delete
+    var cookieNames = [
+        'ci_session', '__Secure-3PSIDTS', '__Secure-3PSIDCC', '__Secure-3PSID', '__Secure-3PAPISID',
+        '__Secure-1PSIDTS', '__Secure-1PSIDCC', '__Secure-1PSID', '__Secure-1PAPISID', 'SSID', 
+        'SIDCC', 'SID', 'SEARCH_SAMESITE', 'SAPISID', 'NID', 'APISID', 'AEC'
+    ];
 
-    // Loop through the cookies and delete each one
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var equalsPos = cookie.indexOf("=");
-        var name = equalsPos > -1 ? cookie.substr(0, equalsPos) : cookie;
-
-        // Remove the cookie by setting its expiration date to the past
-        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    // Loop through each cookie name and remove it
+    for (var i = 0; i < cookieNames.length; i++) {
+        var cookieName = cookieNames[i];
+        
+        // Remove cookie by setting its expiration date to a past date
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com"; // For Google cookies (if they are domain-specific)
     }
 }
+
+// Call the function to delete all cookies
+deleteAllCookies();
 
 
 </script>
