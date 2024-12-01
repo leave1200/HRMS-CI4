@@ -28,9 +28,9 @@
                 <td><?= $user['email'] ?></td>
                 <td>
                     <?php if ($user['policy'] === 'Online'): ?>
-                        <span style="color: green; font-size: 1.2em;">●</span> Online
+                        <span style="color: green; font-size: 2.2em;">●</span> Online
                     <?php else: ?>
-                        <span style="color: gray; font-size: 1.2em;">●</span> Offline
+                        <span style="color: gray; font-size: 2.2em;">●</span> Offline
                     <?php endif; ?>
                 </td>
                 <td>
