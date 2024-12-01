@@ -204,28 +204,35 @@ public function getUserLeaveApplications()
             $userId = session()->get('user_id');
     
             if ($userId) {
-                // Update the policy field to 'Offline'
-                if (!$this->userModel->update($userId, ['policy' => 'Offline'])) {
-                    log_message('error', 'Failed to update policy for user ID: ' . $userId);
+                // Attempt to update the 'policy' field to 'Offline'
+                $updateSuccess = $this->userModel->update($userId, ['policy' => 'Offline']);
+    
+                if ($updateSuccess) {
+                    // If the update is successful, proceed with logout
+                    CIAuth::forget();
+                    delete_cookie('csrf_cookie_name'); // Replace with your actual CSRF cookie name if applicable
+                    delete_cookie('ci_session');
+                    $this->session->destroy();
+    
+                    // Redirect to the login page with a success message
+                    return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+                } else {
+                    // Log an error and keep the user logged in
+                    log_message('error', "Failed to update 'policy' to 'Offline' for user ID: $userId.");
+                    return redirect()->back()->with('fail', 'Failed to log out. Please try again.');
                 }
+            } else {
+                // If no user ID is found, keep the user on the same page
+                log_message('warning', 'No user ID found in session during logout.');
+                return redirect()->back()->with('fail', 'No active session found. Unable to log out.');
             }
-    
-            // Forget authentication and destroy the session
-            CIAuth::forget();
-            delete_cookie('csrf_cookie_name'); // Replace with your actual CSRF cookie name
-            delete_cookie('ci_session');
-            $this->session->destroy();
-    
-            // Redirect to the login page
-            return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
         } catch (Exception $e) {
-            // Log unexpected errors
-            log_message('critical', 'Logout error: ' . $e->getMessage());
-    
-            // Redirect to login page with a generic failure message
-            return redirect()->route('admin.login.form')->with('fail', 'An unexpected error occurred during logout. Please try again.');
+            // Log unexpected errors and redirect back with a failure message
+            log_message('critical', 'Unexpected logout error: ' . $e->getMessage());
+            return redirect()->back()->with('fail', 'An error occurred during logout. Please try again.');
         }
     }
+    
     
     
     
