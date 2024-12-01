@@ -51,5 +51,20 @@ class CIAuth
             return null;
         }
     }
+    public static function logoutAllDevices($userId){
+        // Set the user's policy to "Offline"
+        $userModel = new User();
+        $userModel->update($userId, ['policy' => 'Offline']);
+        
+        // Invalidate all sessions for this user
+        $session = session();
+        // Destroy the current session for this user
+        $session->remove('logged_in');
+        $session->remove('userdata');
+        
+        // Optionally, if you're storing sessions in the database:
+        // $sessionModel = new SessionModel(); // Replace with your session model
+        // $sessionModel->deleteWhere('user_id', $userId);  // Clear all sessions for this user
+    }
     
 }
