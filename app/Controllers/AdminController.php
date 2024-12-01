@@ -25,7 +25,12 @@ class AdminController extends BaseController
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
         $this->userModel = new \App\Models\User();
-        
+         $user = CIAuth::user();
+
+        // If the user is logged out (because the policy is "Offline"), redirect them to the login page
+        if (!$user) {
+            return redirect()->to('admin.login.form');  // Replace with your login page URL
+        }
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
