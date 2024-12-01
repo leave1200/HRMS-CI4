@@ -184,40 +184,48 @@ public function getUserLeaveApplications()
 
 
 
-    // public function logoutHandler(){
-    //     $this->userModel->update($userInfo['id'], ['policy' => 'Offline']);
-    //     CIAuth::forget();
-    //     return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-    //     delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
-    //    delete_cookie('ci_session');
-
-    //     $this->session->sess_destroy();
-
-
-
-    public function logoutHandler()
-    {
-        // Retrieve the logged-in user's ID from the session
-        $userId = session()->get('user_id');
-        if ($userId) {
-            // Update the policy field to 'Offline'
-            $this->userModel->update($userId, ['policy' => 'Offline']);
-        }
-    
-        // Forget authentication
+    public function logoutHandler(){
+        $this->userModel->update($userInfo['id'], ['policy' => 'Offline']);
         CIAuth::forget();
-    
-        // Delete cookies
-        delete_cookie('csrf_cookie_name');  // Adjust to your actual CSRF cookie name
-        delete_cookie('ci_session');
-    
-        // Destroy the session
+        return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
+        delete_cookie('csrf_cookie_name');  // Make sure this matches the cookie name you are using
+       delete_cookie('ci_session');
+
         $this->session->sess_destroy();
-    
-        // Redirect to the login page
-        return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+
+
+
+    // Redirect to the login page after logout
+    return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
+    // public function logoutHandler()
+    // {
+    //     try {
+    //         // Update the policy field to 'offline'
+    //         $userId = session()->get('user_id');
+    //         if ($userId) {
+    //             if (!$this->userModel->update($userId, ['policy' => 'Offline'])) {
+    //                 throw new \Exception('Failed to update policy field.');
+    //             }
+    //         }
     
+    //         // Clear authentication
+    //         CIAuth::forget();
+    
+    //         // Delete cookies
+    //         delete_cookie('csrf_cookie_name');
+    //         delete_cookie('ci_session');
+    
+    //         // Destroy the session
+    //         $this->session->sess_destroy();
+    
+    //         // Redirect to the login page
+    //         return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
+    //     } catch (\Exception $e) {
+    //         log_message('error', 'Logout error: ' . $e->getMessage());
+    //         return redirect()->route('admin.login.form')->with('fail', 'An error occurred during logout. Please try again.');
+    //     }
+    // }
     
 
     public function profile(){
