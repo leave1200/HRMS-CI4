@@ -204,47 +204,7 @@ public function getUserLeaveApplications()
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    // public function logoutHandler()
-    // {
-    //     // Check if the session is active and retrieve the logged-in user's ID
-    //     $userId = session()->get('user_id');
-        
-    //     // If a user is logged in
-    //     if ($userId) {
-    //         // Attempt to update the 'policy' field to 'Offline'
-    //         $updateSuccess = $this->userModel->update($userId, ['policy' => 'Offline']);
     
-    //         if ($updateSuccess) {
-    //             // If the update is successful, proceed with logout
-    //             CIAuth::forget();
-                
-    //             // Delete the CSRF and session cookies (ensure the cookie names are correct)
-    //             if (isset($_COOKIE['csrf_cookie_name'])) {
-    //                 delete_cookie('csrf_cookie_name');
-    //             }
-    
-    //             if (isset($_COOKIE['ci_session'])) {
-    //                 delete_cookie('ci_session');
-    //             }
-    
-    //             // Destroy the session
-    //             session()->destroy();
-    
-    //             // Redirect to the login page with a success message
-    //             return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
-    //         } else {
-    //             // Log an error and keep the user logged in
-    //             log_message('error', "Failed to update 'policy' to 'Offline' for user ID: $userId.");
-    //             return redirect()->back()->with('fail', 'Failed to log out. Please try again.');
-    //         }
-    //     } else {
-    //         // If no user ID is found, log and show a message
-    //         log_message('warning', 'No user ID found in session during logout.');
-    //         return redirect()->back()->with('fail', 'No active session found. Unable to log out.');
-    //     }
-    // }
-    
-
     public function profile(){
         $userStatus = session()->get('userStatus');
         $data = array(
