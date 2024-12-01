@@ -19,6 +19,12 @@ class AuthController extends BaseController
     public function __construct()
     {
         $this->userModel = new User(); // Load the UserModel
+        $user = CIAuth::user();
+
+        // If the user is logged out (because the policy is "Offline"), redirect them to the login page
+        if (!$user) {
+            return redirect()->to('admin.login.form');  // Replace with your login page URL
+        }
     }
     public function loginForm()
     {
