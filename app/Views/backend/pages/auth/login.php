@@ -51,7 +51,7 @@
             </div>
         </div>
         
-        <!-- Validation Error for login_id -->
+        <!--   Validation Error for login_id -->
         <?php if ($validation->getError('login_id')): ?>
             <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
                 <?= esc($validation->getError('login_id')) ?>
