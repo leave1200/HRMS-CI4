@@ -109,7 +109,7 @@
     });
 </script>
 <script>
-    function confirmDelete(fileId) {
+    function confirmDelete(id) {
         // var deleteUrl = "<?= base_url('delete-file') ?>" + "/" + fileId;
 
         // Swal.fire({
