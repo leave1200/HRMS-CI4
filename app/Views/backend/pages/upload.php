@@ -109,61 +109,34 @@
     });
 </script>
 <script>
-function confirmDelete(fileId) {
-    var deleteUrl = "<?= base_url('delete-file') ?>" + "/" + fileId;
+    function confirmDelete(fileId) {
+        var deleteUrl = "<?= base_url('delete-file') ?>" + "/" + fileId;
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be undone!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Send AJAX request to delete the file
-            fetch(deleteUrl, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: data.message,
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            // Reload the page after successful deletion
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                // Show success message after deletion
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'Your file has been deleted successfully.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                            // Reload the page
                             location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message,
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'An unexpected error occurred.',
-                        confirmButtonText: 'OK'
-                    });
                 });
-        }
-    });
-}
-
+            }
+        });
+    }
 </script>
 <script>
     document.getElementById('file').addEventListener('change', function(event) {
