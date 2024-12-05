@@ -421,7 +421,7 @@ class UserController extends Controller
 
     public function deleteFile($id)
     {
-        $fileModel = new FileModel();
+        $fileModel = new \App\Models\FileModel();
         $file = $fileModel->find($id);
 
         if (!$file) {
