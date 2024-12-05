@@ -118,7 +118,7 @@ $routes->group('', static function($routes){
         $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
         $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
         // Ensure that deleteFile route is also defined
-        $routes->delete('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
+        $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
         
 
         $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);
