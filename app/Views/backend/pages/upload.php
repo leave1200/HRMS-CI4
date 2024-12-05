@@ -81,8 +81,9 @@
                                     <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm"><i class="icon-copy fi-save">Download</i></a>
 
                                     
-                                        <!-- Delete Action (using SweetAlert for confirmation) -->
-                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)"><i class="icon-copy fi-page-delete">Delete</i></button>
+                                        <!-- Delete Action (using SweetAlert for confirmation)
+                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)"><i class="icon-copy fi-page-delete">Delete</i></button> -->
+                                         <a href="<?= route_to('deleteFile', $file['id']) ?>" class="btn btn-success btn-sm"><i class="icon-copy fi-page-delete">Download</i></a>
 
                                     
                                 </td>
