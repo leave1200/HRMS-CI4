@@ -147,7 +147,7 @@
         if (result.isConfirmed) {
             $.ajax({
                 type: 'POST',
-                url: '<?= route_to('delete-file') ?>',
+                url: "<?= route_to('delete-file') ?>", + "/" + fileId;
                 data: {
                     id: id,
                     '<?= csrf_token() ?>': '<?= csrf_hash() ?>' // Add CSRF token for CodeIgniter 4
