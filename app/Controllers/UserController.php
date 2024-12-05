@@ -421,13 +421,14 @@ class UserController extends Controller
 
     public function deleteFile($id)
     {
-        $fileModel = new \App\Models\FileModel();
+
         $file = $fileModel->find($id);
 
         if (!$file) {
             session()->setFlashdata('error', 'File not found.');
             return redirect()->back();
         }
+        $fileModel = new \App\Models\FileModel();
 
         if ($fileModel->delete($id)) {
             session()->setFlashdata('success', 'File deleted successfully.');
