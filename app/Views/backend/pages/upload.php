@@ -132,7 +132,7 @@
                     confirmButtonText: 'OK'
                 }).then(() => {
                             // Reload the page
-                            window.location.href = deleteUrl;
+                            location.reload();
                 });
             }
         });
