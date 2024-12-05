@@ -131,37 +131,37 @@ function confirmDelete(id) {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Response:', data); // Debugging
-
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: data.message,
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            location.reload(); // Reload page or refresh table
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message,
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error); // Debugging
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data); // Debugging
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted!',
+                        text: data.message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Reload the page
+                    });
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: 'An unexpected error occurred.',
+                        text: data.message,
                         confirmButtonText: 'OK'
                     });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error); // Debugging
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An unexpected error occurred.',
+                    confirmButtonText: 'OK'
                 });
+            });
+
         }
     });
 }
