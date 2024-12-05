@@ -419,39 +419,24 @@ class UserController extends Controller
 
 
 
-public function deleteFile($id)
-{
-    $fileModel = new FileModel();
-    $file = $fileModel->find($id);
+    public function deleteFile($id)
+    {
+        $fileModel = new FileModel();
+        $file = $fileModel->find($id);
 
-    // Check if file exists
-    if (!$file) {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'File not found.'
-        ]);
+        if (!$file) {
+            session()->setFlashdata('error', 'File not found.');
+            return redirect()->back();
+        }
+
+        if ($fileModel->delete($id)) {
+            session()->setFlashdata('success', 'File deleted successfully.');
+        } else {
+            session()->setFlashdata('error', 'Failed to delete the file.');
+        }
+
+        return redirect()->back();
     }
-
-    // Attempt to delete file
-    $filePath = WRITEPATH . 'uploads/' . $file['name']; // Adjust path as necessary
-    if (file_exists($filePath)) {
-        unlink($filePath); // Delete the physical file
-    }
-
-    // Delete database record
-    if ($fileModel->delete($id)) {
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'File deleted successfully.'
-        ]);
-    } else {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Failed to delete the file.'
-        ]);
-    }
-}
-
 
     public function uploadList()
     {
