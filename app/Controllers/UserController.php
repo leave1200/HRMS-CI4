@@ -440,23 +440,21 @@ class UserController extends Controller
     // }
     public function deleteFile($id)
     {
-        log_message('info', "Delete request received for file ID: {$id}");
+        $fileModel = new \App\Models\FileModel();
     
-        $fileModel = new FileModel();
+        // Find the file by ID
         $file = $fileModel->find($id);
-    
         if (!$file) {
-            log_message('error', "File with ID {$id} not found in database.");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'File not found.'
             ]);
         }
     
-        $filePath = WRITEPATH . 'uploads/' . $file['name']; // Update this path as needed
+        // Optionally delete the physical file
+        $filePath = WRITEPATH . 'uploads/' . $file['name']; // Adjust the file path if necessary
         if (file_exists($filePath)) {
             if (!unlink($filePath)) {
-                log_message('error', "Failed to delete physical file: {$filePath}");
                 return $this->response->setJSON([
                     'status' => 'error',
                     'message' => 'Failed to delete the physical file.'
@@ -464,20 +462,20 @@ class UserController extends Controller
             }
         }
     
+        // Delete the record from the database
         if ($fileModel->delete($id)) {
-            log_message('info', "File with ID {$id} deleted successfully.");
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'File deleted successfully.'
             ]);
         } else {
-            log_message('error', "Failed to delete database record for file ID: {$id}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Failed to delete the file record.'
             ]);
         }
     }
+    
     
 
 

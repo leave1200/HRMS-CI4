@@ -124,43 +124,44 @@ function confirmDelete(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request
-            fetch(deleteUrl, {
-                method: 'DELETE',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data); // Debugging
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Deleted!',
-                        text: data.message,
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        location.reload(); // Reload the page
-                    });
-                } else {
+            const deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + id;
+                fetch(deleteUrl, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload(); // Reload the page after deletion
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Debugging
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: data.message,
+                        text: 'An unexpected error occurred.',
                         confirmButtonText: 'OK'
                     });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error); // Debugging
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An unexpected error occurred.',
-                    confirmButtonText: 'OK'
                 });
-            });
+
 
         }
     });
