@@ -419,24 +419,48 @@ class UserController extends Controller
 
 
 
+    // public function deleteFile($id)
+    // {
+    //     $fileModel = new FileModel();
+    //     $file = $fileModel->find($id);
+
+    //     if (!$file) {
+    //         session()->setFlashdata('error', 'File not found.');
+    //         return redirect()->back();
+    //     }
+
+    //     if ($fileModel->delete($id)) {
+    //         session()->setFlashdata('success', 'File deleted successfully.');
+    //     } else {
+    //         session()->setFlashdata('error', 'Failed to delete the file.');
+    //     }
+
+    //     return redirect()->back();
+    // }
     public function deleteFile($id)
-    {
-        $fileModel = new FileModel();
-        $file = $fileModel->find($id);
+{
+    $fileModel = new FileModel();
 
-        if (!$file) {
-            session()->setFlashdata('error', 'File not found.');
-            return redirect()->back();
-        }
-
-        if ($fileModel->delete($id)) {
-            session()->setFlashdata('success', 'File deleted successfully.');
-        } else {
-            session()->setFlashdata('error', 'Failed to delete the file.');
-        }
-
-        return redirect()->back();
+    // Fetch the file
+    $file = $fileModel->find($id);
+    if (!$file) {
+        return $this->response->setJSON(['status' => 'error', 'message' => 'File not found.']);
     }
+
+    // Delete the file from storage
+    $filePath = WRITEPATH . 'uploads/' . $file['name'];
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Delete the file record from the database
+    if ($fileModel->delete($id)) {
+        return $this->response->setJSON(['status' => 'success', 'message' => 'File deleted successfully.']);
+    } else {
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete file.']);
+    }
+}
+
 
     public function uploadList()
     {
