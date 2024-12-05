@@ -109,35 +109,63 @@
     });
 </script>
 <script>
-    function confirmDelete(id) {
-        var deleteUrl = "<?= base_url('deleteFile') ?>" + "/" + id;
+function confirmDelete(fileId) {
+    const deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + fileId;
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This action cannot be undone!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Send DELETE request
+            fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response:', data); // Debugging
 
-                // Show success message after deletion
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted!',
-                    text: 'Your file has been deleted successfully.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                            // Reload the page
-                            // window.location.href = deleteUrl;
-                            location.reload();
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload(); // Reload page or refresh table
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Debugging
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An unexpected error occurred.',
+                        confirmButtonText: 'OK'
+                    });
                 });
-            }
-        });
-    }
+        }
+    });
+}
+
 </script>
 <script>
     document.getElementById('file').addEventListener('change', function(event) {
