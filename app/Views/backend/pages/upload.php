@@ -109,8 +109,8 @@
     });
 </script>
 <script>
-function confirmDelete(fileId) {
-    const deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + fileId;
+function confirmDelete(id) {
+    const deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + id;
 
     Swal.fire({
         title: 'Are you sure?',
