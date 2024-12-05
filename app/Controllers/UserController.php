@@ -439,43 +439,46 @@ class UserController extends Controller
     //     return redirect()->back();
     // }
     public function deleteFile($id)
-{
-    $fileModel = new FileModel();
-
-    // Find the file in the database
-    $file = $fileModel->find($id);
-
-    if (!$file) {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'File not found.'
-        ]);
-    }
-
-    // Delete the physical file (if applicable)
-    $filePath = WRITEPATH . 'uploads/' . $file['name']; // Adjust path if different
-    if (file_exists($filePath)) {
-        if (!unlink($filePath)) {
+    {
+        log_message('info', "Delete request received for file ID: {$id}");
+    
+        $fileModel = new FileModel();
+        $file = $fileModel->find($id);
+    
+        if (!$file) {
+            log_message('error', "File with ID {$id} not found in database.");
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'Failed to delete the physical file.'
+                'message' => 'File not found.'
+            ]);
+        }
+    
+        $filePath = WRITEPATH . 'uploads/' . $file['name']; // Update this path as needed
+        if (file_exists($filePath)) {
+            if (!unlink($filePath)) {
+                log_message('error', "Failed to delete physical file: {$filePath}");
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'Failed to delete the physical file.'
+                ]);
+            }
+        }
+    
+        if ($fileModel->delete($id)) {
+            log_message('info', "File with ID {$id} deleted successfully.");
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'File deleted successfully.'
+            ]);
+        } else {
+            log_message('error', "Failed to delete database record for file ID: {$id}");
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to delete the file record.'
             ]);
         }
     }
-
-    // Delete the file record from the database
-    if ($fileModel->delete($id)) {
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'File deleted successfully.'
-        ]);
-    } else {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Failed to delete the file record.'
-        ]);
-    }
-}
+    
 
 
     public function uploadList()
