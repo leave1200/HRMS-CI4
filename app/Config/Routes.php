@@ -74,7 +74,7 @@ $routes->group('', static function($routes){
                 $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
                 $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
                 // Ensure that deleteFile route is also defined
-                $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
+                $routes->get('delete-file/(:any)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
     });
     $routes->group('Attendance-page', ['filter'=>'cifilter:auth'], static function($routes){
 
