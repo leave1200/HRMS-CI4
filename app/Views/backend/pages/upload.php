@@ -110,32 +110,79 @@
 </script>
 <script>
     function confirmDelete(fileId) {
-        var deleteUrl = "<?= base_url('delete-file') ?>" + "/" + fileId;
+        // var deleteUrl = "<?= base_url('delete-file') ?>" + "/" + fileId;
 
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "This action cannot be undone!",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, delete it!',
+        //     cancelButtonText: 'Cancel'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+
+        //         // Show success message after deletion
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'Deleted!',
+        //             text: 'Your file has been deleted successfully.',
+        //             confirmButtonText: 'OK'
+        //         }).then(() => {
+        //                     // Reload the page
+        //                     window.location.href = deleteUrl;
+        //         });
+        //     }
+        // });
         Swal.fire({
-            title: 'Are you sure?',
-            text: "This action cannot be undone!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this employee!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: '<?= route_to('deleteFile') ?>',
+                data: {
+                    id: id,
+                    '<?= csrf_token() ?>': '<?= csrf_hash() ?>' // Add CSRF token for CodeIgniter 4
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Success response:', response); // Log the success response
 
-                // Show success message after deletion
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted!',
-                    text: 'Your file has been deleted successfully.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                            // Reload the page
-                            window.location.href = deleteUrl;
-                });
-            }
-        });
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: response.message,
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload(); // Reload page or update table
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message, // Display the error message from response
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr.responseText); // Log the error response text
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while processing your request. ' + xhr.responseText,
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
     }
 </script>
 <script>
