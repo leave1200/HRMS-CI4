@@ -110,7 +110,7 @@
 </script>
 <script>
     function confirmDelete(fileId) {
-        var deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + fileId;
+        var deleteUrl = "<?= route_to('admin/delete-file') ?>" + "/" + fileId;
 
         Swal.fire({
             title: 'Are you sure?',
