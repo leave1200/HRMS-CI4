@@ -231,12 +231,6 @@ function printDataTable() {
         return { hours: diffInHours, minutes: diffInMinutes };
     }
 
-    // Initialize totals for undertime and worked time
-    let totalUndertimeHours = 0;
-    let totalUndertimeMinutes = 0;
-    let totalWorkedHours = 0;
-    let totalWorkedMinutes = 0;
-
     // Generate table rows for dates, arrival, and departure times
     var tableRows = Array.from({ length: 31 }).map((_, index) => {
         let date = index + 1; // Dates 1 to 31
@@ -250,40 +244,37 @@ function printDataTable() {
         let arrivalPM = row ? row.querySelector("td:nth-child(8)").textContent.trim() : ''; // PM Arrival
         let departurePM = row ? row.querySelector("td:nth-child(9)").textContent.trim() : ''; // PM Departure
 
-        // Calculate undertime hours and minutes
-        let undertimeAM = { hours: 0, minutes: 0 };
-        let undertimePM = { hours: 0, minutes: 0 };
+        // Calculate regular worked time and undertime for each row
+        let workedHoursAM = 0;
+        let workedMinutesAM = 0;
+        let workedHoursPM = 0;
+        let workedMinutesPM = 0;
 
+        // Calculate AM worked time
         if (arrivalAM && departureAM) {
             let amWorkDuration = calculateTimeDifference(arrivalAM, departureAM);
-            totalWorkedHours += amWorkDuration.hours;
-            totalWorkedMinutes += amWorkDuration.minutes;
-            undertimeAM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
+            workedHoursAM = amWorkDuration.hours;
+            workedMinutesAM = amWorkDuration.minutes;
         }
 
+        // Calculate PM worked time
         if (arrivalPM && departurePM) {
             let pmWorkDuration = calculateTimeDifference(arrivalPM, departurePM);
-            totalWorkedHours += pmWorkDuration.hours;
-            totalWorkedMinutes += pmWorkDuration.minutes;
-            undertimePM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
+            workedHoursPM = pmWorkDuration.hours;
+            workedMinutesPM = pmWorkDuration.minutes;
         }
 
-        // Calculate undertime
+        // Calculate total worked hours and minutes for the day
+        let totalWorkedHours = workedHoursAM + workedHoursPM;
+        let totalWorkedMinutes = workedMinutesAM + workedMinutesPM;
+
+        // Calculate undertime for the day (assuming a full 8-hour workday)
         let totalUndertime = 8 - (totalWorkedHours + totalWorkedMinutes / 60);
         let undertimeHours = Math.floor(totalUndertime);
         let undertimeMinutes = Math.round((totalUndertime - undertimeHours) * 60);
 
-        // Accumulate the total undertime
-        totalUndertimeHours += undertimeHours;
-        totalUndertimeMinutes += undertimeMinutes;
-
-        // Handle cases where minutes exceed 60
-        if (totalUndertimeMinutes >= 60) {
-            totalUndertimeHours += Math.floor(totalUndertimeMinutes / 60);
-            totalUndertimeMinutes = totalUndertimeMinutes % 60;
-        }
-
-        return `
+        // Return table row
+        return ` 
             <tr>
                 <td>${date}</td>
                 <td>${arrivalAM}</td>
@@ -296,17 +287,13 @@ function printDataTable() {
         `;
     }).join('');
 
-    // Calculate total worked time in hours and minutes
-    let totalWorkedTimeHours = Math.floor(totalWorkedMinutes / 60);
-    let totalWorkedTimeMinutes = totalWorkedMinutes % 60;
-
     // Construct the two forms side by side
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
             <div style="display: flex; justify-content: space-between;">
                 <!-- First Form -->
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
-                <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
+                    <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
                     <h3 style="text-align: center;">DAILY TIME RECORD</h3>
                     <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
                     <p style="text-align: center;">${monthYearText}</p>
@@ -334,16 +321,11 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
-                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
-                    <p style="margin-top: 50px; text-align: center;">Administrator</p>
-                    <p style="margin-top: -25px; text-align: center;">Administrator</p>
-                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
                 </div>
 
                 <!-- Second Form -->
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
-                <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
+                    <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
                     <h3 style="text-align: center;">DAILY TIME RECORD</h3>
                     <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
                     <p style="text-align: center;">${monthYearText}</p>
@@ -371,11 +353,6 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
-                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
-                    <p style="margin-top: 50px; text-align: center;">Administrator</p>
-                    <p style="margin-top: -25px; text-align: center;">Administrator</p>
-                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
                 </div>
             </div>
         </div>
@@ -389,6 +366,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 
