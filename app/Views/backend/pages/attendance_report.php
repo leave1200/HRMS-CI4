@@ -235,8 +235,9 @@ function printDataTable() {
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
                     <h3 style="text-align: center;">Civil Service Form No. 48</h3>
                     <p style="text-align: center;">For the month of ____________________, 20_______</p>
-                    <p>Regular Days: __________</p>
-                    <p>Saturdays: __________</p>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Regular Days:</strong> ${numberOfDays}</p>
+                    <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
                             <tr>
@@ -251,7 +252,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;">TOTAL:</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> __________</p>
                     <p style="margin-top: 50px; text-align: center;">In-Charge</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
                 </div>
@@ -260,8 +261,9 @@ function printDataTable() {
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
                     <h3 style="text-align: center;">Civil Service Form No. 48</h3>
                     <p style="text-align: center;">For the month of ____________________, 20_______</p>
-                    <p>Regular Days: __________</p>
-                    <p>Saturdays: __________</p>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Regular Days:</strong> ${numberOfDays}</p>
+                    <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
                             <tr>
@@ -276,7 +278,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;">TOTAL:</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> __________</p>
                     <p style="margin-top: 50px; text-align: center;">In-Charge</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
                 </div>
@@ -293,10 +295,6 @@ function printDataTable() {
 }
 </script>
 
-
-
-
-</script>
 
 <script>
 function fetchArchivedData() {
