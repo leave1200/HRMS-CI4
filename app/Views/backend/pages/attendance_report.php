@@ -273,7 +273,8 @@ function printDataTable() {
                 <td>${departureAM}</td>
                 <td>${arrivalPM}</td>
                 <td>${departurePM}</td>
-                <td>${undertimeHours} hours ${undertimeMinutes} minutes</td>
+                <td>${undertimeHours}</td>
+                <td>${undertimeMinutes}</td>
             </tr>
         `;
     }).join('');
