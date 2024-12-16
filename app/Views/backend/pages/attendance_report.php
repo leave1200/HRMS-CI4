@@ -256,12 +256,17 @@ function printDataTable() {
                     <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
+                           <tr>
+                                <th rowspan="2">Date</th>
+                                <th colspan="2">AM</th>
+                                <th colspan="2">PM</th>
+                                <th rowspan="2">Undertime</th>
+                            </tr>
                             <tr>
-                                <th>Date</th>
-                                <th>AM Arrival</th>
-                                <th>AM Departure</th>
-                                <th>PM Arrival</th>
-                                <th>PM Departure</th>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -284,11 +289,16 @@ function printDataTable() {
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>AM Arrival</th>
-                                <th>AM Departure</th>
-                                <th>PM Arrival</th>
-                                <th>PM Departure</th>
+                                <th rowspan="2">Date</th>
+                                <th colspan="2">AM</th>
+                                <th colspan="2">PM</th>
+                                <th rowspan="2">Undertime</th>
+                            </tr>
+                            <tr>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
+                                <th>Arrival | Departure</th>
                             </tr>
                         </thead>
                         <tbody>
