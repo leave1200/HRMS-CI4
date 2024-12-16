@@ -325,7 +325,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
@@ -359,7 +359,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
