@@ -308,7 +308,7 @@ function printDataTable() {
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
                 <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
                     <h3 style="text-align: center;">DAILY TIME RECORD</h3>
-                    <p style="text-align: center;">${name}<br><strong style="margin-top: -30px;">(Name)</strong></p>
+                    <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
                     <p style="text-align: center;">${monthYearText}</p>
                     <p style="text-align: right;"><strong>Regular Days:</strong> ${numberOfDays}</p>
                     <p style="text-align: right;"><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
