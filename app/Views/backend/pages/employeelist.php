@@ -652,26 +652,22 @@ function exportToExcel() {
     var headers = table.querySelectorAll('thead th');
     var rows = table.querySelectorAll('tbody tr');
 
-    // Find the index of the Action column (assuming it's the last column)
+    // Find the index of the "Action" column (assuming it's the last column)
     var actionIndex = headers.length - 1;
 
-    // Remove "Action" column from header
-    headers[actionIndex].style.display = 'none';
-
-    // Remove "Action" column from each row
-    rows.forEach(function(row) {
-        row.cells[actionIndex].style.display = 'none';
-    });
-
-    // Remove the "Profile" column (assuming it's the second last column)
+    // Find the index of the "Profile" column (assuming it's the second last column)
     var profileIndex = headers.length - 2;
 
-    // Remove "Profile" column from header
-    headers[profileIndex].style.display = 'none';
-
-    // Remove "Profile" column from each row
+    // Remove "Action" column from header and body
+    headers[actionIndex].remove();  // Remove Action column from header
     rows.forEach(function(row) {
-        row.cells[profileIndex].style.display = 'none';
+        row.deleteCell(actionIndex); // Remove Action column from each row
+    });
+
+    // Remove "Profile" column from header and body
+    headers[profileIndex].remove();  // Remove Profile column from header
+    rows.forEach(function(row) {
+        row.deleteCell(profileIndex); // Remove Profile column from each row
     });
 
     // Convert the table to a workbook and export to Excel
@@ -690,16 +686,18 @@ function exportToExcel() {
     URL.revokeObjectURL(url);
 
     // Optionally, restore the columns' visibility (in case you want to retain them for the webpage)
-    headers[actionIndex].style.display = '';
-    rows.forEach(function(row) {
-        row.cells[actionIndex].style.display = '';
-    });
-    headers[profileIndex].style.display = '';
-    rows.forEach(function(row) {
-        row.cells[profileIndex].style.display = '';
-    });
+    // This step is optional, but you can restore the columns if needed
+    // headers[actionIndex].style.display = '';
+    // rows.forEach(function(row) {
+    //     row.cells[actionIndex].style.display = '';
+    // });
+    // headers[profileIndex].style.display = '';
+    // rows.forEach(function(row) {
+    //     row.cells[profileIndex].style.display = '';
+    // });
 }
 </script>
+
 
 <script>
 function deleteEmployee(id) {
