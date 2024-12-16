@@ -974,12 +974,13 @@ function validateDesignation1(input) {
 <script>
     $(document).ready(function () {
         $('#DataTables_Table_0').DataTable({
-            "pageLength": 9, // Show 10 entries per page
+            "pageLength": 10, // Show 10 entries per page
             "lengthChange": false, // Disable the option to change page size
             "searching": true, // Enable search functionality
             "order": [[0, "asc"]] // Order by the first column (ID) ascending
         });
     });
 </script>
+
 
 <?= $this->endSection() ?>
