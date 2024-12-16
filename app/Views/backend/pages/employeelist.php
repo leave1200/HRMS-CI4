@@ -34,7 +34,7 @@
     </div>
     <div class="table-responsive">
         <table class="table table-striped" id="DataTables_Table_0">
-            <thead>
+        <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Profile</th>
@@ -46,59 +46,57 @@
                 </tr>
             </thead>
             <tbody>
-    <?php if (!empty($employee)): ?>
-        <?php foreach ($employee as $index => $emp): ?>
-             <?php if ($emp['result'] !== 'Pending'): // Skip employees with status 'Pending' ?> 
-                <tr>
-                    <td><?= $index + 1 ?></td>
-                    <td>
-                        <a href="#" class="edit-profile-picture-btn" data-id="<?= $emp['id'] ?>">
-                            <img src="<?= $emp['picture'] ? base_url('backend/images/users/' . htmlspecialchars($emp['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
-                            <i class="icon-copy dw dw-edit-1"></i>
-                        </a>
-                    </td>
-
-                    <td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
-                    <td><?= htmlspecialchars($emp['address']) ?></td>
-                    <td><?= htmlspecialchars($emp['dob']) ?></td>
-                    <td><?= htmlspecialchars($emp['email']) ?></td>
-                    <td>
-                        <button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
-                            <button class="btn btn-primary edit-employee-btn"
-                                data-id="<?= $emp['id'] ?>"
-                                data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
-                                data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
-                                data-phone="<?= htmlspecialchars($emp['phone']) ?>"
-                                data-dob="<?= htmlspecialchars($emp['dob']) ?>"
-                                data-age="<?= htmlspecialchars($emp['age']) ?>"
-                                data-sex="<?= htmlspecialchars($emp['sex']) ?>"
-                                data-address="<?= htmlspecialchars($emp['address']) ?>"
-                                data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
-                                data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
-                                data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
-                                data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
-                                data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
-                                data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
-                                data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
-                                data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
-                                data-result="<?= htmlspecialchars($emp['result']) ?>"
-                                data-comment="<?= htmlspecialchars($emp['comment']) ?>"
-                                data-toggle="modal"
-                                data-target="#editEmployeeModal">
-                                Edit
-                            </button>
-
-                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
-                        </td>
+                <?php if (!empty($employee)): ?>
+                    <?php foreach ($employee as $index => $emp): ?>
+                        <?php if ($emp['result'] !== 'Pending'): ?>
+                            <tr>
+                                <td><?= $index + 1 ?></td>
+                                <td>
+                                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $emp['id'] ?>">
+                                        <img src="<?= $emp['picture'] ? base_url('backend/images/users/' . htmlspecialchars($emp['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
+                                        <i class="icon-copy dw dw-edit-1"></i>
+                                    </a>
+                                </td>
+                                <td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
+                                <td><?= htmlspecialchars($emp['address']) ?></td>
+                                <td><?= htmlspecialchars($emp['dob']) ?></td>
+                                <td><?= htmlspecialchars($emp['email']) ?></td>
+                                <td>
+                                    <button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
+                                    <button class="btn btn-primary edit-employee-btn"
+                                        data-id="<?= $emp['id'] ?>"
+                                        data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
+                                        data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
+                                        data-phone="<?= htmlspecialchars($emp['phone']) ?>"
+                                        data-dob="<?= htmlspecialchars($emp['dob']) ?>"
+                                        data-age="<?= htmlspecialchars($emp['age']) ?>"
+                                        data-sex="<?= htmlspecialchars($emp['sex']) ?>"
+                                        data-address="<?= htmlspecialchars($emp['address']) ?>"
+                                        data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
+                                        data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
+                                        data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
+                                        data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
+                                        data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
+                                        data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
+                                        data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
+                                        data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
+                                        data-result="<?= htmlspecialchars($emp['result']) ?>"
+                                        data-comment="<?= htmlspecialchars($emp['comment']) ?>"
+                                        data-toggle="modal"
+                                        data-target="#editEmployeeModal">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7">No employees found</td>
                     </tr>
-                <?php endif; ?> 
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="7">No employees found</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
+                <?php endif; ?>
+            </tbody>
         </table>
     </div>
 </div>
