@@ -231,9 +231,11 @@ function printDataTable() {
         return { hours: diffInHours, minutes: diffInMinutes };
     }
 
-    // Initialize totals for undertime
+    // Initialize totals for undertime and worked time
     let totalUndertimeHours = 0;
     let totalUndertimeMinutes = 0;
+    let totalWorkedHours = 0;
+    let totalWorkedMinutes = 0;
 
     // Generate table rows for dates, arrival, and departure times
     var tableRows = Array.from({ length: 31 }).map((_, index) => {
@@ -251,22 +253,23 @@ function printDataTable() {
         // Calculate undertime hours and minutes
         let undertimeAM = { hours: 0, minutes: 0 };
         let undertimePM = { hours: 0, minutes: 0 };
-        let totalWorkedHours = 0;
 
         if (arrivalAM && departureAM) {
             let amWorkDuration = calculateTimeDifference(arrivalAM, departureAM);
-            totalWorkedHours += amWorkDuration.hours + amWorkDuration.minutes / 60;
+            totalWorkedHours += amWorkDuration.hours;
+            totalWorkedMinutes += amWorkDuration.minutes;
             undertimeAM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
         }
 
         if (arrivalPM && departurePM) {
             let pmWorkDuration = calculateTimeDifference(arrivalPM, departurePM);
-            totalWorkedHours += pmWorkDuration.hours + pmWorkDuration.minutes / 60;
+            totalWorkedHours += pmWorkDuration.hours;
+            totalWorkedMinutes += pmWorkDuration.minutes;
             undertimePM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
         }
 
-        // Assuming an 8-hour workday (4 hours AM, 4 hours PM)
-        let totalUndertime = 8 - totalWorkedHours;
+        // Calculate undertime
+        let totalUndertime = 8 - (totalWorkedHours + totalWorkedMinutes / 60);
         let undertimeHours = Math.floor(totalUndertime);
         let undertimeMinutes = Math.round((totalUndertime - undertimeHours) * 60);
 
@@ -292,6 +295,10 @@ function printDataTable() {
             </tr>
         `;
     }).join('');
+
+    // Calculate total worked time in hours and minutes
+    let totalWorkedTimeHours = Math.floor(totalWorkedMinutes / 60);
+    let totalWorkedTimeMinutes = totalWorkedMinutes % 60;
 
     // Construct the two forms side by side
     var printContent = `
@@ -325,6 +332,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
+                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
                     <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
@@ -359,6 +367,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
+                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
                     <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
@@ -376,8 +385,6 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
-
-
 
 
 
