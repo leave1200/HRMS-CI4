@@ -64,42 +64,41 @@
                     <td><?= htmlspecialchars($emp['email']) ?></td>
                     <td>
                         <button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
-                        <button class="btn btn-primary edit-employee-btn"
-                            data-id="<?= $emp['id'] ?>"
-                            data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
-                            data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
-                            data-phone="<?= htmlspecialchars($emp['phone']) ?>"
-                            data-dob="<?= htmlspecialchars($emp['dob']) ?>"
-                             data-age="<?= htmlspecialchars($emp['age']) ?>"
-                            data-sex="<?= htmlspecialchars($emp['sex']) ?>"
-                            data-address="<?= htmlspecialchars($emp['address']) ?>"
-                            data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
-                            data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
-                            data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
-                            data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
-                            data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
-                            data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
-                            data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
-                            data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
-                            data-result="<?= htmlspecialchars($emp['result']) ?>"
-                            data-comment="<?= htmlspecialchars($emp['comment']) ?>"
-                            data-toggle="modal"
-                            data-target="#editEmployeeModal">
-                            Edit
-                        </button>
+                            <button class="btn btn-primary edit-employee-btn"
+                                data-id="<?= $emp['id'] ?>"
+                                data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
+                                data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
+                                data-phone="<?= htmlspecialchars($emp['phone']) ?>"
+                                data-dob="<?= htmlspecialchars($emp['dob']) ?>"
+                                data-age="<?= htmlspecialchars($emp['age']) ?>"
+                                data-sex="<?= htmlspecialchars($emp['sex']) ?>"
+                                data-address="<?= htmlspecialchars($emp['address']) ?>"
+                                data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
+                                data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
+                                data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
+                                data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
+                                data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
+                                data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
+                                data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
+                                data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
+                                data-result="<?= htmlspecialchars($emp['result']) ?>"
+                                data-comment="<?= htmlspecialchars($emp['comment']) ?>"
+                                data-toggle="modal"
+                                data-target="#editEmployeeModal">
+                                Edit
+                            </button>
 
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
-                    </td>
-                </tr>
-             <?php endif; ?> 
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="7">No employees found</td>
-        </tr>
-    <?php endif; ?>
-</tbody>
-
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
+                        </td>
+                    </tr>
+                <?php endif; ?> 
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="7">No employees found</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
         </table>
     </div>
 </div>
@@ -970,6 +969,16 @@ function validateDesignation1(input) {
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
         document.getElementById('interview_date').setAttribute('min', formattedDate);
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#employeeTable').DataTable({
+            "pageLength": 10, // Show 10 entries per page
+            "lengthChange": false, // Disable the option to change page size
+            "searching": true, // Enable search functionality
+            "order": [[0, "asc"]] // Order by the first column (ID) ascending
+        });
     });
 </script>
 
