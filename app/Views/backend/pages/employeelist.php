@@ -553,7 +553,7 @@ function printTable() {
     // Open a new window or tab for printing
     var printWindow = window.open('', '', 'height=600,width=800');
 
-    // Clone the table without the pagination controls
+    // Clone the table without the pagination controls and search bar
     var table = document.querySelector('.table-responsive').innerHTML;
     var clonedTable = document.createElement('div');
     clonedTable.innerHTML = table;
@@ -574,6 +574,18 @@ function printTable() {
     var pagination = clonedTable.querySelector('.dataTables_paginate');
     if (pagination) {
         pagination.style.display = 'none'; // Hide pagination
+    }
+
+    // Remove the entries info and search bar
+    var entriesInfo = clonedTable.querySelector('.dataTables_info');
+    var searchBox = clonedTable.querySelector('.dataTables_filter');
+
+    if (entriesInfo) {
+        entriesInfo.style.display = 'none'; // Hide entries information
+    }
+
+    if (searchBox) {
+        searchBox.style.display = 'none'; // Hide search box
     }
 
     // Write the modified content to the new window
@@ -602,6 +614,7 @@ function printTable() {
     printWindow.print();
 }
 </script>
+
 
 <script>
 function exportToCSV() {
