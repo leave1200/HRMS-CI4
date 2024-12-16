@@ -231,6 +231,12 @@ function printDataTable() {
         return { hours: diffInHours, minutes: diffInMinutes };
     }
 
+    // Initialize totals
+    var totalWorkedTimeHours = 0;
+    var totalWorkedTimeMinutes = 0;
+    var totalUndertimeHours = 0;
+    var totalUndertimeMinutes = 0;
+
     // Generate table rows for dates, arrival, and departure times
     var tableRows = Array.from({ length: 31 }).map((_, index) => {
         let date = index + 1; // Dates 1 to 31
@@ -244,45 +250,56 @@ function printDataTable() {
         let arrivalPM = row ? row.querySelector("td:nth-child(8)").textContent.trim() : ''; // PM Arrival
         let departurePM = row ? row.querySelector("td:nth-child(9)").textContent.trim() : ''; // PM Departure
 
-        // Calculate regular worked time and undertime for each row
-        let workedHoursAM = 0;
-        let workedMinutesAM = 0;
-        let workedHoursPM = 0;
-        let workedMinutesPM = 0;
+        // Calculate worked time
+        let workedHoursAM = 0, workedMinutesAM = 0, workedHoursPM = 0, workedMinutesPM = 0;
 
-        // Calculate AM worked time
         if (arrivalAM && departureAM) {
             let amWorkDuration = calculateTimeDifference(arrivalAM, departureAM);
             workedHoursAM = amWorkDuration.hours;
             workedMinutesAM = amWorkDuration.minutes;
         }
 
-        // Calculate PM worked time
         if (arrivalPM && departurePM) {
             let pmWorkDuration = calculateTimeDifference(arrivalPM, departurePM);
             workedHoursPM = pmWorkDuration.hours;
             workedMinutesPM = pmWorkDuration.minutes;
         }
 
-        // Calculate total worked hours and minutes for the day
-        let totalWorkedHours = workedHoursAM + workedHoursPM;
-        let totalWorkedMinutes = workedMinutesAM + workedMinutesPM;
+        // Add to total worked time
+        totalWorkedTimeHours += workedHoursAM + workedHoursPM;
+        totalWorkedTimeMinutes += workedMinutesAM + workedMinutesPM;
 
-        // Calculate undertime for the day (assuming a full 8-hour workday)
-        let totalUndertime = 8 - (totalWorkedHours + totalWorkedMinutes / 60);
-        let undertimeHours = Math.floor(totalUndertime);
-        let undertimeMinutes = Math.round((totalUndertime - undertimeHours) * 60);
+        // Normalize total worked minutes
+        if (totalWorkedTimeMinutes >= 60) {
+            totalWorkedTimeHours += Math.floor(totalWorkedTimeMinutes / 60);
+            totalWorkedTimeMinutes = totalWorkedTimeMinutes % 60;
+        }
+
+        // Calculate undertime (assuming a full 8-hour workday)
+        let totalWorkedTimeForDay = workedHoursAM + workedHoursPM + (workedMinutesAM + workedMinutesPM) / 60;
+        let dailyUndertime = 8 - totalWorkedTimeForDay;
+
+        if (dailyUndertime > 0) {
+            totalUndertimeHours += Math.floor(dailyUndertime);
+            totalUndertimeMinutes += Math.round((dailyUndertime - Math.floor(dailyUndertime)) * 60);
+        }
+
+        // Normalize total undertime minutes
+        if (totalUndertimeMinutes >= 60) {
+            totalUndertimeHours += Math.floor(totalUndertimeMinutes / 60);
+            totalUndertimeMinutes = totalUndertimeMinutes % 60;
+        }
 
         // Return table row
-        return ` 
+        return `
             <tr>
                 <td>${date}</td>
                 <td>${arrivalAM}</td>
                 <td>${departureAM}</td>
                 <td>${arrivalPM}</td>
                 <td>${departurePM}</td>
-                <td>${undertimeHours}</td>
-                <td>${undertimeMinutes}</td>
+                <td>${Math.floor(dailyUndertime)}</td>
+                <td>${Math.round((dailyUndertime - Math.floor(dailyUndertime)) * 60)}</td>
             </tr>
         `;
     }).join('');
