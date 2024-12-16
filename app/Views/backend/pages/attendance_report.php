@@ -267,6 +267,8 @@ function printDataTable() {
                                 <th>Departure</th>
                                 <th>Arrival</th>
                                 <th>Departure</th>
+                                <th>Hour</th>
+                                <th>Minutes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -299,6 +301,8 @@ function printDataTable() {
                                 <th>Departure</th>
                                 <th>Arrival</th>
                                 <th>Departure</th>
+                                <th>Hour</th>
+                                <th>Minute</th>
                             </tr>
                         </thead>
                         <tbody>
