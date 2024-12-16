@@ -227,10 +227,10 @@ function printDataTable() {
             return dateCell && parseInt(new Date(dateCell.textContent).getDate()) === date;
         });
 
-        let arrivalAM = row ? row.querySelector("td:nth-child(3)").textContent.trim() : ''; // AM Arrival
-        let departureAM = row ? row.querySelector("td:nth-child(4)").textContent.trim() : ''; // AM Departure
-        let arrivalPM = row ? row.querySelector("td:nth-child(5)").textContent.trim() : ''; // PM Arrival
-        let departurePM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // PM Departure
+        let arrivalAM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // AM Arrival
+        let departureAM = row ? row.querySelector("td:nth-child(7)").textContent.trim() : ''; // AM Departure
+        let arrivalPM = row ? row.querySelector("td:nth-child(8)").textContent.trim() : ''; // PM Arrival
+        let departurePM = row ? row.querySelector("td:nth-child(9)").textContent.trim() : ''; // PM Departure
 
         return `
             <tr>
