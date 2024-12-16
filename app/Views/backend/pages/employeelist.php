@@ -656,7 +656,7 @@ function exportToExcel() {
     var actionIndex = headers.length - 1;
 
     // Find the index of the "Profile" column (assuming it's the second last column)
-    var profileIndex = headers.length - 2;
+    var profileIndex = headers.length - 6;
 
     // Remove "Action" column from header and body
     headers[actionIndex].remove();  // Remove Action column from header
