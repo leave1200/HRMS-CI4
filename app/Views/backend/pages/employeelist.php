@@ -973,7 +973,7 @@ function validateDesignation1(input) {
 </script>
 <script>
     $(document).ready(function () {
-        $('#employeeTable').DataTable({
+        $('#DataTables_Table_0').DataTable({
             "pageLength": 10, // Show 10 entries per page
             "lengthChange": false, // Disable the option to change page size
             "searching": true, // Enable search functionality
