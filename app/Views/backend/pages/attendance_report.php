@@ -263,10 +263,10 @@ function printDataTable() {
                                 <th rowspan="2">Undertime</th>
                             </tr>
                             <tr>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
+                                <th>Arrival</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Departure</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -294,11 +294,11 @@ function printDataTable() {
                                 <th colspan="2">PM</th>
                                 <th rowspan="2">Undertime</th>
                             </tr>
-                            <tr>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
-                                <th>Arrival | Departure</th>
+                             <tr>
+                                <th>Arrival</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Departure</th>
                             </tr>
                         </thead>
                         <tbody>
