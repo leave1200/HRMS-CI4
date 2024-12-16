@@ -260,7 +260,7 @@ function printDataTable() {
                                 <th rowspan="2">Date</th>
                                 <th colspan="2">AM</th>
                                 <th colspan="2">PM</th>
-                                <th rowspan="2">Undertime</th>
+                                <th colspan="2">Undertime</th>
                             </tr>
                             <tr>
                                 <th>Arrival</th>
@@ -294,7 +294,7 @@ function printDataTable() {
                                 <th rowspan="2">Date</th>
                                 <th colspan="2">AM</th>
                                 <th colspan="2">PM</th>
-                                <th rowspan="2">Undertime</th>
+                                <th colspan="2">Undertime</th>
                             </tr>
                              <tr>
                                 <th>Arrival</th>
