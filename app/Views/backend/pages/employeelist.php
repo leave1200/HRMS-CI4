@@ -647,6 +647,34 @@ function exportToCSV() {
 <script>
 function exportToExcel() {
     var table = document.querySelector('.table-responsive table');
+    
+    // Remove the "Action" column header and data
+    var headers = table.querySelectorAll('thead th');
+    var rows = table.querySelectorAll('tbody tr');
+
+    // Find the index of the Action column (assuming it's the last column)
+    var actionIndex = headers.length - 1;
+
+    // Remove "Action" column from header
+    headers[actionIndex].style.display = 'none';
+
+    // Remove "Action" column from each row
+    rows.forEach(function(row) {
+        row.cells[actionIndex].style.display = 'none';
+    });
+
+    // Remove the "Profile" column (assuming it's the second last column)
+    var profileIndex = headers.length - 2;
+
+    // Remove "Profile" column from header
+    headers[profileIndex].style.display = 'none';
+
+    // Remove "Profile" column from each row
+    rows.forEach(function(row) {
+        row.cells[profileIndex].style.display = 'none';
+    });
+
+    // Convert the table to a workbook and export to Excel
     var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
 
     // Convert the workbook to binary and create a downloadable link
@@ -660,8 +688,19 @@ function exportToExcel() {
     a.download = 'employees.xlsx';
     a.click();
     URL.revokeObjectURL(url);
+
+    // Optionally, restore the columns' visibility (in case you want to retain them for the webpage)
+    headers[actionIndex].style.display = '';
+    rows.forEach(function(row) {
+        row.cells[actionIndex].style.display = '';
+    });
+    headers[profileIndex].style.display = '';
+    rows.forEach(function(row) {
+        row.cells[profileIndex].style.display = '';
+    });
 }
 </script>
+
 <script>
 function deleteEmployee(id) {
     Swal.fire({
