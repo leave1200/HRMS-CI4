@@ -192,62 +192,63 @@
 
 
 <script>
-
 function printDataTable() {
-    // Call filterTable to get the selected name
+    // Filter visible rows
     var filteredRows = Array.from(document.querySelectorAll("#DataTables_Table_0 tbody tr")).filter(row => row.style.display !== 'none');
 
-    // Get the name from the first filtered row (if available)
+    // Get the name and month (assumes it's in the filtered rows or can be adjusted based on input fields)
     var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
 
-    var filteredTableContent = filteredRows.map(row => {
-        let newRow = row.cloneNode(true);
-        newRow.removeChild(newRow.children[9]); // Remove Action (last column)
-        newRow.removeChild(newRow.children[0]); // Remove # (first column)
-        newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
-        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
-        newRow.removeChild(newRow.children[1]);
-        return newRow.outerHTML; // Convert back to HTML string
+    // Assuming you have a way to determine the current month for the report
+    var currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    // Generate table content
+    var tableRows = filteredRows.map(row => {
+        let cells = row.querySelectorAll("td");
+        return `
+            <tr>
+                <td>${cells[1].textContent.trim()}</td> <!-- Date -->
+                <td>${cells[3].textContent.trim()}</td> <!-- AM In -->
+                <td>${cells[4].textContent.trim()}</td> <!-- AM Out -->
+                <td>${cells[5].textContent.trim()}</td> <!-- PM In -->
+                <td>${cells[6].textContent.trim()}</td> <!-- PM Out -->
+            </tr>
+        `;
     }).join('');
 
-    // Calculate number of days and Saturdays based on filtered rows
-    var numberOfDays = filteredRows.length;
-    var numberOfSaturdays = filteredRows.filter(row => {
-        let dateCell = row.querySelector("td:nth-child(2)");
-        let dateText = dateCell ? dateCell.textContent : '';
-        return new Date(dateText).getDay() === 6; // Saturday is day 6
-    }).length;
-
-    // Construct the custom print layout
+    // Construct the DTR layout
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2>Attendance Report</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Number of days:</strong> ${numberOfDays}</p>
-            <p><strong>Number of Saturdays:</strong> ${numberOfSaturdays}</p>
-            <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
+            <h2 style="text-align: center;">Civil Service Form No. 48</h2>
+            <h3 style="text-align: center;">DAILY TIME RECORD</h3>
+            <p style="text-align: center; margin: 0;">For the Month of: <strong>${currentMonth}</strong></p>
+            <p style="margin-top: 10px;"><strong>Name:</strong> ${name}</p>
+            <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse; text-align: center;">
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>AM Sign In</th>
-                        <th>AM Sign Out</th>
-                        <th>PM Sign In</th>
-                        <th>PM Sign Out</th>
+                        <th>AM In</th>
+                        <th>AM Out</th>
+                        <th>PM In</th>
+                        <th>PM Out</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${filteredTableContent}
+                    ${tableRows}
                 </tbody>
             </table>
         </div>
     `;
 
+    // Print the content
     var originalContent = document.body.innerHTML;
     document.body.innerHTML = printContent;
     window.print();
     document.body.innerHTML = originalContent;
     window.location.reload();
 }
+</script>
+
 
 
 </script>
