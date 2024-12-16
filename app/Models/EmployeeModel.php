@@ -24,7 +24,11 @@ class EmployeeModel extends Model
     {
         return $this->update($id, ['result' => 'Hired']); // Ensure 'result' matches your database column
     }    
-    
+    public function getEmployeeNames()
+{
+    return $this->select('id, CONCAT(firstname, " ", lastname) AS name, email')->findAll();
+}
+
 }
 
 
