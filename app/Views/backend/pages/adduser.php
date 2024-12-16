@@ -32,10 +32,15 @@
                             <option value="">Select an employee</option>
                             <?php if (!empty($employees)): ?>
                                 <?php foreach ($employees as $employee): ?>
-                                    <option value="<?= $employee['id'] ?>"><?= $employee['name'] ?> (<?= $employee['email'] ?>)</option>
+                                    <option value="<?= $employee['id'] ?>"
+                                            data-email="<?= htmlspecialchars($employee['email']) ?>"
+                                            data-name="<?= htmlspecialchars($employee['name']) ?>" <!-- Use concatenated name -->
+                                            <?= old('employee_id') == $employee['id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($employee['name']) ?> <!-- Display the concatenated name -->
+                                    </option>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <option value="">No employees available</option>
+                                <option value="">No employees found</option>
                             <?php endif; ?>
 
                         </select>
