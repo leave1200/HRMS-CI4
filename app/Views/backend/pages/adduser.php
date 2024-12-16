@@ -34,7 +34,7 @@
                                 <?php foreach ($employees as $employee): ?>
                                     <option value="<?= $employee['id'] ?>"
                                             data-email="<?= htmlspecialchars($employee['email']) ?>"
-                                            data-name="<?= htmlspecialchars($employee['name']) ?>
+                                            data-name="<?= htmlspecialchars($employee['name']) ?>"
                                             <?= old('employee_id') == $employee['id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($employee['name']) ?> <!-- Display the concatenated name -->
                                     </option>
