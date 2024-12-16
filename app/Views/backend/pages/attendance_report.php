@@ -196,47 +196,91 @@ function printDataTable() {
     // Filter visible rows
     var filteredRows = Array.from(document.querySelectorAll("#DataTables_Table_0 tbody tr")).filter(row => row.style.display !== 'none');
 
-    // Get the name and month (assumes it's in the filtered rows or can be adjusted based on input fields)
+    // Get the name and month (assuming data exists)
     var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
-
-    // Assuming you have a way to determine the current month for the report
     var currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
 
-    // Generate table content
-    var tableRows = filteredRows.map(row => {
-        let cells = row.querySelectorAll("td");
+    // Calculate regular days and Saturdays
+    var numberOfDays = filteredRows.length;
+    var numberOfSaturdays = filteredRows.filter(row => {
+        let dateCell = row.querySelector("td:nth-child(2)");
+        let dateText = dateCell ? dateCell.textContent : '';
+        return new Date(dateText).getDay() === 6; // Saturday is day 6
+    }).length;
+
+    // Generate table rows for dates, arrival, and departure times
+    var tableRows = Array.from({ length: 31 }).map((_, index) => {
+        let date = index + 1; // Dates 1 to 31
+        let row = filteredRows.find(row => parseInt(row.querySelector("td:nth-child(2)").textContent.trim()) === date);
+        let arrivalAM = row ? row.querySelector("td:nth-child(3)").textContent.trim() : ''; // AM In
+        let departureAM = row ? row.querySelector("td:nth-child(4)").textContent.trim() : ''; // AM Out
+        let arrivalPM = row ? row.querySelector("td:nth-child(5)").textContent.trim() : ''; // PM In
+        let departurePM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // PM Out
         return `
             <tr>
-                <td>${cells[1].textContent.trim()}</td> <!-- Date -->
-                <td>${cells[3].textContent.trim()}</td> <!-- AM In -->
-                <td>${cells[4].textContent.trim()}</td> <!-- AM Out -->
-                <td>${cells[5].textContent.trim()}</td> <!-- PM In -->
-                <td>${cells[6].textContent.trim()}</td> <!-- PM Out -->
+                <td>${date}</td>
+                <td>${arrivalAM}</td>
+                <td>${departureAM}</td>
+                <td>${arrivalPM}</td>
+                <td>${departurePM}</td>
             </tr>
         `;
     }).join('');
 
-    // Construct the DTR layout
+    // Construct the two forms side by side
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="text-align: center;">Civil Service Form No. 48</h2>
-            <h3 style="text-align: center;">DAILY TIME RECORD</h3>
-            <p style="text-align: center; margin: 0;">For the Month of: <strong>${currentMonth}</strong></p>
-            <p style="margin-top: 10px;"><strong>Name:</strong> ${name}</p>
-            <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse; text-align: center;">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>AM In</th>
-                        <th>AM Out</th>
-                        <th>PM In</th>
-                        <th>PM Out</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tableRows}
-                </tbody>
-            </table>
+            <div style="display: flex; justify-content: space-between;">
+                <!-- First Form -->
+                <div style="width: 48%; border: 1px solid #000; padding: 10px;">
+                    <h3 style="text-align: center;">Civil Service Form No. 48</h3>
+                    <p style="text-align: center;">For the month of ____________________, 20_______</p>
+                    <p>Regular Days: __________</p>
+                    <p>Saturdays: __________</p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>AM Arrival</th>
+                                <th>AM Departure</th>
+                                <th>PM Arrival</th>
+                                <th>PM Departure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 20px;">TOTAL:</p>
+                    <p style="margin-top: 50px; text-align: center;">In-Charge</p>
+                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
+                </div>
+
+                <!-- Second Form -->
+                <div style="width: 48%; border: 1px solid #000; padding: 10px;">
+                    <h3 style="text-align: center;">Civil Service Form No. 48</h3>
+                    <p style="text-align: center;">For the month of ____________________, 20_______</p>
+                    <p>Regular Days: __________</p>
+                    <p>Saturdays: __________</p>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>AM Arrival</th>
+                                <th>AM Departure</th>
+                                <th>PM Arrival</th>
+                                <th>PM Departure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 20px;">TOTAL:</p>
+                    <p style="margin-top: 50px; text-align: center;">In-Charge</p>
+                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
+                </div>
+            </div>
         </div>
     `;
 
@@ -248,6 +292,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 
