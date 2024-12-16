@@ -196,9 +196,20 @@ function printDataTable() {
     // Filter visible rows
     var filteredRows = Array.from(document.querySelectorAll("#DataTables_Table_0 tbody tr")).filter(row => row.style.display !== 'none');
 
-    // Get the name and month (assuming data exists)
+    // Extract the name
     var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
-    var currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    // Extract the month and year from the first visible row's date
+    var firstVisibleRowDate = filteredRows.length > 0 ? filteredRows[0].querySelector("td:nth-child(2)").textContent.trim() : '';
+    var monthYearText = '';
+    if (firstVisibleRowDate) {
+        var firstDate = new Date(firstVisibleRowDate);
+        var month = firstDate.toLocaleString('default', { month: 'long' }); // e.g., January
+        var year = firstDate.getFullYear(); // e.g., 2024
+        monthYearText = `For the month of ${month}, ${year}`;
+    } else {
+        monthYearText = "For the month of ____________________, 20_______"; // Default text
+    }
 
     // Calculate regular days and Saturdays
     var numberOfDays = filteredRows.length;
@@ -211,11 +222,16 @@ function printDataTable() {
     // Generate table rows for dates, arrival, and departure times
     var tableRows = Array.from({ length: 31 }).map((_, index) => {
         let date = index + 1; // Dates 1 to 31
-        let row = filteredRows.find(row => parseInt(row.querySelector("td:nth-child(2)").textContent.trim()) === date);
-        let arrivalAM = row ? row.querySelector("td:nth-child(3)").textContent.trim() : ''; // AM In
-        let departureAM = row ? row.querySelector("td:nth-child(4)").textContent.trim() : ''; // AM Out
-        let arrivalPM = row ? row.querySelector("td:nth-child(5)").textContent.trim() : ''; // PM In
-        let departurePM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // PM Out
+        let row = filteredRows.find(row => {
+            let dateCell = row.querySelector("td:nth-child(2)");
+            return dateCell && parseInt(new Date(dateCell.textContent).getDate()) === date;
+        });
+
+        let arrivalAM = row ? row.querySelector("td:nth-child(3)").textContent.trim() : ''; // AM Arrival
+        let departureAM = row ? row.querySelector("td:nth-child(4)").textContent.trim() : ''; // AM Departure
+        let arrivalPM = row ? row.querySelector("td:nth-child(5)").textContent.trim() : ''; // PM Arrival
+        let departurePM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // PM Departure
+
         return `
             <tr>
                 <td>${date}</td>
@@ -234,7 +250,7 @@ function printDataTable() {
                 <!-- First Form -->
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
                     <h3 style="text-align: center;">Civil Service Form No. 48</h3>
-                    <p style="text-align: center;">For the month of ____________________, 20_______</p>
+                    <p style="text-align: center;">${monthYearText}</p>
                     <p><strong>Name:</strong> ${name}</p>
                     <p><strong>Regular Days:</strong> ${numberOfDays}</p>
                     <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
@@ -260,7 +276,7 @@ function printDataTable() {
                 <!-- Second Form -->
                 <div style="width: 48%; border: 1px solid #000; padding: 10px;">
                     <h3 style="text-align: center;">Civil Service Form No. 48</h3>
-                    <p style="text-align: center;">For the month of ____________________, 20_______</p>
+                    <p style="text-align: center;">${monthYearText}</p>
                     <p><strong>Name:</strong> ${name}</p>
                     <p><strong>Regular Days:</strong> ${numberOfDays}</p>
                     <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
@@ -294,6 +310,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 <script>
