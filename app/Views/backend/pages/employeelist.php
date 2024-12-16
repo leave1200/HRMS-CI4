@@ -28,9 +28,9 @@
         <div class="pull-left">
             <h4 class="text-blue h4">Employee List</h4>
         </div>
-        <div class="mb-10 pull-right">
+        <!-- <div class="mb-10 pull-right">
             <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
-        </div>
+        </div> -->
     </div>
     <div class="table-responsive">
         <table class="table table-striped" id="DataTables_Table_0">
