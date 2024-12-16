@@ -956,6 +956,7 @@ public function pmSave()
                 // Load the AttendanceModel
                 $attendanceModel = new \App\Models\AttendanceModel();
                 $userStatus = session()->get('userStatus');
+                $userName = session()->get('userName');
                 if ($userStatus !== 'ADMIN') {
                     return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
                 }
@@ -1011,7 +1012,8 @@ public function pmSave()
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                     'pageTitle'=> 'Attendance Report',
-                    'userStatus' => $userStatus
+                    'userStatus' => $userStatus,
+                    'userName' => $userName
                 ];
             
                 // Load the view and pass the data
