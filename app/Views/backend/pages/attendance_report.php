@@ -310,8 +310,8 @@ function printDataTable() {
                     <h3 style="text-align: center;">DAILY TIME RECORD</h3>
                     <p style="text-align: center;">${name}<br><strong style="margin-top: -30px;">(Name)</strong></p>
                     <p style="text-align: center;">${monthYearText}</p>
-                    <p><strong>Regular Days:</strong> ${numberOfDays}</p>
-                    <p><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
+                    <p style="text-align: right;"><strong>Regular Days:</strong> ${numberOfDays}</p>
+                    <p style="text-align: right;"><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
                            <tr>
