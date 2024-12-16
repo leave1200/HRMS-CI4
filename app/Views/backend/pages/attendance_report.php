@@ -231,6 +231,10 @@ function printDataTable() {
         return { hours: diffInHours, minutes: diffInMinutes };
     }
 
+    // Initialize totals for undertime
+    let totalUndertimeHours = 0;
+    let totalUndertimeMinutes = 0;
+
     // Generate table rows for dates, arrival, and departure times
     var tableRows = Array.from({ length: 31 }).map((_, index) => {
         let date = index + 1; // Dates 1 to 31
@@ -265,6 +269,16 @@ function printDataTable() {
         let totalUndertime = 8 - totalWorkedHours;
         let undertimeHours = Math.floor(totalUndertime);
         let undertimeMinutes = Math.round((totalUndertime - undertimeHours) * 60);
+
+        // Accumulate the total undertime
+        totalUndertimeHours += undertimeHours;
+        totalUndertimeMinutes += undertimeMinutes;
+
+        // Handle cases where minutes exceed 60
+        if (totalUndertimeMinutes >= 60) {
+            totalUndertimeHours += Math.floor(totalUndertimeMinutes / 60);
+            totalUndertimeMinutes = totalUndertimeMinutes % 60;
+        }
 
         return `
             <tr>
@@ -311,7 +325,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> __________</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
@@ -345,7 +359,7 @@ function printDataTable() {
                             ${tableRows}
                         </tbody>
                     </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> __________</p>
+                    <p style="margin-top: 20px;"><strong>TOTAL:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
                     <p style="margin-top: 50px; text-align: center;">Administrator</p>
                     <p style="margin-top: -25px; text-align: center;">Administrator</p>
                     <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
@@ -362,6 +376,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 
