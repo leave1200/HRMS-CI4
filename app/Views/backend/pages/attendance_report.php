@@ -311,8 +311,8 @@ function printDataTable() {
                     <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
                     <p style="text-align: center;">${monthYearText}</p>
                     <p style="text-align: left;">Official hours of arrival<br> and departure</p>
-                    <p style="text-align: right;margin-top: -30px;"><strong>Regular Days:</strong> ${numberOfDays}</p>
-                    <p style="text-align: right;margin-top: -30px;"><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
+                    <p style="text-align: right;margin-top: -60px;"><strong>Regular Days:</strong> ${numberOfDays}</p>
+                    <p style="text-align: right;margin-top: -35px;"><strong>Saturdays:</strong> ${numberOfSaturdays}</p>
                     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
                         <thead>
                            <tr>
