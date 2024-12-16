@@ -219,12 +219,16 @@ function printDataTable() {
         return new Date(dateText).getDay() === 6; // Saturday is day 6
     }).length;
 
-    // Function to calculate time difference in hours and minutes
-    function timeDifference(startTime, endTime) {
-        var start = new Date('1970-01-01 ' + startTime);
-        var end = new Date('1970-01-01 ' + endTime);
-        var diff = (end - start) / 60000; // Convert milliseconds to minutes
-        return diff;
+    // Function to calculate the time difference in hours and minutes
+    function calculateTimeDifference(startTime, endTime) {
+        var start = new Date('1970-01-01T' + startTime + 'Z');
+        var end = new Date('1970-01-01T' + endTime + 'Z');
+        var diffInMillis = end - start;
+
+        var diffInHours = Math.floor(diffInMillis / 1000 / 60 / 60);
+        var diffInMinutes = Math.floor((diffInMillis % (1000 * 60 * 60)) / (1000 * 60));
+
+        return { hours: diffInHours, minutes: diffInMinutes };
     }
 
     // Generate table rows for dates, arrival, and departure times
@@ -240,20 +244,27 @@ function printDataTable() {
         let arrivalPM = row ? row.querySelector("td:nth-child(8)").textContent.trim() : ''; // PM Arrival
         let departurePM = row ? row.querySelector("td:nth-child(9)").textContent.trim() : ''; // PM Departure
 
-        // Calculate total worked time for AM and PM
-        var workedAM = arrivalAM && departureAM ? timeDifference(arrivalAM, departureAM) : 0;
-        var workedPM = arrivalPM && departurePM ? timeDifference(arrivalPM, departurePM) : 0;
+        // Calculate undertime hours and minutes
+        let undertimeAM = { hours: 0, minutes: 0 };
+        let undertimePM = { hours: 0, minutes: 0 };
+        let totalWorkedHours = 0;
 
-        // Convert minutes worked into hours and minutes
-        var totalWorkedMinutes = workedAM + workedPM;
-        var workedHours = Math.floor(totalWorkedMinutes / 60);
-        var workedMinutes = totalWorkedMinutes % 60;
+        if (arrivalAM && departureAM) {
+            let amWorkDuration = calculateTimeDifference(arrivalAM, departureAM);
+            totalWorkedHours += amWorkDuration.hours + amWorkDuration.minutes / 60;
+            undertimeAM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
+        }
 
-        // Assuming 8 hours workday (from 8 AM to 5 PM)
-        var expectedWorkMinutes = 9 * 60; // Total minutes in an 8-hour day (minus 1 hour for lunch)
-        var undertimeMinutes = Math.max(0, expectedWorkMinutes - totalWorkedMinutes);
-        var undertimeHours = Math.floor(undertimeMinutes / 60);
-        var undertimeMinutesLeft = undertimeMinutes % 60;
+        if (arrivalPM && departurePM) {
+            let pmWorkDuration = calculateTimeDifference(arrivalPM, departurePM);
+            totalWorkedHours += pmWorkDuration.hours + pmWorkDuration.minutes / 60;
+            undertimePM = { hours: 0, minutes: 0 }; // Assume no undertime if full 4 hours worked
+        }
+
+        // Assuming an 8-hour workday (4 hours AM, 4 hours PM)
+        let totalUndertime = 8 - totalWorkedHours;
+        let undertimeHours = Math.floor(totalUndertime);
+        let undertimeMinutes = Math.round((totalUndertime - undertimeHours) * 60);
 
         return `
             <tr>
@@ -262,7 +273,7 @@ function printDataTable() {
                 <td>${departureAM}</td>
                 <td>${arrivalPM}</td>
                 <td>${departurePM}</td>
-                <td>${undertimeHours} hr ${undertimeMinutesLeft} min</td>
+                <td>${undertimeHours} hours ${undertimeMinutes} minutes</td>
             </tr>
         `;
     }).join('');
@@ -350,6 +361,7 @@ function printDataTable() {
     window.location.reload();
 }
 </script>
+
 
 
 
