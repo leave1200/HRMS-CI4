@@ -59,10 +59,16 @@ $(document).ready(function() {
                 method: form.attr('method'),
                 data: form.serialize(),
                 success: function(response) {
-                    // Show success modal
+                 // Show success modal
                     $('#success-modal').modal('show');
+
                     // Optionally, reset form
                     form.trigger('reset');
+
+                    // Reload the page after a short delay (optional)
+                    setTimeout(function() {
+                        location.reload(); // Reloads the current page
+                    }, 1500); // 1500ms delay to allow modal to show
                 },
                 error: function(xhr, status, error) {
                     // Handle error
