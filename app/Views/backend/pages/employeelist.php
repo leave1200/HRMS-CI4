@@ -550,10 +550,10 @@ document.getElementById('profile_picture').addEventListener('change', function()
 </script>   
 <script>
 function printTable() {
-    // Open a new window or tab for printing
+    // Open a new window or tab
     var printWindow = window.open('', '', 'height=600,width=800');
 
-    // Clone the table without the pagination controls
+    // Clone the table
     var table = document.querySelector('.table-responsive').innerHTML;
     var clonedTable = document.createElement('div');
     clonedTable.innerHTML = table;
@@ -570,39 +570,19 @@ function printTable() {
         row.cells[row.cells.length - 1].style.display = 'none'; // Hide the Action cell
     });
 
-    // Remove pagination controls (if any)
-    var pagination = clonedTable.querySelector('.dataTables_paginate');
-    if (pagination) {
-        pagination.style.display = 'none'; // Hide pagination
-    }
-
     // Write the modified content to the new window
     printWindow.document.write('<html><head><title>Print Employee Table</title>');
-    printWindow.document.write('<style>body{font-family: Arial, sans-serif;}');
-    printWindow.document.write('table{width: 100%; border-collapse: collapse;}');
-    printWindow.document.write('th, td{border: 1px solid #ddd; padding: 8px;}');
-    printWindow.document.write('th{background-color: #f2f2f2;}');
-    
-    // Add print-specific styles to handle page breaks and prevent table cut-off
-    printWindow.document.write('@media print {');
-    printWindow.document.write('  body { margin: 0; padding: 0; }');
-    printWindow.document.write('  table { page-break-before: auto; page-break-after: auto; page-break-inside: auto; }');
-    printWindow.document.write('  tr { page-break-inside: avoid; page-break-after: auto; }');
-    printWindow.document.write('  thead { display: table-header-group; }');
-    printWindow.document.write('  tfoot { display: table-footer-group; }');
-    printWindow.document.write('}');
-    printWindow.document.write('</style>');
-    printWindow.document.write('</head><body>');
+    printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #ddd; padding: 8px;} th{background-color: #f2f2f2;} </style>');
+    printWindow.document.write('</head><body >');
     printWindow.document.write(clonedTable.innerHTML);
     printWindow.document.write('</body></html>');
 
-    // Close the document and trigger the print action
+    // Close the document and trigger print
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
 }
 </script>
-
 <script>
 function exportToCSV() {
     var table = document.querySelector('.table-responsive table');
