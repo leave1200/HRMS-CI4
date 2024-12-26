@@ -92,7 +92,7 @@
             </div>
             <div class="col-6">
                 <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forgot.forms'), 'attr') ?>">Forgot Password</a>
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>">Forgot Password</a>
                 </div>
             </div>
         </div>
