@@ -52,30 +52,30 @@ class AuthController extends BaseController
 
     public function loginHandler()
     {
-        // Get the reCAPTCHA token from the form
-        $recaptchaResponse = $this->request->getVar('recaptcha_token');
+        // // Get the reCAPTCHA token from the form
+        // $recaptchaResponse = $this->request->getVar('recaptcha_token');
     
-        // Verify the reCAPTCHA token with Google's API
-        $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
-        $remoteIp = $this->request->getServer('REMOTE_ADDR');
-        $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        // // Verify the reCAPTCHA token with Google's API
+        // $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
+        // $remoteIp = $this->request->getServer('REMOTE_ADDR');
+        // $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
     
-        // Send the POST request to Google's API for verification
-        $response = \Config\Services::curlrequest()->post($verificationUrl, [
-            'form_params' => [
-                'secret' => $secretKey,
-                'response' => $recaptchaResponse,
-                'remoteip' => $remoteIp
-            ]
-        ]);
+        // // Send the POST request to Google's API for verification
+        // $response = \Config\Services::curlrequest()->post($verificationUrl, [
+        //     'form_params' => [
+        //         'secret' => $secretKey,
+        //         'response' => $recaptchaResponse,
+        //         'remoteip' => $remoteIp
+        //     ]
+        // ]);
     
-        // Decode the response
-        $recaptchaData = json_decode($response->getBody(), true);
+        // // Decode the response
+        // $recaptchaData = json_decode($response->getBody(), true);
     
-        // If reCAPTCHA verification fails
-        if (!$recaptchaData['success']) {
-            return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
-        }
+        // // If reCAPTCHA verification fails
+        // if (!$recaptchaData['success']) {
+        //     return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
+        // }
     
         // Continue with the rest of the login logic if reCAPTCHA is successful
         $loginId = $this->request->getVar('login_id');
