@@ -4,7 +4,7 @@
     <button type="submit">Verify</button>
 </form>
 
-<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script> -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
 <script>
     grecaptcha.ready(function() {
         grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'homepage' }).then(function(token) {

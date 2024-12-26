@@ -23,32 +23,16 @@ class UserController extends Controller
     public function add()
     {
         $employeeModel = new EmployeeModel();
-        $userModel = new User(); // Assuming you have a UserModel for the `users` table
-    
         $userStatus = session()->get('userStatus');
-        
-        // Fetch all employees
-        $allEmployees = $employeeModel->getEmployeeNames();
-        
-        // Fetch all names from the users table
-        $users = $userModel->select('name')->findAll();
-        $userNames = array_column($users, 'name'); // Extract the names into an array
-    
-        // Filter out employees whose names already exist in the users table
-        $filteredEmployees = array_filter($allEmployees, function ($employee) use ($userNames) {
-            return !in_array($employee['name'], $userNames);
-        });
-    
         $data = [
-            'employees' => $filteredEmployees, // Filtered employees
+            'employees' => $employeeModel->getEmployeeNames(), // Fetch employee names with email
             'pageTitle' => 'Add User',
             'userStatus' => $userStatus,
             'validation' => \Config\Services::validation()
         ];
-    
+        
         return view('backend/pages/adduser', $data);
     }
-    
     public function userlist()
     {
         $userStatus = session()->get('userStatus');
@@ -157,12 +141,10 @@ class UserController extends Controller
                     $user_info = $userModel->asObject()->find($user_id);
                     $old_picture = $user_info->picture;
     
+                    // Delete the old picture if it exists
                     if ($old_picture && file_exists($path . '/' . $old_picture)) {
-                        if (!unlink($path . '/' . $old_picture)) {
-                            log_message('error', 'Failed to delete old picture: ' . $old_picture);
-                        }
+                        unlink($path . '/' . $old_picture);
                     }
-                    
     
                     // Update the user's profile picture in the database
                     $userModel->update($user_id, ['picture' => $newName]);
@@ -232,7 +214,7 @@ class UserController extends Controller
             $new_password = $request->getPost('new_password');
     
             // Hash the new password using bcrypt
-            $hashed_password = password_hash($new_password, PASSWORD_ARGON2ID);
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
     
             // Update the user password in the database
             $user->update($user_id, ['password' => $hashed_password]);
@@ -351,42 +333,34 @@ class UserController extends Controller
     {
         $fileModel = new FileModel();
         $file = $fileModel->find($id);
-    
-        // Check if the file exists
+
         if (!$file) {
             $this->session->setFlashdata('error', 'File not found.');
             return redirect()->back();
         }
-    
-        $userStatus = $this->session->get('userStatus');
-        $loggedInUserId = $this->session->get('user_id'); // Get the logged-in user's ID
-    
-        // Check if the user is ADMIN or the file belongs to the logged-in user (owner)
-        if ($userStatus !== 'ADMIN' && $file['user_id'] !== $loggedInUserId) {
-            // Show an error message if the user is not ADMIN or the file does not belong to them
+
+        // Authorization: Ensure the file belongs to the logged-in user
+        if ($file['user_id'] !== $this->session->get('user_id')) {
             $this->session->setFlashdata('error', 'You do not have permission to access this file.');
             return redirect()->back();
         }
-    
-        // File path
+
         $filePath = WRITEPATH . 'uploads/' . $file['name'];
-    
-        // Check if the file exists on the server
+
         if (!file_exists($filePath)) {
             $this->session->setFlashdata('error', 'File does not exist.');
             return redirect()->back();
         }
-    
+
         // Determine the MIME type of the file
         $mime = mime_content_type($filePath) ?: 'application/octet-stream';
-    
+
         // Serve the file for download
         return $this->response
                     ->setHeader('Content-Type', $mime)
                     ->setHeader('Content-Disposition', 'attachment; filename="' . $file['original_name'] . '"')
                     ->setBody(file_get_contents($filePath));
     }
-    
 
     public function viewFile($id)
 {

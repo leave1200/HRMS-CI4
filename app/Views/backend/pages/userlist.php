@@ -15,7 +15,6 @@
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -26,13 +25,6 @@
                 <td><?= $user['name'] ?></td>
                 <td><?= $user['username'] ?></td>
                 <td><?= $user['email'] ?></td>
-                <td>
-                    <?php if ($user['policy'] === 'Online'): ?>
-                        <span style="color: green; font-size: 2.2em;">●</span> Online
-                    <?php else: ?>
-                        <span style="color: gray; font-size: 2.2em;">●</span> Offline
-                    <?php endif; ?>
-                </td>
                 <td>
                 <button class="btn btn-danger" onclick="deleteUser(<?= $user['id'] ?>)">Delete</button>
                 </td>

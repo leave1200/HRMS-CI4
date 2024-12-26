@@ -42,7 +42,7 @@
         </div>
 
     </div>
-    <button onclick="printDataTable()" class="btn btn-primary"><i class="icon-copy bi bi-printer"></i>Print</button>
+    <button onclick="printDataTable()" class="btn btn-primary">Print</button>
     <!-- <button onclick="fetchArchivedData()" class="btn btn-secondary">View Archived Records</button> -->
     <div class="table-responsive">
         <div id="print-area">
@@ -190,28 +190,29 @@
 </div>
 
 
+<!-- Add SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
 function printDataTable() {
-    // Filter visible rows
+    // Call filterTable to get the selected name
     var filteredRows = Array.from(document.querySelectorAll("#DataTables_Table_0 tbody tr")).filter(row => row.style.display !== 'none');
 
-    // Extract the name
+    // Get the name from the first filtered row (if available)
     var name = filteredRows.length > 0 ? filteredRows[0].cells[2].textContent.trim() : "No Name Found";
 
-    // Extract the month and year from the first visible row's date
-    var firstVisibleRowDate = filteredRows.length > 0 ? filteredRows[0].querySelector("td:nth-child(2)").textContent.trim() : '';
-    var monthYearText = '';
-    if (firstVisibleRowDate) {
-        var firstDate = new Date(firstVisibleRowDate);
-        var month = firstDate.toLocaleString('default', { month: 'long' }); // e.g., January
-        var year = firstDate.getFullYear(); // e.g., 2024
-        monthYearText = `For the month of ${month}, ${year}`;
-    } else {
-        monthYearText = "For the month of ____________________, 20_______"; // Default text
-    }
+    var filteredTableContent = filteredRows.map(row => {
+        let newRow = row.cloneNode(true);
+        newRow.removeChild(newRow.children[9]); // Remove Action (last column)
+        newRow.removeChild(newRow.children[0]); // Remove # (first column)
+        newRow.removeChild(newRow.children[1]); // Remove Office (adjusted index after removing #)
+        newRow.removeChild(newRow.children[2]); // Remove Position (adjusted index after removing Office)
+        newRow.removeChild(newRow.children[1]);
+        return newRow.outerHTML; // Convert back to HTML string
+    }).join('');
 
-    // Calculate regular days and Saturdays
+    // Calculate number of days and Saturdays based on filtered rows
     var numberOfDays = filteredRows.length;
     var numberOfSaturdays = filteredRows.filter(row => {
         let dateCell = row.querySelector("td:nth-child(2)");
@@ -219,184 +220,39 @@ function printDataTable() {
         return new Date(dateText).getDay() === 6; // Saturday is day 6
     }).length;
 
-    // Function to calculate the time difference in hours and minutes
-    function calculateTimeDifference(startTime, endTime) {
-        var start = new Date('1970-01-01T' + startTime + 'Z');
-        var end = new Date('1970-01-01T' + endTime + 'Z');
-        var diffInMillis = end - start;
-
-        var diffInHours = Math.floor(diffInMillis / 1000 / 60 / 60);
-        var diffInMinutes = Math.floor((diffInMillis % (1000 * 60 * 60)) / (1000 * 60));
-
-        return { hours: diffInHours, minutes: diffInMinutes };
-    }
-
-    // Initialize totals
-    var totalWorkedTimeHours = 0;
-    var totalWorkedTimeMinutes = 0;
-    var totalUndertimeHours = 0;
-    var totalUndertimeMinutes = 0;
-
-    // Generate table rows for dates, arrival, and departure times
-    var tableRows = Array.from({ length: 31 }).map((_, index) => {
-        let date = index + 1; // Dates 1 to 31
-        let row = filteredRows.find(row => {
-            let dateCell = row.querySelector("td:nth-child(2)");
-            return dateCell && parseInt(new Date(dateCell.textContent).getDate()) === date;
-        });
-
-        let arrivalAM = row ? row.querySelector("td:nth-child(6)").textContent.trim() : ''; // AM Arrival
-        let departureAM = row ? row.querySelector("td:nth-child(7)").textContent.trim() : ''; // AM Departure
-        let arrivalPM = row ? row.querySelector("td:nth-child(8)").textContent.trim() : ''; // PM Arrival
-        let departurePM = row ? row.querySelector("td:nth-child(9)").textContent.trim() : ''; // PM Departure
-
-        // Calculate worked time
-        let workedHoursAM = 0, workedMinutesAM = 0, workedHoursPM = 0, workedMinutesPM = 0;
-
-        if (arrivalAM && departureAM) {
-            let amWorkDuration = calculateTimeDifference(arrivalAM, departureAM);
-            workedHoursAM = amWorkDuration.hours;
-            workedMinutesAM = amWorkDuration.minutes;
-        }
-
-        if (arrivalPM && departurePM) {
-            let pmWorkDuration = calculateTimeDifference(arrivalPM, departurePM);
-            workedHoursPM = pmWorkDuration.hours;
-            workedMinutesPM = pmWorkDuration.minutes;
-        }
-
-        // Add to total worked time
-        totalWorkedTimeHours += workedHoursAM + workedHoursPM;
-        totalWorkedTimeMinutes += workedMinutesAM + workedMinutesPM;
-
-        // Normalize total worked minutes
-        if (totalWorkedTimeMinutes >= 60) {
-            totalWorkedTimeHours += Math.floor(totalWorkedTimeMinutes / 60);
-            totalWorkedTimeMinutes = totalWorkedTimeMinutes % 60;
-        }
-
-        // Calculate undertime (assuming a full 8-hour workday)
-        let totalWorkedTimeForDay = workedHoursAM + workedHoursPM + (workedMinutesAM + workedMinutesPM) / 60;
-        let dailyUndertime = 8 - totalWorkedTimeForDay;
-
-        if (dailyUndertime > 0) {
-            totalUndertimeHours += Math.floor(dailyUndertime);
-            totalUndertimeMinutes += Math.round((dailyUndertime - Math.floor(dailyUndertime)) * 60);
-        }
-
-        // Normalize total undertime minutes
-        if (totalUndertimeMinutes >= 60) {
-            totalUndertimeHours += Math.floor(totalUndertimeMinutes / 60);
-            totalUndertimeMinutes = totalUndertimeMinutes % 60;
-        }
-
-        // Return table row
-        return `
-            <tr>
-                <td>${date}</td>
-                <td>${arrivalAM}</td>
-                <td>${departureAM}</td>
-                <td>${arrivalPM}</td>
-                <td>${departurePM}</td>
-                <td>${Math.floor(dailyUndertime)}</td>
-                <td>${Math.round((dailyUndertime - Math.floor(dailyUndertime)) * 60)}</td>
-            </tr>
-        `;
-    }).join('');
-
-    // Construct the two forms side by side
+    // Construct the custom print layout
     var printContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <div style="display: flex; justify-content: space-between;">
-                <!-- First Form -->
-                <div style="width: 48%; border: 1px solid #000; padding: 10px;">
-                    <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
-                    <h3 style="text-align: center;">DAILY TIME RECORD</h3>
-                    <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
-                    <p style="text-align: center;">${monthYearText}</p>
-                    <p style="text-align: left;">Official hours of arrival<br> and departure</p>
-                    <p style="text-align: center;margin-top: -65px;">Regular Days: ${numberOfDays}</p>
-                    <p style="text-align: center;margin-top: -10px;">Saturdays: ${numberOfSaturdays}</p>
-                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
-                        <thead>
-                           <tr>
-                                <th rowspan="2">Date</th>
-                                <th colspan="2">AM</th>
-                                <th colspan="2">PM</th>
-                                <th colspan="2">Undertime</th>
-                            </tr>
-                            <tr>
-                                <th>Arrival</th>
-                                <th>Departure</th>
-                                <th>Arrival</th>
-                                <th>Departure</th>
-                                <th>Hour</th>
-                                <th>Minutes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRows}
-                        </tbody>
-                    </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
-                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
-                    <p style="margin-top: 50px; text-align: center;"><u>CHARO MAE CAHUTAY</u></p>
-                    <p style="margin-top: -25px; text-align: center;">Administrator</p>
-                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
-                </div>
-
-                <!-- Second Form -->
-                <div style="width: 48%; border: 1px solid #000; padding: 10px;">
-                    <p style="text-align: left;"><i>Civil Service Form No. 48</i></p>
-                    <h3 style="text-align: center;">DAILY TIME RECORD</h3>
-                    <p style="text-align: center;"><u>${name}</u><br><strong style="margin-top: -30px;">(Name)</strong></p>
-                    <p style="text-align: center;">${monthYearText}</p>
-                    <p style="text-align: left;">Official hours of arrival<br> and departure</p>
-                    <p style="text-align: center;margin-top: -65px;">Regular Days: ${numberOfDays}</p>
-                    <p style="text-align: center;margin-top: -10px;">Saturdays: ${numberOfSaturdays}</p>
-                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: center; border-collapse: collapse;">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">Date</th>
-                                <th colspan="2">AM</th>
-                                <th colspan="2">PM</th>
-                                <th colspan="2">Undertime</th>
-                            </tr>
-                             <tr>
-                                <th>Arrival</th>
-                                <th>Departure</th>
-                                <th>Arrival</th>
-                                <th>Departure</th>
-                                <th>Hour</th>
-                                <th>Minute</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRows}
-                        </tbody>
-                    </table>
-                    <p style="margin-top: 20px;"><strong>TOTAL Time Worked:</strong> ${totalWorkedTimeHours} hours ${totalWorkedTimeMinutes} minutes</p>
-                    <p style="margin-top: 20px;"><strong>TOTAL Not Work:</strong> ${totalUndertimeHours} hours ${totalUndertimeMinutes} minutes</p>
-                    <p style="margin-top: 50px; text-align: center;"><u>CHARO MAE CAHUTAY</u></p>
-                    <p style="margin-top: -25px; text-align: center;">Administrator</p>
-                    <p style="margin-top: 20px; text-align: justify;">I CERTIFY on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
-                </div>
-            </div>
+            <h2>Attendance Report</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Number of days:</strong> ${numberOfDays}</p>
+            <p><strong>Number of Saturdays:</strong> ${numberOfSaturdays}</p>
+            <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>AM Sign In</th>
+                        <th>AM Sign Out</th>
+                        <th>PM Sign In</th>
+                        <th>PM Sign Out</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredTableContent}
+                </tbody>
+            </table>
         </div>
     `;
 
-    // Print the content
     var originalContent = document.body.innerHTML;
     document.body.innerHTML = printContent;
     window.print();
     document.body.innerHTML = originalContent;
     window.location.reload();
 }
+
+
 </script>
-
-
-
-
 
 <script>
 function fetchArchivedData() {

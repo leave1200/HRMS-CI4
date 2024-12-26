@@ -51,7 +51,7 @@
             </div>
         </div>
         
-        <!--   Validation Error for login_id -->
+        <!-- Validation Error for login_id -->
         <?php if ($validation->getError('login_id')): ?>
             <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
                 <?= esc($validation->getError('login_id')) ?>
@@ -100,10 +100,10 @@
 
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6LeIE6YqAAAAANev7MxAZoB6vIIPhWoSBkCsa4TA"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LeIE6YqAAAAANev7MxAZoB6vIIPhWoSBkCsa4TA', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
@@ -177,36 +177,6 @@
     });
 </script>
 
-<script>
-function deleteSpecificCookies() {
-    var cookieNames = [
-        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
-        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
-        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
-    ];
 
-    // Loop through each cookie name and remove it
-    for (var i = 0; i < cookieNames.length; i++) {
-        var cookieName = cookieNames[i];
-
-        // Try to remove cookies for the root path and specific domains
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
-    }
-}
-
-// Call the function to delete the specific cookies
-deleteSpecificCookies();
-
-</script>
 
 <?= $this->endSection() ?>

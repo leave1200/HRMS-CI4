@@ -1,7 +1,7 @@
 <?= $this->extend('backend/layout/auth-layout') ?>
 <?= $this->section('content') ?>
 
-<div class="col-md-10">
+<div class="col-md-6">
 						<div class="login-box bg-white box-shadow border-radius-10">
 							<div class="login-title">
 								<h2 class="text-center text-primary">Reset Password</h2>
@@ -63,38 +63,5 @@
 							</form>
 						</div>
 					</div>
- <script>
-    // Toggle password visibility for new password
-    document.getElementById('toggleNewPassword').addEventListener('click', function() {
-        var passwordField = document.getElementById('new_password');
-        var icon = this.querySelector('i');
-
-        if (passwordField.type === "password") {
-            passwordField.type = "text"; // Show password
-            icon.classList.remove('dw-padlock1'); // Change to eye icon
-            icon.classList.add('dw-eye');
-        } else {
-            passwordField.type = "password"; // Hide password
-            icon.classList.remove('dw-eye'); // Change to padlock icon
-            icon.classList.add('dw-padlock1');
-        }
-    });
-
-    // Toggle password visibility for confirm password
-    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
-        var passwordField = document.getElementById('confirm_new_password');
-        var icon = this.querySelector('i');
-
-        if (passwordField.type === "password") {
-            passwordField.type = "text"; // Show password
-            icon.classList.remove('dw-padlock1'); // Change to eye icon
-            icon.classList.add('dw-eye');
-        } else {
-            passwordField.type = "password"; // Hide password
-            icon.classList.remove('dw-eye'); // Change to padlock icon
-            icon.classList.add('dw-padlock1');
-        }
-    });
-</script>
 
 <?= $this->endSection()?>

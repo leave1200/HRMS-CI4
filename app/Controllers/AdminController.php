@@ -24,7 +24,6 @@ class AdminController extends BaseController
     {
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
-        $this->userModel = new \App\Models\User();
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
@@ -48,11 +47,6 @@ class AdminController extends BaseController
         $attendances = $attendanceModel->findAll();
         $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
         $pmAttendanceRecords = $attendanceModel->where('pm_sign_in IS NOT NULL')->countAllResults();
-        $user = CIAuth::user();
-        if(!$user){
-            CIAuth::forget();
-            return redirect()->route('admin.login.form')->with('success', 'You are logged out!');
-        }
         
 
 
@@ -71,146 +65,18 @@ class AdminController extends BaseController
         ];
         return view('backend/pages/home', $data);
     }
-    public function getUserFileUploads()
-        {
-            $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
-            $fileModel = new \App\Models\FileModel();
-
-            // Query to get file upload counts grouped by date
-            $fileData = $fileModel->select("DATE(uploaded_at) as upload_date, COUNT(*) as file_count")
-                                ->where('user_id', $userId)
-                                ->groupBy('upload_date')
-                                ->orderBy('upload_date', 'ASC')
-                                ->findAll();
-
-            return $this->response->setJSON($fileData);
-        }
-        public function getUserAttendances()
-        {
-            $userId = session()->get('user_id'); // Ensure the session holds the logged-in user's ID
-            $attendanceModel = new \App\Models\AttendanceModel();
-        
-            // Query to get attendance counts grouped by the derived date and type
-            $amSignInData = $attendanceModel
-                ->select("DATE(sign_in) as date, 'AM Sign-In' as status, COUNT(*) as count")
-                ->where('attendance', $userId)
-                ->where('sign_in IS NOT NULL')
-                ->groupBy('DATE(sign_in)')
-                ->get()
-                ->getResultArray();
-        
-            $pmSignInData = $attendanceModel
-                ->select("DATE(pm_sign_in) as date, 'PM Sign-In' as status, COUNT(*) as count")
-                ->where('attendance', $userId)
-                ->where('pm_sign_in IS NOT NULL')
-                ->groupBy('DATE(pm_sign_in)')
-                ->get()
-                ->getResultArray();
-        
-            // Combine both datasets
-            $attendanceData = array_merge($amSignInData, $pmSignInData);
-        
-            return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
-        }
-        
-        public function getAllAttendances()
-                {
-                    $attendanceModel = new \App\Models\AttendanceModel();
-
-                    // Query to get all attendance counts grouped by the derived date and type
-                    $amSignInData = $attendanceModel
-                        ->select("DATE(sign_in) as date, 'AM Sign-In' as status, COUNT(*) as count")
-                        ->where('sign_in IS NOT NULL')
-                        ->groupBy('DATE(sign_in)')
-                        ->get()
-                        ->getResultArray();
-
-                    $pmSignInData = $attendanceModel
-                        ->select("DATE(pm_sign_in) as date, 'PM Sign-In' as status, COUNT(*) as count")
-                        ->where('pm_sign_in IS NOT NULL')
-                        ->groupBy('DATE(pm_sign_in)')
-                        ->get()
-                        ->getResultArray();
-
-                    // Combine both datasets
-                    $attendanceData = array_merge($amSignInData, $pmSignInData);
-
-                    return $this->response->setJSON(['success' => true, 'data' => $attendanceData]);
-                }
-
-        
-        
-
-public function getUserLeaveApplications()
-{
-    $userId = session()->get('user_id'); // Get logged-in user's ID from the session
-    if (!$userId) {
-        return $this->response->setJSON(['success' => false, 'message' => 'User not logged in.']);
-    }
-
-    $leaveModel = new \App\Models\LeaveApplicationModel();
-
-    // Query to count leave applications for the logged-in user grouped by date and status
-    $leaveData = $leaveModel->select("DATE(la_start) as leave_date, status, COUNT(*) as leave_count")
-                            ->where('la_name', $userId) // Filter by the logged-in user's ID
-                            ->groupBy('leave_date, status')
-                            ->orderBy('leave_date', 'ASC')
-                            ->findAll();
-
-    if (empty($leaveData)) {
-        return $this->response->setJSON(['success' => true, 'data' => [], 'message' => 'No leave applications found for the user.']);
-    }
-
-    return $this->response->setJSON(['success' => true, 'data' => $leaveData]);
-}
-// Controller Method
-        public function getUserInfo()
-        {
-            $userId = session()->get('user_id'); // Get the logged-in user's ID from the session
-            $userModel = new \App\Models\User(); // Assuming you have a UserModel for your users table
-            
-            // Fetch user data by user ID
-            $user = $userModel->find($userId);
-
-            if ($user) {
-                // Return user data as JSON response
-                return $this->response->setJSON([
-                    'success' => true,
-                    'name' => $user['name'],
-                    'status' => $user['status'],
-                ]);
-            }
-
-            return $this->response->setJSON(['success' => false, 'message' => 'User not found']);
-        }
-
-
-
-
-
 
     public function logoutHandler(){
-        $userId = session()->get('user_id');
-        $userModel = new \App\Models\User();
-
-        $user = $userModel->find($userId);
-        if ($user) {
-            $this->userModel->update($userId, ['policy' => 'Offline']);
-        }
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-        foreach ($_COOKIE as $key => $value) {
-            delete_cookie($key);
-        }
+        session()->destroy();
 
-        $this->session->sess_destroy();
-
-
+    // Optionally, clear cookies (if you set any manually)
+    // setcookie('your_cookie_name', '', time() - 3600, '/'); // Clear the cookie
 
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    
     public function profile(){
         $userStatus = session()->get('userStatus');
         $data = array(
@@ -785,66 +651,60 @@ public function updateDesignation()
     
     /////&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-    public function attendance()
-    {
-        $userModel = new User(); 
-        $attendanceModel = new AttendanceModel();
-        $designationModel = new Designation();
-        $positionModel = new Position();
-    
-        // Get the logged-in user's ID and status
-        $loggedInUserId = session()->get('user_id'); 
-        $userStatus = session()->get('userStatus'); 
-        $loggedInUser = $userModel->find($loggedInUserId); // This will fetch the logged-in user
-        // If user is not an admin, filter attendance by the logged-in user's ID (using 'att' field)
-        if ($userStatus !== 'ADMIN') {
-            $attendances = $attendanceModel->where('attendance', $loggedInUserId)->findAll();
-        } else {
-            $attendances = $attendanceModel->findAll();
-        }
-    
-        // Fetch other related data (e.g., designations, positions)
-        $users = $userModel->findAll(); 
-        $designations = $designationModel->findAll();
-        $positions = $positionModel->findAll();
-    
-        $data = [
-            'pageTitle' => 'Attendance',
-            'users' => $users,
-            'designations' => $designations,
-            'positions' => $positions,
-            'attendances' => $attendances,
-            'userStatus' => $userStatus,
-            'users' => $loggedInUser,
-        ];
-    
-        return view('backend/pages/attendance', $data);
-    }
+
+
+public function attendance()
+{
+    $employeeModel = new EmployeeModel();
+    $employees = $employeeModel->findAll();
     
     
+    $designationModel = new Designation();
+    $designations = $designationModel->findAll();
     
+    $positionModel = new Position();
+    $positions = $positionModel->findAll();
+    
+    $attendanceModel = new AttendanceModel();
+    
+    // Fetch attendance records including pm_sign_out
+    $attendances = $attendanceModel->findAll(); // Adjust this to include pm_sign_out if necessary
+    $userStatus = session()->get('userStatus');
+
+    $data = [
+        'pageTitle' => 'Attendance',
+        'employees' => $employees,
+        'designations' => $designations,
+        'positions' => $positions,
+        'attendances' => $attendances, // Include attendance records here
+        'userStatus' => $userStatus
+    ];
+    
+    return view('backend/pages/attendance', $data);
+}
+
 
 
 public function saveAttendance()
 {
     $attendanceModel = new AttendanceModel();
-    $userModel = new User(); // Assuming UserModel is used for user-related data
+    $employeeModel = new EmployeeModel();
     $designationModel = new Designation();
     $positionModel = new Position();
 
-    // Get user, office, and position data from POST request
-    $userId = $this->request->getPost('user'); // Assuming 'user' is passed in the front-end
+    // Get employee, office, and position data from POST request
+    $employeeId = $this->request->getPost('employee');
     $officeId = $this->request->getPost('office');
     $positionId = $this->request->getPost('position');
 
-    // Fetch user details
-    $user = $userModel->find($userId); // Get user from the UserModel
+    // Fetch employee details
+    $employee = $employeeModel->find($employeeId);
     $designation = $designationModel->find($officeId);
     $position = $positionModel->find($positionId);
 
-    // Validate user, office, and position data
-    if (!$user || !isset($user['name'])) {
-        return $this->response->setJSON(['success' => false, 'message' => 'User not found or missing data.']);
+    // Validate employee, office, and position data
+    if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
+        return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
     }
 
     if (!$designation || !isset($designation['name'])) {
@@ -858,11 +718,9 @@ public function saveAttendance()
     // Prepare attendance data
     $currentTime = date('Y-m-d H:i:s');
     $attendanceData = [
-        'name' => $user['name'], // Use 'name' from the user model
+        'name' => $employee['firstname'] . ' ' . $employee['lastname'],
         'office' => $designation['name'],
         'position' => $position['position_name'],
-        'attendance' => 'Present', // Example value; modify based on logic
-        'attendance' => $userId, // Store the user ID in the 'att' field
         'sign_in' => null, // Set to null for AM sign-in initially
         'sign_out' => null, // Initially null for AM sign-out
         'pm_sign_in' => null, // Initially null for PM sign-in
@@ -883,7 +741,6 @@ public function saveAttendance()
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to record attendance.']);
     }
 }
-
 
 public function pmSave()
 {
@@ -922,6 +779,112 @@ public function pmSave()
 
 
 
+                
+
+
+            // public function saveAttendance()
+            // {
+            //     $attendanceModel = new AttendanceModel();
+            //     $employeeModel = new EmployeeModel();
+            //     $designationModel = new Designation();
+            //     $positionModel = new Position();
+            
+            //     $employeeId = $this->request->getPost('employee');
+            //     $officeId = $this->request->getPost('office');
+            //     $positionId = $this->request->getPost('position');
+            //     $isPM = $this->request->getPost('is_pm'); // New input to indicate if this is a PM sign-in
+            
+            //     // Fetch employee details
+            //     $employee = $employeeModel->find($employeeId);
+            //     $designation = $designationModel->find($officeId);
+            //     $position = $positionModel->find($positionId);
+            
+            //     if (!$employee || !isset($employee['firstname']) || !isset($employee['lastname'])) {
+            //         return $this->response->setJSON(['success' => false, 'message' => 'Employee not found or missing data.']);
+            //     }
+            
+            //     if (!$designation || !isset($designation['name'])) {
+            //         return $this->response->setJSON(['success' => false, 'message' => 'Office not found or missing data.']);
+            //     }
+            
+            //     if (!$position || !isset($position['position_name'])) {
+            //         return $this->response->setJSON(['success' => false, 'message' => 'Position not found or missing data.']);
+            //     }
+            
+            //     // Check if the employee has already signed in
+            //     $attendance = $attendanceModel->where('name', $employee['firstname'] . ' ' . $employee['lastname'])->first();
+            
+            //     if ($isPM) {
+            //         // If signing in for PM
+            //         if ($attendance) {
+            //             // If the employee has already signed in for AM
+            //             if ($attendance['sign_in'] === null) {
+            //                 // Mark as absent for AM if they did not sign in
+            //                 $attendanceModel->update($attendance['id'], [
+            //                     'attendance' => 0, // Mark as absent
+            //                     'pm_sign_in' => date('Y-m-d H:i:s'), // Record PM sign-in time
+            //                 ]);
+            //                 return $this->response->setJSON(['success' => true, 'message' => 'Marked as absent for AM and PM sign-in recorded successfully.']);
+            //             } elseif ($attendance['pm_sign_in'] !== null) {
+            //                 // PM sign-in already recorded
+            //                 return $this->response->setJSON(['success' => false, 'message' => 'PM sign-in already recorded.']);
+            //             } else {
+            //                 // Update PM sign-in time
+            //                 $attendanceModel->update($attendance['id'], [
+            //                     'pm_sign_in' => date('Y-m-d H:i:s'), // Update PM sign-in time
+            //                 ]);
+            //                 return $this->response->setJSON(['success' => true, 'message' => 'PM sign-in recorded successfully.']);
+            //             }
+            //         } else {
+            //             // If no attendance record exists, create one and mark as absent for AM
+            //             $data = [
+            //                 'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+            //                 'office' => $designation['name'],
+            //                 'position' => $position['position_name'],
+            //                 'attendance' => 0, // Mark as absent
+            //                 'sign_in' => null,
+            //                 'pm_sign_in' => date('Y-m-d H:i:s'), // Record PM sign-in time
+            //                 'sign_out' => null,
+            //                 'pm_sign_out' => null,
+            //             ];
+            //             $attendanceModel->insert($data);
+            //             return $this->response->setJSON(['success' => true, 'message' => 'Marked as absent for AM and PM sign-in recorded successfully.']);
+            //         }
+            //     }
+            
+            //     // For AM sign-in
+            //     if ($attendance) {
+            //         if ($attendance['sign_in'] !== null) {
+            //             return $this->response->setJSON(['success' => false, 'message' => 'AM sign-in already recorded.']);
+            //         }
+            //     }
+            
+            //     // Prepare data for AM sign-in
+            //     $data = [
+            //         'name' => $employee['firstname'] . ' ' . $employee['lastname'],
+            //         'office' => $designation['name'],
+            //         'position' => $position['position_name'],
+            //         'attendance' => 1, // Assuming attendance value is 1 for sign-in
+            //         'sign_in' => date('Y-m-d H:i:s'), // Update AM sign-in time
+            //         'pm_sign_in' => null, // Initially null for PM sign-in
+            //         'sign_out' => null, // Initially null for sign-out
+            //         'pm_sign_out' => null, // Initially null for PM sign-out
+            //     ];
+            
+            //     // Insert or update data into the database
+            //     if ($attendance) {
+            //         // Update existing attendance record
+            //         $attendanceModel->update($attendance['id'], $data);
+            //         return $this->response->setJSON(['success' => true, 'message' => 'AM sign-in recorded successfully.']);
+            //     } else {
+            //         // Insert new attendance record
+            //         if ($attendanceModel->insert($data)) {
+            //             return $this->response->setJSON(['success' => true, 'message' => 'AM sign-in recorded successfully.']);
+            //         } else {
+            //             return $this->response->setJSON(['success' => false, 'message' => 'Failed to record sign-in.']);
+            //         }
+            //     }
+            // }
                
             public function signOut()
             {
@@ -956,7 +919,6 @@ public function pmSave()
                 // Load the AttendanceModel
                 $attendanceModel = new \App\Models\AttendanceModel();
                 $userStatus = session()->get('userStatus');
-                $userName = session()->get('userName');
                 if ($userStatus !== 'ADMIN') {
                     return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
                 }
@@ -1012,8 +974,7 @@ public function pmSave()
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                     'pageTitle'=> 'Attendance Report',
-                    'userStatus' => $userStatus,
-                    'userName' => $userName
+                    'userStatus' => $userStatus
                 ];
             
                 // Load the view and pass the data
@@ -1345,150 +1306,43 @@ public function cancelHolidays()
 
         
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 public function leave_application()
 {
-    $leaveTypeModel = new leave_typeModel();
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User();
-
-    // Get the logged-in user's ID and status from the session
-    $loggedInUserId = session()->get('user_id');  // Assuming the user ID is stored in the session
-    $userStatus = session()->get('userStatus');   // Get the logged-in user's status (EMPLOYEE, ADMIN, etc.)
-
-    // Fetch the logged-in user's data if the user is an EMPLOYEE
-    if ($userStatus !== 'ADMIN') {
-        $loggedInUser = $userModel->find($loggedInUserId); // Fetch only the logged-in user's data
-    } else {
-        // Optionally, fetch all users if the user is an ADMIN
-        $loggedInUser = null; 
-    }
-
-    // Fetch leave applications for the logged-in user
-    $data = [
-        'pageTitle' => 'Leave Application',
-        'leaveTypes' => $leaveTypeModel->findAll(),
-        'users' => $userModel->select('id, name')->findAll(),
-        'userStatus' => session()->get('userStatus'),
-        'loggedInUser' => $loggedInUser,  // Pass logged-in user data
-        'leaveApplications' => $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $userModel, $loggedInUserId),
-    ];
-
-    return view('backend/pages/leave_application', $data);
-}
-
-public function pendingleave(){
-      // Load the models
+    // Load the models
     $leaveTypeModel = new leave_typeModel(); // Ensure the correct class name
     $leaveApplicationModel = new LeaveApplicationModel();
-    $userModel = new User(); // Load the User model
+    $employeeModel = new EmployeeModel();
     $userStatus = session()->get('userStatus');
     if ($userStatus !== 'ADMIN') {
         return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
     }
     
+
     // Fetch leave applications with details
-    $leaveApplications = $leaveApplicationModel->getLeaveApplications($leaveTypeModel, $userModel);
+    $leaveApplications = $leaveApplicationModel->getLeaveApplicationsWithDetails($leaveTypeModel, $employeeModel);
     
     // Retrieve all leave types
     $leaveTypes = $leaveTypeModel->findAll();
 
-    // Fetch user names
-    $users = $userModel->select('id, name')->findAll();
+    // Fetch employee names
+    $employees = $employeeModel->getEmployeeNames();
+
+    // Get user status from session
+    $userStatus = session()->get('userStatus');
 
     // Prepare data for the view
     $data = [
         'pageTitle' => 'Leave Application',
         'leaveTypes' => $leaveTypes,
-        'users' => $users, // Pass users to the view
+        'employees' => $employees,
         'userStatus' => $userStatus,
         'leaveApplications' => $leaveApplications // Pass leave applications with details
     ];
 
-
-// Load the view with data
-return view('backend/pages/pendingleave', $data);
-
+    // Load the view with data
+    return view('backend/pages/leave_application', $data);
 }
-public function rejectLeave()
-{
-    // $leaveApplicationModel = new LeaveApplicationModel();
-    // $laId = $this->request->getPost('la_id');
-
-    // // Attempt to delete the leave application
-    // if ($leaveApplicationModel->delete($laId)) {
-    //     return $this->response->setJSON([
-    //         'status' => 'success',
-    //         'message' => 'Leave application has been successfully Rejected.'
-    //     ]);
-    // } else {
-    //     return $this->response->setJSON([
-    //         'status' => 'error',
-    //         'message' => 'Failed to Reject the leave application. Please try again.'
-    //     ]);
-    // }
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $laId = $this->request->getPost('la_id');
-
-    // Attempt to update the leave application status to "Cancelled"
-    $updated = $leaveApplicationModel->update($laId, [
-        'status' => 'Rejected'
-    ]);
-
-    if ($updated) {
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'Leave application has been successfully rejected.'
-        ]);
-    } else {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Failed to reject the leave application. Please try again.'
-        ]);
-    }
-}
-
-
-public function cancelLeave()
-{
-    // $leaveApplicationModel = new LeaveApplicationModel();
-    // $laId = $this->request->getPost('la_id');
-
-    // // Attempt to delete the leave application
-    // if ($leaveApplicationModel->delete($laId)) {
-    //     return $this->response->setJSON([
-    //         'status' => 'success',
-    //         'message' => 'Leave application has been successfully Canceled.'
-    //     ]);
-    // } else {
-    //     return $this->response->setJSON([
-    //         'status' => 'error',
-    //         'message' => 'Failed to Cancel the leave application. Please try again.'
-    //     ]);
-    // }
-    $leaveApplicationModel = new LeaveApplicationModel();
-    $laId = $this->request->getPost('la_id');
-
-    // Attempt to update the leave application status to "Cancelled"
-    $updated = $leaveApplicationModel->update($laId, [
-        'status' => 'Cancelled'
-    ]);
-
-    if ($updated) {
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'Leave application has been successfully cancelled.'
-        ]);
-    } else {
-        return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'Failed to cancel the leave application. Please try again.'
-        ]);
-    }
-}
-
-
 //////////////////////////////////////////////////////////////////////////
 public function submitLeaveApplication()
 {
@@ -1620,107 +1474,34 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
         return view('backend/pages/print', $data);
     }
 
-// public function notifications()
-// {
-//     $employeeModel = new EmployeeModel();
-
-//     // Fetch employees whose result is "Pending"
-//     $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-
-//     // Count the pending employees
-//     $pendingCount = count($pendingEmployees);
-
-//     // Pass both the pending employees and their count to the view
-//     return view('backend/layout/inc/header', [
-//             'pendingEmployees' => $pendingEmployees,
-//         'pendingCount' => $pendingCount
-//     ]);
-// }
-
-    // public function fetchPendingResults()
-    //     {
-    //         $employeeModel = new EmployeeModel();
-            
-    //         // Fetch employees with a pending result
-    //         $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-    //         $data = [
-    //             'count' => count($pendingEmployees), // Add the count of pending employees
-    //             'employees' => [] // Initialize the employee details array
-    //         ];
-    //         // Format the response
-    //         $data = [];
-    //         foreach ($pendingEmployees as $employee) {
-    //             $data[] = [
-    //                 'firstname' => $employee['firstname'],
-    //                 'lastname' => $employee['lastname']
-    //             ];
-    //         }
-
-    //         return $this->response->setJSON($data);
-    //     }
-    public function fetchPendingResults()
+    public function notifications()
     {
         $employeeModel = new EmployeeModel();
-        $leaveApplicationModel = new LeaveApplicationModel(); // Assuming this model exists
-        $userModel = new User(); // Assuming the User model exists for fetching user details
-        $leaveTypeModel = new leave_typeModel(); // Load the LeaveTypeModel
-        // Get the logged-in user's ID and status
-        $loggedInUserId = session()->get('id');
-        $loggedInUserStatus = session()->get('userStatus'); // Assuming this holds 'ADMIN', 'EMPLOYEE', etc.
-        
-        // Initialize empty data array for employees and leave applications
-        $data = [
-            'employees' => [],
-            'leave_applications' => []
-        ];
-
-        // If user is ADMIN, fetch all pending results and leave applications
-        if ($loggedInUserStatus === 'ADMIN') {
-            // Fetch all employees with pending results
-            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
-            
-            // Fetch all pending leave applications
-            $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')->findAll();
-        } else {
-            // Non-ADMIN users (EMPLOYEE/STAFF), only fetch their own pending results
-            $pendingEmployees = $employeeModel->where('result', 'Pending')
-                                            ->where('user_id', $loggedInUserId) // Only fetch their own results
-                                            ->findAll();
-            
-            // Non-ADMIN users, only fetch their own pending leave applications
-            $pendingLeaveApplications = $leaveApplicationModel->where('status', 'Pending')
-                                                            ->where('user_id', $loggedInUserId) // Only fetch their own applications
-                                                            ->findAll();
-        }
-        
-        // Process pending employees
-        foreach ($pendingEmployees as $employee) {
-            $data['employees'][] = [
-                'firstname' => $employee['firstname'],
-                'lastname'  => $employee['lastname']
-            ];
-        }
-
-        // Process pending leave applications and fetch user and leave type details
-        foreach ($pendingLeaveApplications as $leave) {
-            // Fetch the user based on user_id (assuming la_name is user_id)
-            $user = $userModel->find($leave['la_name']); // Fetch user by user_id (la_name is user_id here)
-
-            // Fetch leave type from the leave_types table (assuming la_type is the leave type ID)
-            $leaveType = $leaveTypeModel->find($leave['la_type']); // Fetch leave type by ID
-
-            $data['leave_applications'][] = [
-                'la_name' => $user ? $user['name'] : 'Unknown User', // Get full name from user data
-                'la_type' => $leaveType ? $leaveType['l_name'] : 'Unknown Leave Type' // Get leave type name from leave types
-            ];
-        }
-
-        return $this->response->setJSON($data);
+    
+        // Fetch employees whose result is "Pending"
+        $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
+    
+        // Pass the pending employees to the view
+        return view('backend/pages/pendingemployee', ['pendingEmployees' => $pendingEmployees]);
     }
-    
-    
-    
+    public function fetchPendingResults()
+        {
+            $employeeModel = new EmployeeModel();
+            
+            // Fetch employees with a pending result
+            $pendingEmployees = $employeeModel->where('result', 'Pending')->findAll();
 
+            // Format the response
+            $data = [];
+            foreach ($pendingEmployees as $employee) {
+                $data[] = [
+                    'firstname' => $employee['firstname'],
+                    'lastname' => $employee['lastname']
+                ];
+            }
+
+            return $this->response->setJSON($data);
+        }
         public function deleteuser()
         {
             if ($this->request->isAJAX()) {
@@ -1758,6 +1539,5 @@ private function adjustLeaveEndDate($start_date, $total_leave_days, $holidayMode
             
             return view('backend/pages/terms', $data);
         }
-        ///////////////////////////////pin forgot password
 
 }

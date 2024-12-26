@@ -12,19 +12,6 @@ $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' => 'send_password_reset_link']);
     $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
     $routes->post('reset-password-handler/(:any)', 'AuthController::resetPasswordHandler/$1', ['as' => 'reset-password-handler']);
-    // Route for the pin sender page
-    $routes->get('forgot-password-pin', 'AuthController::forgotPasswordPinPage');
-    $routes->post('send-pin', 'AuthController::sendPinCode',['as' => 'admin.send-pin']);
-    $routes->get('reset-password-with-pin/(:segment)', 'AuthController::resetPasswordWithPin/$1');
-    $routes->get('reset-pin', 'AuthController::resetPin');
-    $routes->post('/reset-password-handler-with-pin', 'AuthController::resetPasswordHandlerWithPin');
-    $routes->post('/verify-pin', 'AuthController::verifyPin', ['as' => 'verify-pin']);
-    $routes->get('/reset-password/(:segment)', 'AuthController::resetPasswords/$1', ['as' => 'reset-password']);
-
-
-    
-
-
 });
 
 
@@ -69,12 +56,6 @@ $routes->group('', static function($routes){
                 $routes->get('pendingemployeelist','AdminController::pendingemployeelist',['as'=>'admin.pendingemployeelist']);
                 $routes->put('hired_employee', 'AdminController::hire_employee', ['as' => 'admin.hired']);
                 $routes->get('admin/getEmployeeGenderData', 'AdminController::getEmployeeGenderData',['as'=>'admin.gender']);
-                $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
-                $routes->post('upload-file', 'UserController::uploadFile', ['as' => 'uploadFile']);
-                $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
-                $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
-                // Ensure that deleteFile route is also defined
-                $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
     });
     $routes->group('Attendance-page', ['filter'=>'cifilter:auth'], static function($routes){
 
@@ -103,12 +84,6 @@ $routes->group('', static function($routes){
                 $routes->post('holiday/create', 'AdminController::create', ['as' => 'admin.create_holidays']);
                 $routes->post('admin/update-holidays', 'AdminController::updateHolidays', ['as' => 'admin.update_holidays']);
                 $routes->post('admin/cancel-holidays', 'AdminController::cancelHolidays', ['as' => 'admin.cancel_holidays']);
-                $routes->get('pending_leave','AdminController::pendingleave',['as'=>'admin.pending_leave']);
-                $routes->post('admin/cancel-leave', 'AdminController::cancelLeave', ['as' => 'admin.cancel.leave']);
-                $routes->post('reject-leave', 'AdminController::rejectLeave', ['as' => 'admin.reject.leave']);
-                $routes->get('/getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
-
-
     });
 
     $routes->group('Account-center', ['filter'=>'cifilter:auth'], static function($routes){
@@ -119,7 +94,12 @@ $routes->group('', static function($routes){
         $routes->get('add', 'UserController::add', ['as' => 'user.add']);
         $routes->get('userlist', 'UserController::userlist', ['as' => 'user.list']);
         $routes->post('update-user-picture', 'UserController::update_profile_picture');
-       
+        $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
+        $routes->post('upload-file', 'UserController::uploadFile', ['as' => 'uploadFile']);
+        $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
+        $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
+        // Ensure that deleteFile route is also defined
+        $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
         
 
         $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);
@@ -141,8 +121,6 @@ $routes->group('', static function($routes){
                 $routes->post('update-personal-details','AdminController::updatePersonalDetails',['as'=>'update-personal-details']);
                 $routes->post('update-profile-picture','UserController::updatePersonalPictures',['as'=>'update-profile-picture']);  
                 $routes->post('change-password','UserController::changePassword',['as'=>'change-password']);
-
-
     });
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 
@@ -150,15 +128,6 @@ $routes->group('', static function($routes){
         $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
         $routes->get('terms-and-condition','AdminController::terms',['as'=>'admin.terms']);
         $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
-        $routes->get('getUserFileUploads', 'AdminController::getUserFileUploads');
-        $routes->get('getUserLeaveApplications', 'AdminController::getUserLeaveApplications');
-        $routes->get('getUserAttendances', 'AdminController::getUserAttendances');
-        $routes->get('getAllAttendances', 'AdminController::getAllAttendances');
-        $routes->get('/getUserInfo', 'AdminController::getUserInfo');
-
-
-        
-
 
         
 });

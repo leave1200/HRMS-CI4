@@ -18,7 +18,15 @@
     </div>
 </div>
 <div class="tabs">
-
+    <!-- <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#attendanceTab1">Sign In AM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#attendanceTab2">Sign In PM</a>
+        </li>
+    </ul> -->
+    
     <div class="tab-content">
         <div id="attendanceTab1" class="tab-pane fade show active">
             <div class="pd-20 card-box mb-30">
@@ -31,24 +39,12 @@
                     <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6">
-                        <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" id="userInput" class="form-control" 
-                                    placeholder="Type user's name..." autocomplete="off" required 
-                                    value="<?= isset($users['name']) ? $users['name'] : '' ?>" 
-                                    <?= $userStatus == 'EMPLOYEE' ? 'readonly' : '' ?>> <!-- Make it readonly for EMPLOYEE -->
-                                <input type="hidden" name="user" id="selectedUserId" required value="<?= isset($users['id']) ? $users['id'] : '' ?>">
+                                <label>Employee</label>
+                                <input type="text" id="employeeInput" class="form-control" placeholder="Type employee's name..." autocomplete="off" required>
+                                <ul id="employeeList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
+                                <input type="hidden" name="employee" id="selectedEmployeeId" required>
                             </div>
-                            <?php endif; ?>
-                            <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
-                            <div class="form-group">
-                                <label>User</label>
-                                <input type="text" id="userInput" class="form-control" placeholder="Type user's name..." autocomplete="off" required>
-                                <ul id="userList" class="list-group" style="display: none; position: absolute; max-height: 150px; overflow-y: auto; z-index: 1000;"></ul>
-                                <input type="hidden" name="user" id="selectedUserId" required>
-                            </div>
-                            <?php endif; ?>
                             <div class="form-group">
                                 <label>Office</label>
                                 <select name="office" class="form-control" style="width: 50%; height: 38px" required>
@@ -65,12 +61,40 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                            <!-- <button type="button" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button> -->
                             <button type="button" id="signInButton" class="btn btn-outline-primary mt-2" onclick="signInEmployee()">Sign In</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+        
+        <!-- <div id="attendanceTab2" class="tab-pane fade">
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">Attendance</h4>
+                    </div>
+                </div>
+                <form id="pmsignInForm2" method="post">
+                    <?= csrf_field() ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employee Attendance ID</label>
+                                <input type="text" id="employeeNumberInput2" name="attendance_id" class="form-control" readonly required>
+                            </div>
+                            <div class="form-group">
+                                <label>Employee Name</label>
+                                <input type="text" id="employeeNameInput2" class="form-control" readonly>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary mt-2" onclick="signInPmEmployee()">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> -->
+
     </div>
 </div>
 
@@ -81,6 +105,22 @@
     <div class="pb-20">
         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="row">
+                <!-- <div class="col-sm-12 col-md-6">
+                    <div class="dataTables_length" id="DataTables_Table_0_length">
+                        <label>Show
+                            <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="custom-select custom-select-sm form-control form-control-sm">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="-1">All</option>
+                            </select> entries
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6"> -->
+                <!-- <div class="mb-10 pull-right">
+                    <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
+                </div> -->
                     <script>
                     function filterTable() {
                         const input = document.getElementById('searchInput');
@@ -88,7 +128,7 @@
                         const rows = document.querySelectorAll('#DataTables_Table_0_wrapper tbody tr');
 
                         rows.forEach(row => {
-                            const nameCell = row.cells[1]; // Assuming the Name is the second column
+                            const nameCell = row.cells[1]; // Assuming the Name is the third column
                             if (nameCell) {
                                 const txtValue = nameCell.textContent || nameCell.innerText;
                                 row.style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
@@ -105,7 +145,6 @@
                             <thead>
                                 <tr role="row">
                                     <th>#</th>
-                                    <th>Attendance ID</th>
                                     <th>Name</th>
                                     <th>Office</th>
                                     <th>Position</th>
@@ -118,7 +157,6 @@
                                     <?php foreach ($attendances as $attendance): ?>
                                         <tr>
                                             <td><?= esc($attendance['id']) ?></td>
-                                            <td><?= esc($attendance['attendance']) ?></td>
                                             <td><?= esc($attendance['name']) ?></td>
                                             <td><?= esc($attendance['office']) ?></td>
                                             <td><?= esc($attendance['position']) ?></td>
@@ -158,6 +196,7 @@
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -170,11 +209,11 @@
 <script src="/backend/src/plugins/sweetalert2/sweetalert2.all.js"></script>
 
 <script>
-const users = <?= json_encode($users); ?>; // Fetching user data from PHP
+const employees = <?= json_encode($employees); ?>; // Fetching employee data from PHP
 
-const input = document.getElementById('userInput');
-const list = document.getElementById('userList');
-const selectedUserId = document.getElementById('selectedUserId');
+const input = document.getElementById('employeeInput');
+const list = document.getElementById('employeeList');
+const selectedEmployeeId = document.getElementById('selectedEmployeeId');
 
 input.addEventListener('input', function() {
     const filterValue = this.value.toLowerCase();
@@ -182,29 +221,29 @@ input.addEventListener('input', function() {
     list.style.display = 'none'; // Hide the list initially
 
     if (filterValue) {
-        const filteredUsers = users.filter(user =>
-            user.name.toLowerCase().includes(filterValue) // Use 'name' field for filtering
+        const filteredEmployees = employees.filter(employee =>
+            `${employee.firstname} ${employee.lastname}`.toLowerCase().includes(filterValue)
         );
 
-        filteredUsers.forEach(user => {
+        filteredEmployees.forEach(employee => {
             const li = document.createElement('li');
-            li.textContent = user.name; // Display the full name
+            li.textContent = `${employee.firstname} ${employee.lastname}`;
             li.className = 'list-group-item'; // Bootstrap list group class
             li.onclick = () => {
-                input.value = user.name; // Set input value
-                selectedUserId.value = user.id; // Set hidden input value
+                input.value = `${employee.firstname} ${employee.lastname}`; // Set input value
+                selectedEmployeeId.value = employee.id; // Set hidden input value
                 
                 // Update PM sign-in fields
-                $('#userNumberInput2').val(user.id);
-                $('#userNameInput2').val(user.name);
-                $('#selectedUserId2').val(user.id);
+                $('#employeeNumberInput2').val(employee.id);
+                $('#employeeNameInput2').val(`${employee.firstname} ${employee.lastname}`);
+                $('#selectedEmployeeId2').val(employee.id);
 
                 list.style.display = 'none'; // Hide the list after selection
             };
             list.appendChild(li);
         });
 
-        if (filteredUsers.length > 0) {
+        if (filteredEmployees.length > 0) {
             list.style.display = 'block'; // Show the list if there are results
         }
     }
@@ -218,28 +257,20 @@ document.addEventListener('click', (event) => {
     }
 });
 
-
-// Hide the list if clicking outside
-document.addEventListener('click', (event) => {
-    if (!input.contains(event.target) && !list.contains(event.target)) {
-        list.style.display = 'none';
-    }
-});
-
 function signInEmployee() {
-    const selectedUser = selectedUserId.value;  // Assuming this holds the user ID
-    if (!selectedUser) {
+    const selectedEmployee = selectedEmployeeId.value;
+    if (!selectedEmployee) {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Please select a user.',
+            text: 'Please select an employee.',
         });
         return;
     }
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "You want to sign in this user?",
+        text: "You want to sign in this employee?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -279,8 +310,8 @@ function signInEmployee() {
             });
         }
     });
-}
 
+}
 
 function signOutAttendance(attendanceId, session) {
     const sessionText = session === 'am' ? 'AM' : 'PM';
@@ -339,22 +370,21 @@ $(document).ready(function() {
     const table = $('#DataTables_Table_0').DataTable();
 
     $('#DataTables_Table_0 tbody').on('click', 'tr', function() {
-        const userId = $(this).find('td:eq(0)').text(); // Get user ID from the first column
-        const userName = $(this).find('td:eq(1)').text(); // Get user name from the second column
+        const employeeId = $(this).find('td:eq(0)').text(); // Get employee ID from the first column
+        const employeeName = $(this).find('td:eq(1)').text(); // Get employee name from the second column
         const officeId = $(this).find('td:eq(2)').text(); // Get office ID from the third column
         const positionId = $(this).find('td:eq(3)').text(); // Get position ID from the fourth column
 
         // Populate the fields in the PM Sign In form
-        $('#userNumberInput2').val(userId);
-        $('#userNameInput2').val(userName);
-        $('#selectedUserId2').val(userId);
+        $('#employeeNumberInput2').val(employeeId);
+        $('#employeeNameInput2').val(employeeName);
+        $('#selectedEmployeeId2').val(employeeId);
 
-        // Set Office and Position based on selected user
+        // Set Office and Position based on selected employee
         $('#officeSelect2').val(officeId).change(); // Set the office select value
         $('#positionSelect2').val(positionId).change(); // Set the position select value
     });
 });
-
 
 </script>
 <script>
@@ -414,4 +444,32 @@ function signInPmEmployee(attendanceId) {
 }
 
 </script>
+<!-- <script>
+        function checkButtonVisibility() {
+            // Set the timezone to Asia/Manila
+            const options = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit' };
+            const now = new Date().toLocaleString('en-US', options);
+
+            const [hours, minutes] = now.split(':').map(Number);
+
+            // Convert to 24-hour format
+            const currentTime = hours * 60 + minutes;
+
+            // Define time ranges in minutes from 00:00
+            const range1Start = 7 * 60 + 30; // 07:30 AM
+            const range1End = 8 * 60 + 30;   // 08:30 AM
+            const range2Start = 12 * 60 + 30; // 12:30 PM
+            const range2End = 13 * 60 + 30;   // 01:30 PM
+
+            // Check if current time is within the defined ranges
+            const isVisible = (currentTime >= range1Start && currentTime <= range1End) ||
+                              (currentTime >= range2Start && currentTime <= range2End);
+
+            // Set button visibility
+            document.getElementById('signInButton').style.display = isVisible ? 'block' : 'none';
+        }
+
+        // Run the function on page load
+        window.onload = checkButtonVisibility;
+    </script> -->
 <?= $this->endSection() ?>

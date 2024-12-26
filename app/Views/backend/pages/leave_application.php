@@ -25,40 +25,27 @@
             </div>
             <form id="leaveApplicationForm" action="<?= route_to('admin.submit_leave') ?>" method="POST">
                 <?= csrf_field() ?>
-                <?php if (isset($userStatus) && $userStatus !== 'ADMIN'): ?>
+                
                 <!-- Form fields -->
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                     <div class="col-sm-12 col-md-10">
-                        <?php if ($userStatus == 'EMPLOYEE'): ?>
-                            <!-- Display the name in the input field, but the id is passed in a hidden input -->
-                        <input type="text" class="form-control" value="<?= esc($loggedInUser['name']) ?>" readonly>
-                        <input type="hidden" name="la_name" value="<?= esc($loggedInUser['id']) ?>">
-                        <?php else: ?>
-                            <input type="text" class="form-control" value="Select User" readonly>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <?php endif; ?>
-                <?php if (isset($userStatus) && $userStatus !== 'EMPLOYEE' && $userStatus !== 'STAFF'): ?>
-                    <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Name</label>
-                    <div class="col-sm-12 col-md-10">
                         <select name="la_name" class="form-control" required>
-                            <option value="" disabled selected>Select User</option>
-                            <?php if (!empty($users) && is_array($users)): ?>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?= esc($user['id']) ?>">
-                                        <?= esc($user['name']) ?>
+                            <option value="" disabled selected>Select Employee</option>
+                            <?php if (!empty($employees) && is_array($employees)): ?>
+                                <?php foreach ($employees as $employee): ?>
+                                    <option value="<?= esc($employee['id']) ?>">
+                                        <?= esc($employee['firstname'] . ' ' . $employee['lastname']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <option value="" disabled>No users available</option>
+                                <option value="" disabled>No employees available</option>
                             <?php endif; ?>
                         </select>
                     </div>
                 </div>
-                <?php endif; ?>
+
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Leave Type</label>
                     <div class="col-sm-12 col-md-10">
@@ -102,40 +89,43 @@
 </div>
 
 <!-- DataTable to display leave applications -->
-<div class="pd-20 card-box mb-30">
-    <div class="table-responsive">
-        <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Submitted Leave Applications</h4>
+            <table id="leaveApplicationsTable" class="table table-striped table-bordered" style="width:100%">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>User Name</th>
-                    <th>Leave Type</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($leaveApplications as $application): ?>
                     <tr>
-                        <td><?= esc($application['la_id']) ?></td>
-                        <td><?= esc($application['user_name']) ?></td>
-                        <td><?= esc($application['leave_type_name']) ?></td>
-                        <td><?= esc($application['la_start']) ?></td>
-                        <td><?= esc($application['la_end']) ?></td>
-                        <td><?= esc($application['status']) ?></td>
-                        <td>
-                            <button class="btn btn-danger btn-sm delete-btn" data-id="<?= esc($application['la_id']) ?>">Cancel</button>
-                        </td>
-
+                        <th>ID</th>
+                        <th>Employee Name</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Action</th> <!-- New Action Column -->
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($leaveApplications as $application): ?>
+                        <tr>
+                            <td><?= esc($application['la_id']) ?></td>
+                            <td><?= esc($application['employee_name']) ?></td>
+                            <td><?= esc($application['leave_type_name']) ?></td>
+                            <td><?= esc($application['la_start']) ?></td>
+                            <td><?= esc($application['la_end']) ?></td>
+                            <td><?= esc($application['status']) ?></td>
+                            <td>
+                                <button class="btn btn-success btn-sm approve-btn" data-id="<?= esc($application['la_id']) ?>">Approve</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
 $(document).ready(function() {
     if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
@@ -248,47 +238,6 @@ $(document).ready(function() {
         });
     });
 });
-</script>
-<script>
-$(document).ready(function() {
-    // Delete button click handler
-    $('.delete-btn').on('click', function() {
-        var applicationId = $(this).data('id');
-
-        Swal.fire({
-            title: 'Confirm Cancelation',
-            text: 'Are you sure you want to Cancel this leave application?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Canceled it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= route_to('admin.cancel.leave') ?>', // Your route to handle deletion
-                    data: { la_id: applicationId },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Swal.fire('Canceled!', response.message, 'success').then(() => {
-                                location.reload(); // Reload the page after deletion
-                            });
-                        } else {
-                            Swal.fire('Error!', response.message, 'error');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error('AJAX Error:', xhr);
-                        Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
-                    }
-                });
-            }
-        });
-    });
-});
-
-
 </script>
 
 <?= $this->endSection() ?>
