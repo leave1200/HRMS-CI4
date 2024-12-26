@@ -197,7 +197,7 @@ class AuthController extends BaseController
                 'max_length' => 'Password must not have more than 25 characters in length.'
             ]
         ]
-    ];
+    ]; 
 
     // Validate input
     if (!$this->validate($rules)) {
