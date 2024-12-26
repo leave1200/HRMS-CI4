@@ -114,21 +114,21 @@ class AuthController extends BaseController
     
         // Verify user password
         if (!$userInfo || !password_verify($this->request->getVar('password'), $userInfo['password'])) {
-            $attempts = session()->get('login_attempts') ?: 0;
-            $attempts++;
-            session()->set('login_attempts', $attempts);
+            // $attempts = session()->get('login_attempts') ?: 0;
+            // $attempts++;
+            // session()->set('login_attempts', $attempts);
     
-            if ($attempts >= 3) {
-                session()->set('wait_time', time() + 30); // Wait for 30 seconds
-                return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
-            }
+            // if ($attempts >= 3) {
+            //     session()->set('wait_time', time() + 30); // Wait for 30 seconds
+            //     return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
+            // }
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
     
-        // Reset failed login attempts
-        session()->remove('login_attempts');
-        session()->remove('wait_time');
+        // // Reset failed login attempts
+        // session()->remove('login_attempts');
+        // session()->remove('wait_time');
     
         // Set user session and authenticate
         CIAuth::setCIAuth($userInfo);
