@@ -140,10 +140,10 @@ class AuthController extends BaseController
             'isLoggedIn' => true
         ]);
             // Check if the user has accepted the terms and conditions
-    if ($userInfo['terms'] != 1) {
-        // If the user has not accepted the terms, redirect them to the terms acceptance page
-        return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-    }
+            if ($userInfo['terms'] != 1) {
+                // If the user has not accepted the terms, redirect them to the terms acceptance page
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
         return redirect()->route('admin.home');
     }
     
