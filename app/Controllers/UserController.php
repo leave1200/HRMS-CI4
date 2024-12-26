@@ -23,32 +23,16 @@ class UserController extends Controller
     public function add()
     {
         $employeeModel = new EmployeeModel();
-        $userModel = new User(); // Assuming you have a UserModel for the `users` table
-    
         $userStatus = session()->get('userStatus');
-        
-        // Fetch all employees
-        $allEmployees = $employeeModel->getEmployeeNames();
-        
-        // Fetch all names from the users table
-        $users = $userModel->select('name')->findAll();
-        $userNames = array_column($users, 'name'); // Extract the names into an array
-    
-        // Filter out employees whose names already exist in the users table
-        $filteredEmployees = array_filter($allEmployees, function ($employee) use ($userNames) {
-            return !in_array($employee['name'], $userNames);
-        });
-    
         $data = [
-            'employees' => $filteredEmployees, // Filtered employees
+            'employees' => $employeeModel->getEmployeeNames(), // Fetch employee names with email
             'pageTitle' => 'Add User',
             'userStatus' => $userStatus,
             'validation' => \Config\Services::validation()
         ];
-    
+        
         return view('backend/pages/adduser', $data);
     }
-    
     public function userlist()
     {
         $userStatus = session()->get('userStatus');

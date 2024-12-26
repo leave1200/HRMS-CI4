@@ -34,15 +34,14 @@
                                 <?php foreach ($employees as $employee): ?>
                                     <option value="<?= $employee['id'] ?>"
                                             data-email="<?= htmlspecialchars($employee['email']) ?>"
-                                            data-name="<?= htmlspecialchars($employee['name']) ?>"
+                                            data-name="<?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>"
                                             <?= old('employee_id') == $employee['id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($employee['name']) ?> <!-- Display the concatenated name -->
+                                        <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <option value="">No employees found</option>
                             <?php endif; ?>
-
                         </select>
 
                         <div class="text-danger"><?= $validation->getError('employee_id') ?></div>
@@ -96,6 +95,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var form = document.getElementById('addUserForm');

@@ -6,12 +6,6 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<meta http-equiv="X-Frame-Options" content="DENY">
-		<meta http-equiv="X-XSS-Protection" content="1; mode=block">
-		<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
-		<meta name="referrer" content="no-referrer-when-downgrade">
-		<meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
 		<meta name="csrf-token-name" content="<?= csrf_token() ?>">
 		<title><?= isset($pageTitle) ? $pageTitle : 'New Page Title'; ?></title>
 
@@ -45,9 +39,11 @@
 		<link rel="stylesheet" type="text/css" href="/backend/src/plugins/jquery-steps/jquery.steps.css"/>
 		<link rel="stylesheet" type="text/css" href="/backend/vendors/styles/style.css" />
 		<link rel="stylesheet" type="text/css" href="/backend/src/plugins/datatables/css/dataTables.bootstrap4.min.css"/>
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-knob@1.2.13/dist/jquery.knob.min.css"> -->
 		<link rel="stylesheet" href="/backend/src/plugins/timedropper/timedropper.css">
 		<link rel="stylesheet" href="/extra-assets/ijaboCropTool/ijaboCropTool.min.css">
 		<!-- Toastr CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 		
 		<?= $this->renderSection('stylesheets') ?>
@@ -92,6 +88,9 @@
 		<script src="/backend/src/plugins/timedropper/timedropper.js"></script>
 		<script src="/backend/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
 		<script src="/backend/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
+		<!-- Toastr JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 		<?= $this->renderSection('scripts') ?>
 	</body>
 </html>

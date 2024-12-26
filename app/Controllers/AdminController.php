@@ -24,7 +24,6 @@ class AdminController extends BaseController
     {
         $this->employeeModel = new \App\Models\EmployeeModel(); // Load your model
         $this->leaveTypeModel = new \App\Models\leave_typeModel();
-        $this->userModel = new \App\Models\User();
     }
     protected $helpers =['url','form', 'CIMail', 'CIFunctions', 'EmployeeModel','AttendanceModel'];
 
@@ -48,11 +47,6 @@ class AdminController extends BaseController
         $attendances = $attendanceModel->findAll();
         $amAttendanceRecords = $attendanceModel->where('sign_in IS NOT NULL')->countAllResults();
         $pmAttendanceRecords = $attendanceModel->where('pm_sign_in IS NOT NULL')->countAllResults();
-        $user = CIAuth::user();
-        if(!$user){
-            CIAuth::forget();
-            return redirect()->route('admin.login.form')->with('success', 'You are logged out!');
-        }
         
 
 
@@ -190,27 +184,16 @@ public function getUserLeaveApplications()
 
 
     public function logoutHandler(){
-        $userId = session()->get('user_id');
-        $userModel = new \App\Models\User();
-
-        $user = $userModel->find($userId);
-        if ($user) {
-            $this->userModel->update($userId, ['policy' => 'Offline']);
-        }
         CIAuth::forget();
         return redirect()->route('admin.login.form')->with('fail', 'You are logged out!');
-        foreach ($_COOKIE as $key => $value) {
-            delete_cookie($key);
-        }
+        session()->destroy();
 
-        $this->session->sess_destroy();
-
-
+    // Optionally, clear cookies (if you set any manually)
+    // setcookie('your_cookie_name', '', time() - 3600, '/'); // Clear the cookie
 
     // Redirect to the login page after logout
     return redirect()->route('admin.login.form')->with('success', 'You have been logged out successfully.');
     }
-    
     public function profile(){
         $userStatus = session()->get('userStatus');
         $data = array(
@@ -956,7 +939,6 @@ public function pmSave()
                 // Load the AttendanceModel
                 $attendanceModel = new \App\Models\AttendanceModel();
                 $userStatus = session()->get('userStatus');
-                $userName = session()->get('userName');
                 if ($userStatus !== 'ADMIN') {
                     return redirect()->to('/forbidden'); // Or whatever route you choose for unauthorized access
                 }
@@ -1012,8 +994,7 @@ public function pmSave()
                     'startDate' => $startDate,
                     'endDate' => $endDate,
                     'pageTitle'=> 'Attendance Report',
-                    'userStatus' => $userStatus,
-                    'userName' => $userName
+                    'userStatus' => $userStatus
                 ];
             
                 // Load the view and pass the data

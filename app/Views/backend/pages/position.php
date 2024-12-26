@@ -118,6 +118,9 @@ function filterTable() {
     </div>
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/backend/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#positionForm').on('submit', function(e) {

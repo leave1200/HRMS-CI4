@@ -136,6 +136,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
 $(document).ready(function() {
     if ($.fn.DataTable.isDataTable('#leaveApplicationsTable')) {
