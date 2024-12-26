@@ -81,12 +81,14 @@ class AuthController extends BaseController
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
     
+        // Validation rules for login_id and password
         $rules = [
             'login_id' => [
-                'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email' : ''),
+                'rules' => 'required|' . ($fieldType === 'email' ? 'valid_email|is_not_unique[users.email]' : 'is_not_unique[users.username]'),
                 'errors' => [
                     'required' => $fieldType === 'email' ? 'Email is required' : 'Username is required',
                     'valid_email' => 'Please, check the email field. It does not appear to be valid.',
+                    'is_not_unique' => $fieldType === 'email' ? 'Email does not exist in our system.' : 'Username does not exist in our system.'
                 ]
             ],
             'password' => [
@@ -99,6 +101,7 @@ class AuthController extends BaseController
             ]
         ];
     
+        // Validate input
         if (!$this->validate($rules)) {
             return view('backend/pages/auth/login', [
                 'pageTitle' => 'Login',
@@ -106,27 +109,28 @@ class AuthController extends BaseController
             ]);
         }
     
+        // Check user credentials
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
-        if (!$userInfo) {
-            return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
-        }
     
-        if (!password_verify($this->request->getVar('password'), $userInfo['password'])) {
+        // Verify user password
+        if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
     
             if ($attempts >= 3) {
-                session()->set('wait_time', time() + 30);
+                session()->set('wait_time', time() + 30); // Wait for 30 seconds
                 return redirect()->route('admin.login.form')->with('fail', 'Too many incorrect attempts. Please wait 30 seconds before trying again.')->withInput();
             }
     
             return redirect()->route('admin.login.form')->with('fail', 'Invalid credentials')->withInput();
         }
     
+        // Reset failed login attempts
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
+        // Set user session and authenticate
         CIAuth::setCIAuth($userInfo);
     
         session()->set([
@@ -135,13 +139,12 @@ class AuthController extends BaseController
             'userStatus' => $userInfo['status'],
             'isLoggedIn' => true
         ]);
-    
-        if (empty($userInfo['terms']) || $userInfo['terms'] != 1) {
-            return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
-        }
-    
+            // Check if the user has accepted the terms and conditions
+            if ($userInfo['terms'] != 1) {
+                // If the user has not accepted the terms, redirect them to the terms acceptance page
+                return redirect()->route('admin.terms')->with('fail', 'You must accept the terms and conditions to proceed.');
+            }
         return redirect()->route('admin.home');
-    
     }
     
     
