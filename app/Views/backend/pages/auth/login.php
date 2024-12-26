@@ -100,14 +100,14 @@
 
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
 <script>
     grecaptcha.ready(function() {
         grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
-</script>
+</script> -->
 <script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
