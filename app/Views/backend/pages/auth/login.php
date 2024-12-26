@@ -78,8 +78,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="onClick(event)">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
                 </div>
             </div>
         </div>
@@ -102,15 +102,20 @@
 </div>
 <script src="https://www.google.com/recaptcha/api.js?render=6LfIKqYqAAAAAIVDEETFcOdkS0iksqucwX9SzRB1"></script>
 <script>
-      function onClick(e) {
-        e.preventDefault();
-        grecaptcha.ready(function() {
-          grecaptcha.execute('6LfIKqYqAAAAAIVDEETFcOdkS0iksqucwX9SzRB1', {action: 'submit'}).then(function(token) {
-              // Add your logic to submit to your backend server here.
-          });
-        });
-      }
-  </script>
+  function onClick(e) {
+    e.preventDefault();
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6LfIKqYqAAAAAIVDEETFcOdkS0iksqucwX9SzRB1', { action: 'submit' }).then(function(token) {
+        // Set the token in the hidden input field
+        document.getElementById('recaptcha_token').value = token;
+        
+        // Submit the form
+        document.querySelector('form').submit();
+      });
+    });
+  }
+</script>
+
 <script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
