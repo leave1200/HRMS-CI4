@@ -113,7 +113,7 @@ class AuthController extends BaseController
         $userInfo = $this->userModel->where($fieldType, $loginId)->first();
     
         // Verify user password
-        if (!$userInfo || !Hash::check($this->request->getVar('password'), $userInfo['password'])) {
+        if (!$userInfo || !password_verify($this->request->getVar('password'), $userInfo['password'])) {
             $attempts = session()->get('login_attempts') ?: 0;
             $attempts++;
             session()->set('login_attempts', $attempts);
