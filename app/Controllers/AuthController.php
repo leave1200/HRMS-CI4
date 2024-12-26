@@ -154,7 +154,7 @@ class AuthController extends BaseController
     $recaptchaResponse = $this->request->getVar('recaptcha_token');
 
     // Verify the reCAPTCHA token with Google's API
-    $secretKey = '6LfdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
+    $secretKey = '6LdcqXoqAAAAABIemrKHuNtlyIXuP5dPn--VQUhD'; // Replace with your secret key from Google reCAPTCHA
     $remoteIp = $this->request->getServer('REMOTE_ADDR');
     $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
 

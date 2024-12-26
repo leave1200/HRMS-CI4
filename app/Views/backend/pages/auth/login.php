@@ -100,10 +100,10 @@
 
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6fLdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
