@@ -55,7 +55,7 @@ class Encryption extends BaseConfig
      *
      * HMAC digest to use, e.g. 'SHA512' or 'SHA256'. Default value is 'SHA512'.
      */
-    public string $digest = 'SHA512';
+    public string $digest = 'argon2id';
 
     /**
      * Whether the cipher-text should be raw. If set to false, then it will be base64 encoded.

@@ -159,11 +159,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
-
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.js"></script>
 
 <script>
            $('#personal_details_from').on('submit', function(e) {
@@ -219,8 +214,6 @@
             }).then((result) => {
                             if (result.isConfirmed) {
                                 location.reload();
-                                // Optionally reload the page or perform other actions
-                                // Example: location.reload(); // Reload the page
                             }
                         });
             } else {

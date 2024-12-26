@@ -200,9 +200,11 @@ class App extends BaseConfig
      */
     public bool $CSPEnabled = false;
     public $cookieSecure = true;
-    public $sessionExpiration = 1300;
+    public $sessionExpiration = 0;
     public $cookieHTTPOnly = true;  // Prevents JavaScript from accessing cookies
     public $cookieSameSite = 'Lax'; // or 'Strict' for tighter control
+    public $disablePoweredByHeader = true;
+
 
 
 }

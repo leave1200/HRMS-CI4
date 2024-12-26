@@ -79,10 +79,12 @@
                                     
                                     <!-- Download Link -->
                                     <a href="<?= route_to('downloadFile', $file['id']) ?>" class="btn btn-success btn-sm"><i class="icon-copy fi-save">Download</i></a>
+                                    <a href="<?= route_to('deleteFile', $file['id']) ?>" class="btn btn-success btn-sm"><i class="icon-copy fi-page-delete">Delete</i></a>
 
                                     
-                                        <!-- Delete Action (using SweetAlert for confirmation) -->
-                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)"><i class="icon-copy fi-page-delete">Delete</i></button>
+                                        <!-- Delete Action (using SweetAlert for confirmation)
+                                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= esc($file['id']) ?>)"><i class="icon-copy fi-page-delete">Delete</i></button> -->
+                                         
 
                                     
                                 </td>
@@ -100,9 +102,7 @@
 </div>
 
 <!-- Load jQuery, DataTables, and SweetAlert2 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     $(document).ready(function() {
         $('#uploadsTable').DataTable({
@@ -110,7 +110,7 @@
         });
     });
 </script>
-<script>
+<!-- <script>
     function confirmDelete(fileId) {
         var deleteUrl = "<?= base_url('admin/delete-file') ?>" + "/" + fileId;
 
@@ -134,12 +134,12 @@
                     confirmButtonText: 'OK'
                 }).then(() => {
                             // Reload the page
-                            window.location.href = deleteUrl;
+                            location.reload();
                 });
             }
         });
     }
-</script>
+</script> -->
 <script>
     document.getElementById('file').addEventListener('change', function(event) {
         const fileInput = event.target;

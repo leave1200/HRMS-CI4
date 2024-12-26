@@ -69,6 +69,12 @@ $routes->group('', static function($routes){
                 $routes->get('pendingemployeelist','AdminController::pendingemployeelist',['as'=>'admin.pendingemployeelist']);
                 $routes->put('hired_employee', 'AdminController::hire_employee', ['as' => 'admin.hired']);
                 $routes->get('admin/getEmployeeGenderData', 'AdminController::getEmployeeGenderData',['as'=>'admin.gender']);
+                $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
+                $routes->post('upload-file', 'UserController::uploadFile', ['as' => 'uploadFile']);
+                $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
+                $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
+                // Ensure that deleteFile route is also defined
+                $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
     });
     $routes->group('Attendance-page', ['filter'=>'cifilter:auth'], static function($routes){
 
@@ -113,12 +119,7 @@ $routes->group('', static function($routes){
         $routes->get('add', 'UserController::add', ['as' => 'user.add']);
         $routes->get('userlist', 'UserController::userlist', ['as' => 'user.list']);
         $routes->post('update-user-picture', 'UserController::update_profile_picture');
-        $routes->get('upload', 'UserController::upload', ['as' => 'user.upload']);
-        $routes->post('upload-file', 'UserController::uploadFile', ['as' => 'uploadFile']);
-        $routes->get('download-file/(:num)', 'UserController::downloadFile/$1', ['as' => 'downloadFile']);
-        $routes->get('view-file/(:num)', 'UserController::viewFile/$1', ['as' => 'viewFile']);
-        // Ensure that deleteFile route is also defined
-        $routes->get('delete-file/(:num)', 'UserController::deleteFile/$1', ['as' => 'deleteFile']);
+       
         
 
         $routes->get('admin/get_pending_notifications', 'AdminController::notifications', ['as' => 'admin.pending']);

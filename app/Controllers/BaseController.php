@@ -50,9 +50,21 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
+         // Set security headers
+   // Set security headers
+   $response->setHeader('X-Content-Type-Options', 'nosniff');
+   $response->setHeader('X-Frame-Options', 'DENY');
+   $response->setHeader('X-XSS-Protection', '1; mode=block');
+   $response->setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+   $response->setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self';");
+   $response->setHeader('Referrer-Policy', 'no-referrer-when-downgrade');
+   $response->setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+
+   return $response;
 
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
     }
+    
 }

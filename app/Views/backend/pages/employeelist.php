@@ -2,6 +2,8 @@
 
 <?= $this->extend('backend/layout/pages-layout') ?>
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 <div class="page-header">
     <div class="row">
@@ -28,13 +30,13 @@
         <div class="pull-left">
             <h4 class="text-blue h4">Employee List</h4>
         </div>
-        <div class="mb-10 pull-right">
+        <!-- <div class="mb-10 pull-right">
             <input type="text" id="searchInput" placeholder="Search by Name" onkeyup="filterTable()" class="form-control">
-        </div>
+        </div> -->
     </div>
     <div class="table-responsive">
         <table class="table table-striped" id="DataTables_Table_0">
-            <thead>
+        <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Profile</th>
@@ -46,60 +48,57 @@
                 </tr>
             </thead>
             <tbody>
-    <?php if (!empty($employee)): ?>
-        <?php foreach ($employee as $index => $emp): ?>
-             <?php if ($emp['result'] !== 'Pending'): // Skip employees with status 'Pending' ?> 
-                <tr>
-                    <td><?= $index + 1 ?></td>
-                    <td>
-                        <a href="#" class="edit-profile-picture-btn" data-id="<?= $emp['id'] ?>">
-                            <img src="<?= $emp['picture'] ? base_url('backend/images/users/' . htmlspecialchars($emp['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
-                            <i class="icon-copy dw dw-edit-1"></i>
-                        </a>
-                    </td>
-
-                    <td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
-                    <td><?= htmlspecialchars($emp['address']) ?></td>
-                    <td><?= htmlspecialchars($emp['dob']) ?></td>
-                    <td><?= htmlspecialchars($emp['email']) ?></td>
-                    <td>
-                        <button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
-                        <button class="btn btn-primary edit-employee-btn"
-                            data-id="<?= $emp['id'] ?>"
-                            data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
-                            data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
-                            data-phone="<?= htmlspecialchars($emp['phone']) ?>"
-                            data-dob="<?= htmlspecialchars($emp['dob']) ?>"
-                             data-age="<?= htmlspecialchars($emp['age']) ?>"
-                            data-sex="<?= htmlspecialchars($emp['sex']) ?>"
-                            data-address="<?= htmlspecialchars($emp['address']) ?>"
-                            data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
-                            data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
-                            data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
-                            data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
-                            data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
-                            data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
-                            data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
-                            data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
-                            data-result="<?= htmlspecialchars($emp['result']) ?>"
-                            data-comment="<?= htmlspecialchars($emp['comment']) ?>"
-                            data-toggle="modal"
-                            data-target="#editEmployeeModal">
-                            Edit
-                        </button>
-
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
-                    </td>
-                </tr>
-             <?php endif; ?> 
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="7">No employees found</td>
-        </tr>
-    <?php endif; ?>
-</tbody>
-
+                <?php if (!empty($employee)): ?>
+                    <?php foreach ($employee as $index => $emp): ?>
+                        <?php if ($emp['result'] !== 'Pending'): ?>
+                            <tr>
+                                <td><?= $index + 1 ?></td>
+                                <td>
+                                    <a href="#" class="edit-profile-picture-btn" data-id="<?= $emp['id'] ?>">
+                                        <img src="<?= $emp['picture'] ? base_url('backend/images/users/' . htmlspecialchars($emp['picture'])) : base_url('backend/images/users/userav-min.png') ?>" alt="Profile Picture" class="avatar-photo ci-avatar-photo" style="width: 50px; height: 50px; border-radius: 50%;">
+                                        <i class="icon-copy dw dw-edit-1"></i>
+                                    </a>
+                                </td>
+                                <td><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></td>
+                                <td><?= htmlspecialchars($emp['address']) ?></td>
+                                <td><?= htmlspecialchars($emp['dob']) ?></td>
+                                <td><?= htmlspecialchars($emp['email']) ?></td>
+                                <td>
+                                    <button class="btn btn-info view-btn" data-id="<?= $emp['id'] ?>">View</button>
+                                    <button class="btn btn-primary edit-employee-btn"
+                                        data-id="<?= $emp['id'] ?>"
+                                        data-firstname="<?= htmlspecialchars($emp['firstname']) ?>"
+                                        data-lastname="<?= htmlspecialchars($emp['lastname']) ?>"
+                                        data-phone="<?= htmlspecialchars($emp['phone']) ?>"
+                                        data-dob="<?= htmlspecialchars($emp['dob']) ?>"
+                                        data-age="<?= htmlspecialchars($emp['age']) ?>"
+                                        data-sex="<?= htmlspecialchars($emp['sex']) ?>"
+                                        data-address="<?= htmlspecialchars($emp['address']) ?>"
+                                        data-p-school="<?= htmlspecialchars($emp['p_school']) ?>"
+                                        data-s-school="<?= htmlspecialchars($emp['s_school']) ?>"
+                                        data-t-school="<?= htmlspecialchars($emp['t_school']) ?>"
+                                        data-interview-for="<?= htmlspecialchars($emp['interview_for']) ?>"
+                                        data-interview-type="<?= htmlspecialchars($emp['interview_type']) ?>"
+                                        data-interview-date="<?= htmlspecialchars($emp['interview_date']) ?>"
+                                        data-interview-time="<?= htmlspecialchars($emp['interview_time']) ?>"
+                                        data-behaviour="<?= htmlspecialchars($emp['behaviour']) ?>"
+                                        data-result="<?= htmlspecialchars($emp['result']) ?>"
+                                        data-comment="<?= htmlspecialchars($emp['comment']) ?>"
+                                        data-toggle="modal"
+                                        data-target="#editEmployeeModal">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee(<?= $emp['id'] ?>)">Delete</button>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7">No employees found</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
         </table>
     </div>
 </div>
@@ -551,10 +550,10 @@ document.getElementById('profile_picture').addEventListener('change', function()
 </script>   
 <script>
 function printTable() {
-    // Open a new window or tab
+    // Open a new window or tab for printing
     var printWindow = window.open('', '', 'height=600,width=800');
 
-    // Clone the table
+    // Clone the table without the pagination controls and search bar
     var table = document.querySelector('.table-responsive').innerHTML;
     var clonedTable = document.createElement('div');
     clonedTable.innerHTML = table;
@@ -571,19 +570,52 @@ function printTable() {
         row.cells[row.cells.length - 1].style.display = 'none'; // Hide the Action cell
     });
 
+    // Remove pagination controls (if any)
+    var pagination = clonedTable.querySelector('.dataTables_paginate');
+    if (pagination) {
+        pagination.style.display = 'none'; // Hide pagination
+    }
+
+    // Remove the entries info and search bar
+    var entriesInfo = clonedTable.querySelector('.dataTables_info');
+    var searchBox = clonedTable.querySelector('.dataTables_filter');
+
+    if (entriesInfo) {
+        entriesInfo.style.display = 'none'; // Hide entries information
+    }
+
+    if (searchBox) {
+        searchBox.style.display = 'none'; // Hide search box
+    }
+
     // Write the modified content to the new window
     printWindow.document.write('<html><head><title>Print Employee Table</title>');
-    printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #ddd; padding: 8px;} th{background-color: #f2f2f2;} </style>');
-    printWindow.document.write('</head><body >');
+    printWindow.document.write('<style>body{font-family: Arial, sans-serif;}');
+    printWindow.document.write('table{width: 100%; border-collapse: collapse;}');
+    printWindow.document.write('th, td{border: 1px solid #ddd; padding: 8px;}');
+    printWindow.document.write('th{background-color: #f2f2f2;}');
+    
+    // Add print-specific styles to handle page breaks and prevent table cut-off
+    printWindow.document.write('@media print {');
+    printWindow.document.write('  body { margin: 0; padding: 0; }');
+    printWindow.document.write('  table { page-break-before: auto; page-break-after: auto; page-break-inside: auto; }');
+    printWindow.document.write('  tr { page-break-inside: avoid; page-break-after: auto; }');
+    printWindow.document.write('  thead { display: table-header-group; }');
+    printWindow.document.write('  tfoot { display: table-footer-group; }');
+    printWindow.document.write('}');
+    printWindow.document.write('</style>');
+    printWindow.document.write('</head><body>');
     printWindow.document.write(clonedTable.innerHTML);
     printWindow.document.write('</body></html>');
 
-    // Close the document and trigger print
+    // Close the document and trigger the print action
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
 }
 </script>
+
+
 <script>
 function exportToCSV() {
     var table = document.querySelector('.table-responsive table');
@@ -615,6 +647,30 @@ function exportToCSV() {
 <script>
 function exportToExcel() {
     var table = document.querySelector('.table-responsive table');
+    
+    // Remove the "Action" column header and data
+    var headers = table.querySelectorAll('thead th');
+    var rows = table.querySelectorAll('tbody tr');
+
+    // Find the index of the "Action" column (assuming it's the last column)
+    var actionIndex = headers.length - 1;
+
+    // Find the index of the "Profile" column (assuming it's the second last column)
+    var profileIndex = headers.length - 6;
+
+    // Remove "Action" column from header and body
+    headers[actionIndex].remove();  // Remove Action column from header
+    rows.forEach(function(row) {
+        row.deleteCell(actionIndex); // Remove Action column from each row
+    });
+
+    // Remove "Profile" column from header and body
+    headers[profileIndex].remove();  // Remove Profile column from header
+    rows.forEach(function(row) {
+        row.deleteCell(profileIndex); // Remove Profile column from each row
+    });
+
+    // Convert the table to a workbook and export to Excel
     var wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
 
     // Convert the workbook to binary and create a downloadable link
@@ -628,8 +684,21 @@ function exportToExcel() {
     a.download = 'employees.xlsx';
     a.click();
     URL.revokeObjectURL(url);
+
+    // Optionally, restore the columns' visibility (in case you want to retain them for the webpage)
+    // This step is optional, but you can restore the columns if needed
+    // headers[actionIndex].style.display = '';
+    // rows.forEach(function(row) {
+    //     row.cells[actionIndex].style.display = '';
+    // });
+    // headers[profileIndex].style.display = '';
+    // rows.forEach(function(row) {
+    //     row.cells[profileIndex].style.display = '';
+    // });
 }
 </script>
+
+
 <script>
 function deleteEmployee(id) {
     Swal.fire({
@@ -972,5 +1041,16 @@ function validateDesignation1(input) {
         document.getElementById('interview_date').setAttribute('min', formattedDate);
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $('#DataTables_Table_0').DataTable({
+            "pageLength": 10, // Show 10 entries per page
+            "lengthChange": false, // Disable the option to change page size
+            "searching": true, // Enable search functionality
+            "order": [[0, "asc"]] // Order by the first column (ID) ascending
+        });
+    });
+</script>
+
 
 <?= $this->endSection() ?>

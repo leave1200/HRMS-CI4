@@ -15,7 +15,7 @@ class Security extends BaseConfig
      *
      * @var string 'cookie' or 'session'
      */
-    public string $csrfProtection = 'cookie';
+    public string $csrfProtection = 'csrf_cookie_name';
 
     /**
      * --------------------------------------------------------------------------
@@ -62,7 +62,7 @@ class Security extends BaseConfig
      *
      * Defaults to two hours (in seconds).
      */
-    public int $expires = 7200;
+    public int $expires = 0;
 
     /**
      * --------------------------------------------------------------------------
@@ -100,4 +100,5 @@ class Security extends BaseConfig
      * @deprecated `Config\Cookie` $samesite property is used.
      */
     public string $samesite = 'Lax';
+    public string $passwordHashAlgorithm = 'argon2id';
 }

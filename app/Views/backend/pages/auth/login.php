@@ -8,106 +8,106 @@
 
     <?php $validation = \Config\Services::validation(); ?>
 
-<form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
-    <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
+        <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
 
-    <!-- Success flash message -->
-    <?php if (!empty(session()->getFlashdata('success'))) : ?>
-        <div class="alert alert-success">
-            <?= esc(session()->getFlashdata('success')) ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <?php endif; ?>
+        <!-- Success flash message -->
+        <?php if (!empty(session()->getFlashdata('success'))) : ?>
+            <div class="alert alert-success">
+                <?= esc(session()->getFlashdata('success')) ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
 
-    <!-- Failure flash message -->
-    <?php if (!empty(session()->getFlashdata('fail'))) : ?>
-        <div class="alert alert-danger">
-            <?= esc(session()->getFlashdata('fail')) ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <?php endif; ?>
+        <!-- Failure flash message -->
+        <?php if (!empty(session()->getFlashdata('fail'))) : ?>
+            <div class="alert alert-danger">
+                <?= esc(session()->getFlashdata('fail')) ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif; ?>
 
-    <!-- System Inaccessible Alert -->
-    <?php if (session()->get('system_accessible') === false): ?>
-        <script>
-            swal({
-                title: "System Unavailable!",
-                text: "The system is currently inaccessible. Please try again later.",
-                icon: "warning",
-                button: "OK"
-            });
-        </script>
-    <?php endif; ?>
-
-    <!-- Input for Username or Email -->
-    <div class="input-group custom">
-        <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
-        <div class="input-group-append custom">
-            <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
-        </div>
-    </div>
-    
-    <!-- Validation Error for login_id -->
-    <?php if ($validation->getError('login_id')): ?>
-        <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
-            <?= esc($validation->getError('login_id')) ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Input for Password -->
-    <div class="input-group custom">
-        <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
-        <div class="input-group-append custom">
-            <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
-        </div>
-    </div>
-
-    <!-- Validation Error for password -->
-    <?php if ($validation->getError('password')): ?>
-        <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
-            <?= esc($validation->getError('password')) ?>
-        </div>
-    <?php endif; ?>
-
-    <div class="row pb-30">
-        <div class="col-6">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
-                <label class="custom-control-label" for="customCheck1">Remember</label>
+        <!-- System Inaccessible Alert -->
+        <?php if (session()->get('system_accessible') === false): ?>
+            <script>
+                swal({
+                    title: "System Unavailable!",
+                    text: "The system is currently inaccessible. Please try again later.",
+                    icon: "warning",
+                    button: "OK"
+                });
+            </script>
+        <?php endif; ?>
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+        <!-- Input for Username or Email -->
+        <div class="input-group custom">
+            <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
+            <div class="input-group-append custom">
+                <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
             </div>
         </div>
-        <div class="col-6">
-            <div class="forgot-password">
-                <a href="<?= esc(route_to('admin.forget.forms'), 'attr') ?>">Forgot Password</a>
+        
+        <!--   Validation Error for login_id -->
+        <?php if ($validation->getError('login_id')): ?>
+            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
+                <?= esc($validation->getError('login_id')) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Input for Password -->
+        <div class="input-group custom">
+            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
+            <div class="input-group-append custom">
+                <span class="input-group-text" id="togglePassword">
+                    <i class="dw dw-padlock1"></i>
+                </span>
             </div>
         </div>
-    </div>
 
-    <!-- Google reCAPTCHA v3 Hidden Token Field -->
-    <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="input-group mb-0">
-            <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
-            <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+        <!-- Validation Error for password -->
+        <?php if ($validation->getError('password')): ?>
+            <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
+                <?= esc($validation->getError('password')) ?>
+            </div>
+        <?php endif; ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group mb-0">
+                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="submitForm()"> -->
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+                </div>
             </div>
         </div>
-    </div>
-</form>
+        <div class="row pb-30">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <label class="custom-control-label" for="customCheck1">Remember</label> -->
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>">Forgot Password</a>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
 </div>
-<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LeIE6YqAAAAANev7MxAZoB6vIIPhWoSBkCsa4TA"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LeIE6YqAAAAANev7MxAZoB6vIIPhWoSBkCsa4TA', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
-</script> -->
+</script>
 <script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
@@ -177,6 +177,36 @@
     });
 </script>
 
+<script>
+function deleteSpecificCookies() {
+    var cookieNames = [
+        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
+        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
+        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
+    ];
 
+    // Loop through each cookie name and remove it
+    for (var i = 0; i < cookieNames.length; i++) {
+        var cookieName = cookieNames[i];
+
+        // Try to remove cookies for the root path and specific domains
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
+    }
+}
+
+// Call the function to delete the specific cookies
+deleteSpecificCookies();
+
+</script>
 
 <?= $this->endSection() ?>
