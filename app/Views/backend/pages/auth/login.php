@@ -8,7 +8,7 @@
 
     <?php $validation = \Config\Services::validation(); ?>
 
-    <form action="<?=route_to('admin.login.handler') ?>" method="POST">
+    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
 
         <!-- Success flash message -->
@@ -100,14 +100,14 @@
 
     </form>
 </div>
-<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script> -->
-<!-- <script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
+<script>
     grecaptcha.ready(function() {
         grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
-</script> -->
+</script>
 <script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
