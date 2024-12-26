@@ -8,9 +8,10 @@ use CodeIgniter\Router\RouteCollection;
 $routes->group('', ['filter' => 'cifilter:guest'], static function($routes) {
     $routes->get('/', 'AuthController::loginForm', ['as' => 'admin.login.form']); // Set the main route to guest login
     $routes->post('login', 'AuthController::loginHandler', ['as' => 'admin.login.handler']);
-    $routes->get('forget-password', 'AuthController::forgotForms', ['as' => 'admin.forget.forms']);
+    $routes->get('forget-password', 'AuthController::forgotForms', ['as' => 'admin.forgot.form']);
     $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' => 'send_password_reset_link']);
     $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
+    $routes->post('reset-password-handler/(:any)', 'AuthController::resetPasswordHandler/$1', ['as' => 'reset-password-handler']);
 });
 
 
@@ -119,25 +120,17 @@ $routes->group('', static function($routes){
                 $routes->get('profile','AdminController::profile',['as'=>'admin.profile']);
                 $routes->post('update-personal-details','AdminController::updatePersonalDetails',['as'=>'update-personal-details']);
                 $routes->post('update-profile-picture','UserController::updatePersonalPictures',['as'=>'update-profile-picture']);  
-                $routes->post('change-password','AdminController::changePassword',['as'=>'change-password']);
+                $routes->post('change-password','UserController::changePassword',['as'=>'change-password']);
     });
     $routes->group('', ['filter'=>'cifilter:auth'], static function($routes){
 
         //$routes->view('example-page','example-page');
-        $routes->get('home', 'AdminController::index', ['as' => 'admin.home']);
+        $routes->get('Dashboard', 'AdminController::index', ['as' => 'admin.home']);
+        $routes->get('terms-and-condition','AdminController::terms',['as'=>'admin.terms']);
+        $routes->post('update-terms-acceptance', 'UserController::updateTermsAcceptance', ['as'=>'admin.updateTermsAcceptance']);
+
         
 });
 
 
-    $routes->group('', ['filter'=>'cifilter:guest'], static function($routes){
-       // $routes->view('example-auth','example-auth');
-       $routes->get('login', 'AuthController::loginForm', ['as' => 'admin.login.form']);
-       $routes->post('login', 'AuthController::loginHandler', ['as' => 'admin.login.handler']);
-       $routes->get('forget-password','AuthController::forgotForms',['as'=>'admin.forget.forms']);
-       $routes->post('send_password-reset-link', 'AuthController::sendPasswordResetLink', ['as' =>
-       'send_password_reset_link']);
-        $routes->get('password/reset/(:any)', 'AuthController::resetPassword/$1', ['as' => 'admin.reset-password']);
-        $routes->get('/recaptcha-form', 'AuthController::showForm');
-        $routes->post('recaptcha-verify', 'AuthController::verifyReCaptcha',  ['as' => 'captcha.verify']);
-    });
 });
