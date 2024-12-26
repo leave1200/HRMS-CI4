@@ -42,7 +42,7 @@
                 });
             </script>
         <?php endif; ?>
-
+        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -60,11 +60,14 @@
 
         <!-- Input for Password -->
         <div class="input-group custom">
-            <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
+            <input type="password" class="form-control form-control-lg" id="password" placeholder="**********" name="password" value="<?= esc(set_value('password')) ?>">
             <div class="input-group-append custom">
-                <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+                <span class="input-group-text" id="togglePassword">
+                    <i class="dw dw-padlock1"></i>
+                </span>
             </div>
         </div>
+
 
         <!-- Validation Error for password -->
         <?php if ($validation->getError('password')): ?>
@@ -72,24 +75,6 @@
                 <?= esc($validation->getError('password')) ?>
             </div>
         <?php endif; ?>
-
-        <div class="row pb-30">
-            <div class="col-6">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
-                    <label class="custom-control-label" for="customCheck1">Remember</label>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="forgot-password">
-                    <a href="<?= esc(route_to('admin.forget.forms'), 'attr') ?>">Forgot Password</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Google reCAPTCHA v3 Hidden Token Field -->
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
@@ -98,27 +83,100 @@
                 </div>
             </div>
         </div>
+        <div class="row pb-30">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <!-- <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember">
+                    <label class="custom-control-label" for="customCheck1">Remember</label> -->
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="forgot-password">
+                    <a href="<?= esc(route_to('admin.forgot.form'), 'attr') ?>">Forgot Password</a>
+                </div>
+            </div>
+        </div>
+
+
     </form>
 </div>
-<!-- Include reCAPTCHA API
-<script src="https://www.google.com/recaptcha/api.js?render=6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct"></script>
 <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LdcqXoqAAAAAOKpdE7btEsLljApBKTl9gLoj5Ct', { action: 'login' }).then(function(token) {
             document.getElementById('recaptcha_token').value = token;
         });
     });
 </script>
 <script>
-    function submitForm() {
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LfaHGsqAAAAAO2c4GXxqpOPKhxeTRqQ7FkVeF4m', { action: 'login' }).then(function(token) {
-                document.getElementById('recaptcha_token').value = token;
-                document.getElementById('loginForm').submit(); // Submit the form after setting the token
-            });
-        });
-    }
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        var passwordField = document.getElementById('password');
+        var icon = this.querySelector('i');
+        
+        // Toggle the password type between text and password
+        if (passwordField.type === "password") {
+            passwordField.type = "text"; // Show password
+            icon.classList.remove('dw-padlock1');  // Optionally change icon
+            icon.classList.add('dw-eye');          // Change to 'eye' icon (for example)
+        } else {
+            passwordField.type = "password"; // Hide password
+            icon.classList.remove('dw-eye');  // Optionally change icon back
+            icon.classList.add('dw-padlock1'); // Change to padlock icon
+        }
+    });
 </script>
-<script src="https://www.google.com/recaptcha/api.js"></script> -->
+<script>
+    // Disable right-click context menu
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable specific keyboard shortcuts for opening developer tools
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+            event.preventDefault();
+        }
+    });
+
+    // Hide sensitive content based on permissions (example logic)
+    const userHasPermission = false; // Set this based on actual user permissions
+    const sensitiveContent = document.getElementById('sensitiveContent');
+    if (sensitiveContent) {
+        if (userHasPermission) {
+            sensitiveContent.style.display = 'block';
+        } else {
+            sensitiveContent.style.display = 'none';
+        }
+    }
+
+    // Detect if Developer Console is opened and log a message or perform an action
+    const devToolsDetector = new Image();
+    Object.defineProperty(devToolsDetector, 'id', {
+        get: function () {
+            console.warn('Developer tools detected! Certain features may be disabled.');
+            // Add any additional actions here, like logging out the user or blocking access
+        }
+    });
+    console.log(devToolsDetector); // This will trigger the get function if console is opened
+
+    // Disable `contenteditable` attributes on all elements
+    document.querySelectorAll('*[contenteditable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
+
+    // Obfuscate sensitive function names and operations
+    function obfuscatedFunction() {
+        // Dummy obfuscation example
+        const secretVar = btoa('Sensitive Data'); // Encodes the data to deter inspection
+        return atob(secretVar); // Decodes it only when needed
+    }
+
+    // Additional protections
+    window.addEventListener('load', () => {
+        // Example of restricting access after loading based on client-side logic
+        if (!userHasPermission) {
+            console.warn('Access restricted to certain areas.');
+        }
+    });
+</script>
+
+
 
 <?= $this->endSection() ?>
