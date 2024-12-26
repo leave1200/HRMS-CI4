@@ -107,7 +107,7 @@
             document.getElementById('recaptcha_token').value = token;
         });
     });
-</script>
+</script> 
 <script>
     // Toggle password visibility
     document.getElementById('togglePassword').addEventListener('click', function() {
