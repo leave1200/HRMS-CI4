@@ -8,7 +8,7 @@
 
     <?php $validation = \Config\Services::validation(); ?>
 
-    <form action="<?= esc(route_to('admin.login.handler'), 'attr') ?>" method="POST">
+    <form action="<?= route_to('admin.login.handler') ?>" method="POST">
         <?= csrf_field() ?> <!-- Ensuring CSRF protection is in place -->
 
         <!-- Success flash message -->
