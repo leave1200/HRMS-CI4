@@ -29,7 +29,7 @@ class User extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    Validation rules for creating/updating users
+    // Validation rules for creating/updating users
     protected $validationRules = [
         'name'              => 'required|string|max_length[255]',
         'username'          => 'required|string|max_length[255]',
