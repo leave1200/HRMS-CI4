@@ -42,7 +42,7 @@
                 });
             </script>
         <?php endif; ?>
-        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+        
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -68,7 +68,6 @@
             </div>
         </div>
 
-
         <!-- Validation Error for password -->
         <?php if ($validation->getError('password')): ?>
             <div class="d-block text-danger" style="margin-top: 25px; margin-bottom: 15px;">
@@ -79,7 +78,6 @@
             <div class="col-sm-12">
                 <div class="input-group mb-0">
                 <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="onClick(event)">
-                <!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
                 </div>
             </div>
         </div>
@@ -96,25 +94,8 @@
                 </div>
             </div>
         </div>
-
-
     </form>
 </div>
-<script src="https://www.google.com/recaptcha/api.js?render=6LfIKqYqAAAAAIVDEETFcOdkS0iksqucwX9SzRB1"></script>
-<script>
-  function onClick(e) {
-    e.preventDefault();
-    grecaptcha.ready(function() {
-      grecaptcha.execute('6LfIKqYqAAAAAIVDEETFcOdkS0iksqucwX9SzRB1', { action: 'submit' }).then(function(token) {
-        // Set the token in the hidden input field
-        document.getElementById('recaptcha_token').value = token;
-        
-        // Submit the form
-        document.querySelector('form').submit();
-      });
-    });
-  }
-</script>
 
 <script>
     // Toggle password visibility
@@ -134,6 +115,7 @@
         }
     });
 </script>
+
 <script>
     // Disable right-click context menu
     document.addEventListener('contextmenu', event => event.preventDefault());
@@ -214,7 +196,6 @@ function deleteSpecificCookies() {
 
 // Call the function to delete the specific cookies
 deleteSpecificCookies();
-
 </script>
 
 <?= $this->endSection() ?>
