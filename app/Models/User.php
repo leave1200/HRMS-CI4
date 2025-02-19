@@ -36,7 +36,7 @@ class User extends Model
         'email'             => 'required|valid_email',
         'password'          => 'required|min_length[8]',
         'confirm_password'  => 'matches[password]',
-        'picture'           => 'mime_in[picture,image/jpg,image/jpeg,image/png]|max_size[picture,2048]',
+        'picture'           => 'mime_in' => 'Only JPG, JPEG, and PNG files are allowed.','max_size' => 'The file size should not exceed 2MB.',
         'bio'               => 'permit_empty|string',
         'status'            => 'required|string|max_length[255]'
     ];
