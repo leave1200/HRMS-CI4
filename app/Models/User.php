@@ -57,7 +57,7 @@ class User extends Model
     // Methods for hashing passwords
     public function hashPassword($password)
     {
-        return password_hash($password, PASSWORD_BCRYPT);
+        return password_hash($password, PASSWORD_ARGON2I);
     }
 
     // Method to verify password
