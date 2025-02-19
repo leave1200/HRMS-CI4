@@ -152,12 +152,12 @@ class AuthController extends BaseController
     {
         // Get the reCAPTCHA token from the form
         $recaptchaResponse = $this->request->getVar('recaptcha_token');
-    
+        
         // Verify the reCAPTCHA token with Google's API
         $secretKey = '6LfIKqYqAAAAAHpN8qbdslS0pEF1nNBaPAjT2Eqm'; // Replace with your secret key from Google reCAPTCHA
         $remoteIp = $this->request->getServer('REMOTE_ADDR');
         $verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-    
+        
         // Send the POST request to Google's API for verification
         $response = \Config\Services::curlrequest()->post($verificationUrl, [
             'form_params' => [
@@ -166,16 +166,16 @@ class AuthController extends BaseController
                 'remoteip' => $remoteIp
             ]
         ]);
-    
+        
         // Decode the response
         $recaptchaData = json_decode($response->getBody(), true);
-    
+        
         // If reCAPTCHA verification fails
         if (!$recaptchaData['success']) {
             return redirect()->route('admin.login.form')->with('fail', 'reCAPTCHA verification failed. Please try again.')->withInput();
         }
     
-        // Continue with the rest of the login logic if reCAPTCHA is successful
+        // Login ID handling (email or username)
         $loginId = $this->request->getVar('login_id');
         $fieldType = filter_var($loginId, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
     
@@ -228,9 +228,9 @@ class AuthController extends BaseController
         session()->remove('login_attempts');
         session()->remove('wait_time');
     
-        // ** Update the policy field to 'log_in' **
+        // ** Update the policy field to 'log_in' ** (kept as it might be essential)
         $this->userModel->update($userInfo['id'], ['policy' => 'Online']);
-    
+        
         // Set user session and authenticate
         CIAuth::setCIAuth($userInfo);
     
@@ -249,6 +249,7 @@ class AuthController extends BaseController
     
         return redirect()->route('admin.home');
     }
+    
     
 
     
