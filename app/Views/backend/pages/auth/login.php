@@ -31,18 +31,6 @@
             </div>
         <?php endif; ?>
 
-        <!-- System Inaccessible Alert -->
-        <?php if (session()->get('system_accessible') === false): ?>
-            <script>
-                swal({
-                    title: "System Unavailable!",
-                    text: "The system is currently inaccessible. Please try again later.",
-                    icon: "warning",
-                    button: "OK"
-                });
-            </script>
-        <?php endif; ?>
-        
         <!-- Input for Username or Email -->
         <div class="input-group custom">
             <input type="text" class="form-control form-control-lg" placeholder="Username or Email" name="login_id" value="<?= esc(set_value('login_id')) ?>">
@@ -74,10 +62,12 @@
                 <?= esc($validation->getError('password')) ?>
             </div>
         <?php endif; ?>
+        
         <div class="row">
             <div class="col-sm-12">
                 <div class="input-group mb-0">
-                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" onclick="onClick(event)">
+                    <!-- Removed onclick here -->
+                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
                 </div>
             </div>
         </div>
@@ -114,9 +104,7 @@
             icon.classList.add('dw-padlock1'); // Change to padlock icon
         }
     });
-</script>
 
-<script>
     // Disable right-click context menu
     document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -126,76 +114,6 @@
             event.preventDefault();
         }
     });
-
-    // Hide sensitive content based on permissions (example logic)
-    const userHasPermission = false; // Set this based on actual user permissions
-    const sensitiveContent = document.getElementById('sensitiveContent');
-    if (sensitiveContent) {
-        if (userHasPermission) {
-            sensitiveContent.style.display = 'block';
-        } else {
-            sensitiveContent.style.display = 'none';
-        }
-    }
-
-    // Detect if Developer Console is opened and log a message or perform an action
-    const devToolsDetector = new Image();
-    Object.defineProperty(devToolsDetector, 'id', {
-        get: function () {
-            console.warn('Developer tools detected! Certain features may be disabled.');
-            // Add any additional actions here, like logging out the user or blocking access
-        }
-    });
-    console.log(devToolsDetector); // This will trigger the get function if console is opened
-
-    // Disable `contenteditable` attributes on all elements
-    document.querySelectorAll('*[contenteditable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
-
-    // Obfuscate sensitive function names and operations
-    function obfuscatedFunction() {
-        // Dummy obfuscation example
-        const secretVar = btoa('Sensitive Data'); // Encodes the data to deter inspection
-        return atob(secretVar); // Decodes it only when needed
-    }
-
-    // Additional protections
-    window.addEventListener('load', () => {
-        // Example of restricting access after loading based on client-side logic
-        if (!userHasPermission) {
-            console.warn('Access restricted to certain areas.');
-        }
-    });
-</script>
-
-<script>
-function deleteSpecificCookies() {
-    var cookieNames = [
-        'ar_debug', 'IDE', 'DSID', 'COMPASS', 'GSP', '__Secure-OSID', 
-        'COMPASS', '__Host-3PLSID', '__Secure-3PSID', '__Secure-3PAPISID', 
-        '__Secure-3PSIDTS', 'NID', '__Secure-3PSIDCC'
-    ];
-
-    // Loop through each cookie name and remove it
-    for (var i = 0; i < cookieNames.length; i++) {
-        var cookieName = cookieNames[i];
-
-        // Try to remove cookies for the root path and specific domains
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.doubleclick.net";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.mail.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.scholar.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.docs.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.chromewebstore.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.lens.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.myaccount.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.play.google.com";
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.accounts.google.com";
-    }
-}
-
-// Call the function to delete the specific cookies
-deleteSpecificCookies();
 </script>
 
 <?= $this->endSection() ?>
